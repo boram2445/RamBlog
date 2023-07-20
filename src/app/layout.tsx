@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`h-screen flex flex-col ${notoSansKr.className}`}>
         <Header />
-        <main className='flex-1 mx-auto w-full'>{children}</main>
+        <main className='flex-1 mx-auto w-full bg-white-brown'>{children}</main>
         <Footer />
       </body>
     </html>

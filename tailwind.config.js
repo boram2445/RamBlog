@@ -8,7 +8,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'white-brown': '#f8f4f2',
+        black: '#2c2c2c',
+        'white-brown': '#fafafa',
+        'light-brown': '#f8f4f2',
+        brown: '#be9473',
+        'light-gray': '#cccccc',
+        gray: '#b4b4b4',
+        'dark-gray': '#878787',
+      },
+      screens: {
+        tablet: '640px',
+        laptop: '1024px',
+        desktop: '1280px',
       },
     },
   },
