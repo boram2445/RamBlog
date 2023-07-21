@@ -20,9 +20,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={`h-screen flex flex-col ${notoSansKr.className}`}>
+      <body
+        className={`h-screen flex flex-col ${notoSansKr.className} bg-white-brown`}
+      >
         <Header />
-        <main className='flex-1 mx-auto w-full bg-white-brown'>{children}</main>
+        <main className='flex-1 mx-auto mb-32 w-full'>{children}</main>
         <Footer />
       </body>
     </html>

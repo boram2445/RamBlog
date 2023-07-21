@@ -10,17 +10,17 @@ export default async function Home() {
   return (
     <>
       <Profile />
-      <section className='my-10 mx-auto p-5 max-w-screen-xl'>
+      <section className='max-w-screen-lg my-10 mx-auto p-5'>
         <h2 className='mx-auto pb-2 mb-5 text-xl font-semibold text-black after:content-[""] after:block after:w-20 after:bg-brown after:h-0.5 after:mt-2.5'>
           Featured Articles
         </h2>
-        <div className='mx-auto w-4/5 laptop:w-full grid grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3 desktop:grid-cols-4 gap-6'>
+        <div className='mx-auto w-4/5 laptop:w-full grid grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3 gap-6'>
           {featuredPosts.map((post, index) => (
             <PostCard key={index} post={post} />
           ))}
         </div>
       </section>
-      <section className='mt-10 mb-32 mx-auto p-5 max-w-screen-xl'>
+      <section className='max-w-screen-lg mt-10 mx-auto p-5'>
         <h2 className='mx-auto pb-2 mb-5 text-xl font-semibold text-black after:content-[""] after:block after:w-20 after:bg-brown after:h-0.5 after:mt-2.5'>
           You May Like
         </h2>

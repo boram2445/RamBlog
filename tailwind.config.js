@@ -22,8 +22,20 @@ module.exports = {
         laptop: '1024px',
         desktop: '1280px',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              color: '#3182ce',
+              '&:hover': {
+                color: '#2c5282',
+              },
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
   darkMode: 'class',
 };
