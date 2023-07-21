@@ -1,8 +1,10 @@
 import PostCard from '@/components/PostCard';
+import PostCarousel from '@/components/PostCarousel';
 import Profile from '@/components/Profile';
-import { getFeaturedPosts } from '@/service/posts';
+import { getFeaturedPosts, getPosts } from '@/service/posts';
 
 export default async function Home() {
+  const posts = await getPosts();
   const featuredPosts = await getFeaturedPosts();
 
   return (
@@ -17,6 +19,16 @@ export default async function Home() {
             <PostCard key={index} post={post} />
           ))}
         </div>
+      </section>
+      <section className='mt-10 mb-32 mx-auto p-5 max-w-screen-xl'>
+        <h2 className='mx-auto pb-2 mb-5 text-xl font-semibold text-black after:content-[""] after:block after:w-20 after:bg-brown after:h-0.5 after:mt-2.5'>
+          You May Like
+        </h2>
+        <PostCarousel>
+          {posts.map((post, index) => (
+            <PostCard key={index} post={post} />
+          ))}
+        </PostCarousel>
       </section>
     </>
   );

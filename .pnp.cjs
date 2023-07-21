@@ -38,6 +38,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["postcss", "npm:8.4.26"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:18.2.0"],\
+            ["react-icons", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:4.10.1"],\
+            ["react-multi-carousel", "npm:2.8.4"],\
             ["tailwindcss", "npm:3.3.3"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"]\
           ],\
@@ -4004,6 +4006,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["postcss", "npm:8.4.26"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:18.2.0"],\
+            ["react-icons", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:4.10.1"],\
+            ["react-multi-carousel", "npm:2.8.4"],\
             ["tailwindcss", "npm:3.3.3"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"]\
           ],\
@@ -4044,11 +4048,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["react-icons", [\
+        ["npm:4.10.1", {\
+          "packageLocation": "./.yarn/cache/react-icons-npm-4.10.1-74abe904b6-b6c8d4fe48.zip/node_modules/react-icons/",\
+          "packageDependencies": [\
+            ["react-icons", "npm:4.10.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:4.10.1", {\
+          "packageLocation": "./.yarn/__virtual__/react-icons-virtual-9e44b6bcf9/0/cache/react-icons-npm-4.10.1-74abe904b6-b6c8d4fe48.zip/node_modules/react-icons/",\
+          "packageDependencies": [\
+            ["react-icons", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:4.10.1"],\
+            ["@types/react", "npm:18.2.15"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["react-is", [\
         ["npm:16.13.1", {\
           "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-f7a19ac349.zip/node_modules/react-is/",\
           "packageDependencies": [\
             ["react-is", "npm:16.13.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-multi-carousel", [\
+        ["npm:2.8.4", {\
+          "packageLocation": "./.yarn/cache/react-multi-carousel-npm-2.8.4-e0619af128-ed4d95630f.zip/node_modules/react-multi-carousel/",\
+          "packageDependencies": [\
+            ["react-multi-carousel", "npm:2.8.4"]\
           ],\
           "linkType": "HARD"\
         }]\
