@@ -28,7 +28,7 @@ export default async function PostPage({ params: { slug } }: Props) {
         </div>
       </div>
       <div className='prose mx-auto'>
-        <div className='w-full h-64 relative'>
+        <div className='mb-14 w-full h-72 relative'>
           <Image
             src={`/images/posts/${slug}.png`}
             alt={`${post?.title} 포스트 이미지`}

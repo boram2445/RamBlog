@@ -1,4 +1,3 @@
-import PostCard from '@/components/PostCard';
 import PostCategory from '@/components/PostCategory';
 import { getPosts } from '@/service/posts';
 
