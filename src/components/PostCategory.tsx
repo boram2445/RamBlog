@@ -11,15 +11,14 @@ export default function PostCategory({ posts }: { posts: Post[] }) {
   );
 
   return (
-    <>
-      <section className='p-5 grid grid-cols-3 gap-6'>
+    <div className='flex flex-col-reverse mx-auto tablet:flex-row'>
+      <section className='p-5 grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-x-6 gap-y-10'>
         {selectedCateogory === categories[0] &&
           posts.map((post, index) => <PostCard key={index} post={post} />)}
         {categoryPosts?.map((post, index) => (
           <PostCard key={index} post={post} />
         ))}
       </section>
-
       <section className='py-5 px-8'>
         <h3 className='pb-2 mb-3 border-b border-brown '>Cateogry</h3>
         <ul>
@@ -36,7 +35,7 @@ export default function PostCategory({ posts }: { posts: Post[] }) {
           ))}
         </ul>
       </section>
-    </>
+    </div>
   );
 }
 
