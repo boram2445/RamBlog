@@ -8,32 +8,31 @@ export default function Header() {
         <Link href='/' className='text-xl cursor-pointer'>
           RAMBLOG
         </Link>
-        <div className='flex gap-x-8'>
+        <div className='flex gap-x-5 mr-4'>
           <nav className='flex gap-x-4 items-center'>
             <Link
               href='/about'
-              className='cursor-pointer text-sm font-medium text-dark-gray'
+              className='cursor-pointer text-sm font-medium text-black-gray'
             >
               ABOUT
             </Link>
             <Link
               href='/posts'
-              className='cursor-pointer text-sm font-medium text-dark-gray'
+              className='cursor-pointer text-sm font-medium text-black-gray'
             >
               POSTS
             </Link>
             <Link
               href='/contact'
-              className='cursor-pointer text-sm font-medium text-dark-gray'
+              className='cursor-pointer text-sm font-medium text-black-gray'
             >
               CONTACT
             </Link>
           </nav>
           <div>
-            {/* 외부 링크는 a태그 사용하면 될까..? */}
-            <a href='https://github.com/boram2445' target='_blank'>
+            <Link href='https://github.com/boram2445' target='_blank'>
               <BsGithub className='cursor-pointer text-2xl text-bronze' />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

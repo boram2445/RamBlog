@@ -3660,6 +3660,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nodemailer@npm:^6.9.4":
+  version: 6.9.4
+  resolution: "nodemailer@npm:6.9.4"
+  checksum: 1a61039c9c6041ee9ed423c7fa3685cb300679f1ef8dcfd912fc58d9b8c429c34ac1187eebd4d86baf7158222f6e3a1ea2b4fd2a29630fb9ef0027cef46e90bb
+  languageName: node
+  linkType: hard
+
 "nopt@npm:^6.0.0":
   version: 6.0.0
   resolution: "nopt@npm:6.0.0"
@@ -4168,6 +4175,7 @@ __metadata:
     eslint: 8.45.0
     eslint-config-next: 13.4.10
     next: 13.4.10
+    nodemailer: ^6.9.4
     postcss: 8.4.26
     react: 18.2.0
     react-dom: 18.2.0

@@ -37,6 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.45.0"],\
             ["eslint-config-next", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:13.4.10"],\
             ["next", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:13.4.10"],\
+            ["nodemailer", "npm:6.9.4"],\
             ["postcss", "npm:8.4.26"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:18.2.0"],\
@@ -4370,6 +4371,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["nodemailer", [\
+        ["npm:6.9.4", {\
+          "packageLocation": "./.yarn/cache/nodemailer-npm-6.9.4-4f1ce8ca42-1a61039c9c.zip/node_modules/nodemailer/",\
+          "packageDependencies": [\
+            ["nodemailer", "npm:6.9.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["nopt", [\
         ["npm:6.0.0", {\
           "packageLocation": "./.yarn/cache/nopt-npm-6.0.0-5ea8050815-82149371f8.zip/node_modules/nopt/",\
@@ -4982,6 +4992,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.45.0"],\
             ["eslint-config-next", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:13.4.10"],\
             ["next", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:13.4.10"],\
+            ["nodemailer", "npm:6.9.4"],\
             ["postcss", "npm:8.4.26"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:18.2.0"],\
