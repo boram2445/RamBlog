@@ -1,7 +1,6 @@
 import ExperienceArticle from '@/components/ExperienceArticle';
-import Profile from '@/components/Profile';
+import Profile from '@/components/Hero';
 import ProjectArticle from '@/components/ProjectArticle';
-import Image from 'next/image';
 
 export default function AboutPage() {
   return (

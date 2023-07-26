@@ -3,13 +3,13 @@
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-export default function PostCarousel({
+export default function MultiCarousel({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const responsive = {
-    desktop: {
+    laptop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 3,
     },
@@ -24,18 +24,15 @@ export default function PostCarousel({
   };
 
   return (
-    <div className='relative'>
-      <Carousel
-        responsive={responsive}
-        ssr
-        showDots
-        infinite
-        autoPlay={true}
-        autoPlaySpeed={4000}
-        renderButtonGroupOutside={true}
-      >
-        {children}
-      </Carousel>
-    </div>
+    <Carousel
+      responsive={responsive}
+      infinite
+      autoPlay={true}
+      autoPlaySpeed={4000}
+      itemClass='px-3'
+      containerClass='-mx-3 py-1'
+    >
+      {children}
+    </Carousel>
   );
 }
