@@ -1,6 +1,12 @@
+import { Metadata } from 'next';
 import ExperienceArticle from '@/components/ExperienceArticle';
 import Profile from '@/components/Hero';
 import ProjectArticle from '@/components/ProjectArticle';
+
+export const metadata: Metadata = {
+  title: 'About Me',
+  description: 'Boram의 커리어 소개',
+};
 
 export default function AboutPage() {
   return (

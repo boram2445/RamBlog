@@ -44,3 +44,8 @@ export default async function PostPage({ params: { slug } }: Props) {
     </section>
   );
 }
+
+export async function generateMetadata({ params: { slug } }: Props) {
+  const { title, description } = await getPostData(slug);
+  return { title, description };
+}
