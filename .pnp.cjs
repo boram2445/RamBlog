@@ -30,6 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@tailwindcss/typography", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:0.5.9"],\
             ["@types/node", "npm:20.4.2"],\
+            ["@types/nodemailer", "npm:6.4.9"],\
             ["@types/react", "npm:18.2.15"],\
             ["@types/react-dom", "npm:18.2.7"],\
             ["@types/react-syntax-highlighter", "npm:15.5.7"],\
@@ -47,7 +48,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-syntax-highlighter", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:15.5.0"],\
             ["remark-gfm", "npm:3.0.1"],\
             ["tailwindcss", "npm:3.3.3"],\
-            ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"]\
+            ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
+            ["yup", "npm:1.2.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -522,6 +524,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-20.4.2-0b33863e43-99e544ea75.zip/node_modules/@types/node/",\
           "packageDependencies": [\
             ["@types/node", "npm:20.4.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:20.4.5", {\
+          "packageLocation": "./.yarn/cache/@types-node-npm-20.4.5-7555fad0d4-36a0304a8d.zip/node_modules/@types/node/",\
+          "packageDependencies": [\
+            ["@types/node", "npm:20.4.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/nodemailer", [\
+        ["npm:6.4.9", {\
+          "packageLocation": "./.yarn/cache/@types-nodemailer-npm-6.4.9-b3e43a055c-fd903f38af.zip/node_modules/@types/nodemailer/",\
+          "packageDependencies": [\
+            ["@types/nodemailer", "npm:6.4.9"],\
+            ["@types/node", "npm:20.4.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4943,6 +4962,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["property-expr", [\
+        ["npm:2.0.5", {\
+          "packageLocation": "./.yarn/cache/property-expr-npm-2.0.5-6f6bda4c65-4ebe82ce45.zip/node_modules/property-expr/",\
+          "packageDependencies": [\
+            ["property-expr", "npm:2.0.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["property-information", [\
         ["npm:5.6.0", {\
           "packageLocation": "./.yarn/cache/property-information-npm-5.6.0-1322d29e0f-fcf87c6542.zip/node_modules/property-information/",\
@@ -4985,6 +5013,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ram-blog", "workspace:."],\
             ["@tailwindcss/typography", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:0.5.9"],\
             ["@types/node", "npm:20.4.2"],\
+            ["@types/nodemailer", "npm:6.4.9"],\
             ["@types/react", "npm:18.2.15"],\
             ["@types/react-dom", "npm:18.2.7"],\
             ["@types/react-syntax-highlighter", "npm:15.5.7"],\
@@ -5002,7 +5031,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-syntax-highlighter", "virtual:c68df7cd719952c4595c23f09f147e87b475e3f81ad6eccfe92ed9231463eb6076f56e220de6cca0fd0a5cd5d273967efe9aef0c175c2a71b0f7aefe365a3f5d#npm:15.5.0"],\
             ["remark-gfm", "npm:3.0.1"],\
             ["tailwindcss", "npm:3.3.3"],\
-            ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"]\
+            ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
+            ["yup", "npm:1.2.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -5879,6 +5909,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["tiny-case", [\
+        ["npm:1.0.3", {\
+          "packageLocation": "./.yarn/cache/tiny-case-npm-1.0.3-8c9747c74e-3f7a30c39d.zip/node_modules/tiny-case/",\
+          "packageDependencies": [\
+            ["tiny-case", "npm:1.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["titleize", [\
         ["npm:3.0.0", {\
           "packageLocation": "./.yarn/cache/titleize-npm-3.0.0-7deac2f3a3-71fbbeabbf.zip/node_modules/titleize/",\
@@ -5894,6 +5933,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["to-regex-range", "npm:5.0.1"],\
             ["is-number", "npm:7.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["toposort", [\
+        ["npm:2.0.2", {\
+          "packageLocation": "./.yarn/cache/toposort-npm-2.0.2-d472329c7d-d64c74b570.zip/node_modules/toposort/",\
+          "packageDependencies": [\
+            ["toposort", "npm:2.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5992,6 +6040,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/type-fest-npm-0.20.2-b36432617f-4fb3272df2.zip/node_modules/type-fest/",\
           "packageDependencies": [\
             ["type-fest", "npm:0.20.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:2.19.0", {\
+          "packageLocation": "./.yarn/cache/type-fest-npm-2.19.0-918b953248-a4ef07ece2.zip/node_modules/type-fest/",\
+          "packageDependencies": [\
+            ["type-fest", "npm:2.19.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6378,6 +6433,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/yocto-queue-npm-0.1.0-c6c9a7db29-f77b3d8d00.zip/node_modules/yocto-queue/",\
           "packageDependencies": [\
             ["yocto-queue", "npm:0.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["yup", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/yup-npm-1.2.0-1fa3b3178d-f0cdceb144.zip/node_modules/yup/",\
+          "packageDependencies": [\
+            ["yup", "npm:1.2.0"],\
+            ["property-expr", "npm:2.0.5"],\
+            ["tiny-case", "npm:1.0.3"],\
+            ["toposort", "npm:2.0.2"],\
+            ["type-fest", "npm:2.19.0"]\
           ],\
           "linkType": "HARD"\
         }]\

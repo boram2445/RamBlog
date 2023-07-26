@@ -1,4 +1,4 @@
-import Mailer from '@/components/Mailer';
+import ContactForm from '@/components/ContactForm';
 
 export default function ContactPage() {
   return (
@@ -16,7 +16,7 @@ export default function ContactPage() {
         <h2 className='text-black mt-12 mb-8 text-2xl text-center font-semibold'>
           Contact me with mail
         </h2>
-        <Mailer />
+        <ContactForm />
       </section>
     </div>
   );
