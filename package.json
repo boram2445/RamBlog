@@ -31,7 +31,6 @@
     "typescript": "5.1.6",
     "yup": "^1.2.0"
   },
-  "packageManager": "yarn@3.6.1",
   "devDependencies": {
     "@types/nodemailer": "^6.4.9"
   }
