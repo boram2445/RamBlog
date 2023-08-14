@@ -25,6 +25,12 @@ export default function Header() {
               POSTS
             </Link>
             <Link
+              href='/new'
+              className='cursor-pointer text-sm font-medium text-black-gray'
+            >
+              NEW
+            </Link>
+            <Link
               href='/contact'
               className='cursor-pointer text-sm font-medium text-black-gray'
             >
