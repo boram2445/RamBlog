@@ -37,7 +37,7 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
     <>
       <Editor
         ref={editorRef}
-        initialValue='hello react editor world!'
+        initialValue={content || ' '}
         previewStyle={previewStyle}
         height='500px'
         initialEditType='markdown'

@@ -28,29 +28,29 @@ export function getAllPostsData(): Promise<Post[]> {
    }`);
 }
 
-export function getUnpinnedPostsData(): Promise<Post[]> {
-  return client.fetch(`
-  *[_type == "post" && pinned != true]| order(_createdAt desc){
-      tags,
-      title,
-      pinned,
-      "updatedAt":_updatedAt,
-      "createdAt":_createdAt,
-      "id":_id
-   }`);
-}
+// export function getUnpinnedPostsData(): Promise<Post[]> {
+//   return client.fetch(`
+//   *[_type == "post" && pinned != true]| order(_createdAt desc){
+//       tags,
+//       title,
+//       pinned,
+//       "updatedAt":_updatedAt,
+//       "createdAt":_createdAt,
+//       "id":_id
+//    }`);
+// }
 
-export async function getPinnedPostsData(): Promise<Post[]> {
-  return client.fetch(`
-  *[_type == "post" && pinned == true]| order(_createdAt desc){
-      tags,
-      title,
-      pinned,
-      "updatedAt":_updatedAt,
-      "createdAt":_createdAt,
-      "id":_id
-   }`);
-}
+// export async function getPinnedPostsData(): Promise<Post[]> {
+//   return client.fetch(`
+//   *[_type == "post" && pinned == true]| order(_createdAt desc){
+//       tags,
+//       title,
+//       pinned,
+//       "updatedAt":_updatedAt,
+//       "createdAt":_createdAt,
+//       "id":_id
+//    }`);
+// }
 
 export async function getPostDetail(id: string): Promise<PostData> {
   const posts = await getAllPostsData();

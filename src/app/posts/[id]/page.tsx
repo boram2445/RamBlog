@@ -2,6 +2,7 @@ import AdjacentPostCard from '@/components/AdjacentPostCard';
 import MarkDownPost from '@/components/MarkDownPost';
 import { getPostDetail } from '@/service/posts';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = {
   params: {
@@ -25,6 +26,7 @@ export default async function PostPage({ params: { id } }: Props) {
           <small className='text-sm text-dark-gray text-end bottom-3 right-3'>
             {/* {date.toString()} */}
           </small>
+          <Link href={`/write/${id}`}>수정</Link>
         </div>
       </div>
       <div className='mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
