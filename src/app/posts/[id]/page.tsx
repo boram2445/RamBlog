@@ -1,18 +1,16 @@
 import AdjacentPostCard from '@/components/AdjacentPostCard';
 import MarkDownPost from '@/components/MarkDownPost';
-import { getPostData } from '@/service/posts';
+import { getPostDetail } from '@/service/posts';
 import Image from 'next/image';
 
 type Props = {
   params: {
-    slug: string;
+    id: string;
   };
 };
 
-export default async function PostPage({ params: { slug } }: Props) {
-  const { title, category, date, content, prev, next } = await getPostData(
-    slug
-  );
+export default async function PostPage({ params: { id } }: Props) {
+  const { title, tags, content, prev, next } = await getPostDetail(id);
 
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
@@ -20,21 +18,23 @@ export default async function PostPage({ params: { slug } }: Props) {
         <h2 className='mb-5 text-3xl font-semibold text-black'>{title}</h2>
         <div className='flex justify-between'>
           <span className='py-0.5 px-3 bg-light-brown text-brown text-xs border border-brown  rounded-lg '>
-            {category}
+            {tags.map((tag, index) => (
+              <span key={index}>{tag}</span>
+            ))}
           </span>
           <small className='text-sm text-dark-gray text-end bottom-3 right-3'>
-            {date.toString()}
+            {/* {date.toString()} */}
           </small>
         </div>
       </div>
       <div className='mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
-        <Image
+        {/* <Image
           src={`/images/posts/${slug}.png`}
           alt={`${title} 포스트 이미지`}
           width={500}
           height={320}
           className='mb-8 w-full h-1/6 max-h-96'
-        />
+        /> */}
         <MarkDownPost content={content} />
       </div>
       <div className='mt-32 flex'>
@@ -45,7 +45,7 @@ export default async function PostPage({ params: { slug } }: Props) {
   );
 }
 
-export async function generateMetadata({ params: { slug } }: Props) {
-  const { title, description } = await getPostData(slug);
+export async function generateMetadata({ params: { id } }: Props) {
+  const { title, description } = await getPostDetail(id);
   return { title, description };
 }

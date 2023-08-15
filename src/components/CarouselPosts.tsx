@@ -1,20 +1,19 @@
-import { getAllPosts } from '@/service/posts';
+'use client';
+
 import MultiCarousel from './MultiCarousel';
 import PostCard from './PostCard';
+import usePosts from '@/hooks/usePosts';
 
-export default async function CarouselPosts() {
-  const posts = await getAllPosts();
+export default function CarouselPosts() {
+  const { posts, isLoading, error } = usePosts();
+  const unpinnedPosts = posts?.filter((post) => post.pinned === false);
 
+  if (!unpinnedPosts) return null;
   return (
-    <section>
-      <h2 className='mx-auto my-5 pb-2 text-xl font-semibold text-black after:content-[""] after:block after:w-20 after:bg-brown after:h-0.5 after:mt-2.5'>
-        You May Like
-      </h2>
-      <MultiCarousel>
-        {posts.map((post, index) => (
-          <PostCard key={index} post={post} />
-        ))}
-      </MultiCarousel>
-    </section>
+    <MultiCarousel>
+      {unpinnedPosts.map((post, index) => (
+        <PostCard key={index} post={post} />
+      ))}
+    </MultiCarousel>
   );
 }
