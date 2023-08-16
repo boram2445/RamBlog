@@ -13,7 +13,7 @@ export default function PostCard({ post }: { post: Post }) {
           alt={`${title}이미지`}
           width={200}
           height={200}
-          className='mx-auto w-full h-3/5'
+          className='mx-auto w-full h-3/5 object-cover'
         />
         <div className='p-3'>
           <span className='py-0.5 px-2 bg-light-brown text-brown text-xs rounded-sm'>

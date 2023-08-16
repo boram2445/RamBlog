@@ -41,36 +41,63 @@ export async function getAllPostsData(): Promise<Post[]> {
     .then(mapPosts);
 }
 
-// export async function getPrevPost(
-//   currentPostId: string
-// ): Promise<PostData | null> {
-//   const prevPost = await client.fetch(
-//     `*[_type == "post" &&  _id != "${currentPostId}" && _createdAt < now()] | order(publishedAt desc)[0]`
-//   );
+export async function getPrevPost(currentDate: string) {
+  return await client
+    .fetch(
+      `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
+    {
+      tags,
+      title,
+      pinned,
+      mainImage,
+      "updatedAt":_updatedAt,
+      "createdAt":_createdAt,
+      "id":_id
+   }
+    `,
+      { currentDate }
+    )
+    .then((post) =>
+      post ? { ...post, mainImage: urlFor(post.mainImage) } : null
+    );
+}
 
-//   return prevPost || null;
-// }
-
-// export async function getNextPost(
-//   currentPostId: string
-// ): Promise<PostData | null> {
-//   const nextPost = await client.fetch(
-//     `*[_type == "post" && _id != "${currentPostId}" && _createdAt > now()] | order(publishedAt asc)[0]`
-//   );
-
-//   return nextPost || null;
-// }
+export async function getNextPost(currentDate: string) {
+  return await client
+    .fetch(
+      `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
+      {
+        tags,
+        title,
+        pinned,
+        mainImage,
+        "updatedAt":_updatedAt,
+        "createdAt":_createdAt,
+        "id":_id
+     }
+      `,
+      { currentDate }
+    )
+    .then((post) =>
+      post ? { ...post, mainImage: urlFor(post.mainImage) } : null
+    );
+}
 
 export async function getPostDetail(id: string): Promise<PostData> {
-  // const prevPost = await getPrevPost(id);
-  // const nextPost = await getNextPost(id);
-  const prevPost = null;
-  const nextPost = null;
   const postDetail = await client
-    .fetch(`*[_type == "post" && _id == "${id}"][0]`)
+    .fetch(
+      `*[_type == "post" && _id == "${id}"][0]{
+        ...,
+        "updatedAt":_updatedAt,
+        "createdAt":_createdAt,
+        "id":_id}
+      `
+    )
     .then((post) => ({ ...post, mainImage: urlFor(post.mainImage) }));
+  const prevPost = await getPrevPost(postDetail.createdAt);
+  const nextPost = await getNextPost(postDetail.createdAt);
 
-  return { ...postDetail, prevPost, nextPost };
+  return { ...postDetail, prev: prevPost, next: nextPost };
 }
 
 export async function createPost(
@@ -108,11 +135,10 @@ export async function editPost(
   const newData = {
     ...(title && { title }),
     ...(description && { description }),
-    ...(tagArr && { tags: tagArr }), // tagArr를 추가
+    ...(tagArr && { tags: tagArr }),
     ...(content && { content }),
     ...(mainImage && { mainImage: { asset: { _ref: urlRes.document._id } } }),
   };
-  console.log(newData);
   return client
     .patch(postId) //
     .set(newData) //

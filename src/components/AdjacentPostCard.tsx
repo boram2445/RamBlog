@@ -11,20 +11,21 @@ type Props = {
 const ICON_CLASS = 'text-4xl group-hover:text-5xl transition-all';
 
 export default function AdjacentPostCard({ data, type }: Props) {
-  const { title, id, description } = data;
+  const { title, id, description, mainImage } = data;
+
   return (
     <Link
       href={`/posts/${id}`}
       className='w-full max-h-40 relative cursor-pointer hover:shadow-lg'
     >
-      {/* <Image
-        src={`/images/posts/${path}.png`}
+      <Image
+        src={mainImage}
         alt={title}
         width={200}
         height={150}
-        className='w-full h-full brightness-50'
-      /> */}
-      <div className='group w-full px-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-around items-center '>
+        className='w-full h-full brightness-50 object-cover'
+      />
+      <div className='group w-full px-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-around items-center text-white'>
         {type === 'prev' && <BsArrowLeftCircleFill className={ICON_CLASS} />}
         <div className='text-center'>
           <h4 className='text-xl font-bold'>{title}</h4>
