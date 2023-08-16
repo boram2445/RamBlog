@@ -95,3 +95,26 @@ export async function createPost(
     { autoGenerateArrayKeys: true }
   );
 }
+
+export async function editPost(
+  postId: string,
+  title?: string,
+  description?: string,
+  tagArr?: string[],
+  content?: string,
+  mainImage?: Blob
+) {
+  const urlRes = mainImage && (await uploadImage(mainImage));
+  const newData = {
+    ...(title && { title }),
+    ...(description && { description }),
+    ...(tagArr && { tags: tagArr }), // tagArr를 추가
+    ...(content && { content }),
+    ...(mainImage && { mainImage: { asset: { _ref: urlRes.document._id } } }),
+  };
+  console.log(newData);
+  return client
+    .patch(postId) //
+    .set(newData) //
+    .commit();
+}

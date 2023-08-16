@@ -10,6 +10,8 @@ type Props = {
   };
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function PostPage({ params: { id } }: Props) {
   const { title, tags, content, prev, next, mainImage } = await getPostDetail(
     id

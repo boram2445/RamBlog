@@ -61,6 +61,25 @@ export default function WritePostForm({ id, postDetail }: Props) {
       .finally(() => setLoading(false));
   };
 
+  const handleEdit = () => {
+    const content = editorRef.current?.getInstance().getMarkdown();
+
+    const formData = new FormData();
+    postDetail?.title !== form.title && formData.append('title', form.title);
+    postDetail?.description !== form.description &&
+      formData.append('description', form.description);
+    postDetail?.tags.join(', ') !== form.tags &&
+      formData.append('tags', form.tags);
+    postDetail?.content !== content && formData.append('content', content);
+    file && formData.append('file', file);
+
+    axios
+      .patch(`/api/posts/${id}`, formData)
+      .then(() => router.push('/'))
+      .catch((err) => setError(err.toString()))
+      .finally(() => setLoading(false));
+  };
+
   return (
     <div className='flex flex-col'>
       <div>
@@ -108,7 +127,10 @@ export default function WritePostForm({ id, postDetail }: Props) {
         />
       </div>
       <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
-      <button onClick={handleSubmit} className='bg-pink-200'>
+      <button
+        onClick={postDetail ? handleEdit : handleSubmit}
+        className='bg-pink-200'
+      >
         {id ? '수정완료' : '저장하기'}
       </button>
     </div>

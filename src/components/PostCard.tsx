@@ -5,7 +5,6 @@ import { Post } from '@/service/posts';
 export default function PostCard({ post }: { post: Post }) {
   const { title, description, tags, id, mainImage } = post;
 
-  console.log(mainImage);
   return (
     <Link href={`/posts/${id}`}>
       <article className='relative mx-auto w-full h-80 tablet:h-76 bg-white rounded-lg overflow-hidden ease-in duration-100 cursor-pointer  hover:drop-shadow-md'>

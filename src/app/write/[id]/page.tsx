@@ -7,6 +7,8 @@ type Props = {
   };
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page({ params: { id } }: Props) {
   const postDetail = await getPostDetail(id);
 
