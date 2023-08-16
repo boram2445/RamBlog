@@ -19,6 +19,11 @@ export default {
       type: 'boolean',
     },
     {
+      title: 'Main image',
+      name: 'mainImage',
+      type: 'image',
+    },
+    {
       title: 'Tags',
       name: 'tags',
       type: 'array',
@@ -35,4 +40,19 @@ export default {
       type: 'string',
     },
   ],
+  preview: {
+    select: {
+      title: 'title',
+      publishedAt: 'publishedAt',
+      media: 'mainImage',
+    },
+    prepare(selection) {
+      const {title, media, publishedAt} = selection
+      return {
+        title,
+        media,
+        subtitle: publishedAt,
+      }
+    },
+  },
 }

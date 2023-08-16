@@ -19,6 +19,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
     description: postDetail?.description || '',
     tags: postDetail?.tags.join(', ') || '',
   };
+  const [file, setFile] = useState<File>();
 
   const [form, setForm] = useState(initialState);
   const [loading, setLoading] = useState(false);
@@ -30,17 +31,31 @@ export default function WritePostForm({ id, postDetail }: Props) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const files = e.target?.files;
+    if (files && files[0]) {
+      setFile(files[0]);
+    }
+  };
+
   const handleSubmit = () => {
     const content = editorRef.current?.getInstance().getMarkdown();
 
-    if (!content || !form.title || !form.tags || !form.description) {
+    if (!content || !form.title || !form.tags || !form.description || !file) {
       alert('모든 항목을 입력해 주세요');
       return;
     }
     setLoading(true);
-    const data = { ...form, content };
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('tags', form.tags);
+    formData.append('content', content);
+
     axios
-      .post('/api/posts', data)
+      .post('/api/posts', formData)
       .then(() => router.push('/'))
       .catch((err) => setError(err.toString()))
       .finally(() => setLoading(false));
@@ -58,6 +73,16 @@ export default function WritePostForm({ id, postDetail }: Props) {
           autoFocus
           value={form.title}
           onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label htmlFor='mainImage'>메인 이미지</label>
+        <input
+          type='file'
+          id='mainImage'
+          name='mainImage'
+          accept='image/*'
+          onChange={handleFileChange}
         />
       </div>
       <div>

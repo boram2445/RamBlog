@@ -1,8 +1,10 @@
-import { client } from './sanity';
+import { client, urlFor } from './sanity';
+import { uploadImage } from './image';
 
 export type Post = {
   title: string;
   description: string;
+  mainImage: string;
   pinned: boolean;
   updatedAt: Date;
   createdAt: Date;
@@ -16,60 +18,70 @@ export type PostData = Post & {
   next: Post | null;
 };
 
-export function getAllPostsData(): Promise<Post[]> {
-  return client.fetch(`
-  *[_type == "post"]| order(_createdAt desc){
+function mapPosts(posts: Post[]) {
+  return posts.map((post: Post) => ({
+    ...post,
+    mainImage: urlFor(post.mainImage),
+  }));
+}
+
+export async function getAllPostsData(): Promise<Post[]> {
+  return client
+    .fetch(
+      `*[_type == "post"]| order(_createdAt desc){
       tags,
       title,
       pinned,
+      mainImage,
       "updatedAt":_updatedAt,
       "createdAt":_createdAt,
       "id":_id
-   }`);
+   }`
+    )
+    .then(mapPosts);
 }
 
-// export function getUnpinnedPostsData(): Promise<Post[]> {
-//   return client.fetch(`
-//   *[_type == "post" && pinned != true]| order(_createdAt desc){
-//       tags,
-//       title,
-//       pinned,
-//       "updatedAt":_updatedAt,
-//       "createdAt":_createdAt,
-//       "id":_id
-//    }`);
+// export async function getPrevPost(
+//   currentPostId: string
+// ): Promise<PostData | null> {
+//   const prevPost = await client.fetch(
+//     `*[_type == "post" &&  _id != "${currentPostId}" && _createdAt < now()] | order(publishedAt desc)[0]`
+//   );
+
+//   return prevPost || null;
 // }
 
-// export async function getPinnedPostsData(): Promise<Post[]> {
-//   return client.fetch(`
-//   *[_type == "post" && pinned == true]| order(_createdAt desc){
-//       tags,
-//       title,
-//       pinned,
-//       "updatedAt":_updatedAt,
-//       "createdAt":_createdAt,
-//       "id":_id
-//    }`);
+// export async function getNextPost(
+//   currentPostId: string
+// ): Promise<PostData | null> {
+//   const nextPost = await client.fetch(
+//     `*[_type == "post" && _id != "${currentPostId}" && _createdAt > now()] | order(publishedAt asc)[0]`
+//   );
+
+//   return nextPost || null;
 // }
 
 export async function getPostDetail(id: string): Promise<PostData> {
-  const posts = await getAllPostsData();
-  const index = posts.findIndex((post) => post.id === id);
-  const prev = index - 1 < 0 ? null : posts[index - 1];
-  const next = index + 1 > posts.length - 1 ? null : posts[index + 1];
-  const postDetail = await client.fetch(
-    `*[_type == "post" && _id == "${id}"][0]`
-  );
+  // const prevPost = await getPrevPost(id);
+  // const nextPost = await getNextPost(id);
+  const prevPost = null;
+  const nextPost = null;
+  const postDetail = await client
+    .fetch(`*[_type == "post" && _id == "${id}"][0]`)
+    .then((post) => ({ ...post, mainImage: urlFor(post.mainImage) }));
 
-  return { ...postDetail, prev, next };
+  return { ...postDetail, prevPost, nextPost };
 }
 
 export async function createPost(
   title: string,
   description: string,
   tagArr: string[],
-  content: string
+  content: string,
+  mainImage: Blob
 ) {
+  const urlRes = await uploadImage(mainImage);
+
   return client.create(
     {
       _type: 'post',
@@ -78,6 +90,7 @@ export async function createPost(
       description,
       tags: tagArr,
       content,
+      mainImage: { asset: { _ref: urlRes.document._id } },
     },
     { autoGenerateArrayKeys: true }
   );

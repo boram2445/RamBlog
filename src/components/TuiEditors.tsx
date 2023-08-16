@@ -7,7 +7,7 @@ import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import Prism from 'prismjs';
 import { useEffect, useState } from 'react';
-import { uploadImage } from '@/service/imageUploader';
+import axios from 'axios';
 
 type Props = {
   content: string;
@@ -48,8 +48,12 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
             blob: Blob | File,
             callback: (url: string) => void
           ) => {
-            const imgUrl = await uploadImage(blob);
-            callback(imgUrl);
+            const formData = new FormData();
+            formData.append('file', blob);
+            const imageData = await axios
+              .post('/api/image', formData)
+              .then((res) => res.data.document);
+            callback(imageData.url);
           },
         }}
       />

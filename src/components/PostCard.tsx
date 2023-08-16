@@ -3,17 +3,19 @@ import Link from 'next/link';
 import { Post } from '@/service/posts';
 
 export default function PostCard({ post }: { post: Post }) {
-  const { title, description, tags, id } = post;
+  const { title, description, tags, id, mainImage } = post;
+
+  console.log(mainImage);
   return (
     <Link href={`/posts/${id}`}>
       <article className='relative mx-auto w-full h-80 tablet:h-76 bg-white rounded-lg overflow-hidden ease-in duration-100 cursor-pointer  hover:drop-shadow-md'>
-        {/* <Image
-          src={`/images/posts/${id}.png`}
+        <Image
+          src={mainImage}
           alt={`${title}이미지`}
           width={200}
           height={200}
           className='mx-auto w-full h-3/5'
-        /> */}
+        />
         <div className='p-3'>
           <span className='py-0.5 px-2 bg-light-brown text-brown text-xs rounded-sm'>
             {tags.map((tag, index) => (

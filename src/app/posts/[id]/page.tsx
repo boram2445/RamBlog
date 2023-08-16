@@ -11,7 +11,9 @@ type Props = {
 };
 
 export default async function PostPage({ params: { id } }: Props) {
-  const { title, tags, content, prev, next } = await getPostDetail(id);
+  const { title, tags, content, prev, next, mainImage } = await getPostDetail(
+    id
+  );
 
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
@@ -30,13 +32,13 @@ export default async function PostPage({ params: { id } }: Props) {
         </div>
       </div>
       <div className='mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
-        {/* <Image
-          src={`/images/posts/${slug}.png`}
+        <Image
+          src={mainImage}
           alt={`${title} 포스트 이미지`}
           width={500}
           height={320}
           className='mb-8 w-full h-1/6 max-h-96'
-        /> */}
+        />
         <MarkDownPost content={content} />
       </div>
       <div className='mt-32 flex'>

@@ -6,16 +6,21 @@ export async function GET(_: Request) {
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { title, description, tags, content } = body;
+  const form = await req.formData();
 
-  if (!title || !description || !tags || !content) {
+  const title = form.get('title')?.toString();
+  const description = form.get('description')?.toString();
+  const tags = form.get('tags')?.toString();
+  const content = form.get('content')?.toString();
+  const mainImage = form.get('file') as Blob;
+
+  if (!title || !description || !tags || !content || !mainImage) {
     return new Response('Bad request', { status: 400 });
   }
 
   const tagArr = tags.replace(/ /g, '').split(',');
 
-  return await createPost(title, description, tagArr, content).then((data) =>
-    NextResponse.json(data)
+  return await createPost(title, description, tagArr, content, mainImage).then(
+    (data) => NextResponse.json(data)
   );
 }
