@@ -1,0 +1,29 @@
+.toastui-editor-contents p,
+.ProseMirror div {
+  font-size: 16px;
+}
+
+.toastui-editor-contents h1,
+.toastui-editor-md-heading1 {
+  font-size: 32px;
+}
+
+.toastui-editor-contents h2,
+.toastui-editor-md-heading2 {
+  font-size: 24px;
+}
+
+.toastui-editor-contents h3,
+.toastui-editor-md-heading3 {
+  font-size: 19px;
+}
+
+.toastui-editor-contents h4,
+.toastui-editor-md-heading4 {
+  font-size: 17px;
+}
+
+.toastui-editor-contents code,
+.toastui-editor-md-code-block-line-background {
+  font-size: 15px;
+}

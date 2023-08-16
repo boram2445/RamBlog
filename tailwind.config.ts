@@ -10,15 +10,21 @@ const config: Config = {
     extend: {
       colors: {
         black: '#23262f',
+        'light-black': '#3f3f46',
+        'dark-gray': '#878787',
+        gray: '#b4b4b4',
+        'light-gray': '#e0e0e0',
+        'white-gray': '#efefef',
+        white: 'ffffff',
+
+        'dark-green': '#27622',
+        green: '#46923c',
+        'light-green': '#5bb450',
+        'white-green': 'cce7c9',
         'white-brown': '#fafafa',
         'light-brown': '#f7f3f0',
         brown: '#c3936d',
         bronze: '#cd7f32',
-        'white-gray': '#efefef',
-        'light-gray': '#e0e0e0',
-        gray: '#b4b4b4',
-        'dark-gray': '#878787',
-        'black-gray': '#3f3f46',
       },
       screens: {
         tablet: '640px',
