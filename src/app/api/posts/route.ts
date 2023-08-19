@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
   const description = form.get('description')?.toString();
   const tags = form.get('tags')?.toString();
   const content = form.get('content')?.toString();
-  const mainImage = form.get('file') as Blob;
+  const mainImage = form.get('mainImageUrl')?.toString();
 
-  if (!title || !description || !tags || !content || !mainImage) {
+  if (!title || !description || !tags || !content) {
     return new Response('Bad request', { status: 400 });
   }
 

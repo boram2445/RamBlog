@@ -15,11 +15,11 @@ export async function PATCH(req: NextRequest, context: Context) {
   const form = await req.formData();
   const id = context.params.id;
 
+  const mainImage = form.get('mainImageUrl')?.toString();
   const title = form.get('title')?.toString();
   const description = form.get('description')?.toString();
   const tags = form.get('tags')?.toString();
   const content = form.get('content')?.toString();
-  const mainImage = (form.get('file') as Blob) || undefined;
 
   const tagArr = tags?.replace(/ /g, '').split(',');
 

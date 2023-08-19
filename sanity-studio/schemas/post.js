@@ -21,7 +21,7 @@ export default {
     {
       title: 'Main image',
       name: 'mainImage',
-      type: 'image',
+      type: 'string',
     },
     {
       title: 'Tags',
@@ -44,13 +44,11 @@ export default {
     select: {
       title: 'title',
       publishedAt: 'publishedAt',
-      media: 'mainImage',
     },
     prepare(selection) {
-      const {title, media, publishedAt} = selection
+      const {title, publishedAt} = selection
       return {
         title,
-        media,
         subtitle: publishedAt,
       }
     },

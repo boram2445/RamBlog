@@ -1,5 +1,4 @@
-import { client, urlFor } from './sanity';
-import { uploadImage } from './image';
+import { client } from './sanity';
 
 export type Post = {
   title: string;
@@ -18,17 +17,9 @@ export type PostData = Post & {
   next: Post | null;
 };
 
-function mapPosts(posts: Post[]) {
-  return posts.map((post: Post) => ({
-    ...post,
-    mainImage: urlFor(post.mainImage),
-  }));
-}
-
 export async function getAllPostsData(): Promise<Post[]> {
-  return client
-    .fetch(
-      `*[_type == "post"]| order(_createdAt desc){
+  return client.fetch(
+    `*[_type == "post"]| order(_createdAt desc){
       tags,
       title,
       pinned,
@@ -37,14 +28,12 @@ export async function getAllPostsData(): Promise<Post[]> {
       "createdAt":_createdAt,
       "id":_id
    }`
-    )
-    .then(mapPosts);
+  );
 }
 
 export async function getPrevPost(currentDate: string) {
-  return await client
-    .fetch(
-      `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
+  return await client.fetch(
+    `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
     {
       tags,
       title,
@@ -55,17 +44,13 @@ export async function getPrevPost(currentDate: string) {
       "id":_id
    }
     `,
-      { currentDate }
-    )
-    .then((post) =>
-      post ? { ...post, mainImage: urlFor(post.mainImage) } : null
-    );
+    { currentDate }
+  );
 }
 
 export async function getNextPost(currentDate: string) {
-  return await client
-    .fetch(
-      `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
+  return await client.fetch(
+    `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
       {
         tags,
         title,
@@ -76,24 +61,19 @@ export async function getNextPost(currentDate: string) {
         "id":_id
      }
       `,
-      { currentDate }
-    )
-    .then((post) =>
-      post ? { ...post, mainImage: urlFor(post.mainImage) } : null
-    );
+    { currentDate }
+  );
 }
 
 export async function getPostDetail(id: string): Promise<PostData> {
-  const postDetail = await client
-    .fetch(
-      `*[_type == "post" && _id == "${id}"][0]{
+  const postDetail = await client.fetch(
+    `*[_type == "post" && _id == "${id}"][0]{
         ...,
         "updatedAt":_updatedAt,
         "createdAt":_createdAt,
         "id":_id}
       `
-    )
-    .then((post) => ({ ...post, mainImage: urlFor(post.mainImage) }));
+  );
   const prevPost = await getPrevPost(postDetail.createdAt);
   const nextPost = await getNextPost(postDetail.createdAt);
 
@@ -105,10 +85,8 @@ export async function createPost(
   description: string,
   tagArr: string[],
   content: string,
-  mainImage: Blob
+  mainImage?: string
 ) {
-  const urlRes = await uploadImage(mainImage);
-
   return client.create(
     {
       _type: 'post',
@@ -117,7 +95,7 @@ export async function createPost(
       description,
       tags: tagArr,
       content,
-      mainImage: { asset: { _ref: urlRes.document._id } },
+      mainImage,
     },
     { autoGenerateArrayKeys: true }
   );
@@ -129,15 +107,14 @@ export async function editPost(
   description?: string,
   tagArr?: string[],
   content?: string,
-  mainImage?: Blob
+  mainImage?: string
 ) {
-  const urlRes = mainImage && (await uploadImage(mainImage));
   const newData = {
     ...(title && { title }),
     ...(description && { description }),
     ...(tagArr && { tags: tagArr }),
     ...(content && { content }),
-    ...(mainImage && { mainImage: { asset: { _ref: urlRes.document._id } } }),
+    ...(mainImage && { mainImage }),
   };
   return client
     .patch(postId) //
