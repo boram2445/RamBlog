@@ -1,22 +1,18 @@
-import {defineConfig, isDev} from 'sanity'
-import {visionTool} from '@sanity/vision'
+import {defineConfig} from 'sanity'
 import {deskTool} from 'sanity/desk'
+import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
-import {getStartedPlugin} from './plugins/sanity-plugin-tutorial'
-
-const devOnlyPlugins = [getStartedPlugin()]
 
 export default defineConfig({
   name: 'default',
-  title: 'peru-penguin',
+  title: 'DevBlog',
 
-  projectId: 'kty0t1lq',
+  projectId: 'v3rvpdy7',
   dataset: 'production',
 
-  plugins: [deskTool(), visionTool(), ...(isDev ? devOnlyPlugins : [])],
+  plugins: [deskTool(), visionTool()],
 
   schema: {
     types: schemaTypes,
   },
 })
-
