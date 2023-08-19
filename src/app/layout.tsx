@@ -1,12 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Noto_Sans_KR } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
 
-const notoSansKr = Noto_Sans_KR({
-  weight: ['400', '500', '700'],
+const openSans = Open_Sans({
   subsets: ['latin'],
 });
 
@@ -25,9 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body
-        className={`h-screen flex flex-col bg-white-brown ${notoSansKr.className}`}
-      >
+      <body className={`h-screen flex flex-col  ${openSans.className}`}>
         <Header />
         <SWRConfigContext>
           <main className='grow mx-auto mb-32 w-full'>{children}</main>

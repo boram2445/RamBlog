@@ -62,7 +62,7 @@ export default function ContactForm() {
           className='py-1.5 px-3 h-48 rounded-lg'
           required
         />
-        <button className='border border-brown text-brown rounded-full py-1.5 font-semibold bg-white-brown hover:bg-brown hover:text-white ease-in duration-100'>
+        <button className=' rounded-full py-1.5 font-semibold hover:text-white ease-in duration-100'>
           Send
         </button>
       </form>

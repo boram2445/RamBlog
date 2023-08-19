@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className='max-w-screen-lg mx-auto p-2 tablet:p-5 laptop:p-8'>
-      <div className='bg-light-brown rounded-xl py-3 px-8 shadow-md'>
+      <div className='rounded-xl py-3 px-8 shadow-md'>
         <h2 className='text-lg font-semibold text-black mb-1'>
           Please Contact Me
         </h2>

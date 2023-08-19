@@ -7,7 +7,7 @@ export default function PostCard({ post }: { post: Post }) {
 
   return (
     <Link href={`/posts/${id}`}>
-      <article className='relative mx-auto w-full h-80 tablet:h-76 bg-white rounded-lg overflow-hidden ease-in duration-100 cursor-pointer  hover:drop-shadow-md'>
+      <article className='relative mx-auto w-full h-80 tablet:h-76 overflow-hidden border-2 border-light-gray rounded-lg cursor-pointer  hover:drop-shadow-md'>
         <Image
           src={mainImage}
           alt={`${title}이미지`}
@@ -16,7 +16,7 @@ export default function PostCard({ post }: { post: Post }) {
           className='mx-auto w-full h-3/5 object-cover'
         />
         <div className='p-3'>
-          <span className='py-0.5 px-2 bg-light-brown text-brown text-xs rounded-sm'>
+          <span className='py-0.5 px-2 text-xs rounded-sm'>
             {tags.map((tag, index) => (
               <span key={index}>{tag}</span>
             ))}

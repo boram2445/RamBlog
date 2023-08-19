@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function Header() {
   return (
-    <header className=' bg-light-brown'>
+    <header>
       <div className='max-w-screen-lg mx-auto px-5 py-4 flex justify-between items-center'>
         <Link href='/' className='text-xl cursor-pointer'>
           <Image src={logo} alt='RAMBLOG 로고' width={120} />

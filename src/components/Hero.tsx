@@ -4,7 +4,7 @@ import ProfileImg from '../../public/images/profile.jpg';
 
 export default function Hero() {
   return (
-    <section className='text-center py-5 bg-light-brown'>
+    <section className='text-center py-5'>
       <Image
         src={ProfileImg}
         alt='프로파일 이미지'
