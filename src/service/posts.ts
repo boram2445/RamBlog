@@ -121,3 +121,7 @@ export async function editPost(
     .set(newData) //
     .commit();
 }
+
+export async function deletePost(postId: string) {
+  return client.delete(postId);
+}

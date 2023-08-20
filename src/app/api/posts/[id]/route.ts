@@ -1,4 +1,4 @@
-import { editPost, getPostDetail } from '@/service/posts';
+import { deletePost, editPost, getPostDetail } from '@/service/posts';
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
@@ -31,4 +31,12 @@ export async function PATCH(req: NextRequest, context: Context) {
     content,
     mainImage
   ).then((data) => NextResponse.json(data));
+}
+
+export async function DELETE(_: NextRequest, context: Context) {
+  const id = context.params.id;
+
+  if (!id) return new Response('Bad Request', { status: 400 });
+
+  return await deletePost(id).then((data) => NextResponse.json(data));
 }
