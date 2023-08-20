@@ -2,9 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@/service/posts';
 import TagList from './ui/TagList';
+import Date from './ui/Date';
 
 export default function PostCard({ post }: { post: Post }) {
-  const { title, description, tags, id, mainImage } = post;
+  const { title, description, tags, id, mainImage, createdAt } = post;
 
   return (
     <Link href={`/posts/${id}`}>
@@ -24,9 +25,9 @@ export default function PostCard({ post }: { post: Post }) {
           <p className='w-full text-sm text-dark-gray truncate'>
             {description}
           </p>
-          <time className='text-xs text-dark-gray text-end absolute bottom-3 right-3'>
-            {/* {date.toString()} */}
-          </time>
+          <div className='absolute bottom-4 right-4'>
+            <Date date={createdAt.toString()} />
+          </div>
         </div>
       </article>
     </Link>

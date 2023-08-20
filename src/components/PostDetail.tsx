@@ -10,6 +10,7 @@ import Button from './ui/Button';
 import { AiFillEdit } from 'react-icons/ai';
 import { ClipLoader } from 'react-spinners';
 import TagList from './ui/TagList';
+import Date from './ui/Date';
 
 type Props = {
   id: string;
@@ -26,24 +27,22 @@ export default function PostDetail({ id }: Props) {
       {isLoading && <ClipLoader color='green' />}
       {!isLoading && !error && (
         <>
-          <div className='mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
+          <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
             <h2 className='mb-5 text-3xl font-semibold text-black'>
               {post.title}
             </h2>
-            <div className='flex justify-between items-center'>
-              {post.tags && <TagList tags={post.tags} />}
-              <small className='text-sm text-dark-gray text-end bottom-3 right-3'>
-                {/* {date.toString()} */}
-              </small>
+            <div className='mb-2 flex justify-end gap-2'>
               <Link href={`/write/${id}`}>
-                <Button>
-                  <AiFillEdit size='20' />
-                  수정
-                </Button>
+                <Button>수정</Button>
               </Link>
+              <Button>삭제</Button>
+            </div>
+            <div className='flex justify-between items-center'>
+              {post.tags && <TagList tags={post.tags} type='big' />}
+              <Date date={post.createdAt.toString()} type='big' />
             </div>
           </div>
-          <div className='mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
+          <div className='mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20 min-h-[300px]'>
             <MarkDownPost content={post.content} />
           </div>
           <div className='mt-32 flex'>
