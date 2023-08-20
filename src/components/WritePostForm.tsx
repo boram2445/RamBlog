@@ -61,8 +61,6 @@ export default function WritePostForm({ id, postDetail }: Props) {
     formData.append('tags', form.tags.join());
     formData.append('content', content);
 
-    console.log(url);
-
     axios
       .post('/api/posts', formData)
       .then(() => router.push('/'))
@@ -132,8 +130,14 @@ export default function WritePostForm({ id, postDetail }: Props) {
 
       <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
       <div className='m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3'>
-        <Button onClick={() => router.back()}>뒤로가기</Button>
-        <Button color='black' onClick={postDetail ? handleEdit : handleSubmit}>
+        <Button onClick={() => router.back()} type='big'>
+          뒤로가기
+        </Button>
+        <Button
+          color='black'
+          onClick={postDetail ? handleEdit : handleSubmit}
+          type='big'
+        >
           출간하기
         </Button>
       </div>

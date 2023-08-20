@@ -18,14 +18,20 @@ export default function AdjacentPostCard({ data, type }: Props) {
       href={`/posts/${id}`}
       className='w-full max-h-40 relative cursor-pointer hover:shadow-lg'
     >
-      <Image
-        src={mainImage}
-        alt={title}
-        width={200}
-        height={150}
-        className='w-full h-full brightness-50 object-cover'
-      />
-      <div className='group w-full px-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-around items-center text-white'>
+      {mainImage && (
+        <Image
+          src={mainImage}
+          alt={title}
+          width={200}
+          height={150}
+          className='w-full h-full brightness-50 object-cover'
+        />
+      )}
+      <div
+        className={`group w-full px-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-around items-center ${
+          mainImage ? 'text-white' : 'border border-gray-200 h-[150px]'
+        } `}
+      >
         {type === 'prev' && <BsArrowLeftCircleFill className={ICON_CLASS} />}
         <div className='text-center'>
           <h4 className='text-xl font-bold'>{title}</h4>
