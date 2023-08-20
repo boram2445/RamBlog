@@ -39,7 +39,6 @@ export default function WritePostForm({ id, postDetail }: Props) {
   };
 
   const handleTags = (tagArr: string[]) => {
-    console.log(tagArr);
     setForm((prev) => ({ ...prev, ['tags']: [...tagArr] }));
   };
 
