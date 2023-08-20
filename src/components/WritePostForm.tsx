@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
 import Button from './ui/Button';
+import { HashLoader } from 'react-spinners';
+import TagsInput from './TagsInput';
 
 type Props = {
   id?: string;
@@ -19,10 +21,11 @@ const inputStyle =
 
 export default function WritePostForm({ id, postDetail }: Props) {
   const editorRef = useRef<Editor | null>(null);
+  //tag- 배열로 관리하다가 form전송시 string으로 변환
   const initialState = {
     title: postDetail?.title || '',
     description: postDetail?.description || '',
-    tags: postDetail?.tags.join(', ') || '',
+    tags: postDetail?.tags || [],
   };
 
   const [form, setForm] = useState(initialState);
@@ -33,6 +36,11 @@ export default function WritePostForm({ id, postDetail }: Props) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTags = (tagArr: string[]) => {
+    console.log(tagArr);
+    setForm((prev) => ({ ...prev, ['tags']: [...tagArr] }));
   };
 
   const handleSubmit = () => {
@@ -50,7 +58,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
     formData.append('mainImageUrl', url);
     formData.append('title', form.title);
     formData.append('description', form.description);
-    formData.append('tags', form.tags);
+    formData.append('tags', form.tags.join());
     formData.append('content', content);
 
     console.log(url);
@@ -72,8 +80,8 @@ export default function WritePostForm({ id, postDetail }: Props) {
     postDetail?.title !== form.title && formData.append('title', form.title);
     postDetail?.description !== form.description &&
       formData.append('description', form.description);
-    postDetail?.tags.join(', ') !== form.tags &&
-      formData.append('tags', form.tags);
+    postDetail?.tags.join() !== form.tags.join() &&
+      formData.append('tags', form.tags.join());
     postDetail?.content !== content && formData.append('content', content);
 
     axios
@@ -85,6 +93,12 @@ export default function WritePostForm({ id, postDetail }: Props) {
 
   return (
     <div className='flex flex-col'>
+      {loading && (
+        <div className='absolute bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
+          <HashLoader />
+          <p>업로드 중...</p>
+        </div>
+      )}
       <div className='my-3 mx-auto max-w-screen-lg w-full px-4'>
         <div className={inputBoxStyle}>
           <label htmlFor='title'>제목</label>
@@ -113,20 +127,9 @@ export default function WritePostForm({ id, postDetail }: Props) {
             autoComplete='off'
           />
         </div>
-        <div className={inputBoxStyle}>
-          <label htmlFor='tags'>태그</label>
-          <input
-            type='text'
-            id='tags'
-            name='tags'
-            placeholder='태그를 입력해주세요'
-            value={form.tags}
-            onChange={handleChange}
-            className={inputStyle}
-            autoComplete='off'
-          />
-        </div>
+        <TagsInput tags={form.tags} handleTags={handleTags} />
       </div>
+
       <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
       <div className='m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3'>
         <Button onClick={() => router.back()}>뒤로가기</Button>
@@ -139,7 +142,17 @@ export default function WritePostForm({ id, postDetail }: Props) {
 }
 
 const getMainImageUrl = (content: string) => {
-  const urlRegex = /!\[.*?\]\((https?:\/\/\S+)\)/;
-  const match = content.match(urlRegex);
-  return match?.[1] || '';
+  const markdownRegex = /!\[.*?\]\((https?:\/\/\S+)\)/;
+  const htmlImgRegex = /<img\s+[^>]*src="([^"]+)"[^>]*>/i;
+
+  const markdownMatch = content.match(markdownRegex);
+  const htmlMatch = content.match(htmlImgRegex);
+
+  if (markdownMatch) {
+    return markdownMatch[1];
+  } else if (htmlMatch) {
+    return htmlMatch[1];
+  } else {
+    return '';
+  }
 };

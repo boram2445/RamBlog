@@ -10,6 +10,7 @@ import Prism from 'prismjs';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './tuiEditor.css';
+import { ClipLoader } from 'react-spinners';
 
 type Props = {
   content: string;
@@ -18,6 +19,7 @@ type Props = {
 
 export default function TuiEditors({ content = '', editorRef }: Props) {
   const [previewStyle, setPreviewStyle] = useState<'tab' | 'vertical'>('tab');
+  const [loading, setLoading] = useState(false);
 
   //화면 사이즈가 작아지면 tab형식으로 변환
   //mount될때 실행되는건 알겠는데, 왜 window사이즈가 변할때도 실행되는지 모르겠다.
@@ -35,8 +37,17 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
     };
   }, []);
 
+  const uploadImg = async (file: Blob | File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return await axios
+      .post('/api/image', formData)
+      .then((res) => res.data.document);
+  };
+
   return (
-    <>
+    <div className='relative'>
+      {loading && <ClipLoader className='absolute top-12 z-10' />}
       <Editor
         ref={editorRef}
         initialValue={content || ' '}
@@ -50,15 +61,13 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
             blob: Blob | File,
             callback: (url: string) => void
           ) => {
-            const formData = new FormData();
-            formData.append('file', blob);
-            const imageData = await axios
-              .post('/api/image', formData)
-              .then((res) => res.data.document);
-            callback(imageData.url);
+            setLoading(true);
+            return await uploadImg(blob)
+              .then((data) => callback(data.url))
+              .finally(() => setLoading(false));
           },
         }}
       />
-    </>
+    </div>
   );
 }

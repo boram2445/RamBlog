@@ -9,6 +9,7 @@ import AdjacentPostCard from './AdjacentPostCard';
 import Button from './ui/Button';
 import { AiFillEdit } from 'react-icons/ai';
 import { ClipLoader } from 'react-spinners';
+import TagList from './ui/TagList';
 
 type Props = {
   id: string;
@@ -30,11 +31,7 @@ export default function PostDetail({ id }: Props) {
               {post.title}
             </h2>
             <div className='flex justify-between items-center'>
-              <span className='py-0.5 px-3 text-xs border rounded-lg'>
-                {post?.tags.map((tag, index) => (
-                  <span key={index}>{tag}</span>
-                ))}
-              </span>
+              {post.tags && <TagList tags={post.tags} />}
               <small className='text-sm text-dark-gray text-end bottom-3 right-3'>
                 {/* {date.toString()} */}
               </small>
