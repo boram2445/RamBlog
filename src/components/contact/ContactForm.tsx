@@ -2,7 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { EmailData } from '@/service/email';
-import Banner, { BannerData } from './Banner';
+import Banner, { BannerData } from '../ui/Banner';
 import { sendContactEmail } from '@/service/contact';
 
 export default function ContactForm() {

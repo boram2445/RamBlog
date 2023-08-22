@@ -6,7 +6,7 @@ import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
-import Button from './ui/Button';
+import Button from '../ui/Button';
 import { HashLoader } from 'react-spinners';
 import TagsInput from './TagsInput';
 

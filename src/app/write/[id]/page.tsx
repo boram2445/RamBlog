@@ -1,4 +1,4 @@
-import WritePostForm from '@/components/WritePostForm';
+import WritePostForm from '@/components/post/WritePostForm';
 import { getPostDetail } from '@/service/posts';
 
 type Props = {

@@ -1,6 +1,6 @@
-import Hero from '@/components/Hero';
-import PinnedPosts from '@/components/PinnedPosts';
-import CarouselPosts from '@/components/CarouselPosts';
+import Hero from '@/components/home/Hero';
+import PinnedPosts from '@/components/home/PinnedPosts';
+import CarouselPosts from '@/components/home/CarouselPosts';
 
 const titleStyle = 'mx-auto pb-2 mb-5 text-xl font-semibold text-black';
 

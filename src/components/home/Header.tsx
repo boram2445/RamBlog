@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import logo from '../asset/icons/logo.svg';
+import logo from '../../asset/icons/logo.svg';
 import { BsGithub } from 'react-icons/bs';
 import Image from 'next/image';
 

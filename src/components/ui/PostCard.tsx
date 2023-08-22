@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@/service/posts';
-import TagList from './ui/TagList';
-import Date from './ui/Date';
+import TagList from './TagList';
+import Date from './Date';
 
 export default function PostCard({ post }: { post: Post }) {
   const { title, description, tags, id, mainImage, createdAt } = post;

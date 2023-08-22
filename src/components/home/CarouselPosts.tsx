@@ -1,7 +1,7 @@
 'use client';
 
-import MultiCarousel from './MultiCarousel';
-import PostCard from './PostCard';
+import MultiCarousel from '../ui/MultiCarousel';
+import PostCard from '../ui/PostCard';
 import usePosts from '@/hooks/usePosts';
 
 export default function CarouselPosts() {

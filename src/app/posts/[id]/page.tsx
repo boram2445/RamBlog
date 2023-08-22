@@ -1,6 +1,6 @@
-import AdjacentPostCard from '@/components/AdjacentPostCard';
-import MarkDownPost from '@/components/MarkDownPost';
-import PostDetail from '@/components/PostDetail';
+import AdjacentPostCard from '@/components/post/AdjacentPostCard';
+import MarkDownPost from '@/components/post/MarkDownPost';
+import PostDetail from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
 import Image from 'next/image';
 import Link from 'next/link';

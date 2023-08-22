@@ -1,4 +1,4 @@
-import WritePostForm from '@/components/WritePostForm';
+import WritePostForm from '@/components/post/WritePostForm';
 
 export const dynamic = 'force-dynamic';
 
