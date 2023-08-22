@@ -1,6 +1,4 @@
-'use client';
-
-import { PostData } from '@/service/posts';
+import { PostData, getPostDetail } from '@/service/posts';
 import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -18,22 +16,24 @@ type Props = {
   id: string;
 };
 
-export default function PostDetail({ id }: Props) {
-  //꼭 CSR로 받아와야 하는지 고민해보기
-  const { data: post, isLoading, error } = useSWR<PostData>(`/api/posts/${id}`);
-  const router = useRouter();
+export default async function PostDetail({ id }: Props) {
+  const post = await getPostDetail(id);
 
-  if (!post) return null;
+  // const { data: post, isLoading, error } = useSWR<PostData>(`/api/posts/${id}`);
+  // const router = useRouter();
 
-  const handleDelete = () => {
-    if (confirm('정말로 삭제하시겠습니까?😥')) {
-      axios.delete(`/api/posts/${id}`).then(() => router.push('/'));
-    }
-  };
+  // if (!post) return null;
+
+  // const handleDelete = () => {
+  //   if (confirm('정말로 삭제하시겠습니까?😥')) {
+  //     axios.delete(`/api/posts/${id}`).then(() => router.push('/'));
+  //   }
+  // };
 
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
-      {isLoading && <ClipLoader color='green' />}
+      <MarkDownPost content={post.content} />
+      {/* {isLoading && <ClipLoader color='green' />}
       {!isLoading && !error && (
         <>
           <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
@@ -55,16 +55,13 @@ export default function PostDetail({ id }: Props) {
             <div className='flex-1'>
               <MarkDownPost content={post.content} />
             </div>
-            <div className='hidden md:block absoulte ml-4 w-[210px] overflow-hidden '>
-              <Toc />
-            </div>
           </div>
           <div className='mt-32 flex'>
             {post.prev && <AdjacentPostCard data={post.prev} type='prev' />}
             {post.next && <AdjacentPostCard data={post.next} type='next' />}
           </div>
         </>
-      )}
+      )} */}
     </section>
   );
 }

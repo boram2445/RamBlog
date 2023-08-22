@@ -11,7 +11,7 @@ type Props = {
   };
 };
 
-export default async function PostPage({ params: { id } }: Props) {
+export default function PostPage({ params: { id } }: Props) {
   return (
     <>
       <PostDetail id={id} />
