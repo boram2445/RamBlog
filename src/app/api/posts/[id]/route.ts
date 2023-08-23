@@ -1,4 +1,5 @@
 import { deletePost, editPost, getPostDetail } from '@/service/posts';
+import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
@@ -23,7 +24,7 @@ export async function PATCH(req: NextRequest, context: Context) {
 
   const tagArr = tags?.replace(/ /g, '').split(',');
 
-  return await editPost(
+  const result = await editPost(
     id,
     title,
     description,
@@ -31,6 +32,11 @@ export async function PATCH(req: NextRequest, context: Context) {
     content,
     mainImage
   ).then((data) => NextResponse.json(data));
+
+  revalidatePath(`/posts/[id]`);
+  revalidatePath(`/write/[id]`);
+
+  return result;
 }
 
 export async function DELETE(_: NextRequest, context: Context) {

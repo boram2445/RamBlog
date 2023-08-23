@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import TuiEditors from './TuiEditors';
 import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
@@ -81,15 +81,24 @@ export default function WritePostForm({ id, postDetail }: Props) {
       formData.append('tags', form.tags.join());
     postDetail?.content !== content && formData.append('content', content);
 
+    setLoading(true);
     axios
       .patch(`/api/posts/${id}`, formData)
-      .then(() => router.push('/'))
-      .catch((err) => setError(err.toString()))
-      .finally(() => setLoading(false));
+      .then(() => {
+        router.prefetch(`/posts/${id}`);
+        setTimeout(() => {
+          router.push(`/posts/${id}`);
+          setLoading(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        setError(err.toString());
+        setLoading(false);
+      });
   };
 
   return (
-    <div className='flex flex-col'>
+    <section className='flex flex-col'>
       {loading && (
         <div className='absolute bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
           <HashLoader />
@@ -140,7 +149,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
           출간하기
         </Button>
       </div>
-    </div>
+    </section>
   );
 }
 

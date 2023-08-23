@@ -18,8 +18,9 @@ export type PostData = Post & {
 };
 
 export async function getAllPostsData(): Promise<Post[]> {
-  return client.fetch(
-    `*[_type == "post"]| order(_createdAt desc){
+  return client
+    .fetch(
+      `*[_type == "post"]| order(_createdAt desc){
       tags,
       title,
       pinned,
@@ -28,11 +29,14 @@ export async function getAllPostsData(): Promise<Post[]> {
       "createdAt":_createdAt,
       "id":_id
    }`
-  );
+    )
+    .then((posts) =>
+      posts.map((post: Post) => ({ ...post, pinned: post.pinned ?? false }))
+    );
 }
 
 export async function getPrevPost(currentDate: string) {
-  return await client.fetch(
+  return client.fetch(
     `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
     {
       tags,
@@ -49,7 +53,7 @@ export async function getPrevPost(currentDate: string) {
 }
 
 export async function getNextPost(currentDate: string) {
-  return await client.fetch(
+  return client.fetch(
     `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
       {
         tags,
@@ -74,8 +78,8 @@ export async function getPostDetail(id: string): Promise<PostData> {
         "id":_id}
       `
   );
-  const prevPost = await getPrevPost(postDetail.createdAt);
-  const nextPost = await getNextPost(postDetail.createdAt);
+  const prevPost = await getPrevPost(postDetail?.createdAt);
+  const nextPost = await getNextPost(postDetail?.createdAt);
 
   return { ...postDetail, prev: prevPost, next: nextPost };
 }

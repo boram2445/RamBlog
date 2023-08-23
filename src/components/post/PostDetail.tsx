@@ -1,30 +1,17 @@
-import { PostData, getPostDetail } from '@/service/posts';
-import Image from 'next/image';
-import Link from 'next/link';
-import useSWR from 'swr';
+import { PostData } from '@/service/posts';
 import MarkDownPost from './MarkDownPost';
 import AdjacentPostCard from './AdjacentPostCard';
-import Button from '../ui/Button';
-import { ClipLoader } from 'react-spinners';
 import TagList from '../ui/TagList';
 import Date from '../ui/Date';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import Toc from './Toc';
 import PostButtonList from './PostButtonList';
 
 type Props = {
-  id: string;
+  post: PostData;
 };
 
-export default async function PostDetail({ id }: Props) {
-  const post = await getPostDetail(id);
-  const { title, tags, createdAt, content, prev, next } = post;
-
-  // const { data: post, isLoading, error } = useSWR<PostData>(`/api/posts/${id}`);
-  // const router = useRouter();
-
-  // if (!post) return null;
+export default async function PostDetail({ post }: Props) {
+  const { title, tags, createdAt, content, prev, next, id } = post;
 
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
