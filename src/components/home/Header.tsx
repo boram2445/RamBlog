@@ -43,6 +43,13 @@ export default function Header() {
               <BsGithub className='cursor-pointer text-2xl text-bronze' />
             </Link>
           </div>
+          {user && (
+            <div>
+              {/* eslint-disable-next-line @next/next/no-img-element*/}
+              <img src={user.image || ''} alt={user.username} />
+              <p>{user.username}</p>
+            </div>
+          )}
           <Button onClick={session ? signOut : signIn}>
             {session ? 'Sign Out' : 'Sign In'}
           </Button>
