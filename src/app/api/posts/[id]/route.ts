@@ -34,7 +34,6 @@ export async function PATCH(req: NextRequest, context: Context) {
   ).then((data) => NextResponse.json(data));
 
   revalidatePath(`/posts/[id]`);
-  revalidatePath(`/write/[id]`);
 
   return result;
 }

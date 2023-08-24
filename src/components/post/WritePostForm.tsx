@@ -1,10 +1,10 @@
 'use client';
 
-import { ChangeEvent, useRef, useState, useEffect } from 'react';
+import { ChangeEvent, useRef, useState, useEffect, useTransition } from 'react';
 import TuiEditors from './TuiEditors';
 import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
 import Button from '../ui/Button';
 import { HashLoader } from 'react-spinners';
@@ -28,10 +28,13 @@ export default function WritePostForm({ id, postDetail }: Props) {
     tags: postDetail?.tags || [],
   };
 
-  const [form, setForm] = useState(initialState);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState(initialState);
+
+  const isMutating = isFetching || isPending;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,7 +55,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
 
     const url = getMainImageUrl(content);
 
-    setLoading(true);
+    setIsFetching(true);
     const formData = new FormData();
     formData.append('mainImageUrl', url);
     formData.append('title', form.title);
@@ -64,10 +67,10 @@ export default function WritePostForm({ id, postDetail }: Props) {
       .post('/api/posts', formData)
       .then(() => router.push('/'))
       .catch((err) => setError(err.toString()))
-      .finally(() => setLoading(false));
+      .finally(() => setIsFetching(false));
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
 
     const url = getMainImageUrl(content);
@@ -81,25 +84,22 @@ export default function WritePostForm({ id, postDetail }: Props) {
       formData.append('tags', form.tags.join());
     postDetail?.content !== content && formData.append('content', content);
 
-    setLoading(true);
-    axios
+    setIsFetching(true);
+    await axios
       .patch(`/api/posts/${id}`, formData)
-      .then(() => {
-        router.prefetch(`/posts/${id}`);
-        setTimeout(() => {
-          router.push(`/posts/${id}`);
-          setLoading(false);
-        }, 2000);
-      })
-      .catch((err) => {
-        setError(err.toString());
-        setLoading(false);
-      });
+      .catch((err) => setError(err.toString()));
+
+    setIsFetching(false);
+
+    startTransition(() => {
+      router.refresh();
+      router.push(`/posts/${id}`);
+    });
   };
 
   return (
     <section className='flex flex-col'>
-      {loading && (
+      {isMutating && (
         <div className='absolute bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
           <HashLoader />
           <p>업로드 중...</p>
