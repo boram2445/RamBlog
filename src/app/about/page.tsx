@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import ExperienceArticle from '@/components/contact/ExperienceArticle';
 import Profile from '@/components/home/Hero';
-import ProjectArticle from '@/components/contact/ProjectArticle';
+import ProjectArticle from '@/components/about/ProjectArticle';
+import ExperienceArticle from '@/components/about/ExperienceArticle';
 
 export const metadata: Metadata = {
   title: 'About Me',

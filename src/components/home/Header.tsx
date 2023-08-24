@@ -30,12 +30,6 @@ export default function Header() {
             >
               NEW
             </Link>
-            <Link
-              href='/contact'
-              className='cursor-pointer text-sm font-medium text-black-gray'
-            >
-              CONTACT
-            </Link>
           </nav>
           <div>
             <Link href='https://github.com/boram2445' target='_blank'>
