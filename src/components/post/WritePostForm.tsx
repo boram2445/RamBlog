@@ -1,10 +1,10 @@
 'use client';
 
-import { ChangeEvent, useRef, useState, useEffect, useTransition } from 'react';
+import { ChangeEvent, useRef, useState, useTransition } from 'react';
 import TuiEditors from './TuiEditors';
 import { Editor } from '@toast-ui/react-editor';
 import axios from 'axios';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
 import Button from '../ui/Button';
 import { HashLoader } from 'react-spinners';
@@ -45,7 +45,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
     setForm((prev) => ({ ...prev, ['tags']: [...tagArr] }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
 
     if (!content || !form.title || !form.tags || !form.description) {
@@ -63,11 +63,15 @@ export default function WritePostForm({ id, postDetail }: Props) {
     formData.append('tags', form.tags.join());
     formData.append('content', content);
 
-    axios
+    await axios
       .post('/api/posts', formData)
-      .then(() => router.push('/'))
-      .catch((err) => setError(err.toString()))
-      .finally(() => setIsFetching(false));
+      .catch((err) => setError(err.toString()));
+    setIsFetching(false);
+
+    startTransition(() => {
+      router.prefetch('/');
+      router.push('/');
+    });
   };
 
   const handleEdit = async () => {

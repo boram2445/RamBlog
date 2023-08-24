@@ -17,37 +17,42 @@ export type PostData = Post & {
   next: Post | null;
 };
 
+const simplePostProjection = `
+  tags,
+  title,
+  pinned,
+  mainImage,
+  "updatedAt":_updatedAt,
+  "createdAt":_createdAt,
+  "id":_id
+`;
+
 export async function getAllPostsData(): Promise<Post[]> {
   return client
     .fetch(
-      `*[_type == "post"]| order(_createdAt desc){
-      tags,
-      title,
-      pinned,
-      mainImage,
-      "updatedAt":_updatedAt,
-      "createdAt":_createdAt,
-      "id":_id
-   }`
+      `*[_type == "post"]| order(_createdAt desc){${simplePostProjection}}`
     )
     .then((posts) =>
       posts.map((post: Post) => ({ ...post, pinned: post.pinned ?? false }))
     );
 }
 
+export async function getPinnedData(): Promise<Post[]> {
+  return client.fetch(
+    `*[_type == "post" && pinned == true]| order(_createdAt desc){${simplePostProjection}}`
+  );
+}
+
+export async function getLatestData(): Promise<Post[]> {
+  return client.fetch(
+    `*[_type == "post"]| order(_createdAt desc)[0..8] {${simplePostProjection}}`
+  );
+}
+
 export async function getPrevPost(currentDate: string) {
   return client.fetch(
     `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
-    {
-      tags,
-      title,
-      pinned,
-      mainImage,
-      "updatedAt":_updatedAt,
-      "createdAt":_createdAt,
-      "id":_id
-   }
-    `,
+    {${simplePostProjection}}`,
     { currentDate }
   );
 }
@@ -55,16 +60,7 @@ export async function getPrevPost(currentDate: string) {
 export async function getNextPost(currentDate: string) {
   return client.fetch(
     `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
-      {
-        tags,
-        title,
-        pinned,
-        mainImage,
-        "updatedAt":_updatedAt,
-        "createdAt":_createdAt,
-        "id":_id
-     }
-      `,
+      {${simplePostProjection}}`,
     { currentDate }
   );
 }

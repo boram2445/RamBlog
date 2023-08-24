@@ -1,17 +1,16 @@
-'use client';
-
+import { Post } from '@/service/posts';
 import MultiCarousel from '../ui/MultiCarousel';
 import PostCard from '../ui/PostCard';
-import usePosts from '@/hooks/usePosts';
 
-export default function CarouselPosts() {
-  const { posts, isLoading, error } = usePosts();
-  const unpinnedPosts = posts?.filter((post) => post.pinned === false);
+type Props = {
+  posts: Post[];
+};
 
-  if (!unpinnedPosts) return null;
+export default async function CarouselPosts({ posts }: Props) {
+  if (!posts) return null;
   return (
     <MultiCarousel>
-      {unpinnedPosts.map((post, index) => (
+      {posts.map((post, index) => (
         <PostCard key={index} post={post} />
       ))}
     </MultiCarousel>

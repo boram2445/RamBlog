@@ -1,4 +1,5 @@
 import { createPost, getAllPostsData } from '@/service/posts';
+import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(_: Request) {
@@ -20,7 +21,15 @@ export async function POST(req: NextRequest) {
 
   const tagArr = tags.replace(/ /g, '').split(',');
 
-  return await createPost(title, description, tagArr, content, mainImage).then(
-    (data) => NextResponse.json(data)
-  );
+  const result = await createPost(
+    title,
+    description,
+    tagArr,
+    content,
+    mainImage
+  ).then((data) => NextResponse.json(data));
+
+  revalidatePath('/');
+
+  return result;
 }
