@@ -4,6 +4,12 @@ export default {
   type: 'document',
   fields: [
     {
+      title: 'Author',
+      name: 'author',
+      type: 'reference',
+      to: [{type: 'user'}],
+    },
+    {
       name: 'title',
       title: 'Title',
       type: 'string',
