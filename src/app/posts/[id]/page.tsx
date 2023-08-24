@@ -1,5 +1,6 @@
 import PostDetail from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
+import { cache } from 'react';
 
 type Props = {
   params: {
@@ -7,8 +8,10 @@ type Props = {
   };
 };
 
+const getDetail = cache(async (postId: string) => getPostDetail(postId));
+
 export default async function PostPage({ params: { id } }: Props) {
-  const post = await getPostDetail(id);
+  const post = await getDetail(id);
 
   return (
     <>
@@ -18,6 +21,6 @@ export default async function PostPage({ params: { id } }: Props) {
 }
 
 export async function generateMetadata({ params: { id } }: Props) {
-  const { title, description } = await getPostDetail(id);
+  const { title, description } = await getDetail(id);
   return { title, description };
 }

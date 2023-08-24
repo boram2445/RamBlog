@@ -16,12 +16,6 @@ export default function Hero() {
         <br />
         꿈꾸고 있는 김보람입니다.
       </p>
-      <Link
-        href='/contact'
-        className='py-1.5 px-6 border-stone-300 border-2 rounded-xl text-sm hover:brightness-125'
-      >
-        Contact Me
-      </Link>
     </section>
   );
 }
