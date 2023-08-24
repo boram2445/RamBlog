@@ -11,11 +11,11 @@ type Props = {
 const ICON_CLASS = 'text-4xl group-hover:text-5xl transition-all';
 
 export default function AdjacentPostCard({ data, type }: Props) {
-  const { title, id, description, mainImage } = data;
+  const { title, id, description, mainImage, username } = data;
 
   return (
     <Link
-      href={`/posts/${id}`}
+      href={`/${username}/posts/${id}`}
       className='w-full max-h-40 relative cursor-pointer hover:shadow-lg'
     >
       {mainImage && (

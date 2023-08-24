@@ -9,6 +9,8 @@ export type Post = {
   createdAt: Date;
   tags: string[];
   id: string;
+  username: string;
+  userImage: string;
 };
 
 export type PostData = Post & {
@@ -22,6 +24,8 @@ const simplePostProjection = `
   title,
   pinned,
   mainImage,
+  "username":author->username, 
+  "userImage":author->image,
   "updatedAt":_updatedAt,
   "createdAt":_createdAt,
   "id":_id

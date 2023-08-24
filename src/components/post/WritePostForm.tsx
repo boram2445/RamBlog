@@ -11,6 +11,7 @@ import { HashLoader } from 'react-spinners';
 import TagsInput from './TagsInput';
 
 type Props = {
+  username: string;
   id?: string;
   postDetail?: PostData;
 };
@@ -19,7 +20,7 @@ const inputBoxStyle = 'flex gap-2 items-center';
 const inputStyle =
   'grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md';
 
-export default function WritePostForm({ id, postDetail }: Props) {
+export default function WritePostForm({ username, id, postDetail }: Props) {
   const editorRef = useRef<Editor | null>(null);
   //tag- 배열로 관리하다가 form전송시 string으로 변환
   const initialState = {
@@ -69,8 +70,8 @@ export default function WritePostForm({ id, postDetail }: Props) {
     setIsFetching(false);
 
     startTransition(() => {
-      router.prefetch('/');
-      router.push('/');
+      router.prefetch(`/${username}`);
+      router.push(`/${username}`);
     });
   };
 
@@ -97,7 +98,7 @@ export default function WritePostForm({ id, postDetail }: Props) {
 
     startTransition(() => {
       router.refresh();
-      router.push(`/posts/${id}`);
+      router.push(`/${username}/posts/${id}`);
     });
   };
 

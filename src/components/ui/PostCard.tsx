@@ -5,10 +5,10 @@ import TagList from './TagList';
 import Date from './Date';
 
 export default function PostCard({ post }: { post: Post }) {
-  const { title, description, tags, id, mainImage, createdAt } = post;
+  const { title, description, tags, id, mainImage, createdAt, username } = post;
 
   return (
-    <Link href={`/posts/${id}`}>
+    <Link href={`${username}/posts/${id}`}>
       <article className='relative mx-auto w-full h-80 tablet:h-76 overflow-hidden border-2 border-light-gray rounded-lg cursor-pointer  hover:drop-shadow-md'>
         {mainImage && (
           <Image

@@ -1,11 +1,3 @@
-import Hero from '@/components/home/Hero';
-import PostList from '@/components/home/PostList';
-
 export default async function HomePage() {
-  return (
-    <>
-      <Hero />
-      <PostList />
-    </>
-  );
+  return <p>전체 글 보여주기</p>;
 }
