@@ -1,9 +1,16 @@
+'use client';
+
 import Link from 'next/link';
 import logo from '../../asset/icons/logo.svg';
 import { BsGithub } from 'react-icons/bs';
 import Image from 'next/image';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Button from '../ui/Button';
 
 export default function Header() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   return (
     <header>
       <div className='max-w-screen-lg mx-auto px-5 py-4 flex justify-between items-center'>
@@ -36,6 +43,9 @@ export default function Header() {
               <BsGithub className='cursor-pointer text-2xl text-bronze' />
             </Link>
           </div>
+          <Button onClick={session ? signOut : signIn}>
+            {session ? 'Sign Out' : 'Sign In'}
+          </Button>
         </div>
       </div>
     </header>
