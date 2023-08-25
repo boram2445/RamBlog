@@ -67,7 +67,7 @@ export default function Header() {
             <UserAvartar
               imageUrl={user.image}
               username={user.username}
-              type={'big'}
+              type={'medium'}
             />
           )}
           <Button onClick={session ? signOut : signIn}>

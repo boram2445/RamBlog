@@ -1,17 +1,23 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
 import Hero from '@/components/home/Hero';
 import PostList from '@/components/home/PostList';
+import { getUserForProfile } from '@/service/user';
+import { notFound } from 'next/navigation';
 
-export default async function UserPage() {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
+type Props = {
+  params: {
+    user: string;
+  };
+};
+
+export default async function UserPage({ params: { user } }: Props) {
+  const userData = await getUserForProfile(user);
+
+  if (!user) notFound();
 
   return (
     <div className='text-lg'>
-      안녕{user?.username}
-      <Hero />
-      <PostList />
+      <Hero user={userData} />
+      {/* <PostList user={userData}/> */}
     </div>
   );
 }

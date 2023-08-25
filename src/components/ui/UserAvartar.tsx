@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 type Props = {
   imageUrl?: string;
   username: string;
-  type?: 'small' | 'big';
+  type?: 'small' | 'medium';
 };
 
 export default function UserAvartar({
