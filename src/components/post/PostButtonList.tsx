@@ -43,7 +43,7 @@ export default function PostButtonList({
           <p>삭제중...</p>
         </div>
       )}
-      <div className='mb-2 flex justify-end gap-2'>
+      <div className='flex justify-end gap-2'>
         <Link href={`/write/${id}`} prefetch={false}>
           <Button>수정</Button>
         </Link>

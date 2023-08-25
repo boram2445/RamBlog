@@ -80,6 +80,8 @@ export async function getPostDetail(
         ...,
         "updatedAt":_updatedAt,
         "createdAt":_createdAt,
+        "username":author->username, 
+        "userImage":author->image,
         "id":_id
       }`
   );

@@ -12,12 +12,11 @@ import UserAvartar from './UserAvartar';
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user;
-
-  const router = useRouter();
   const pathname = usePathname();
 
-  const linkButton =
+  const isMyPage =
     user && (pathname.includes('/write') || pathname.includes(user.username));
+  const isWritePage = user && pathname.includes('/write');
 
   return (
     <header>
@@ -25,39 +24,27 @@ export default function Header() {
         <Link href='/' className='text-xl cursor-pointer'>
           <Image src={logo} alt='RAMBLOG 로고' width={120} />
         </Link>
-        <div className='flex gap-x-5 mr-4'>
+        <nav className='flex items-center gap-x-5 mr-4'>
           {user && (
-            <Button
-              onClick={() =>
-                router.push(`${linkButton ? '/' : `${user.username}`}`)
-              }
+            <Link
+              href={`${isMyPage ? '/' : `/${user.username}`}`}
+              prefetch={false}
+              className='hover:text-blue-600'
             >
-              {linkButton ? '전체 포스트' : '내 블로그'}
-            </Button>
+              {isMyPage ? 'All Posts' : 'My Blog'}
+            </Link>
           )}
-          {user && pathname.includes(user.username) && (
-            <nav className='flex gap-x-4 items-center'>
-              <Link
-                href={`/${user.username}/about`}
-                className='cursor-pointer text-sm font-medium text-black-gray'
-              >
-                ABOUT
-              </Link>
-              <Link
-                href={`/${user.username}/posts`}
-                className='cursor-pointer text-sm font-medium text-black-gray'
-              >
-                POSTS
-              </Link>
-              <Link
-                href='/write'
-                className='cursor-pointer text-sm font-medium text-black-gray'
-              >
-                NEW
-              </Link>
-            </nav>
+          {user && (
+            <Link
+              href='/write'
+              prefetch={false}
+              className={`hover:text-blue-600 ${
+                isWritePage && 'text-blue-600'
+              }`}
+            >
+              Add Post
+            </Link>
           )}
-
           {/* <div>
             <Link href='https://github.com/boram2445' target='_blank'>
               <BsGithub className='cursor-pointer text-2xl text-bronze' />
@@ -73,7 +60,7 @@ export default function Header() {
           <Button onClick={session ? signOut : signIn}>
             {session ? 'Sign Out' : 'Sign In'}
           </Button>
-        </div>
+        </nav>
       </div>
     </header>
   );
