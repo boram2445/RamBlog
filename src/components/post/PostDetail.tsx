@@ -16,7 +16,7 @@ export default async function PostDetail({ post }: Props) {
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
       <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
-        <h1 className='mb-5 text-3xl font-semibold text-black'>{title}</h1>
+        <h2 className='mb-5 text-3xl font-semibold text-black'>{title}</h2>
         <PostButtonList id={id} />
         <div className='flex justify-between items-center'>
           {tags && <TagList tags={post.tags} type='big' />}

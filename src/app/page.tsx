@@ -1,3 +1,12 @@
+import PostGrid from '@/components/ui/PostGrid';
+import { getAllPostsData } from '@/service/posts';
+
 export default async function HomePage() {
-  return <p>전체 글 보여주기</p>;
+  const posts = await getAllPostsData();
+
+  return (
+    <>
+      <PostGrid posts={posts} />
+    </>
+  );
 }

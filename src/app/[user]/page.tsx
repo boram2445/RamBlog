@@ -8,10 +8,10 @@ export default async function UserPage() {
   const user = session?.user;
 
   return (
-    <p className='text-lg'>
+    <div className='text-lg'>
       안녕{user?.username}
       <Hero />
       <PostList />
-    </p>
+    </div>
   );
 }
