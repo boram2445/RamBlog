@@ -42,7 +42,7 @@ export async function PATCH(req: NextRequest, context: Context) {
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  revalidatePath(`/[user]`);
+  revalidatePath(`/`);
 
   return result;
 }
@@ -59,7 +59,7 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-  revalidatePath(`/[user]`);
+  revalidatePath(`/`);
 
   return result;
 }
