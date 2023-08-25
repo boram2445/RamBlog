@@ -15,9 +15,9 @@ export default async function UserPage({ params: { user } }: Props) {
   if (!user) notFound();
 
   return (
-    <div className='text-lg'>
+    <>
       <Hero user={userData} />
       <PostList user={userData} />
-    </div>
+    </>
   );
 }
