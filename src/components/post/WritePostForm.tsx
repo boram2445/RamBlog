@@ -70,7 +70,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
     setIsFetching(false);
 
     startTransition(() => {
-      router.prefetch(`/${username}`);
+      router.refresh();
       router.push(`/${username}`);
     });
   };

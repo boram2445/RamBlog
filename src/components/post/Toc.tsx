@@ -56,8 +56,6 @@ export default function Toc() {
     return () => IOList.forEach((IO) => IO.disconnect());
   }, []);
 
-  console.log(currentIndex);
-
   return (
     <aside className='pl-2 border-l border-gray-200'>
       <ul>

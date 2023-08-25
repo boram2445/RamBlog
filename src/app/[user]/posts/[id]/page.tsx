@@ -9,21 +9,19 @@ type Props = {
   };
 };
 
-const getDetail = cache(async (user: string, postId: string) =>
-  getPostDetail(user, postId)
-);
+const getDetail = cache(getPostDetail);
 
 export default async function PostPage({ params: { user, id } }: Props) {
-  const post = await getDetail(user, id);
+  const post = await getDetail(id, user);
 
   return (
     <>
-      <PostDetail post={post} />
+      <PostDetail post={post} username={user} />
     </>
   );
 }
 
 export async function generateMetadata({ params: { user, id } }: Props) {
-  const { title, description } = await getDetail(user, id);
+  const { title, description } = await getDetail(id, user);
   return { title, description };
 }

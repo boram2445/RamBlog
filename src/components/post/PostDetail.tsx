@@ -8,16 +8,17 @@ import PostButtonList from './PostButtonList';
 
 type Props = {
   post: PostData;
+  username: string;
 };
 
-export default async function PostDetail({ post }: Props) {
+export default async function PostDetail({ post, username }: Props) {
   const { title, tags, createdAt, content, prev, next, id } = post;
 
   return (
     <section className='max-w-screen-lg mx-auto p-8'>
       <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
         <h2 className='mb-5 text-3xl font-semibold text-black'>{title}</h2>
-        <PostButtonList id={id} />
+        <PostButtonList id={id} username={username} />
         <div className='flex justify-between items-center'>
           {tags && <TagList tags={post.tags} type='big' />}
           <Date date={createdAt.toString()} type='big' />
