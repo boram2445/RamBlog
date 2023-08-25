@@ -24,6 +24,7 @@ const simplePostProjection = `
   title,
   pinned,
   mainImage,
+  description,
   "username":author->username, 
   "userImage":author->image,
   "updatedAt":_updatedAt,
