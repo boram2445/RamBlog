@@ -41,15 +41,15 @@ export async function getAllPostsData(): Promise<Post[]> {
     );
 }
 
-export async function getPinnedData(): Promise<Post[]> {
+export async function getPinnedData(username: string): Promise<Post[]> {
   return client.fetch(
-    `*[_type == "post" && pinned == true]| order(_createdAt desc){${simplePostProjection}}`
+    `*[_type == "post" && author->username =="${username}" && pinned == true ]| order(_createdAt desc){${simplePostProjection}}`
   );
 }
 
-export async function getLatestData(): Promise<Post[]> {
+export async function getLatestData(username: string): Promise<Post[]> {
   return client.fetch(
-    `*[_type == "post"]| order(_createdAt desc)[0..8] {${simplePostProjection}}`
+    `*[_type == "post" && author->username =="${username}"]| order(_createdAt desc)[0..8] {${simplePostProjection}}`
   );
 }
 

@@ -17,7 +17,7 @@ export default async function UserPage({ params: { user } }: Props) {
   return (
     <div className='text-lg'>
       <Hero user={userData} />
-      {/* <PostList user={userData}/> */}
+      <PostList user={userData} />
     </div>
   );
 }

@@ -1,12 +1,17 @@
 import { getLatestData, getPinnedData } from '@/service/posts';
 import CarouselPosts from './CarouselPosts';
 import PostGrid from '../ui/PostGrid';
+import { HomeUser } from '@/model/user';
 
 const titleStyle = 'mx-auto pb-2 mb-5 text-xl font-semibold text-black';
 
-export default async function PostList() {
-  const pinnedPosts = await getPinnedData();
-  const latestPosts = await getLatestData();
+type Props = {
+  user: HomeUser;
+};
+
+export default async function PostList({ user }: Props) {
+  const pinnedPosts = await getPinnedData(user.username);
+  const latestPosts = await getLatestData(user.username);
 
   return (
     <>
