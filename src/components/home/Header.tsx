@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
 import { useRouter, usePathname } from 'next/navigation';
+import UserAvartar from '../ui/UserAvartar';
 
 export default function Header() {
   const { data: session } = useSession();
@@ -14,6 +15,9 @@ export default function Header() {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const linkButton =
+    user && (pathname.includes('/write') || pathname.includes(user.username));
 
   return (
     <header>
@@ -23,6 +27,15 @@ export default function Header() {
         </Link>
         <div className='flex gap-x-5 mr-4'>
           {user && (
+            <Button
+              onClick={() =>
+                router.push(`${linkButton ? '/' : `${user.username}`}`)
+              }
+            >
+              {linkButton ? '전체 포스트' : '내 블로그'}
+            </Button>
+          )}
+          {user && pathname.includes(user.username) && (
             <nav className='flex gap-x-4 items-center'>
               <Link
                 href={`/${user.username}/about`}
@@ -51,26 +64,11 @@ export default function Header() {
             </Link>
           </div> */}
           {user && (
-            <>
-              <div>
-                {/* eslint-disable-next-line @next/next/no-img-element*/}
-                <img src={user.image || ''} alt={user.username} />
-                <p>{user.username}</p>
-              </div>
-              <Button
-                onClick={() =>
-                  router.push(
-                    `${
-                      pathname.includes(user.username)
-                        ? '/'
-                        : `${user.username}`
-                    }`
-                  )
-                }
-              >
-                {pathname.includes(user.username) ? '전체 포스트' : '내 블로그'}
-              </Button>
-            </>
+            <UserAvartar
+              imageUrl={user.image}
+              username={user.username}
+              type={'big'}
+            />
           )}
           <Button onClick={session ? signOut : signIn}>
             {session ? 'Sign Out' : 'Sign In'}
