@@ -1,4 +1,4 @@
-import PostGrid from '@/components/ui/PostGrid';
+import PostGrid from '@/components/common/PostGrid';
 import { getAllPostsData } from '@/service/posts';
 
 export default async function HomePage() {

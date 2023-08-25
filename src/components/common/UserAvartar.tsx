@@ -1,6 +1,6 @@
 'use client';
 
-import Avartar from './Avartar';
+import Avartar from '../ui/Avartar';
 import { useRouter } from 'next/navigation';
 
 type Props = {

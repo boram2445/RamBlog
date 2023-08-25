@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '@/service/posts';
 import TagList from './TagList';
-import Date from './Date';
+import Date from '../ui/Date';
 import UserAvartar from './UserAvartar';
 import { useRouter } from 'next/navigation';
 

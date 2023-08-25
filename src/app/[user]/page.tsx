@@ -1,7 +1,7 @@
-import Hero from '@/components/home/Hero';
-import PostList from '@/components/home/PostList';
 import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
+import PostList from '@/components/posts/PostList';
+import Hero from '@/components/user/Hero';
 
 type Props = {
   params: {

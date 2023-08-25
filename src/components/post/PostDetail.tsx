@@ -1,7 +1,7 @@
 import { PostData } from '@/service/posts';
 import MarkDownPost from './MarkDownPost';
 import AdjacentPostCard from './AdjacentPostCard';
-import TagList from '../ui/TagList';
+import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import Toc from './Toc';
 import PostButtonList from './PostButtonList';

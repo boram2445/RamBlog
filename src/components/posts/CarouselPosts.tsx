@@ -1,6 +1,6 @@
 import { Post } from '@/service/posts';
-import MultiCarousel from '../ui/MultiCarousel';
-import PostCard from '../ui/PostCard';
+import MultiCarousel from '../common/MultiCarousel';
+import PostCard from '../common/PostCard';
 
 type Props = {
   posts: Post[];

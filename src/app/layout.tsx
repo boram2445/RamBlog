@@ -1,8 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
-import Header from '@/components/home/Header';
-import Footer from '@/components/home/Footer';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
 import AuthContext from '@/context/AuthContext';
 

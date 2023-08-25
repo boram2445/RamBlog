@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
 import { useRouter, usePathname } from 'next/navigation';
-import UserAvartar from '../ui/UserAvartar';
+import UserAvartar from './UserAvartar';
 
 export default function Header() {
   const { data: session } = useSession();
