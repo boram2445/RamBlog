@@ -53,23 +53,23 @@ export async function getLatestData(username: string): Promise<Post[]> {
   );
 }
 
-export async function getPrevPost(currentDate: string) {
+export async function getPrevPost(username:string,currentDate: string) {
   return client.fetch(
-    `*[_type == "post" && _createdAt > $currentDate] | order(_createdAt asc) [0]
+    `*[_type == "post" && author->username =="${username}" && _createdAt > $currentDate] | order(_createdAt asc) [0]
     {${simplePostProjection}}`,
     { currentDate }
   );
 }
 
-export async function getNextPost(currentDate: string) {
+export async function getNextPost(username:string, currentDate: string) {
   return client.fetch(
-    `*[_type == "post" && _createdAt < $currentDate] | order(_createdAt desc) [0]
+    `*[_type == "post" && author->username =="${username}"  && _createdAt < $currentDate] | order(_createdAt desc) [0]
       {${simplePostProjection}}`,
     { currentDate }
   );
 }
 
-export async function getPostDetail(id: string): Promise<PostData> {
+export async function getPostDetail(username:string, id: string): Promise<PostData> {
   const postDetail = await client.fetch(
     `*[_type == "post" && _id == "${id}"][0]{
         ...,
@@ -78,8 +78,8 @@ export async function getPostDetail(id: string): Promise<PostData> {
         "id":_id}
       `
   );
-  const prevPost = await getPrevPost(postDetail?.createdAt);
-  const nextPost = await getNextPost(postDetail?.createdAt);
+  const prevPost = await getPrevPost(username, postDetail?.createdAt);
+  const nextPost = await getNextPost(username, postDetail?.createdAt);
 
   return { ...postDetail, prev: prevPost, next: nextPost };
 }

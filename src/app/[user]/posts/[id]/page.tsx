@@ -4,14 +4,17 @@ import { cache } from 'react';
 
 type Props = {
   params: {
+    user: string;
     id: string;
   };
 };
 
-const getDetail = cache(async (postId: string) => getPostDetail(postId));
+const getDetail = cache(async (user: string, postId: string) =>
+  getPostDetail(user, postId)
+);
 
-export default async function PostPage({ params: { id } }: Props) {
-  const post = await getDetail(id);
+export default async function PostPage({ params: { user, id } }: Props) {
+  const post = await getDetail(user, id);
 
   return (
     <>
@@ -20,7 +23,7 @@ export default async function PostPage({ params: { id } }: Props) {
   );
 }
 
-export async function generateMetadata({ params: { id } }: Props) {
-  const { title, description } = await getDetail(id);
+export async function generateMetadata({ params: { user, id } }: Props) {
+  const { title, description } = await getDetail(user, id);
   return { title, description };
 }
