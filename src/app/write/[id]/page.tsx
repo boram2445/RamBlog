@@ -1,5 +1,8 @@
-import WritePostForm from '@/components/WritePostForm';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import WritePostForm from '@/components/post/WritePostForm';
 import { getPostDetail } from '@/service/posts';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 type Props = {
   params: {
@@ -9,12 +12,18 @@ type Props = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function Page({ params: { id } }: Props) {
+export default async function EditPage({ params: { id } }: Props) {
   const postDetail = await getPostDetail(id);
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+
+  if (!user) {
+    redirect('/auth/signin');
+  }
 
   return (
-    <section>
-      <WritePostForm id={id} postDetail={postDetail} />
-    </section>
+    <>
+      <WritePostForm id={id} postDetail={postDetail} username={user.username} />
+    </>
   );
 }

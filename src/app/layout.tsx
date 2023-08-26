@@ -1,9 +1,10 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/common/Header';
+import Footer from '@/components/common/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
+import AuthContext from '@/context/AuthContext';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -25,10 +26,12 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`h-screen flex flex-col  ${openSans.className}`}>
-        <Header />
-        <SWRConfigContext>
-          <main className='grow mx-auto mb-32 w-full'>{children}</main>
-        </SWRConfigContext>
+        <AuthContext>
+          <Header />
+          <SWRConfigContext>
+            <main className='grow mx-auto mb-32 w-full'>{children}</main>
+          </SWRConfigContext>
+        </AuthContext>
         <Footer />
       </body>
     </html>
