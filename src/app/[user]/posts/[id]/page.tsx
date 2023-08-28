@@ -1,4 +1,5 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import CommentForm from '@/components/post/CommentForm';
 import PostDetail from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
 import { getServerSession } from 'next-auth';
@@ -22,6 +23,7 @@ export default async function PostPage({ params: { user, id } }: Props) {
   return (
     <>
       <PostDetail post={post} loginUserData={loginUserData} />
+      {/* <CommentForm /> */}
     </>
   );
 }

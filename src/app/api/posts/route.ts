@@ -1,8 +1,8 @@
+import { authOptions } from '../auth/[...nextauth]/options';
 import { createPost, getAllPostsData } from '@/service/posts';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function GET(_: Request) {
   return await getAllPostsData().then((data) => NextResponse.json(data));

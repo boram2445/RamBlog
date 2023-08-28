@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import WritePostForm from '@/components/post/WritePostForm';
 import { redirect } from 'next/navigation';
+import { authOptions } from '../api/auth/[...nextauth]/options';
+import WritePostForm from '@/components/post/WritePostForm';
 
 export const dynamic = 'force-dynamic';
 

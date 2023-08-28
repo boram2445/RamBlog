@@ -1,8 +1,8 @@
-import { deletePost, editPost, getPostDetail } from '@/service/posts';
+import { authOptions } from '../../auth/[...nextauth]/options';
+import { deletePost, editPost } from '@/service/posts';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '../../auth/[...nextauth]/route';
 
 type Context = {
   params: { id: string };
