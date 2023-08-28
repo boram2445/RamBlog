@@ -21,10 +21,10 @@ export default async function PostPage({ params: { user, id } }: Props) {
   const post = await getDetail(id, user);
 
   return (
-    <>
+    <div className='max-w-screen-lg mx-auto p-8'>
       <PostDetail post={post} loginUserData={loginUserData} />
-      {/* <CommentForm /> */}
-    </>
+      <CommentForm />
+    </div>
   );
 }
 
