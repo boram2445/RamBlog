@@ -7,11 +7,12 @@ import axios from 'axios';
 
 type Props = {
   postId: string;
+  commentId?: string;
 };
 
 const inputStyle = 'p-2 border border-gray-300 rounded-lg placeholder:text-sm';
 
-export default function CommentForm({ postId }: Props) {
+export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -48,6 +49,7 @@ export default function CommentForm({ postId }: Props) {
         password: form.gusetPassword,
       };
     }
+    if (commentId) data = { ...data, commentId };
     axios
       .post(`/api/comment/${postId}`, data)
       .then(() => {})

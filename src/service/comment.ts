@@ -31,12 +31,35 @@ export async function getPostComments(postId: string) {
        ${commentProjection}
        "recomments": comments[]{
         ${commentProjection}
-       }
-      },
+       } | order(createdAt desc),
+      } | order(createdAt desc),
     }.comments`
   );
 }
 
+async function addNestedComment(
+  postId: string,
+  commentId: string,
+  commentTypeProjection: any
+) {
+  const appendType = `comments[_key == "${commentId}"].comments`;
+
+  return client
+    .patch(postId)
+    .setIfMissing({ [appendType]: [] })
+    .append(appendType, [commentTypeProjection])
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+async function addTopLevelComment(postId: string, commentTypeProjection: any) {
+  return client
+    .patch(postId)
+    .setIfMissing({ comments: [] })
+    .append('comments', [commentTypeProjection])
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+// 댓글 추가 함수
 export async function addComment(
   postId: string,
   {
@@ -44,16 +67,18 @@ export async function addComment(
     text,
     name,
     password,
+    commentId,
   }: {
     type: 'loggedInUserComment' | 'guestComment';
     text: string;
     name?: string;
     password?: string;
+    commentId?: string;
   },
   userId?: string
 ) {
-  let commentTypeProjection;
   const now = new Date();
+  let commentTypeProjection;
 
   if (type === 'loggedInUserComment') {
     commentTypeProjection = {
@@ -72,9 +97,7 @@ export async function addComment(
     };
   }
 
-  return client
-    .patch(postId)
-    .setIfMissing({ comments: [] })
-    .append('comments', [commentTypeProjection])
-    .commit({ autoGenerateArrayKeys: true });
+  return commentId
+    ? addNestedComment(postId, commentId, commentTypeProjection)
+    : addTopLevelComment(postId, commentTypeProjection);
 }

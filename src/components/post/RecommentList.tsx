@@ -9,9 +9,10 @@ import Button from '../ui/Button';
 type Props = {
   comments?: CommentType[];
   postId: string;
+  commentId: string;
 };
 
-export default function ReCommentList({ comments, postId }: Props) {
+export default function ReCommentList({ comments, postId, commentId }: Props) {
   const [openForm, setOpenForm] = useState(false);
 
   return (
@@ -34,7 +35,9 @@ export default function ReCommentList({ comments, postId }: Props) {
           답글 달기
         </Button>
       )}
-      {(openForm || !comments) && <CommentForm postId={postId} />}
+      {(openForm || !comments) && (
+        <CommentForm postId={postId} commentId={commentId} />
+      )}
     </div>
   );
 }

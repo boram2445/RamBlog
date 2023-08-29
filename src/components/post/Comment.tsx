@@ -73,7 +73,11 @@ export default function Comment({
         )}
       </button>
       {openForm && (
-        <ReCommentList comments={comment.recomments} postId={postId} />
+        <ReCommentList
+          comments={comment.recomments}
+          postId={postId}
+          commentId={comment.id}
+        />
       )}
     </div>
   );
