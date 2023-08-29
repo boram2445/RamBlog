@@ -8,9 +8,10 @@ import Button from '../ui/Button';
 
 type Props = {
   comments?: CommentType[];
+  postId: string;
 };
 
-export default function ReCommentList({ comments }: Props) {
+export default function ReCommentList({ comments, postId }: Props) {
   const [openForm, setOpenForm] = useState(false);
 
   return (
@@ -19,7 +20,11 @@ export default function ReCommentList({ comments }: Props) {
         <ul className='mb-4 flex flex-col gap-3'>
           {comments.map((comment) => (
             <li key={comment.id}>
-              <Comment comment={comment} commentType='recomment' />
+              <Comment
+                postId={postId}
+                comment={comment}
+                commentType='recomment'
+              />
             </li>
           ))}
         </ul>
@@ -29,7 +34,7 @@ export default function ReCommentList({ comments }: Props) {
           답글 달기
         </Button>
       )}
-      {(openForm || !comments) && <CommentForm />}
+      {(openForm || !comments) && <CommentForm postId={postId} />}
     </div>
   );
 }

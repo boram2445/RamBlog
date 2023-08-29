@@ -36,3 +36,45 @@ export async function getPostComments(postId: string) {
     }.comments`
   );
 }
+
+export async function addComment(
+  postId: string,
+  {
+    type,
+    text,
+    name,
+    password,
+  }: {
+    type: 'loggedInUserComment' | 'guestComment';
+    text: string;
+    name?: string;
+    password?: string;
+  },
+  userId?: string
+) {
+  let commentTypeProjection;
+  const now = new Date();
+
+  if (type === 'loggedInUserComment') {
+    commentTypeProjection = {
+      _type: 'loggedInUserComment',
+      comment: text,
+      author: { _ref: userId, _type: 'reference' },
+      createdAt: now.toISOString(),
+    };
+  } else if (type === 'guestComment') {
+    commentTypeProjection = {
+      _type: 'guestComment',
+      comment: text,
+      name: name,
+      password: password,
+      createdAt: now.toISOString(),
+    };
+  }
+
+  return client
+    .patch(postId)
+    .setIfMissing({ comments: [] })
+    .append('comments', [commentTypeProjection])
+    .commit({ autoGenerateArrayKeys: true });
+}

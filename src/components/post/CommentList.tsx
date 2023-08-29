@@ -21,13 +21,13 @@ export default function CommentList({ postId }: Props) {
         댓글 <span className='text-red-500'>{comments?.length ?? 0}</span>
       </h4>
       <div className='w-full px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
-        <CommentForm />
+        <CommentForm postId={postId} />
         {isLoading && <ClipLoader />}
         {comments && (
           <ul className='mt-12 flex flex-col gap-3'>
             {comments.map((comment) => (
               <li key={comment.id}>
-                <Comment comment={comment} />
+                <Comment comment={comment} postId={postId} />
               </li>
             ))}
           </ul>

@@ -5,17 +5,20 @@ import { useRouter } from 'next/navigation';
 import { BsPlusSquare } from 'react-icons/bs';
 import { AiOutlineMinusSquare } from 'react-icons/ai';
 import { useState } from 'react';
-import CommentForm from './CommentForm';
 import { Comment } from '@/service/comment';
-import CommentList from './CommentList';
 import ReCommentList from './RecommentList';
 
 type Props = {
+  postId: string;
   comment: Comment;
   commentType?: 'comment' | 'recomment';
 };
 
-export default function Comment({ comment, commentType = 'comment' }: Props) {
+export default function Comment({
+  postId,
+  comment,
+  commentType = 'comment',
+}: Props) {
   const {
     image,
     username,
@@ -69,7 +72,9 @@ export default function Comment({ comment, commentType = 'comment' }: Props) {
           </>
         )}
       </button>
-      {openForm && <ReCommentList comments={comment.recomments} />}
+      {openForm && (
+        <ReCommentList comments={comment.recomments} postId={postId} />
+      )}
     </div>
   );
 }
