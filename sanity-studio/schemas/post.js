@@ -1,3 +1,5 @@
+import {loggedInUserComment, guestComment} from './comment'
+
 export default {
   title: 'Post',
   name: 'post',
@@ -70,10 +72,12 @@ export default {
               title: 'CreatedAt',
               name: 'createdAt',
               type: 'datetime',
-              options: {
-                dateFormat: 'YYYY.MM.DD',
-                timeFormat: 'HH:mm',
-              },
+            },
+            {
+              title: 'Comments',
+              name: 'comments',
+              type: 'array',
+              of: [loggedInUserComment, guestComment],
             },
           ],
         },
@@ -101,10 +105,12 @@ export default {
               title: 'CreatedAt',
               name: 'createdAt',
               type: 'datetime',
-              options: {
-                dateFormat: 'YYYY.MM.DD',
-                timeFormat: 'HH:mm',
-              },
+            },
+            {
+              title: 'Comments',
+              name: 'comments',
+              type: 'array',
+              of: [loggedInUserComment, guestComment],
             },
           ],
         },
