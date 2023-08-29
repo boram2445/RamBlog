@@ -2,8 +2,10 @@ type Props = {
   color?: 'white' | 'black';
   onClick?: () => void;
   children: React.ReactNode;
-  type?: 'small' | 'big';
+  type?: ButtonSize;
 };
+
+type ButtonSize = 'small' | 'medium' | 'big' | 'max';
 
 export default function Button({
   color = 'white',
@@ -19,11 +21,22 @@ export default function Button({
   return (
     <button
       onClick={onClick}
-      className={`flex gap-1 items-center border rounded-lg transition-all  font-semibold ${colorStyle} ${
-        type === 'big' ? 'py-1.5 px-4 text-lg' : 'py-1 px-3'
-      }`}
+      className={`flex justify-center gap-1 items-center border rounded-lg transition-all font-semibold ${colorStyle} ${getSizeStyle(
+        type
+      )}`}
     >
       {children}
     </button>
   );
+}
+
+function getSizeStyle(size: ButtonSize) {
+  switch (size) {
+    case 'small':
+      return 'py-1 px-3';
+    case 'big':
+      return 'py-1.5 px-4 text-lg';
+    case 'max':
+      return 'py-1.5 w-full';
+  }
 }
