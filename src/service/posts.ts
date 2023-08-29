@@ -11,6 +11,16 @@ export type Post = {
   id: string;
   username: string;
   userImage: string;
+  comments?: Comment[];
+};
+
+export type Comment = {
+  id: string;
+  username: string;
+  image?: string;
+  comment: string;
+  type: 'loggedInUserComment' | 'guestComment';
+  createdAt: Date;
 };
 
 export type PostData = Post & {
@@ -83,6 +93,19 @@ export async function getPostDetail(
         "createdAt":_createdAt,
         "username":author->username, 
         "userImage":author->image,
+        "comments": comments[]{
+          createdAt,
+          "id":_key,
+          "comment": comment,
+          "type":_type,
+          _type == 'loggedInUserComment' => {
+            "username":author->username,
+            "image":author->image
+          },
+          _type == 'guestComment' => {
+            "username":name
+          }
+        },
         "id":_id
       }`
   );
