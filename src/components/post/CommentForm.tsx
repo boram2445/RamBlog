@@ -10,10 +10,7 @@ export default function CommentForm() {
   const user = session?.user;
 
   return (
-    <div className='w-full px-4 tablet:px-8 laptop:px-16 desktop:px-20'>
-      <h4 className='border-b border-gray-200 pb-1 mb-5 text-sm text-gray-500 font-semibold'>
-        댓글 <span className='text-red-500'>0</span>
-      </h4>
+    <div>
       <textarea
         placeholder='여러분의 소중한 댓글을 입력해주세요'
         className={`w-full h-28 ${inputStyle}`}

@@ -9,12 +9,19 @@ type Props = {
 export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
   return (
     <div className={`rounded-full overflow-hidden ${getSizeStyle(type)}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element*/}
-      <img
-        src={imageUrl || ''}
-        alt={username}
-        className='w-full object-cover'
-      />
+      {!imageUrl && (
+        <div className='w-full h-full bg-orange-100 border-2 border-dashed border-orange-300 rounded-full'></div>
+      )}
+      {imageUrl && (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element*/}
+          <img
+            src={imageUrl || ''}
+            alt={username}
+            className='w-full object-cover'
+          />
+        </>
+      )}
     </div>
   );
 }
