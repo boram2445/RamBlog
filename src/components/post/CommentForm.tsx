@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import Button from '../ui/Button';
 import { ChangeEvent, useState } from 'react';
-import axios from 'axios';
+import useComment from '@/hooks/useComment';
 
 type Props = {
   postId: string;
@@ -16,8 +16,8 @@ export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
+  const { setComment } = useComment(postId);
   const [form, setForm] = useState(initialState);
-  const [error, setError] = useState('');
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -28,33 +28,30 @@ export default function CommentForm({ postId, commentId }: Props) {
 
   const handleSubmit = () => {
     if (!form.text) {
-      alert('작성할 댓글을 입력해주세요😊');
+      alert('댓글을 입력해주세요😊');
       return;
     }
     let data;
     if (user) {
-      data = { type: 'loggedInUserComment', text: form.text };
+      data = { text: form.text };
     } else {
       if (!form.guestName) {
         alert('이름을 입력해 주세요😊');
         return;
       } else if (!form.gusetPassword) {
-        alert('댓글 입력을 위한 비밀번호를 입력해주세요😊');
+        alert('비밀번호를 입력해주세요😊');
         return;
       }
       data = {
-        type: 'guestComment',
         text: form.text,
         name: form.guestName,
         password: form.gusetPassword,
       };
     }
     if (commentId) data = { ...data, commentId };
-    axios
-      .post(`/api/comment/${postId}`, data)
-      .then(() => {})
-      .catch((err) => setError(err.toString()))
-      .finally(() => setForm(initialState));
+
+    setComment(!!user, data);
+    setForm(initialState);
   };
 
   return (

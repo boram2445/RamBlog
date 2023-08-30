@@ -39,10 +39,7 @@ export async function DELETE(req: NextRequest, context: Context) {
   const url = new URL(req.url);
   const searchParams = new URLSearchParams(url.search);
   const commentId = searchParams.get('commentId');
-  const parentCommentId =
-    searchParams.get('parentCommentId') === 'undefined'
-      ? null
-      : searchParams.get('parentCommentId');
+  const parentCommentId = searchParams.get('parentCommentId');
 
   if (!commentId) {
     return new Response('Bad Request', { status: 400 });

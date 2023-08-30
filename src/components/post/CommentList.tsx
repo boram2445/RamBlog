@@ -1,11 +1,10 @@
 'use client';
 
-import useSWR from 'swr';
-import { Comment as CommetType } from '@/service/comment';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 import { ClipLoader } from 'react-spinners';
 import { AuthUser } from '@/model/user';
+import useComment from '@/hooks/useComment';
 
 type Props = {
   postId: string;
@@ -18,9 +17,7 @@ export default function CommentList({
   postUser,
   loginUserData,
 }: Props) {
-  const { data: comments, isLoading } = useSWR<CommetType[]>(
-    `/api/comment/${postId}`
-  );
+  const { comments, isLoading } = useComment(postId);
 
   return (
     <>

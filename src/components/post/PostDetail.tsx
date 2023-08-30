@@ -44,7 +44,7 @@ export default async function PostDetail({ post, loginUserData }: Props) {
         )}
         <div className='mt-2 flex justify-between items-center'>
           {tags && <TagList tags={post.tags} type='big' />}
-          <Date date={createdAt.toString()} type='big' />
+          <Date date={createdAt?.toString()} type='big' />
         </div>
       </div>
       <div className='relative flex mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20 min-h-[300px]'>

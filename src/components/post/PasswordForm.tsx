@@ -4,6 +4,8 @@ import { RiCloseLine } from 'react-icons/ri';
 import Button from '../ui/Button';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
+import { useSWRConfig } from 'swr';
+import useComment from '@/hooks/useComment';
 
 type Props = {
   setForm: (close: boolean) => void;
@@ -20,6 +22,7 @@ export default function PasswordForm({
 }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { deleteComment, checkPassword } = useComment(postId);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
@@ -33,18 +36,12 @@ export default function PasswordForm({
         commentId,
         password,
       };
-      const passwordMatch = await axios
-        .post(`/api/comment/${postId}/password`, data)
+      const passwordMatch = await checkPassword(data) //
         .catch(() => setError('비밀번호가 일치하지 않습니다.'));
 
-      if (!passwordMatch) return;
-
-      axios
-        .delete(
-          `/api/comment/${postId}?commentId=${commentId}&parentCommentId=${parentCommentId}`
-        )
-        .then(() => console.log('삭제가 완료되었습니다.'))
-        .catch(() => setError('삭제처리 오류가 발생했습니다.'));
+      if (passwordMatch) {
+        deleteComment(commentId, parentCommentId);
+      }
     }
   };
 

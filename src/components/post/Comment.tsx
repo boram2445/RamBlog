@@ -9,7 +9,7 @@ import { Comment } from '@/service/comment';
 import ReCommentList from './RecommentList';
 import { AuthUser } from '@/model/user';
 import PasswordForm from './PasswordForm';
-import axios from 'axios';
+import useComment from '@/hooks/useComment';
 
 type Props = {
   postId: string;
@@ -28,6 +28,11 @@ export default function Comment({
   loginUserData,
   parentCommentId,
 }: Props) {
+  const router = useRouter();
+
+  const { deleteComment } = useComment(postId);
+  const [openForm, setOpenForm] = useState(false);
+  const [openDeletePasswordForm, setOpenDeletePasswordForm] = useState(false);
   const {
     image,
     username,
@@ -37,20 +42,10 @@ export default function Comment({
     recomments,
     id,
   } = comment;
-  const router = useRouter();
-
-  const [openForm, setOpenForm] = useState(false);
-
-  const [openDeletePasswordForm, setOpenDeletePasswordForm] = useState(false);
 
   const handleDeleteUserComment = () => {
     if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
-      axios
-        .delete(
-          `/api/comment/${postId}?commentId=${id}&parentCommentId=${parentCommentId}`
-        )
-        .then(() => console.log('삭제가 완료되었습니다.'))
-        .catch((err) => console.log(err));
+      deleteComment(id, parentCommentId);
     }
   };
 
@@ -79,7 +74,7 @@ export default function Comment({
           </div>
         </div>
         {/* 포스트 주인은 그냥 삭제 가능 */}
-        {postUser === username && (
+        {loginUserData?.username === postUser && (
           <button onClick={handleDeleteUserComment} className='hover:underline'>
             삭제
           </button>
