@@ -8,12 +8,6 @@ type Context = {
   params: { id: string };
 };
 
-// export async function GET(_: Request, context: Context) {
-//   return await getPostDetail(context.params.id).then((data) =>
-//     NextResponse.json(data)
-//   );
-// }
-
 export async function PATCH(req: NextRequest, context: Context) {
   const session = await getServerSession(authOptions);
   const user = session?.user;
@@ -42,7 +36,7 @@ export async function PATCH(req: NextRequest, context: Context) {
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  revalidatePath(`/`);
+  revalidatePath(`/[user]`);
 
   return result;
 }
@@ -59,7 +53,7 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-  revalidatePath(`/`);
+  revalidatePath(`/[user]`);
 
   return result;
 }
