@@ -19,7 +19,7 @@ export default function PasswordForm({
   commentId,
 }: Props) {
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
@@ -27,17 +27,24 @@ export default function PasswordForm({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      parentCommentId,
-      commentId,
-      password,
-    };
-    const passwordMatch = await axios
-      .post(`/api/comment/${postId}/password`, data)
-      .catch(() => setError(true));
+    if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
+      const data = {
+        parentCommentId,
+        commentId,
+        password,
+      };
+      const passwordMatch = await axios
+        .post(`/api/comment/${postId}/password`, data)
+        .catch(() => setError('비밀번호가 일치하지 않습니다.'));
 
-    if (passwordMatch) {
-      //댓글 제거
+      if (!passwordMatch) return;
+
+      axios
+        .delete(
+          `/api/comment/${postId}?commentId=${commentId}&parentCommentId=${parentCommentId}`
+        )
+        .then(() => console.log('삭제가 완료되었습니다.'))
+        .catch(() => setError('삭제처리 오류가 발생했습니다.'));
     }
   };
 

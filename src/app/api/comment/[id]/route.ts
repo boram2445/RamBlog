@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { NextResponse, NextRequest } from 'next/server';
-import { addComment, getPostComments } from '@/service/comment';
+import { addComment, deleteComment, getPostComments } from '@/service/comment';
 import { authOptions } from '../../auth/[...nextauth]/options';
 
 type Context = {
@@ -31,6 +31,24 @@ export async function POST(req: NextRequest, context: Context) {
   }
 
   return addComment(context.params.id, data, user?.id)
+    .then((res) => NextResponse.json(res))
+    .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+}
+
+export async function DELETE(req: NextRequest, context: Context) {
+  const url = new URL(req.url);
+  const searchParams = new URLSearchParams(url.search);
+  const commentId = searchParams.get('commentId');
+  const parentCommentId =
+    searchParams.get('parentCommentId') === 'undefined'
+      ? null
+      : searchParams.get('parentCommentId');
+
+  if (!commentId) {
+    return new Response('Bad Request', { status: 400 });
+  }
+
+  return deleteComment(context.params.id, commentId, parentCommentId)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 }

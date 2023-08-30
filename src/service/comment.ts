@@ -59,7 +59,6 @@ async function addTopLevelComment(postId: string, commentTypeProjection: any) {
     .commit({ autoGenerateArrayKeys: true });
 }
 
-// 댓글 추가 함수
 export async function addComment(
   postId: string,
   {
@@ -125,6 +124,21 @@ export async function checkPassword(
 
   const res = await client.fetch(passwordProjection);
 
-  console.log(res.password, password);
   return res.password === password;
+}
+
+export async function deleteComment(
+  postId: string,
+  commentId: string,
+  parentCommentId: string | null
+) {
+  let deleteCommentProjection;
+
+  if (parentCommentId) {
+    deleteCommentProjection = `comments[_key == "${parentCommentId}"].comments[_key == "${commentId}"]`;
+  } else {
+    deleteCommentProjection = `comments[_key == "${commentId}"]`;
+  }
+
+  return client.patch(postId).unset([deleteCommentProjection]).commit();
 }

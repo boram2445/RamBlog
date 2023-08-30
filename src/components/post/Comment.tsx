@@ -9,6 +9,7 @@ import { Comment } from '@/service/comment';
 import ReCommentList from './RecommentList';
 import { AuthUser } from '@/model/user';
 import PasswordForm from './PasswordForm';
+import axios from 'axios';
 
 type Props = {
   postId: string;
@@ -42,7 +43,16 @@ export default function Comment({
 
   const [openDeletePasswordForm, setOpenDeletePasswordForm] = useState(false);
 
-  const handleDeleteUserComment = () => {};
+  const handleDeleteUserComment = () => {
+    if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
+      axios
+        .delete(
+          `/api/comment/${postId}?commentId=${id}&parentCommentId=${parentCommentId}`
+        )
+        .then(() => console.log('삭제가 완료되었습니다.'))
+        .catch((err) => console.log(err));
+    }
+  };
 
   return (
     <div
