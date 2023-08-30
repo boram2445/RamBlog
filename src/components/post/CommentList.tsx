@@ -5,12 +5,19 @@ import { Comment as CommetType } from '@/service/comment';
 import CommentForm from './CommentForm';
 import Comment from './Comment';
 import { ClipLoader } from 'react-spinners';
+import { AuthUser } from '@/model/user';
 
 type Props = {
   postId: string;
+  postUser: string;
+  loginUserData?: AuthUser;
 };
 
-export default function CommentList({ postId }: Props) {
+export default function CommentList({
+  postId,
+  postUser,
+  loginUserData,
+}: Props) {
   const { data: comments, isLoading } = useSWR<CommetType[]>(
     `/api/comment/${postId}`
   );
@@ -27,7 +34,12 @@ export default function CommentList({ postId }: Props) {
           <ul className='mt-12 flex flex-col gap-3'>
             {comments.map((comment) => (
               <li key={comment.id}>
-                <Comment comment={comment} postId={postId} />
+                <Comment
+                  comment={comment}
+                  postId={postId}
+                  postUser={postUser}
+                  loginUserData={loginUserData}
+                />
               </li>
             ))}
           </ul>

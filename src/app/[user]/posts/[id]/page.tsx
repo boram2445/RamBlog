@@ -23,7 +23,11 @@ export default async function PostPage({ params: { user, id } }: Props) {
   return (
     <div className='max-w-screen-lg mx-auto p-8'>
       <PostDetail post={post} loginUserData={loginUserData} />
-      <CommentList postId={post.id} />
+      <CommentList
+        postId={post.id}
+        postUser={post.username}
+        loginUserData={loginUserData}
+      />
     </div>
   );
 }

@@ -101,3 +101,30 @@ export async function addComment(
     ? addNestedComment(postId, commentId, commentTypeProjection)
     : addTopLevelComment(postId, commentTypeProjection);
 }
+
+export async function checkPassword(
+  password: string,
+  postId: string,
+  commentId: string,
+  parentCommentId?: string
+) {
+  let passwordProjection;
+
+  if (parentCommentId) {
+    passwordProjection = `
+    *[_type == "post" && _id == "${postId}"][0]{
+      'password': comments[_key == "${parentCommentId}"][0].comments[_key == "${commentId}"][0].password
+   }`;
+  } else {
+    passwordProjection = `
+    *[_type == "post" && _id == "${postId}"][0]{
+      'password': comments[_key == "${commentId}"][0].password
+    }
+    `;
+  }
+
+  const res = await client.fetch(passwordProjection);
+
+  console.log(res.password, password);
+  return res.password === password;
+}
