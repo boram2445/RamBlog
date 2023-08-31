@@ -52,7 +52,7 @@ export default async function PostDetail({ post, loginUserData }: Props) {
           <MarkDownPost content={content} />
         </div>
       </div>
-      <div className='mt-32 flex'>
+      <div className='mx-auto px-4 mt-32 mb-12 flex gap-4 flex-col laptop:flex-row'>
         {prev && <AdjacentPostCard data={prev} type='prev' />}
         {next && <AdjacentPostCard data={next} type='next' />}
       </div>

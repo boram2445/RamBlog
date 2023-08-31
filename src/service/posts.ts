@@ -50,7 +50,7 @@ export async function getPinnedData(username: string): Promise<Post[]> {
 
 export async function getLatestData(username: string): Promise<Post[]> {
   return client.fetch(
-    `*[_type == "post" && author->username =="${username}"]| order(_createdAt desc)[0..8] {${simplePostProjection}}`
+    `*[_type == "post" && author->username =="${username}"]| order(_createdAt desc)[0..8] { "username":author->username, title, "id":_id}`
   );
 }
 
@@ -58,7 +58,7 @@ export async function getPrevPost(username: string, currentDate: string) {
   if (!currentDate) return null;
   return client.fetch(
     `*[_type == "post" && author->username =="${username}" && _createdAt > $currentDate ] | order(_createdAt asc) [0]
-    {${simplePostProjection}}`,
+    { "username":author->username, title, "id":_id}`,
     { currentDate }
   );
 }

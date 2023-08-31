@@ -8,34 +8,25 @@ type Props = {
   type: 'prev' | 'next';
 };
 
-const ICON_CLASS = 'text-4xl group-hover:text-5xl transition-all';
+const ICON_CLASS = 'text-3xl group-hover:text-4xl transition-all';
 
 export default function AdjacentPostCard({ data, type }: Props) {
-  const { title, id, description, mainImage, username } = data;
+  const { title, id, username } = data;
 
   return (
     <Link
       href={`/${username}/posts/${id}`}
-      className='w-full max-h-40 relative cursor-pointer hover:shadow-lg'
+      className='w-full h-20 flex items-center cursor-pointer hover:shadow-lg bg-gray-50'
     >
-      {mainImage && (
-        <Image
-          src={mainImage}
-          alt={title}
-          width={200}
-          height={150}
-          className='w-full h-full brightness-50 object-cover'
-        />
-      )}
       <div
-        className={`group w-full px-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-around items-center ${
-          mainImage ? 'text-white' : 'border border-gray-200 h-[150px]'
-        } `}
+        className={`group w-full px-5 flex items-center gap-4 ${
+          type === 'next' ? 'justify-end' : ''
+        }`}
       >
         {type === 'prev' && <BsArrowLeftCircleFill className={ICON_CLASS} />}
-        <div className='text-center'>
-          <h4 className='text-xl font-bold'>{title}</h4>
-          <p className='font-bold'>{description}</p>
+        <div className={`${type === 'next' ? 'text-end' : ''}`}>
+          <small>{type === 'prev' ? '이전 포스트' : '다음 포스트'}</small>
+          <h4 className='text-xl font-semibold'>{title}</h4>
         </div>
         {type === 'next' && <BsArrowRightCircleFill className={ICON_CLASS} />}
       </div>
