@@ -31,20 +31,14 @@ export default async function PostDetail({ post, loginUserData }: Props) {
   return (
     <section>
       <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
-        <h2 className='mb-5 text-3xl font-semibold text-black'>{title}</h2>
-        {isMyPost && <PostButtonList id={id} username={username} />}
-        {!isMyPost && (
-          <div className='flex justify-end'>
-            <UserAvartar
-              imageUrl={userImage}
-              username={username}
-              type='medium'
-            />
-          </div>
-        )}
-        <div className='mt-2 flex justify-between items-center'>
+        <div className='flex justify-between'>
           {tags && <TagList tags={post.tags} type='big' />}
-          <Date date={createdAt?.toString()} type='big' />
+          {isMyPost && <PostButtonList id={id} username={username} />}
+        </div>
+        <h1 className='mb-6 text-4xl font-semibold text-black'>{title}</h1>
+        <div className='flex gap-4'>
+          <UserAvartar imageUrl={userImage} username={username} type='small' />
+          <Date date={createdAt?.toString()} type='small' />
         </div>
       </div>
       <div className='relative flex mx-auto px-4 tablet:px-8 laptop:px-16 desktop:px-20 min-h-[300px]'>

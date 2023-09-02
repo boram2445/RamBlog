@@ -4,8 +4,6 @@ type Props = {
 };
 
 export default function TagList({ tags, type = 'small' }: Props) {
-  console.log(tags);
-
   return (
     <ul className='flex gap-2'>
       {tags?.map((tag, index) => (

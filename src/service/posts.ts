@@ -1,4 +1,5 @@
 import { client } from './sanity';
+import slugify from 'slugify';
 
 export type Post = {
   title: string;
@@ -20,7 +21,7 @@ export type PostData = Post & {
 };
 
 const simplePostProjection = `
-  tags,
+  "tags":tags[]->tagName,
   title,
   pinned,
   mainImage,
@@ -85,6 +86,7 @@ export async function getPostDetail(
   const postDetail = await client.fetch(
     `*[_type == "post" && _id == "${postId}"][0]{
         ...,
+        "tags":tags[]->tagName,
         "updatedAt":_updatedAt,
         "createdAt":_createdAt,
         "username":author->username, 
@@ -112,19 +114,32 @@ export async function createPost(
   content: string,
   mainImage?: string
 ) {
-  return client.create(
-    {
+  const tagStubs = tagArr.map((tagName) => {
+    const newTagName = slugify(tagName, { lower: true });
+    return {
+      _id: `tag-${userId}-${newTagName}`,
+      _type: 'tag',
+      tagName,
+      createdBy: { _ref: userId, _type: 'reference' },
+    };
+  });
+
+  const tagDocs = tagStubs.map((stub) => client.createIfNotExists(stub));
+  const createdTags = await Promise.all(tagDocs);
+
+  return await client
+    .transaction()
+    .create({
       _type: 'post',
       author: { _ref: userId },
       title,
       pinned: false,
       description,
-      tags: tagArr,
+      tags: createdTags.map((tag) => ({ _ref: tag._id, _type: 'reference' })),
       content,
       mainImage,
-    },
-    { autoGenerateArrayKeys: true }
-  );
+    }) // 블로그 글(Post) 생성
+    .commit({ autoGenerateArrayKeys: true });
 }
 
 export async function editPost(
@@ -150,4 +165,12 @@ export async function editPost(
 
 export async function deletePost(postId: string) {
   return client.delete(postId);
+}
+
+export async function getTags(username: string): Promise<string[]> {
+  return client
+    .fetch(
+      `*[_type == 'tag' && createdBy->username == "${username}"] {tagName}`
+    )
+    .then((items) => items.map((item: { tagName: string }) => item.tagName));
 }

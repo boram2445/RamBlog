@@ -8,5 +8,11 @@ export default {
       title: 'Tag Name',
       type: 'string',
     },
+    {
+      name: 'createdBy',
+      title: 'Created By',
+      type: 'reference',
+      to: [{type: 'user'}],
+    },
   ],
 }

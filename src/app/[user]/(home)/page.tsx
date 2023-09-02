@@ -1,4 +1,5 @@
 import PostList from '@/components/posts/PostList';
+import UserTagList from '@/components/user/UserTagList';
 import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
 
@@ -14,6 +15,7 @@ export default async function UserPage({ params: { user } }: Props) {
   if (!user) notFound();
   return (
     <>
+      <UserTagList username={user} />
       <PostList user={userData} />
     </>
   );
