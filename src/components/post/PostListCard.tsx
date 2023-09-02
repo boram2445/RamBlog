@@ -5,23 +5,14 @@ import Date from '../ui/Date';
 import Image from 'next/image';
 
 export default function PostListCard({ post }: { post: Post }) {
-  const {
-    title,
-    description,
-    tags,
-    id,
-    mainImage,
-    createdAt,
-    username,
-    userImage,
-  } = post;
+  const { title, description, tags, id, mainImage, createdAt, username } = post;
 
   const router = useRouter();
 
   return (
     <article
       onClick={() => router.push(`/${username}/posts/${id}`)}
-      className='py-6 px-12 flex justify-between border border-gray-100 rounded-full cursor-pointer hover:bg-gray-50'
+      className='p-6 flex justify-between border-b border-gray-200 cursor-pointer hover:bg-gray-50'
     >
       <div className='flex flex-col'>
         <TagList tags={tags} />

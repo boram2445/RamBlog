@@ -1,21 +1,23 @@
-import { AiOutlineCalendar } from 'react-icons/ai';
+import { getDate } from '@/utils/date';
 
 type Props = {
   date: string;
   type?: 'small' | 'big';
+  dateType?: 'date' | 'time' | 'full';
 };
 
-export default function Date({ date, type = 'small' }: Props) {
+export default function Date({
+  date,
+  type = 'small',
+  dateType = 'full',
+}: Props) {
   return (
     <time
-      className={`flex gap-2 items-center ${type === 'small' && 'text-sm'}`}
+      className={`flex gap-2 items-center ${
+        type === 'small' && 'text-sm'
+      } text-gray-500`}
     >
-      <AiOutlineCalendar size={`${type === 'small' ? '14' : '20'}`} />
-      {getDate(date)}
+      {getDate(date, dateType)}
     </time>
   );
 }
-
-const getDate = (dateStr: string) => {
-  return dateStr.split('T')[0];
-};
