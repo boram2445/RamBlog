@@ -37,7 +37,8 @@ export default {
       type: 'array',
       of: [
         {
-          type: 'string',
+          type: 'reference',
+          to: [{type: 'tag'}],
         },
       ],
       validation: (Rule) => Rule.unique(),
