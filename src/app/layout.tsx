@@ -25,11 +25,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={`h-screen flex flex-col  ${openSans.className}`}>
+      <body className={`h-screen flex flex-col ${openSans.className}`}>
         <AuthContext>
           <Header />
           <SWRConfigContext>
-            <main className='grow mx-auto mb-32 w-full'>{children}</main>
+            <main className='grow max-w-screen-lg my-10 mx-auto mb-32 w-full'>
+              {children}
+            </main>
           </SWRConfigContext>
         </AuthContext>
         <Footer />

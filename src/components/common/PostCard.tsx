@@ -45,7 +45,7 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
         <div className='p-2 flex justify-between border-t border-gray-100'>
           <UserAvartar username={username} imageUrl={userImage} />
-          <Date date={createdAt.toString()} />
+          <Date date={createdAt?.toString()} />
         </div>
       </div>
     </article>
