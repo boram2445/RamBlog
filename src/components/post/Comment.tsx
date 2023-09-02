@@ -49,13 +49,17 @@ export default function Comment({
     }
   };
 
+  const isUserDelete =
+    loginUserData?.username === postUser ||
+    loginUserData?.username === username;
+
   return (
     <div
       className={`relative p-4 rounded-lg ${
         commentType === 'comment' ? 'bg-gray-50' : 'bg-gray-100'
       }`}
     >
-      <div>
+      <div className='flex justify-between'>
         <div className='mb-2 flex items-center gap-4'>
           <Avartar imageUrl={image} username={username} type='big' />
           <div className='flex flex-col gap-1'>
@@ -73,23 +77,14 @@ export default function Comment({
             </time>
           </div>
         </div>
-        {/* 포스트 주인은 그냥 삭제 가능 */}
-        {loginUserData?.username === postUser && (
-          <button onClick={handleDeleteUserComment} className='hover:underline'>
-            삭제
-          </button>
-        )}
-        {/* 다른 포스트에서 내가 작성한 글일 경우 */}
-        {loginUserData?.username === username && (
-          <button onClick={handleDeleteUserComment} className='hover:underline'>
-            삭제
-          </button>
-        )}
-        {/* guest일 경우 비밀번호 입력 후 제거 가능 */}
-        {type === 'guestComment' && (
+        {(isUserDelete || type === 'guestComment') && (
           <button
-            onClick={() => setOpenDeletePasswordForm(true)}
-            className='hover:underline'
+            onClick={
+              type === 'guestComment'
+                ? () => setOpenDeletePasswordForm(true)
+                : handleDeleteUserComment
+            }
+            className='hover:underline self-start mr-2'
           >
             삭제
           </button>

@@ -105,7 +105,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   return (
     <section className='flex flex-col'>
       {isMutating && (
-        <div className='absolute bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
+        <div className='fixed bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
           <HashLoader />
           <p>업로드 중...</p>
         </div>

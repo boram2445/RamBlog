@@ -5,19 +5,18 @@ import TabList from '@/components/user/TabList';
 import { ReactNode } from 'react';
 
 type Props = {
-  params: {
-    user: string;
-  };
+  params: { user: string };
   children: ReactNode;
 };
 
-export default async function UserLayout({
+export default async function UserTemplate({
   params: { user },
   children,
 }: Props) {
   const userData = await getUserForProfile(user);
 
   if (!user) notFound();
+
   return (
     <>
       <Hero user={userData} />

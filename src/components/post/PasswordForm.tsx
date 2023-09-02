@@ -48,7 +48,7 @@ export default function PasswordForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className='px-5 absolute inset-0 bg-pink-200 flex flex-col justify-center'
+      className='px-5 absolute inset-0 rounded-lg border border-gray-200 bg-white flex flex-col justify-center animate-wiggle'
     >
       <button onClick={() => setForm(false)} className='absolute top-3 right-3'>
         <RiCloseLine size='24' />

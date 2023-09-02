@@ -1,7 +1,7 @@
 'use client';
 
 import { Post } from '@/service/posts';
-import PostCard from './PostCard';
+import PostCard from '../post/PostCard';
 
 type Props = {
   posts: Post[];
