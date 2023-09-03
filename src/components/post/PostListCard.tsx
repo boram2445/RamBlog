@@ -1,3 +1,5 @@
+'use client';
+
 import { Post } from '@/service/posts';
 import { useRouter } from 'next/navigation';
 import TagList from '../common/TagList';

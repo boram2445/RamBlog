@@ -2,11 +2,10 @@
 
 import Link from 'next/link';
 import logo from '../../asset/icons/logo.svg';
-import { BsGithub } from 'react-icons/bs';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import UserAvartar from './UserAvartar';
 
 export default function Header() {

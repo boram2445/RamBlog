@@ -29,7 +29,7 @@ export default function RootLayout({
         <AuthContext>
           <Header />
           <SWRConfigContext>
-            <main className='grow max-w-screen-lg my-10 mx-auto mb-32 w-full'>
+            <main className='grow max-w-screen-lg mx-auto mb-32 w-full'>
               {children}
             </main>
           </SWRConfigContext>
