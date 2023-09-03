@@ -32,7 +32,7 @@ export default function PostCard({ post }: { post: Post }) {
           alt={`${title}이미지`}
           width={200}
           height={200}
-          className='mx-auto w-full h-1/2 object-cover'
+          className='mx-auto w-full h-1/2 object-cover aspect-square'
         />
       )}
       <div className={`${mainImage ? 'h-1/2' : 'h-full'} flex flex-col`}>

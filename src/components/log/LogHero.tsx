@@ -30,7 +30,12 @@ export default function LogHero({ username }: Props) {
           </Button>
         )}
       </div>
-      {isOpenForm && <LogForm username={username} />}
+      {isOpenForm && (
+        <LogForm
+          username={username}
+          closeForm={() => setIsOpenForm((prev) => !prev)}
+        />
+      )}
     </>
   );
 }

@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
   const form = await req.formData();
   const title = form.get('title')?.toString();
   const content = form.get('content')?.toString();
-  const file = form.get('file') as Blob;
+  const file = (form.get('file') as Blob) ?? '';
 
-  if (!title || !content || !file) {
+  if (!title || !content) {
     return new Response('Bad request', { status: 400 });
   }
 

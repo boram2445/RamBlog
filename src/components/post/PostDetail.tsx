@@ -32,7 +32,7 @@ export default async function PostDetail({ post, loginUserData }: Props) {
     <section>
       <div className='flex flex-col mt-8 mb-7 tablet:mx-5 pb-3 border-b '>
         <div className='flex justify-between'>
-          {tags && <TagList tags={post.tags} type='big' />}
+          {tags && <TagList tags={post.tags} type='small' />}
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
         <h1 className='mb-6 text-4xl font-semibold text-black'>{title}</h1>

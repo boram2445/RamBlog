@@ -17,16 +17,16 @@ export default function PostList({ user }: Props) {
 
   return (
     <>
-      {isLoading && (
-        <div className='text-center'>
-          <ClipLoader color='gray' />
-        </div>
-      )}
       <UserTagList
         username={user.username}
         onClick={setSelectedTag}
         selected={selectedTag}
       />
+      {isLoading && (
+        <div className='text-center'>
+          <ClipLoader color='gray' />
+        </div>
+      )}
       {!isLoading && !error && (
         <ul className='flex flex-col gap-4'>
           {posts?.map((post) => (

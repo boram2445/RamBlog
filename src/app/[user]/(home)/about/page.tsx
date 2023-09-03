@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* <Profile /> */}
       <div className='mx-auto max-w-screen-lg p-2 tablet:p-5 laptop:px-8'>
         <section className='mb-12 pb-12 border-b border-light-gray'>
           <h3 className='my-3 text-2xl font-semibold text-black'>Values</h3>

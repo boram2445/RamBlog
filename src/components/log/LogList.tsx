@@ -10,10 +10,8 @@ type Props = {
 export default function LogList({ username }: Props) {
   const { logs } = useLogs(username);
 
-  console.log(logs);
-
   return (
-    <ul>
+    <ul className='flex flex-col gap-3'>
       {logs?.map((log) => (
         <li key={log.id}>
           <LogCard log={log} />

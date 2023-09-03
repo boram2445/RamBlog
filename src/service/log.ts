@@ -1,6 +1,6 @@
+import { uploadImage } from '@/service/image';
 import axios from 'axios';
 import { assetURL, client, urlFor } from './sanity';
-import { uploadImage } from './image';
 
 export type Log = {
   title: string;
@@ -39,19 +39,22 @@ export async function createLog(
   userId: string,
   title: string,
   content: string,
-  file: Blob
+  file?: Blob
 ) {
-  return uploadImage(file) //
-    .then((result) =>
-      client.create(
-        {
-          _type: 'log',
-          author: { _ref: userId },
-          photo: { asset: { _ref: result.document._id } },
-          title,
-          content,
-        },
-        { autoGenerateArrayKeys: true }
-      )
-    );
+  const res = file && (await uploadImage(file));
+
+  let logCreateProjection = {
+    _type: 'log',
+    author: { _ref: userId },
+    title,
+    content,
+  };
+
+  let logCreateProjectionFile = file
+    ? { ...logCreateProjection, photo: { asset: { _ref: res.document._id } } }
+    : logCreateProjection;
+
+  return client.create(logCreateProjectionFile, {
+    autoGenerateArrayKeys: true,
+  });
 }
