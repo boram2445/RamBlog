@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  revalidatePath(`/[user]`);
+  // revalidatePath(`/[user]`);
 
   return result;
 }

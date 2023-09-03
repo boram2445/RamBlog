@@ -1,4 +1,4 @@
-import { getAllUserPosts, getPostDetail } from '@/service/posts';
+import { getAllUserPosts } from '@/service/posts';
 import { NextResponse } from 'next/server';
 
 type Context = {

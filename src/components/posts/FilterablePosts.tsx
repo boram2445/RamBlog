@@ -2,7 +2,7 @@
 
 import { Post } from '@/service/posts';
 import { useState } from 'react';
-import PostCard from '../common/PostCard';
+import PostCard from '../post/PostCard';
 import Categories from './Categories';
 
 type Props = {

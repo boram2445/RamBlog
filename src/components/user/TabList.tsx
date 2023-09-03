@@ -8,7 +8,7 @@ type Props = {
   user: HomeUser;
 };
 
-const tabStyle = `px-16 py-4 cursor-pointer text-gray-600 border-b-2 border-gray-200 hover:text-gray-900`;
+const tabStyle = `px-16 py-3 cursor-pointer text-gray-600 border-b-2 border-gray-200 hover:text-gray-900`;
 const tabs = [
   { href: '/about', name: 'About' },
   { href: '', name: 'Posts' },
@@ -19,7 +19,7 @@ export default function TabList({ user }: Props) {
   const pathname = usePathname();
 
   return (
-    <ul className='flex justify-center'>
+    <ul className='mt-3 mb-6 flex justify-center'>
       {tabs.map(({ href, name }) => (
         <li key={href}>
           <Link

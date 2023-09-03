@@ -13,7 +13,6 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user: { id, name, image, email } }) {
       if (!email) return false;
       addUser({
-        //만약 블로그에 로그인한 사람이라면 addUser를
         id,
         name: name || '',
         email,

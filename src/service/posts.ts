@@ -43,7 +43,7 @@ export async function getAllPostsData(): Promise<Post[]> {
     );
 }
 
-export async function getAllUserPosts(username: string): Promise<Post[]> {
+export async function getAllUserPosts(username: string) {
   return client.fetch(
     `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`
   );
@@ -127,7 +127,7 @@ export async function createPost(
   const tagDocs = tagStubs.map((stub) => client.createIfNotExists(stub));
   const createdTags = await Promise.all(tagDocs);
 
-  return await client
+  return client
     .transaction()
     .create({
       _type: 'post',
@@ -138,7 +138,7 @@ export async function createPost(
       tags: createdTags.map((tag) => ({ _ref: tag._id, _type: 'reference' })),
       content,
       mainImage,
-    }) // 블로그 글(Post) 생성
+    })
     .commit({ autoGenerateArrayKeys: true });
 }
 
@@ -173,4 +173,10 @@ export async function getTags(username: string): Promise<string[]> {
       `*[_type == 'tag' && createdBy->username == "${username}"] {tagName}`
     )
     .then((items) => items.map((item: { tagName: string }) => item.tagName));
+}
+
+export async function getTagPosts(username: string, tag: string) {
+  return client.fetch(
+    `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`
+  );
 }

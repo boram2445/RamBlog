@@ -3,12 +3,12 @@
 import { ChangeEvent, useRef, useState, useTransition } from 'react';
 import TuiEditors from './TuiEditors';
 import { Editor } from '@toast-ui/react-editor';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
 import Button from '../ui/Button';
 import { HashLoader } from 'react-spinners';
 import TagsInput from './TagsInput';
+import useUserPost from '@/hooks/useUserPost';
 
 type Props = {
   username: string;
@@ -34,6 +34,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState(initialState);
+  const { addPost, editPost } = useUserPost(username, 'all');
 
   const isMutating = isFetching || isPending;
 
@@ -48,29 +49,17 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
 
   const handleSubmit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
-
     if (!content || !form.title || !form.tags || !form.description) {
       alert('모든 항목을 입력해 주세요');
       return;
     }
 
-    const url = getMainImageUrl(content);
-
     setIsFetching(true);
-    const formData = new FormData();
-    formData.append('mainImageUrl', url);
-    formData.append('title', form.title);
-    formData.append('description', form.description);
-    formData.append('tags', form.tags.join());
-    formData.append('content', content);
-
-    await axios
-      .post('/api/posts', formData)
-      .catch((err) => setError(err.toString()));
+    await addPost(content, form);
     setIsFetching(false);
 
     startTransition(() => {
-      router.refresh();
+      // router.refresh();
       router.push(`/${username}`);
     });
   };
@@ -78,26 +67,28 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   const handleEdit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
 
-    const url = getMainImageUrl(content);
+    // const url = getMainImageUrl(content);
 
-    const formData = new FormData();
-    postDetail?.mainImage !== url && formData.append('mainImageUrl', url);
-    postDetail?.title !== form.title && formData.append('title', form.title);
-    postDetail?.description !== form.description &&
-      formData.append('description', form.description);
-    postDetail?.tags.join() !== form.tags.join() &&
-      formData.append('tags', form.tags.join());
-    postDetail?.content !== content && formData.append('content', content);
+    // const formData = new FormData();
+    // postDetail?.mainImage !== url && formData.append('mainImageUrl', url);
+    // postDetail?.title !== form.title && formData.append('title', form.title);
+    // postDetail?.description !== form.description &&
+    //   formData.append('description', form.description);
+    // postDetail?.tags.join() !== form.tags.join() &&
+    //   formData.append('tags', form.tags.join());
+    // postDetail?.content !== content && formData.append('content', content);
 
+    if (!id) return;
     setIsFetching(true);
-    await axios
-      .patch(`/api/posts/${id}`, formData)
-      .catch((err) => setError(err.toString()));
+    // await axios
+    //   .patch(`/api/posts/${id}`, formData)
+    //   .catch((err) => setError(err.toString()));
+    await editPost(id, content, form);
 
     setIsFetching(false);
 
     startTransition(() => {
-      router.refresh();
+      // router.refresh();
       router.push(`/${username}/posts/${id}`);
     });
   };
