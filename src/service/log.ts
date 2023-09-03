@@ -1,4 +1,6 @@
-import { client, urlFor } from './sanity';
+import axios from 'axios';
+import { assetURL, client, urlFor } from './sanity';
+import { uploadImage } from './image';
 
 export type Log = {
   title: string;
@@ -30,5 +32,26 @@ export async function getAllUserLogs(username: string) {
         ...log,
         image: log.image ? urlFor(log.image) : '',
       }))
+    );
+}
+
+export async function createLog(
+  userId: string,
+  title: string,
+  content: string,
+  file: Blob
+) {
+  return uploadImage(file) //
+    .then((result) =>
+      client.create(
+        {
+          _type: 'log',
+          author: { _ref: userId },
+          photo: { asset: { _ref: result.document._id } },
+          title,
+          content,
+        },
+        { autoGenerateArrayKeys: true }
+      )
     );
 }
