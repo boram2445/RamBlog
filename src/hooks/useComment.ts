@@ -27,12 +27,12 @@ export default function useComment(postId: string) {
   );
 
   const deleteComment = useCallback(
-    (commentId: string, parentCommentId?: string) => {
+    async (commentId: string, parentCommentId?: string) => {
       let url = `/api/comment/${postId}?commentId=${commentId}${
         parentCommentId ? `&parentCommentId=${parentCommentId}` : ''
       }`;
 
-      axios
+      await axios
         .delete(url) //
         .then(() => mutate(`/api/comment/${postId}`));
     },

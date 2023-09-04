@@ -38,7 +38,7 @@ export default function PasswordForm({
         .catch(() => setError('비밀번호가 일치하지 않습니다.'));
 
       if (passwordMatch) {
-        deleteComment(commentId, parentCommentId);
+        deleteComment(commentId, parentCommentId).then(() => setForm(false));
       }
     }
   };

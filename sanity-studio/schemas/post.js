@@ -59,6 +59,11 @@ export default {
           type: 'object',
           fields: [
             {
+              title: 'Deleted',
+              name: 'deleted',
+              type: 'boolean',
+            },
+            {
               title: 'Author',
               name: 'author',
               type: 'reference',
@@ -87,6 +92,11 @@ export default {
           name: 'guestComment',
           type: 'object',
           fields: [
+            {
+              title: 'Deleted',
+              name: 'deleted',
+              type: 'boolean',
+            },
             {
               title: 'Guest name',
               name: 'name',

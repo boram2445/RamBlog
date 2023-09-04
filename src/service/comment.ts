@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 export type Comment = {
   id: string;
+  deleted: boolean;
   username: string;
   image?: string;
   comment: string;
@@ -13,6 +14,7 @@ export type Comment = {
 
 const commentProjection = `
   createdAt,
+  deleted,
   "id":_key,
   "comment": comment,
   "type":_type,
@@ -82,6 +84,7 @@ export async function addComment(
 
   if (type === 'loggedInUserComment') {
     commentTypeProjection = {
+      deleted: false,
       _type: 'loggedInUserComment',
       comment: text,
       author: { _ref: userId, _type: 'reference' },
@@ -89,6 +92,7 @@ export async function addComment(
     };
   } else if (type === 'guestComment') {
     commentTypeProjection = {
+      deleted: false,
       _type: 'guestComment',
       comment: text,
       name: name,
@@ -128,18 +132,45 @@ export async function checkPassword(
   return isSame;
 }
 
+async function findComment(
+  postId: string,
+  commentId: string,
+  parentCommentId: string | null
+) {
+  const commentPath = parentCommentId
+    ? `comments[_key == "${parentCommentId}"].comments[_key == "${commentId}"]`
+    : `comments[_key == "${commentId}"]`;
+
+  const existingComment = await client.fetch(
+    `*[_id == "${postId}"][0].${commentPath}`
+  );
+
+  return [commentPath, existingComment[0]];
+}
+
 export async function deleteComment(
   postId: string,
   commentId: string,
   parentCommentId: string | null
 ) {
-  let deleteCommentProjection;
+  const [commentPath, existingComment] = await findComment(
+    postId,
+    commentId,
+    parentCommentId
+  );
 
-  if (parentCommentId) {
-    deleteCommentProjection = `comments[_key == "${parentCommentId}"].comments[_key == "${commentId}"]`;
+  if (existingComment) {
+    const updatedComment = {
+      ...existingComment,
+      deleted: true,
+      comment: '삭제된 댓글 입니다',
+    };
+
+    return client
+      .patch(postId)
+      .insert('replace', commentPath, [updatedComment])
+      .commit();
   } else {
-    deleteCommentProjection = `comments[_key == "${commentId}"]`;
+    return Promise.reject('Comment not found');
   }
-
-  return client.patch(postId).unset([deleteCommentProjection]).commit();
 }

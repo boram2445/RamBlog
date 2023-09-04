@@ -42,8 +42,10 @@ export default function Comment({
     type,
     recomments,
     id,
+    deleted,
   } = comment;
 
+  console.log(deleted);
   const handleDeleteUserComment = () => {
     if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
       deleteComment(id, parentCommentId);
@@ -60,36 +62,40 @@ export default function Comment({
         commentType === 'comment' ? 'bg-gray-50' : 'bg-gray-100'
       }`}
     >
-      <div className='flex justify-between'>
-        <div className='mb-2 flex items-center gap-4'>
-          <Avartar imageUrl={image} username={username} type='big' />
-          <div className='flex flex-col gap-1'>
-            <span
-              className={`text-semibold ${
-                type === 'loggedInUserComment' &&
-                'hover:underline cursor-pointer'
-              }`}
-              onClick={() => router.push(`/${username}`)}
-            >
-              {username}
-            </span>
-            <Date date={createdAt?.toString()} dateType='date' />
+      {!deleted && (
+        <div className='flex justify-between'>
+          <div className='mb-2 flex items-center gap-4'>
+            <Avartar imageUrl={image} username={username} type='big' />
+            <div className='flex flex-col gap-1'>
+              <span
+                className={`text-semibold ${
+                  type === 'loggedInUserComment' &&
+                  'hover:underline cursor-pointer'
+                }`}
+                onClick={() => router.push(`/${username}`)}
+              >
+                {username}
+              </span>
+              <Date date={createdAt?.toString()} dateType='date' />
+            </div>
           </div>
+          {(isUserDelete || type === 'guestComment') && (
+            <button
+              onClick={
+                type === 'guestComment'
+                  ? () => setOpenDeletePasswordForm(true)
+                  : handleDeleteUserComment
+              }
+              className='hover:underline self-start mr-2'
+            >
+              삭제
+            </button>
+          )}
         </div>
-        {(isUserDelete || type === 'guestComment') && (
-          <button
-            onClick={
-              type === 'guestComment'
-                ? () => setOpenDeletePasswordForm(true)
-                : handleDeleteUserComment
-            }
-            className='hover:underline self-start mr-2'
-          >
-            삭제
-          </button>
-        )}
-      </div>
+      )}
+
       <p className='ml-2 pt-3 pb-5'>{text}</p>
+
       <button
         className='ml-2 flex items-center gap-2 hover:text-gray-700'
         onClick={() => setOpenForm((prev) => !prev)}
@@ -99,7 +105,7 @@ export default function Comment({
             <BsPlusSquare size='14' />
             <span className='text-sm'>
               {recomments?.length
-                ? `${recomments.length}개의 답글`
+                ? `${recomments?.length}개의 답글`
                 : '답글 달기'}
             </span>
           </>
@@ -111,6 +117,7 @@ export default function Comment({
           </>
         )}
       </button>
+
       {openForm && (
         <ReCommentList
           comments={comment.recomments}

@@ -42,12 +42,12 @@ export default function ReCommentList({
           ))}
         </ul>
       )}
-      {comments?.length !== 0 && !openForm && (
+      {comments && comments.length > 0 && !openForm && (
         <Button onClick={() => setOpenForm((prev) => !prev)} type='max'>
           답글 달기
         </Button>
       )}
-      {(openForm || comments?.length === 0) && (
+      {(!comments || comments.length === 0 || openForm) && (
         <CommentForm postId={postId} commentId={commentId} />
       )}
     </div>

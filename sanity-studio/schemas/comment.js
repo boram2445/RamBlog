@@ -4,6 +4,11 @@ export const loggedInUserComment = {
   type: 'object',
   fields: [
     {
+      title: 'Deleted',
+      name: 'deleted',
+      type: 'boolean',
+    },
+    {
       title: 'Author',
       name: 'author',
       type: 'reference',
@@ -27,6 +32,11 @@ export const guestComment = {
   name: 'guestComment',
   type: 'object',
   fields: [
+    {
+      title: 'Deleted',
+      name: 'deleted',
+      type: 'boolean',
+    },
     {
       title: 'Guest name',
       name: 'name',
