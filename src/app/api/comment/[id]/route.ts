@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { NextResponse, NextRequest } from 'next/server';
 import { addComment, deleteComment, getPostComments } from '@/service/comment';
 import { authOptions } from '../../auth/[...nextauth]/options';
+import bcrypt from 'bcrypt';
 
 type Context = {
   params: { id: string };
@@ -30,7 +31,12 @@ export async function POST(req: NextRequest, context: Context) {
     }
   }
 
-  return addComment(context.params.id, data, user?.id)
+  const newData =
+    data.type === 'loggedInUserComment'
+      ? data
+      : { ...data, password: bcrypt.hashSync(data.password, 2) };
+
+  return addComment(context.params.id, newData, user?.id)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 }

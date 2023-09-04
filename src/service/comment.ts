@@ -1,4 +1,5 @@
 import { client } from './sanity';
+import bcrypt from 'bcrypt';
 
 export type Comment = {
   id: string;
@@ -123,8 +124,8 @@ export async function checkPassword(
   }
 
   const res = await client.fetch(passwordProjection);
-
-  return res.password === password;
+  const isSame = bcrypt.compareSync(password, res.password);
+  return isSame;
 }
 
 export async function deleteComment(

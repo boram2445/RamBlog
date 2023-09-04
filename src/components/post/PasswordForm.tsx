@@ -3,8 +3,6 @@
 import { RiCloseLine } from 'react-icons/ri';
 import Button from '../ui/Button';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import axios from 'axios';
-import { useSWRConfig } from 'swr';
 import useComment from '@/hooks/useComment';
 
 type Props = {
