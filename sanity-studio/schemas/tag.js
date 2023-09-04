@@ -9,10 +9,16 @@ export default {
       type: 'string',
     },
     {
-      name: 'createdBy',
-      title: 'Created By',
-      type: 'reference',
-      to: [{type: 'user'}],
+      title: 'Users',
+      name: 'users',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'user'}],
+        },
+      ],
+      validation: (Rule) => Rule.unique(),
     },
   ],
 }

@@ -49,7 +49,6 @@ export async function getAllUserPosts(username: string) {
     {},
     { cache: 'no-store' }
   );
-
 }
 
 // export async function getPinnedData(username: string): Promise<Post[]> {
@@ -109,6 +108,24 @@ export async function getPostDetail(
   return { ...postDetail, prev: prevPost, next: nextPost };
 }
 
+// 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
+async function checkAndAddTag(tagName: string, userId: string) {
+  const existingTags = await client.fetch(
+    `*[_type == "tag" && tagName == "${tagName}"]`
+  );
+  if (existingTags.length === 0) {
+    const newTag = {
+      _type: 'tag',
+      tagName: tagName,
+      users: [{ _ref: userId, _type: 'reference' }],
+    };
+    const createdTag = await client.create(newTag);
+    return createdTag._id;
+  } else {
+    return existingTags[0]._id;
+  }
+}
+
 export async function createPost(
   userId: string,
   title: string,
@@ -117,18 +134,9 @@ export async function createPost(
   content: string,
   mainImage?: string
 ) {
-  const tagStubs = tagArr.map((tagName) => {
-    const newTagName = slugify(tagName, { lower: true });
-    return {
-      _id: `tag-${userId}-${newTagName}`,
-      _type: 'tag',
-      tagName,
-      createdBy: { _ref: userId, _type: 'reference' },
-    };
-  });
-
-  const tagDocs = tagStubs.map((stub) => client.createIfNotExists(stub));
-  const createdTags = await Promise.all(tagDocs);
+  const tagRefs = await Promise.all(
+    tagArr.map((tagName) => checkAndAddTag(tagName, userId))
+  );
 
   return client
     .transaction()
@@ -138,7 +146,7 @@ export async function createPost(
       title,
       pinned: false,
       description,
-      tags: createdTags.map((tag) => ({ _ref: tag._id, _type: 'reference' })),
+      tags: tagRefs.map((tagRef) => ({ _ref: tagRef, _type: 'reference' })),
       content,
       mainImage,
     })
@@ -171,10 +179,8 @@ export async function deletePost(postId: string) {
 }
 
 export async function getTags(username: string): Promise<string[]> {
-  return client
-    .fetch(
-      `*[_type == 'tag' && createdBy->username == "${username}"] {tagName}`
-    )
+  return await client
+    .fetch(`*[_type == 'tag' && "${username}" in users[]->username]{tagName}`)
     .then((items) => items.map((item: { tagName: string }) => item.tagName));
 }
 
