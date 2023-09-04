@@ -45,8 +45,11 @@ export async function getAllPostsData(): Promise<Post[]> {
 
 export async function getAllUserPosts(username: string) {
   return client.fetch(
-    `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`
+    `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`,
+    {},
+    { cache: 'no-store' }
   );
+
 }
 
 // export async function getPinnedData(username: string): Promise<Post[]> {
