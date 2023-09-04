@@ -10,6 +10,7 @@ import ReCommentList from './RecommentList';
 import { AuthUser } from '@/model/user';
 import PasswordForm from './PasswordForm';
 import useComment from '@/hooks/useComment';
+import Date from '../ui/Date';
 
 type Props = {
   postId: string;
@@ -72,9 +73,7 @@ export default function Comment({
             >
               {username}
             </span>
-            <time className='text-sm text-gray-400'>
-              {createdAt?.toString()}
-            </time>
+            <Date date={createdAt?.toString()} dateType='date' />
           </div>
         </div>
         {(isUserDelete || type === 'guestComment') && (
@@ -99,7 +98,9 @@ export default function Comment({
           <>
             <BsPlusSquare size='14' />
             <span className='text-sm'>
-              {recomments ? `${recomments.length}개의 답글` : '답글 달기'}
+              {recomments?.length
+                ? `${recomments.length}개의 답글`
+                : '답글 달기'}
             </span>
           </>
         )}

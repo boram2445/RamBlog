@@ -6,6 +6,7 @@ import { ClipLoader } from 'react-spinners';
 import PostListCard from '../post/PostListCard';
 import UserTagList from '../user/UserTagList';
 import { useState } from 'react';
+import Title from '../ui/Title';
 
 type Props = {
   user: HomeUser;
@@ -17,6 +18,12 @@ export default function PostList({ user }: Props) {
 
   return (
     <>
+      <div className='mb-12'>
+        <Title
+          title='Posts'
+          description='기술, 레슨, 오래 기억하고 싶은 것들을 작성합니다'
+        />
+      </div>
       <UserTagList
         username={user.username}
         onClick={setSelectedTag}

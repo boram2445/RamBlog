@@ -25,7 +25,7 @@ export default function ReCommentList({
   const [openForm, setOpenForm] = useState(false);
 
   return (
-    <div className='mt-4 my-12 ml-2'>
+    <div className='mt-3 my-6 ml-2'>
       {comments && (
         <ul className='mb-4 flex flex-col gap-3'>
           {comments.map((comment) => (
@@ -42,12 +42,12 @@ export default function ReCommentList({
           ))}
         </ul>
       )}
-      {comments && !openForm && (
+      {comments?.length !== 0 && !openForm && (
         <Button onClick={() => setOpenForm((prev) => !prev)} type='max'>
           답글 달기
         </Button>
       )}
-      {(openForm || !comments) && (
+      {(openForm || comments?.length === 0) && (
         <CommentForm postId={postId} commentId={commentId} />
       )}
     </div>

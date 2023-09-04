@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import ProjectArticle from '@/components/about/ProjectArticle';
 import ExperienceArticle from '@/components/about/ExperienceArticle';
+import Title from '@/components/ui/Title';
 
 export const metadata: Metadata = {
   title: 'About Me',
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <div className='mx-auto max-w-screen-lg p-2 tablet:p-5 laptop:px-8'>
+      <div className='mb-12'>
+        <Title title='About me' description='나의 모든 발자취들을 기록합니다' />
+      </div>
+      <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
         <section className='mb-12 pb-12 border-b border-light-gray'>
           <h3 className='my-3 text-2xl font-semibold text-black'>Values</h3>
           <p className='text-black'>
