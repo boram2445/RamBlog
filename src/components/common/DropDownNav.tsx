@@ -17,6 +17,7 @@ export default function DropDownNav({
 }: Props) {
   const navRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
+  //밖을 클릭함
   const handleClickOutside = useCallback(
     ({ target }: MouseEvent) => {
       if (
@@ -24,8 +25,9 @@ export default function DropDownNav({
           btnRef.current?.contains(target as Node) ||
           navRef.current?.contains(target as Node)
         )
-      )
+      ) {
         closeModal();
+      }
     },
     [btnRef, closeModal]
   );
@@ -47,7 +49,10 @@ export default function DropDownNav({
       {navList.map((nav, index) => (
         <button
           key={index}
-          onClick={nav.onClick}
+          onClick={() => {
+            nav.onClick();
+            closeModal();
+          }}
           className='hover:bg-gray-50 w-full py-2 px-2 text-sm text-gray-700'
         >
           {nav.label}
