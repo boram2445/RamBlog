@@ -16,6 +16,8 @@ export default function PostList({ user }: Props) {
   const [selectedTag, setSelectedTag] = useState('all');
   const { posts, isLoading, error } = useUserPost(user.username, selectedTag);
 
+  console.log(selectedTag);
+
   return (
     <>
       <div className='mb-12'>
