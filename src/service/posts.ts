@@ -47,21 +47,12 @@ export async function getAllUserPosts(username: string) {
   return client.fetch(
     `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`,
     {},
-    { cache: 'no-store' }
+    {
+      cache: 'force-cache',
+      next: { tags: ['userPosts'] },
+    }
   );
 }
-
-// export async function getPinnedData(username: string): Promise<Post[]> {
-//   return client.fetch(
-//     `*[_type == "post" && author->username =="${username}" && pinned == true ]| order(_createdAt desc){${simplePostProjection}}`
-//   );
-// }
-
-// export async function getLatestData(username: string): Promise<Post[]> {
-//   return client.fetch(
-//     `*[_type == "post" && author->username =="${username}"]| order(_createdAt desc)[0..8] {${simplePostProjection}}`
-//   );
-// }
 
 export async function getPrevPost(username: string, currentDate: string) {
   if (!currentDate) return null;
@@ -109,7 +100,7 @@ export async function getPostDetail(
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
-async function checkAndAddTag(tagName: string, userId: string) {
+async function checkAndAddTag(tagName: string) {
   const existingTags = await client.fetch(
     `*[_type == "tag" && tagName == "${tagName}"]`
   );
@@ -117,7 +108,6 @@ async function checkAndAddTag(tagName: string, userId: string) {
     const newTag = {
       _type: 'tag',
       tagName: tagName,
-      users: [{ _ref: userId, _type: 'reference' }],
     };
     const createdTag = await client.create(newTag);
     return createdTag._id;
@@ -129,59 +119,114 @@ async function checkAndAddTag(tagName: string, userId: string) {
 export async function createPost(
   userId: string,
   title: string,
-  description: string,
-  tagArr: string[],
   content: string,
+  description?: string,
+  tagArr?: string[],
   mainImage?: string
 ) {
-  const tagRefs = await Promise.all(
-    tagArr.map((tagName) => checkAndAddTag(tagName, userId))
-  );
+  const newData: {
+    _type: string;
+    author: { _ref: string };
+    title: string;
+    pinned: boolean;
+    content: string;
+    description?: string;
+    tags?: { _ref: string; _type: string }[];
+    mainImage?: string;
+  } = {
+    _type: 'post',
+    author: { _ref: userId },
+    title,
+    pinned: false,
+    content,
+    ...(description && { description }),
+    ...(mainImage && { mainImage }),
+  };
+
+  if (tagArr && tagArr.length !== 0) {
+    const tagRefs = await Promise.all(
+      tagArr.map((tagName) => checkAndAddTag(tagName))
+    );
+    newData.tags = tagRefs.map((tagRef) => ({
+      _ref: tagRef,
+      _type: 'reference',
+    }));
+  }
 
   return client
     .transaction()
-    .create({
-      _type: 'post',
-      author: { _ref: userId },
-      title,
-      pinned: false,
-      description,
-      tags: tagRefs.map((tagRef) => ({ _ref: tagRef, _type: 'reference' })),
-      content,
-      mainImage,
-    })
+    .create(newData)
     .commit({ autoGenerateArrayKeys: true });
 }
 
 export async function editPost(
   postId: string,
-  title?: string,
+  title: string,
+  content: string,
   description?: string,
   tagArr?: string[],
-  content?: string,
   mainImage?: string
 ) {
-  const newData = {
-    ...(title && { title }),
+  const newData: {
+    title: string;
+    content: string;
+    description?: string;
+    tags?: { _ref: string; _type: string }[];
+    mainImage?: string;
+  } = {
+    title,
+    content,
     ...(description && { description }),
-    ...(tagArr && { tags: tagArr }),
-    ...(content && { content }),
     ...(mainImage && { mainImage }),
   };
+
+  if (tagArr) {
+    const tagRefs = await Promise.all(
+      tagArr.map((tagName) => checkAndAddTag(tagName))
+    );
+    newData.tags = tagRefs.map((tagRef) => ({
+      _ref: tagRef,
+      _type: 'reference',
+    }));
+  }
+
   return client
     .patch(postId) //
     .set(newData) //
-    .commit();
+    .commit({ autoGenerateArrayKeys: true });
 }
 
 export async function deletePost(postId: string) {
   return client.delete(postId);
 }
 
-export async function getTags(username: string): Promise<string[]> {
-  return await client
-    .fetch(`*[_type == 'tag' && "${username}" in users[]->username]{tagName}`)
-    .then((items) => items.map((item: { tagName: string }) => item.tagName));
+export async function getTags(
+  username: string
+): Promise<{ name: string; count: number }[]> {
+  return client
+    .fetch(
+      `*[_type == 'post' && author->username == '${username}'].tags[]->tagName`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['userTags'] },
+      }
+    )
+    .then((tagList) => {
+      const tagCountMap: { [tag: string]: number } = {};
+      tagList.forEach((tag: string) => {
+        if (tag === null) return;
+        tagCountMap[tag] ? tagCountMap[tag]++ : (tagCountMap[tag] = 1);
+      });
+
+      const result = Object.entries(tagCountMap).map(([name, count]) => ({
+        name,
+        count,
+      }));
+
+      console.log(result);
+      return result;
+    });
 }
 
 export async function getTagPosts(username: string, tag: string) {

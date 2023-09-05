@@ -24,18 +24,6 @@ export default {
       type: 'string',
     },
     {
-      title: 'Tags',
-      name: 'tags',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{type: 'tag'}],
-        },
-      ],
-      validation: (Rule) => Rule.unique(),
-    },
-    {
       title: 'Following',
       name: 'following',
       type: 'array',

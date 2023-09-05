@@ -11,17 +11,17 @@ type Props = {
 
 export default function UserTagList({ username, onClick, selected }: Props) {
   const { data: tags } = useSWR(`/api/${username}/posts/tags`);
-
+  console.log(tags);
   return (
     <div className='px-6 mb-6'>
-      {tags && (
+      {/* {tags && (
         <TagList
           tags={['all', ...tags]}
           type='big'
           onClick={onClick}
           checked={selected}
         />
-      )}
+      )} */}
     </div>
   );
 }

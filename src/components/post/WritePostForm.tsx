@@ -34,7 +34,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState(initialState);
-  const { addPost, editPost } = useUserPost(username, 'all');
+  const { writePost } = useUserPost(username, 'all');
 
   const isMutating = isFetching || isPending;
 
@@ -47,50 +47,41 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
     setForm((prev) => ({ ...prev, ['tags']: [...tagArr] }));
   };
 
+  const handleAlert = (content: string) => {
+    if (!form.title.trim()) {
+      alert('제목을 입력해 주세요');
+      return false;
+    }
+    if (!content.trim()) {
+      alert('내용을 입력해주세요');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
-    if (!content || !form.title || !form.tags || !form.description) {
-      alert('모든 항목을 입력해 주세요');
-      return;
+    if (handleAlert(content)) {
+      setIsFetching(true);
+      await writePost(content, form);
+      setIsFetching(false);
+      startTransition(() => {
+        router.push(`/${username}`);
+      });
     }
-
-    setIsFetching(true);
-    await addPost(content, form);
-    setIsFetching(false);
-
-    startTransition(() => {
-      // router.refresh();
-      router.push(`/${username}`);
-    });
   };
 
   const handleEdit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
-
-    // const url = getMainImageUrl(content);
-
-    // const formData = new FormData();
-    // postDetail?.mainImage !== url && formData.append('mainImageUrl', url);
-    // postDetail?.title !== form.title && formData.append('title', form.title);
-    // postDetail?.description !== form.description &&
-    //   formData.append('description', form.description);
-    // postDetail?.tags.join() !== form.tags.join() &&
-    //   formData.append('tags', form.tags.join());
-    // postDetail?.content !== content && formData.append('content', content);
-
     if (!id) return;
-    setIsFetching(true);
-    // await axios
-    //   .patch(`/api/posts/${id}`, formData)
-    //   .catch((err) => setError(err.toString()));
-    await editPost(id, content, form);
-
-    setIsFetching(false);
-
-    startTransition(() => {
-      // router.refresh();
-      router.push(`/${username}/posts/${id}`);
-    });
+    if (handleAlert(content)) {
+      setIsFetching(true);
+      await writePost(content, form, id);
+      setIsFetching(false);
+      startTransition(() => {
+        router.push(`/${username}/posts/${id}`);
+      });
+    }
   };
 
   return (

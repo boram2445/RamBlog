@@ -1,14 +1,15 @@
 import { authOptions } from '../../auth/[...nextauth]/options';
 import { deletePost, editPost } from '@/service/posts';
 import { getServerSession } from 'next-auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
   params: { id: string };
 };
 
-export async function PATCH(req: NextRequest, context: Context) {
+export async function POST(req: NextRequest, context: Context) {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
@@ -25,18 +26,21 @@ export async function PATCH(req: NextRequest, context: Context) {
   const tags = form.get('tags')?.toString();
   const content = form.get('content')?.toString();
 
+  if (!title || !content) {
+    return new Response('Bad request', { status: 400 });
+  }
   const tagArr = tags?.replace(/ /g, '').split(',');
-
   const result = await editPost(
     id,
     title,
+    content,
     description,
     tagArr,
-    content,
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  // revalidatePath(`/[user]`);
+  revalidateTag('userTags');
+  revalidateTag('userPosts');
 
   return result;
 }
@@ -53,7 +57,8 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-  // revalidatePath(`/[user]`);
+  revalidateTag('userTags');
+  revalidateTag('userPosts');
 
   return result;
 }

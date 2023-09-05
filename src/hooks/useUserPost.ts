@@ -14,44 +14,28 @@ export default function useUserPost(username: string, tag: string) {
   const { data: posts, isLoading, error } = useSWR<Post[]>(url);
   const { mutate } = useSWRConfig();
 
-  const addPost = useCallback(
-    async (content: string, form: PostData) => {
-      const url = getMainImageUrl(content);
+  const writePost = useCallback(
+    async (content: string, form: PostData, postId?: string) => {
+      const imageUrl = getMainImageUrl(content);
+
+      console.log(form.title, form.tags, content);
 
       const formData = new FormData();
-      formData.append('mainImageUrl', url);
-      formData.append('title', form.title);
-      formData.append('description', form.description);
-      formData.append('tags', form.tags.join());
-      formData.append('content', content);
+      imageUrl && formData.append('mainImageUrl', imageUrl);
+      form.title.trim() && formData.append('title', form.title);
+      form.description && formData.append('description', form.description);
+      form.tags.length !== 0 && formData.append('tags', form.tags.join());
+      content.trim() && formData.append('content', content);
 
-      await axios.post('/api/posts', formData).then(() => {
-        console.log('실행되나요');
-        mutate(`/api/${username}/posts`);
-      });
-    },
-    [mutate, username]
-  );
-
-  const editPost = useCallback(
-    async (postId: string, content: string, form: PostData) => {
-      const url = getMainImageUrl(content);
-
-      const formData = new FormData();
-      formData.append('mainImageUrl', url);
-      formData.append('title', form.title);
-      formData.append('description', form.description);
-      formData.append('tags', form.tags.join());
-      formData.append('content', content);
-
+      const url = postId ? `/api/posts/${postId}` : '/api/posts';
       await axios
-        .patch(`/api/posts/${postId}`, formData)
+        .post(url, formData)
         .then(() => mutate(`/api/${username}/posts`));
     },
     [mutate, username]
   );
 
-  return { posts, isLoading, error, addPost, editPost };
+  return { posts, isLoading, error, writePost };
 }
 
 type PostData = {
