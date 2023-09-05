@@ -7,11 +7,23 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
 import { usePathname } from 'next/navigation';
 import UserAvartar from './UserAvartar';
+import { useRef, useState } from 'react';
+import DropDownNav from './DropDownNav';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user;
   const pathname = usePathname();
+
+  const [isOpenNav, setIsOpenNav] = useState(false);
+  const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  console.log(isOpenNav);
+  const navList = [
+    { label: '프로필 수정', onClick: () => {} },
+    { label: '로그아웃', onClick: signOut },
+  ];
 
   const isMyPage =
     user && (pathname.includes('/write') || pathname.includes(user.username));
@@ -19,46 +31,51 @@ export default function Header() {
 
   return (
     <header>
-      <div className='max-w-screen-lg mx-auto px-5 py-4 flex justify-between items-center'>
+      <div className='max-w-screen-lg mx-auto px-5 py-3 flex justify-between items-center'>
         <Link href='/' className='text-xl cursor-pointer'>
           <Image src={logo} alt='RAMBLOG 로고' width={120} />
         </Link>
         <nav className='flex items-center gap-x-5 mr-4'>
           {user && (
-            <Link
-              href={`${isMyPage ? '/' : `/${user.username}`}`}
-              prefetch={false}
-              className='hover:text-blue-600'
-            >
-              {isMyPage ? 'All Posts' : 'My Blog'}
-            </Link>
+            <>
+              <Link
+                href={`${isMyPage ? '/' : `/${user.username}`}`}
+                prefetch={false}
+                className='hover:text-blue-600'
+              >
+                {isMyPage ? 'All Posts' : 'My Blog'}
+              </Link>
+              <Link
+                href='/write'
+                prefetch={false}
+                className={`hover:text-blue-600 ${
+                  isWritePage && 'text-blue-600'
+                }`}
+              >
+                Add Post
+              </Link>
+              <div ref={btnRef} className='relative'>
+                <UserAvartar
+                  imageUrl={user.image}
+                  username={user.username}
+                  size='medium'
+                  type='button'
+                  onClick={() => setIsOpenNav((prev) => !prev)}
+                  icon={isOpenNav ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
+                />
+                {isOpenNav && (
+                  <DropDownNav
+                    navList={navList}
+                    isOpen={isOpenNav}
+                    closeModal={() => setIsOpenNav(false)}
+                    btnRef={btnRef}
+                  />
+                )}
+              </div>
+            </>
           )}
-          {user && (
-            <Link
-              href='/write'
-              prefetch={false}
-              className={`hover:text-blue-600 ${
-                isWritePage && 'text-blue-600'
-              }`}
-            >
-              Add Post
-            </Link>
-          )}
-          {/* <div>
-            <Link href='https://github.com/boram2445' target='_blank'>
-              <BsGithub className='cursor-pointer text-2xl text-bronze' />
-            </Link>
-          </div> */}
-          {user && (
-            <UserAvartar
-              imageUrl={user.image}
-              username={user.username}
-              type={'medium'}
-            />
-          )}
-          <Button onClick={session ? signOut : signIn}>
-            {session ? 'Sign Out' : 'Sign In'}
-          </Button>
+
+          {!session && <Button onClick={signIn}>로그인</Button>}
         </nav>
       </div>
     </header>
