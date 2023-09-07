@@ -1,8 +1,9 @@
+import { Links } from '@/model/user';
 import { BsGithub, BsTwitter, BsFacebook, BsYoutube } from 'react-icons/bs';
 import { MdEmail } from 'react-icons/md';
 
 type Props = {
-  links: { linkType: string; urlOrEmail: string }[];
+  links: Links;
 };
 
 const linkButtonStyle = 'text-gray-500 hover:text-gray-900 w-6 h-6';
@@ -10,14 +11,11 @@ const linkButtonStyle = 'text-gray-500 hover:text-gray-900 w-6 h-6';
 export default function LinkButtons({ links }: Props) {
   return (
     <ul className='flex gap-2'>
-      {links.map(({ linkType, urlOrEmail }, index) => {
+      {Object.entries(links).map(([key, value]) => {
+        if (!value) return;
         return (
-          <a
-            href={linkType === 'email' ? '#' : urlOrEmail}
-            key={index}
-            target='_blank'
-          >
-            {getIcon(linkType)}
+          <a href={value ?? '#'} key={key} target='_blank'>
+            {getIcon(key)}
           </a>
         );
       })}

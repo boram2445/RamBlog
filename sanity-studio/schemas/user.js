@@ -41,31 +41,37 @@ export default {
     {
       title: 'Links',
       name: 'links',
-      type: 'array',
-      of: [
+      type: 'object',
+      fields: [
         {
-          type: 'object',
-          fields: [
-            {
-              title: 'Link Type',
-              name: 'linkType',
-              type: 'string',
-              options: {
-                list: [
-                  {title: 'Github', value: 'github'},
-                  {title: 'Email', value: 'email'},
-                  {title: 'Twitter', value: 'twitter'},
-                  {title: 'Facebook', value: 'facebook'},
-                  {title: 'Youtube', value: 'youtube'},
-                ],
-              },
-            },
-            {
-              title: 'URL or Email',
-              name: 'urlOrEmail',
-              type: 'string',
-            },
-          ],
+          title: 'Github',
+          name: 'github',
+          type: 'string',
+        },
+        {
+          title: 'Email',
+          name: 'email',
+          type: 'string',
+        },
+        {
+          title: 'Twitter',
+          name: 'twitter',
+          type: 'string',
+        },
+        {
+          title: 'Facebook',
+          name: 'facebook',
+          type: 'string',
+        },
+        {
+          title: 'Youtube',
+          name: 'youtube',
+          type: 'string',
+        },
+        {
+          title: 'HomePage',
+          name: 'homePage',
+          type: 'string',
         },
       ],
     },
