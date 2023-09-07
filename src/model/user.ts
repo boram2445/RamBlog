@@ -9,6 +9,10 @@ export type AuthUser = {
 export type SimpleUser = Pick<AuthUser, 'username' | 'image'>;
 
 export type HomeUser = AuthUser & {
+  links: { linkType: string; urlOrEmail: string }[];
+  blogName: string;
+  title: string;
+  introduce: string;
   following: SimpleUser[];
   followers: SimpleUser[];
   bookmarks: string[];

@@ -35,6 +35,6 @@ function getSizeStyle(size: AvartarSize) {
     case 'big':
       return 'w-14 h-14';
     case 'max':
-      return 'w-[150px] h-[150px]';
+      return 'w-[135px] h-[135px]';
   }
 }
