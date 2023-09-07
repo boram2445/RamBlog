@@ -24,6 +24,52 @@ export default {
       type: 'string',
     },
     {
+      title: 'Blog Name',
+      name: 'blogName',
+      type: 'string',
+    },
+    {
+      title: 'Profile Title',
+      name: 'title',
+      type: 'string',
+    },
+    {
+      title: 'Profile Introduce',
+      name: 'introduce',
+      type: 'string',
+    },
+    {
+      title: 'Links',
+      name: 'links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              title: 'Link Type',
+              name: 'linkType',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Github', value: 'github'},
+                  {title: 'Email', value: 'email'},
+                  {title: 'Twitter', value: 'twitter'},
+                  {title: 'Facebook', value: 'facebook'},
+                  {title: 'Youtube', value: 'youtube'},
+                ],
+              },
+            },
+            {
+              title: 'URL or Email',
+              name: 'urlOrEmail',
+              type: 'string',
+            },
+          ],
+        },
+      ],
+    },
+    {
       title: 'Following',
       name: 'following',
       type: 'array',
