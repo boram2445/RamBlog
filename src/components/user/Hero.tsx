@@ -1,18 +1,20 @@
 import { HomeUser } from '@/model/user';
 import Avartar from '../ui/Avartar';
 import LinkButtons from './LinkButtons';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import EditButton from './EditButton';
+import { AuthUser } from '@/model/user';
 
 type Props = {
   user: HomeUser;
+  loginUser?: AuthUser;
 };
 
-export default function Hero({ user }: Props) {
+export default function Hero({ user, loginUser }: Props) {
   return (
     <section className='relative py-7 px-3 flex gap-10'>
-      <button className='absolute top-12 right-7'>
-        <BsThreeDotsVertical className='text-gray-500 hover:text-gray-800 w-5 h-5' />
-      </button>
+      {loginUser?.id === user.id && (
+        <EditButton username={loginUser.username} />
+      )}
       <div className='p-3 border border-gray-100 rounded-full'>
         <Avartar imageUrl={user.image} username={user.username} type='max' />
       </div>

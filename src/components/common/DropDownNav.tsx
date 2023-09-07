@@ -6,7 +6,8 @@ type Props = {
   navList: { label: string; onClick: () => void }[];
   isOpen: boolean;
   closeModal: () => void;
-  btnRef: React.MutableRefObject<HTMLInputElement>;
+  btnRef: React.MutableRefObject<HTMLInputElement | HTMLButtonElement>;
+  width?: string;
 };
 
 export default function DropDownNav({
@@ -14,6 +15,7 @@ export default function DropDownNav({
   isOpen,
   closeModal,
   btnRef,
+  width,
 }: Props) {
   const navRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -40,11 +42,13 @@ export default function DropDownNav({
       window.removeEventListener('click', handleClickOutside);
     };
   }, [handleClickOutside, isOpen]);
-
+  console.log(width);
   return (
     <nav
       ref={navRef}
-      className='mt-2 w-full absolute right-0 border border-gray-200 flex flex-col rounded-lg overflow-hidden'
+      className={`mt-2 absolute right-0 ${
+        width ? width : 'w-full'
+      }  border border-gray-200 flex flex-col rounded-lg overflow-hidden z-10`}
     >
       {navList.map((nav, index) => (
         <button
@@ -53,7 +57,7 @@ export default function DropDownNav({
             nav.onClick();
             closeModal();
           }}
-          className='hover:bg-gray-50 w-full py-2 px-2 text-sm text-gray-700'
+          className='bg-white hover:bg-gray-50 w-full py-2 px-2 text-sm text-gray-700'
         >
           {nav.label}
         </button>
