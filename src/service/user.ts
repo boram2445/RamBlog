@@ -1,5 +1,6 @@
-import { HomeUser } from '@/model/user';
+import { HomeUser, Links } from '@/model/user';
 import { client } from './sanity';
+import { uploadImage } from './image';
 
 type OAuthUser = {
   id: string;
@@ -32,11 +33,37 @@ export async function getUserForProfile(username: string): Promise<HomeUser> {
     "following":count(following),
     "followers":count(followers),
     "posts":count(*[_type=="post" && author->username == "${username}"])
-  }`
+    }`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['profile'] },
+      }
     )
     .then((user) => ({
       ...user,
       following: user.following ?? 0,
       followers: user.followers ?? 0,
     }));
+}
+
+export async function editProfile(
+  userId: string,
+  title: string,
+  introduce?: string,
+  links?: Links,
+  image?: Blob
+) {
+  const imageRes = image && (await uploadImage(image));
+
+  const newData = !imageRes
+    ? { title, introduce, links }
+    : {
+        title,
+        introduce,
+        links,
+        image: imageRes.document.url,
+      };
+
+  return client.patch(userId).set(newData).commit();
 }

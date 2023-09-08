@@ -3,27 +3,19 @@
 import { BsGithub, BsTwitter, BsFacebook, BsYoutube } from 'react-icons/bs';
 import { MdEmail } from 'react-icons/md';
 import { AiOutlineHome } from 'react-icons/ai';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Links } from '@/model/user';
 
 type Props = {
   links: Links;
+  onChange: (links: Links) => void;
 };
 
 const iconStyle = 'w-5 h-5 text-gray-500';
 
-export default function SocialForm({ links }: Props) {
-  const [form, setForm] = useState({
-    github: links.github ?? '',
-    email: links.email ?? '',
-    twitter: links.twitter ?? '',
-    facebook: links.facebook ?? '',
-    youtube: links.youtube ?? '',
-    homePage: links.homePage ?? '',
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, name: NameType) => {
-    setForm((prev) => ({ ...prev, [name]: e.target.value }));
+export default function SocialForm({ links, onChange }: Props) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, name: SocialType) => {
+    onChange({ ...links, [name]: e.target.value });
   };
 
   return (
@@ -33,8 +25,8 @@ export default function SocialForm({ links }: Props) {
           {item.icon}
           <input
             type='text'
-            value={form[item.name as NameType]}
-            onChange={(e) => handleChange(e, item.name as NameType)}
+            value={links[item.name as SocialType]}
+            onChange={(e) => handleChange(e, item.name as SocialType)}
             className='p-2 grow border border-gray-200 rounded-md outline-blue-500 text-sm'
             placeholder={item.placeholder}
           />
@@ -44,7 +36,7 @@ export default function SocialForm({ links }: Props) {
   );
 }
 
-type NameType =
+export type SocialType =
   | 'github'
   | 'email'
   | 'twitter'

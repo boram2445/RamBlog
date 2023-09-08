@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
-import ProfileForm from '@/components/profile/ProfileForm';
+import ProfileForm from '@/components/setting/ProfileForm';
 import Title from '@/components/ui/Title';
 
 export default async function ProfilePage() {
