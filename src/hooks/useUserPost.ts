@@ -18,8 +18,6 @@ export default function useUserPost(username: string, tag: string) {
     async (content: string, form: PostData, postId?: string) => {
       const imageUrl = getMainImageUrl(content);
 
-      console.log(form.title, form.tags, content);
-
       const formData = new FormData();
       imageUrl && formData.append('mainImageUrl', imageUrl);
       form.title.trim() && formData.append('title', form.title);

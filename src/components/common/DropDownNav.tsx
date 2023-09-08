@@ -42,7 +42,6 @@ export default function DropDownNav({
       window.removeEventListener('click', handleClickOutside);
     };
   }, [handleClickOutside, isOpen]);
-  console.log(width);
   return (
     <nav
       ref={navRef}
