@@ -18,6 +18,9 @@ export async function addUser({ id, username, email, image, name }: OAuthUser) {
     email,
     name,
     image,
+    blogName: name,
+    title: `${name}`,
+    introduce: `안녕하세요 ${name}의 멋진 블로그입니다 :)`,
     following: [],
     followers: [],
     bookmarks: [],
@@ -44,6 +47,14 @@ export async function getUserForProfile(username: string): Promise<HomeUser> {
       ...user,
       following: user.following ?? 0,
       followers: user.followers ?? 0,
+      links: user.links ?? {
+        github: '',
+        email: '',
+        twitter: '',
+        facebook: '',
+        youtube: '',
+        homePage: '',
+      },
     }));
 }
 
