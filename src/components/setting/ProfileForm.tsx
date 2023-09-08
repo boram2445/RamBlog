@@ -76,7 +76,7 @@ export default function ProfileForm({ userData }: Props) {
     // const data = { title, introduce, links: linkForm };
 
     axios
-      .post(`/api/${userData.username}/me/profile`, formData)
+      .post(`/api/${userData.username}/me/setting`, formData)
       .then(() => {
         router.refresh();
         router.push(`/${userData.username}`);

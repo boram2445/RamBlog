@@ -22,7 +22,7 @@ export default function Header() {
   const router = useRouter();
   const navList = [
     {
-      label: '설정',
+      label: '프로필 설정',
       onClick: () => router.push(`/${user?.username}/me/setting`),
     },
     { label: '로그아웃', onClick: signOut },

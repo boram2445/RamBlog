@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import ProfileForm from '@/components/setting/ProfileForm';
 import Title from '@/components/ui/Title';
 
-export default async function ProfilePage() {
+export default async function SettingPage() {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
