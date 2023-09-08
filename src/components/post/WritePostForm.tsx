@@ -6,9 +6,9 @@ import { Editor } from '@toast-ui/react-editor';
 import { useRouter } from 'next/navigation';
 import { PostData } from '@/service/posts';
 import Button from '../ui/Button';
-import { HashLoader } from 'react-spinners';
 import TagsInput from './TagsInput';
 import useUserPost from '@/hooks/useUserPost';
+import PageLoader from '../ui/PageLoader';
 
 type Props = {
   username: string;
@@ -86,12 +86,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
 
   return (
     <section className='flex flex-col'>
-      {isMutating && (
-        <div className='fixed bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
-          <HashLoader />
-          <p>업로드 중...</p>
-        </div>
-      )}
+      {isMutating && <PageLoader label='업로드중...' />}
       <div className='my-3 mx-auto max-w-screen-lg w-full px-4'>
         <div className={inputBoxStyle}>
           <label htmlFor='title'>제목</label>
@@ -125,13 +120,13 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
 
       <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
       <div className='m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3'>
-        <Button onClick={() => router.back()} type='big'>
+        <Button onClick={() => router.back()} size='big'>
           뒤로가기
         </Button>
         <Button
           color='black'
           onClick={postDetail ? handleEdit : handleSubmit}
-          type='big'
+          size='big'
         >
           출간하기
         </Button>
@@ -139,19 +134,3 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
     </section>
   );
 }
-
-const getMainImageUrl = (content: string) => {
-  const markdownRegex = /!\[.*?\]\((https?:\/\/\S+)\)/;
-  const htmlImgRegex = /<img\s+[^>]*src="([^"]+)"[^>]*>/i;
-
-  const markdownMatch = content.match(markdownRegex);
-  const htmlMatch = content.match(htmlImgRegex);
-
-  if (markdownMatch) {
-    return markdownMatch[1];
-  } else if (htmlMatch) {
-    return htmlMatch[1];
-  } else {
-    return '';
-  }
-};
