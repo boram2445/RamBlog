@@ -23,6 +23,7 @@ export default function ProfileForm({ userData }: Props) {
   );
   const [title, setTitle] = useState(userData?.title ?? '');
   const [introduce, setIntroduce] = useState(userData?.introduce ?? '');
+  const [name, setName] = useState(userData?.name ?? '');
   const [isOpenSocial, setIsOpenSocial] = useState(false);
   const [error, setError] = useState('');
 
@@ -52,6 +53,7 @@ export default function ProfileForm({ userData }: Props) {
     const { name, value } = e.target;
     if (name === 'title') setTitle(value);
     else if (name === 'introeuce') setIntroduce(value);
+    else if (name === 'name') setName(value);
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -59,6 +61,10 @@ export default function ProfileForm({ userData }: Props) {
 
     if (!title.trim()) {
       alert('블로그 타이틀을 설정해 주세요.');
+      return;
+    }
+    if (!name.trim()) {
+      alert('닉네임을 설정해 주세요');
       return;
     }
 
@@ -69,11 +75,10 @@ export default function ProfileForm({ userData }: Props) {
     image && typeof image !== 'string' && formData.append('image', image);
     formData.append('title', title);
     formData.append('introduce', introduce);
+    formData.append('name', name);
     Object.entries(linkForm).forEach(([key, value]) =>
       formData.append(key, value)
     );
-
-    // const data = { title, introduce, links: linkForm };
 
     axios
       .post(`/api/${userData.username}/me/setting`, formData)
@@ -123,7 +128,7 @@ export default function ProfileForm({ userData }: Props) {
           </div>
           <div className='grow mt-5 flex flex-col'>
             <label className='text-xs mb-2'>
-              블로그 타이틀{' '}
+              블로그 타이틀
               <span className='text-pink-500 font-semibold'>*</span>
             </label>
             <input
@@ -145,6 +150,25 @@ export default function ProfileForm({ userData }: Props) {
               placeholder='간단한 소개를 입력해주세요.'
             />
           </div>
+        </div>
+        <div className='my-8 flex flex-col'>
+          <div className='flex items-center'>
+            <label className='text-lg font-semibold' htmlFor='name'>
+              닉네임 <span className='text-pink-500'>*</span>
+            </label>
+            <small className='ml-5 text-xs text-gray-400'>
+              1에서 10자까지 입력 가능합니다.
+            </small>
+          </div>
+          <input
+            id='name'
+            name='name'
+            type='text'
+            value={name}
+            onChange={handleChange}
+            className='p-2 border-b border-gray-200 outline-none text-sm'
+            autoComplete='off'
+          />
         </div>
         <section>
           <div className='my-4'>

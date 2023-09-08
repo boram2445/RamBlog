@@ -17,8 +17,9 @@ export async function POST(req: NextRequest) {
   const image = form.get('image') as Blob;
   const title = form.get('title')?.toString();
   const introduce = form.get('introduce')?.toString();
+  const name = form.get('name')?.toString();
 
-  if (!title) {
+  if (!title || !name) {
     return new Response('Bad request', { status: 400 });
   }
 
@@ -40,6 +41,7 @@ export async function POST(req: NextRequest) {
 
   const result = await editProfile(
     user.id,
+    name,
     title,
     introduce,
     links,

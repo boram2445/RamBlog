@@ -49,6 +49,7 @@ export async function getUserForProfile(username: string): Promise<HomeUser> {
 
 export async function editProfile(
   userId: string,
+  name: string,
   title: string,
   introduce?: string,
   links?: Links,
@@ -57,8 +58,9 @@ export async function editProfile(
   const imageRes = image && (await uploadImage(image));
 
   const newData = !imageRes
-    ? { title, introduce, links }
+    ? { name, title, introduce, links }
     : {
+        name,
         title,
         introduce,
         links,
