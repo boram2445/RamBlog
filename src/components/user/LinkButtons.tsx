@@ -1,6 +1,7 @@
 import { Links } from '@/model/user';
 import { BsGithub, BsTwitter, BsFacebook, BsYoutube } from 'react-icons/bs';
 import { MdEmail } from 'react-icons/md';
+import { AiOutlineHome } from 'react-icons/ai';
 
 type Props = {
   links: Links;
@@ -13,8 +14,9 @@ export default function LinkButtons({ links }: Props) {
     <ul className='flex gap-2'>
       {Object.entries(links).map(([key, value]) => {
         if (!value) return;
+        if (key === 'email') return getIcon(key);
         return (
-          <a href={value ?? '#'} key={key} target='_blank'>
+          <a href={value} key={key} target='_blank'>
             {getIcon(key)}
           </a>
         );
@@ -23,7 +25,7 @@ export default function LinkButtons({ links }: Props) {
   );
 }
 
-function getIcon(linkType: string) {
+export function getIcon(linkType: string) {
   switch (linkType) {
     case 'github':
       return <BsGithub className={linkButtonStyle} />;
@@ -35,5 +37,7 @@ function getIcon(linkType: string) {
       return <BsFacebook className={linkButtonStyle} />;
     case 'youtube':
       return <BsYoutube className={linkButtonStyle} />;
+    case 'homePage':
+      return <AiOutlineHome className={linkButtonStyle} />;
   }
 }
