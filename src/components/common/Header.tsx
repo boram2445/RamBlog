@@ -5,7 +5,7 @@ import logo from '../../asset/icons/logo.svg';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import UserAvartar from './UserAvartar';
 import { useRef, useState } from 'react';
 import DropDownNav from './DropDownNav';
@@ -19,9 +19,12 @@ export default function Header() {
   const [isOpenNav, setIsOpenNav] = useState(false);
   const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  console.log(isOpenNav);
+  const router = useRouter();
   const navList = [
-    { label: '프로필 수정', onClick: () => {} },
+    {
+      label: '설정',
+      onClick: () => router.push(`/${user?.username}/me/setting`),
+    },
     { label: '로그아웃', onClick: signOut },
   ];
 

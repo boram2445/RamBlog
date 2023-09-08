@@ -33,7 +33,7 @@ export default function Button({
 function getSizeStyle(size: ButtonSize) {
   switch (size) {
     case 'small':
-      return 'py-1 px-3';
+      return 'py-1 px-3 text-sm';
     case 'big':
       return 'py-1.5 px-4 text-lg';
     case 'max':

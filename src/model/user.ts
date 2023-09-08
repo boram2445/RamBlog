@@ -9,11 +9,20 @@ export type AuthUser = {
 export type SimpleUser = Pick<AuthUser, 'username' | 'image'>;
 
 export type HomeUser = AuthUser & {
-  links: { linkType: string; urlOrEmail: string }[];
+  links: Links;
   blogName: string;
   title: string;
   introduce: string;
   following: SimpleUser[];
   followers: SimpleUser[];
   bookmarks: string[];
+};
+
+export type Links = {
+  github?: string;
+  email?: string;
+  twitter?: string;
+  facebook?: string;
+  youtube?: string;
+  homePage?: string;
 };
