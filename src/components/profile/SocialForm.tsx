@@ -27,28 +27,20 @@ export default function SocialForm({ links }: Props) {
   };
 
   return (
-    <section>
-      <div className='my-4'>
-        <h4 className='text-lg font-semibold'>소셜 정보</h4>
-        <small className='text-xs text-gray-400'>
-          포스트 및 블로그에서 보여지는 프로필에 사용되는 소셜 정보입니다.
-        </small>
-      </div>
-      <ul>
-        {list.map((item, index) => (
-          <li key={index} className='flex gap-3 items-center'>
-            {item.icon}
-            <input
-              type='text'
-              value={form[item.name as NameType]}
-              onChange={(e) => handleChange(e, item.name as NameType)}
-              className='mb-2 p-2 grow border border-gray-200 rounded-md outline-blue-500 text-sm'
-              placeholder={item.placeholder}
-            />
-          </li>
-        ))}
-      </ul>
-    </section>
+    <ul>
+      {list.map((item, index) => (
+        <li key={index} className='mb-2 flex gap-3 items-center'>
+          {item.icon}
+          <input
+            type='text'
+            value={form[item.name as NameType]}
+            onChange={(e) => handleChange(e, item.name as NameType)}
+            className='p-2 grow border border-gray-200 rounded-md outline-blue-500 text-sm'
+            placeholder={item.placeholder}
+          />
+        </li>
+      ))}
+    </ul>
   );
 }
 
