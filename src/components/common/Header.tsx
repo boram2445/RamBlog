@@ -30,6 +30,7 @@ export default function Header() {
 
   const router = useRouter();
   const navList = [
+    { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
     {
       label: '프로필 설정',
       onClick: () => router.push(`/${user?.username}/me/setting`),

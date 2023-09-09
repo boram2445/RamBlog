@@ -16,7 +16,7 @@ export default async function SettingPage() {
     <section className='max-w-screen-md mx-auto p-5'>
       <div className='mb-8'>
         <Title
-          title='프로필 수정'
+          title='프로필 설정'
           description='현재 프로필을 수정할수 있어요.'
         />
       </div>
