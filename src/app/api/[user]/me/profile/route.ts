@@ -1,8 +1,28 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import { editProfile } from '@/service/user';
+import {
+  editProfile,
+  getUserByUsername,
+  getUserForProfile,
+} from '@/service/user';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(_: Request) {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+
+  if (!user) {
+    return new Response(JSON.stringify(null), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  return await getUserByUsername(user.username).then((data) =>
+    NextResponse.json(data)
+  );
+}
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);

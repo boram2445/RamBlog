@@ -24,7 +24,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={`flex justify-center gap-1 items-center border rounded-lg transition-all font-semibold ${colorStyle} ${getSizeStyle(
+      className={`flex justify-center gap-1 items-center border rounded-full transition-all font-semibold ${colorStyle} ${getSizeStyle(
         size
       )}`}
     >

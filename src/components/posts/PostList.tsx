@@ -1,7 +1,7 @@
 'use client';
 
 import useUserPost from '@/hooks/useUserPost';
-import { HomeUser } from '@/model/user';
+import { ProfileUser } from '@/model/user';
 import { ClipLoader } from 'react-spinners';
 import PostListCard from '../post/PostListCard';
 import UserTagList from '../user/UserTagList';
@@ -9,7 +9,7 @@ import { useState } from 'react';
 import Title from '../ui/Title';
 
 type Props = {
-  user: HomeUser;
+  user: ProfileUser;
 };
 
 export default function PostList({ user }: Props) {

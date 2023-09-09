@@ -1,11 +1,11 @@
 'use client';
 
-import { HomeUser, Links } from '@/model/user';
+import { Links, ProfileUser } from '@/model/user';
 import Button from '../ui/Button';
 import Avartar from '../ui/Avartar';
-import { ChangeEvent, FormEvent, useState, useTransition } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { AiOutlineCamera } from 'react-icons/ai';
-import SocialForm, { SocialType } from './SocialForm';
+import SocialForm from './SocialForm';
 import SocialLinks from './SocialLinks';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import PageLoader from '../ui/PageLoader';
 import { mutate } from 'swr';
 
 type Props = {
-  userData: HomeUser;
+  userData: ProfileUser;
 };
 
 export default function ProfileForm({ userData }: Props) {
@@ -82,7 +82,7 @@ export default function ProfileForm({ userData }: Props) {
     );
 
     axios
-      .post(`/api/${userData.username}/me/setting`, formData)
+      .post(`/api/${userData.username}/me/profile`, formData)
       .then(() => {
         router.refresh();
         mutate(`/api/${userData.username}/me`);

@@ -1,4 +1,4 @@
-import { HomeUser, Links } from '@/model/user';
+import { Links, ProfileUser } from '@/model/user';
 import { client } from './sanity';
 import { uploadImage } from './image';
 
@@ -39,7 +39,21 @@ export async function getUserData(userId: string) {
   );
 }
 
-export async function getUserForProfile(username: string): Promise<HomeUser> {
+export async function getUserByUsername(username: string) {
+  return client.fetch(
+    `*[_type == "user" && username == "${username}"][0]{
+      ...,
+      "id":_id,
+      following[]->{username,image},
+      followers[]->{username,image},
+      "bookmarks":bookmarks[]->_id
+    }`
+  );
+}
+
+export async function getUserForProfile(
+  username: string
+): Promise<ProfileUser> {
   return client
     .fetch(
       `*[_type=='user' && username == "${username}"][0]{

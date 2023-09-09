@@ -16,8 +16,6 @@ export default async function UserTemplate({
   children,
 }: Props) {
   const userData = await getUserForProfile(user);
-  const session = await getServerSession(authOptions);
-  const loginUserData = session?.user;
 
   if (!user) notFound();
 
