@@ -1,7 +1,7 @@
 import { ProfileUser } from '@/model/user';
 import Avartar from '../ui/Avartar';
 import LinkButtons from './LinkButtons';
-import FollowButton from './FollowButton';
+import FollowButton from '../common/FollowButton';
 import FollowNumButtons from './FollowNumButtons';
 
 type Props = {
@@ -17,7 +17,7 @@ export default function Hero({ user }: Props) {
       <div className='grow mt-3 flex flex-col'>
         <div className='flex justify-between'>
           <h2 className='text-2xl font-semibold text-gray-900'>{user.title}</h2>
-          <FollowButton user={user} />
+          <FollowButton userId={user.id} username={user.username} />
         </div>
         <p className='grow my-4 text-gray-700'>{user.introduce}</p>
         <div className='flex justify-between items-center'>

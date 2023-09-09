@@ -1,6 +1,5 @@
 'use client';
 
-import { ProfileUser } from '@/model/user';
 import Button from '../ui/Button';
 import useMe from '@/hooks/useMe';
 import { useState, useTransition } from 'react';
@@ -8,26 +7,27 @@ import { useRouter } from 'next/navigation';
 import { PulseLoader } from 'react-spinners';
 
 type Props = {
-  user: ProfileUser;
+  userId: string;
+  username: string;
 };
 
-export default function FollowButton({ user }: Props) {
-  const { loggedInUser, toggleFollow } = useMe();
+export default function FollowButton({ userId, username }: Props) {
+  const { loggedInUser, toggleFollow } = useMe(); //로그인한 사람
 
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isFetching, setIsFetching] = useState(false);
   const isUpdating = isPending || isFetching;
 
-  const showButton = loggedInUser && loggedInUser.id !== user.id;
+  const showButton = loggedInUser && loggedInUser.id !== userId;
   const following =
     loggedInUser &&
-    loggedInUser.following.find((item) => item.username === user.username);
-  const text = following ? '팔로우 취소' : '팔로우';
+    loggedInUser.following.find((item) => item.username === username);
+  const text = following ? '팔로잉' : '팔로우';
 
   const handleFollow = async () => {
     setIsFetching(true);
-    await toggleFollow(user.id, !following);
+    await toggleFollow(userId, !following);
     setIsFetching(false);
     startTransition(() => {
       router.refresh();
