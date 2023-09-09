@@ -38,7 +38,7 @@ export default function FollowButton({ userId, username }: Props) {
   return (
     <>
       {showButton && (
-        <div className='relative'>
+        <div className='relative h-[30px]'>
           {isUpdating && (
             <div className='absolute inset-0 flex justify-center items-center z-20'>
               <PulseLoader size='6' color='gray' />

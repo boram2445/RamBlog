@@ -28,7 +28,7 @@ export default function Button({
       onClick={onClick}
       className={`flex justify-center gap-1 items-center border rounded-full transition-all font-semibold ${colorStyle} ${getSizeStyle(
         size
-      )} ${disabled && 'opacity-60'}`}
+      )} ${disabled && 'text-opacity-20'}`}
       disabled={disabled}
     >
       {children}
