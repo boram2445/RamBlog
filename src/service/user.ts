@@ -47,7 +47,12 @@ export async function getUserByUsername(username: string) {
       following[]->{username,image},
       followers[]->{username,image},
       "bookmarks":bookmarks[]->_id
-    }`
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['following'] },
+    }
   );
 }
 
@@ -66,7 +71,7 @@ export async function getUserForProfile(
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['profile'] },
+        next: { tags: ['profile', 'following'] },
       }
     )
     .then((user) => ({

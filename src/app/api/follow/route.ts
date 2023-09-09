@@ -2,6 +2,7 @@ import { follow, unfollow } from '@/service/user';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '../auth/[...nextauth]/options';
+import { revalidateTag } from 'next/cache';
 
 export async function PUT(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -19,7 +20,11 @@ export async function PUT(req: NextRequest) {
 
   const request = isFollow ? follow : unfollow;
 
-  return request(user.id, targetId) //
+  const result = await request(user.id, targetId) //
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+
+  revalidateTag('following');
+
+  return result;
 }
