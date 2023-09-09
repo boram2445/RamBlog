@@ -16,10 +16,14 @@ export default function Hero({ user }: Props) {
       </div>
       <div className='grow mt-3 flex flex-col'>
         <div className='flex justify-between'>
-          <h2 className='text-2xl font-semibold text-gray-900'>{user.title}</h2>
+          <div className=' max-w-[410px]'>
+            <h2 className='text-2xl font-semibold text-gray-900'>
+              {user.title}
+            </h2>
+            <p className='grow my-4 text-gray-700'>{user.introduce}</p>
+          </div>
           <FollowButton userId={user.id} username={user.username} />
         </div>
-        <p className='grow my-4 text-gray-700'>{user.introduce}</p>
         <div className='flex justify-between items-center'>
           <LinkButtons links={user.links} />
           <FollowNumButtons user={user} />
