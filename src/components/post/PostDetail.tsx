@@ -37,7 +37,7 @@ export default async function PostDetail({ post, loginUserData }: Props) {
         </div>
         <h1 className='mb-6 text-4xl font-semibold text-black'>{title}</h1>
         <div className='flex gap-4'>
-          <UserAvartar imageUrl={userImage} username={username} type='small' />
+          <UserAvartar imageUrl={userImage} username={username} size='small' />
           <Date date={createdAt?.toString()} type='small' />
         </div>
       </div>

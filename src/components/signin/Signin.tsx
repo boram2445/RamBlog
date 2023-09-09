@@ -15,7 +15,7 @@ export default function Signin({ providers, callbackUrl }: Props) {
         <Button
           key={id}
           onClick={() => signIn(id, { callbackUrl })}
-          type='big'
+          size='big'
         >{`Sign In with ${name}`}</Button>
       ))}
     </>

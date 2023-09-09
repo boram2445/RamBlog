@@ -6,10 +6,27 @@ export type AuthUser = {
   image?: string;
 };
 
+export type UserData = AuthUser & {
+  blogName: string;
+};
+
 export type SimpleUser = Pick<AuthUser, 'username' | 'image'>;
 
 export type HomeUser = AuthUser & {
+  links: Links;
+  blogName: string;
+  title: string;
+  introduce: string;
   following: SimpleUser[];
   followers: SimpleUser[];
   bookmarks: string[];
+};
+
+export type Links = {
+  github?: string;
+  email?: string;
+  twitter?: string;
+  facebook?: string;
+  youtube?: string;
+  homePage?: string;
 };

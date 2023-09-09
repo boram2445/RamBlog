@@ -3,6 +3,8 @@ import Hero from '@/components/user/Hero';
 import { notFound } from 'next/navigation';
 import TabList from '@/components/user/TabList';
 import { ReactNode } from 'react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 type Props = {
   params: { user: string };
@@ -14,6 +16,8 @@ export default async function UserTemplate({
   children,
 }: Props) {
   const userData = await getUserForProfile(user);
+  const session = await getServerSession(authOptions);
+  const loginUserData = session?.user;
 
   if (!user) notFound();
 

@@ -2,7 +2,8 @@ type Props = {
   color?: 'white' | 'black';
   onClick?: () => void;
   children: React.ReactNode;
-  type?: ButtonSize;
+  size?: ButtonSize;
+  type?: 'button' | 'submit';
 };
 
 type ButtonSize = 'small' | 'medium' | 'big' | 'max';
@@ -11,7 +12,8 @@ export default function Button({
   color = 'white',
   onClick,
   children,
-  type = 'small',
+  size = 'small',
+  type = 'button',
 }: Props) {
   const colorStyle =
     color === 'white'
@@ -20,9 +22,10 @@ export default function Button({
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`flex justify-center gap-1 items-center border rounded-lg transition-all font-semibold ${colorStyle} ${getSizeStyle(
-        type
+        size
       )}`}
     >
       {children}
@@ -33,7 +36,7 @@ export default function Button({
 function getSizeStyle(size: ButtonSize) {
   switch (size) {
     case 'small':
-      return 'py-1 px-3';
+      return 'py-1 px-3 text-sm';
     case 'big':
       return 'py-1.5 px-4 text-lg';
     case 'max':

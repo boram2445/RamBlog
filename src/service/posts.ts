@@ -223,8 +223,6 @@ export async function getTags(
         name,
         count,
       }));
-
-      console.log(result);
       return result;
     });
 }

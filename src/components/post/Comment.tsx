@@ -45,7 +45,6 @@ export default function Comment({
     deleted,
   } = comment;
 
-  console.log(deleted);
   const handleDeleteUserComment = () => {
     if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
       deleteComment(id, parentCommentId);

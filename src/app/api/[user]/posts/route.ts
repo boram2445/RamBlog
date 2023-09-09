@@ -7,7 +7,6 @@ type Context = {
 
 export async function GET(_: Request, context: Context) {
   const { user } = context.params;
-  console.log('Get started', user);
 
   if (!user) {
     return new NextResponse('Bad Reqest', { status: 400 });

@@ -43,7 +43,7 @@ export default function ReCommentList({
         </ul>
       )}
       {comments && comments.length > 0 && !openForm && (
-        <Button onClick={() => setOpenForm((prev) => !prev)} type='max'>
+        <Button onClick={() => setOpenForm((prev) => !prev)} size='max'>
           답글 달기
         </Button>
       )}
