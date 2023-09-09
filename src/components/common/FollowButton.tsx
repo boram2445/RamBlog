@@ -5,6 +5,7 @@ import useMe from '@/hooks/useMe';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { PulseLoader } from 'react-spinners';
+import { AiOutlineCheck, AiOutlinePlus } from 'react-icons/ai';
 
 type Props = {
   userId: string;
@@ -48,6 +49,7 @@ export default function FollowButton({ userId, username }: Props) {
             onClick={handleFollow}
             color={following ? 'black' : 'white'}
           >
+            {following ? <AiOutlineCheck color='white' /> : <AiOutlinePlus />}
             {text}
           </Button>
         </div>

@@ -14,24 +14,24 @@ export default function FollowLists({ username, type }: Props) {
 
   const list =
     type === 'follower' ? userProfile?.followers : userProfile?.following;
-  const count = list?.length || 0;
+  const count = list?.length || '';
 
   return (
     <section>
-      <h1>
+      <h1 className='my-2 text-xl'>
         {type === 'follower' ? '팔로워' : '팔로잉'}
-        <span className='text-pink-400'>{` ${count}`}</span>명
+        <span className='text-pink-400 font-semibold'>{` ${count}`}</span>명
       </h1>
       {isLoading && (
         <div>
           <ClipLoader />
         </div>
       )}
-      {userProfile && (
+      {!isLoading && !error && (
         <ul>
           {list?.map((item) => (
             <li key={item.id}>
-              <UserCard user={userProfile} followUser={item} />
+              <UserCard followUser={item} />
             </li>
           ))}
         </ul>
