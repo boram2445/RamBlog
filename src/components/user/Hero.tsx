@@ -1,14 +1,12 @@
 import { HomeUser } from '@/model/user';
 import Avartar from '../ui/Avartar';
 import LinkButtons from './LinkButtons';
-import { AuthUser } from '@/model/user';
 
 type Props = {
   user: HomeUser;
-  loginUser?: AuthUser;
 };
 
-export default function Hero({ user, loginUser }: Props) {
+export default function Hero({ user }: Props) {
   return (
     <section className='relative py-7 px-3 flex gap-10'>
       <div className='p-3 border border-gray-100 rounded-full'>

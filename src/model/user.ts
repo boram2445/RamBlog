@@ -6,6 +6,10 @@ export type AuthUser = {
   image?: string;
 };
 
+export type UserData = AuthUser & {
+  blogName: string;
+};
+
 export type SimpleUser = Pick<AuthUser, 'username' | 'image'>;
 
 export type HomeUser = AuthUser & {

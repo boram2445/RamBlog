@@ -10,6 +10,7 @@ import SocialLinks from './SocialLinks';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import PageLoader from '../ui/PageLoader';
+import { mutate } from 'swr';
 
 type Props = {
   userData: HomeUser;
@@ -84,6 +85,7 @@ export default function ProfileForm({ userData }: Props) {
       .post(`/api/${userData.username}/me/setting`, formData)
       .then(() => {
         router.refresh();
+        mutate(`/api/${userData.username}/me`);
         router.push(`/${userData.username}`);
       })
       .catch((err) => setError(err.toString()))

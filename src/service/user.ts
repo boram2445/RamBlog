@@ -27,6 +27,18 @@ export async function addUser({ id, username, email, image, name }: OAuthUser) {
   });
 }
 
+export async function getUserData(userId: string) {
+  return client.fetch(
+    `*[_type=='user' && _id == "${userId}"][0]
+    {"id":_id,name,username,email,image,blogName}`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['profile'] },
+    }
+  );
+}
+
 export async function getUserForProfile(username: string): Promise<HomeUser> {
   return client
     .fetch(

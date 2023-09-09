@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import useSWR from 'swr';
 import logo from '../../asset/icons/logo.svg';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -10,10 +11,18 @@ import UserAvartar from './UserAvartar';
 import { useRef, useState } from 'react';
 import DropDownNav from './DropDownNav';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { UserData } from '@/model/user';
 
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user;
+
+  const { data: loginUser } = useSWR<UserData>(
+    user ? `/api/${user.username}/me` : null
+  );
+
+  console.log(loginUser);
+
   const pathname = usePathname();
 
   const [isOpenNav, setIsOpenNav] = useState(false);
@@ -39,10 +48,10 @@ export default function Header() {
           <Image src={logo} alt='RAMBLOG 로고' width={120} />
         </Link>
         <nav className='flex items-center gap-x-5 mr-4'>
-          {user && (
+          {loginUser && (
             <>
               <Link
-                href={`${isMyPage ? '/' : `/${user.username}`}`}
+                href={`${isMyPage ? '/' : `/${loginUser.username}`}`}
                 prefetch={false}
                 className='hover:text-blue-600'
               >
@@ -59,8 +68,8 @@ export default function Header() {
               </Link>
               <div ref={btnRef} className='relative'>
                 <UserAvartar
-                  imageUrl={user.image}
-                  username={user.username}
+                  imageUrl={loginUser.image}
+                  username={loginUser.username}
                   size='medium'
                   type='button'
                   onClick={() => setIsOpenNav((prev) => !prev)}
