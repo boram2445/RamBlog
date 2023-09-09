@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HomeUser } from '@/model/user';
+import { ProfileUser } from '@/model/user';
 
 type Props = {
-  user: HomeUser;
+  user: ProfileUser;
 };
 
 const tabStyle = `px-16 py-3 cursor-pointer text-gray-600 border-b-2 border-gray-200 hover:text-gray-900`;

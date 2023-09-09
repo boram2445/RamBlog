@@ -10,13 +10,33 @@ export type UserData = AuthUser & {
   blogName: string;
 };
 
-export type SimpleUser = Pick<AuthUser, 'username' | 'image'>;
+export type SimpleUser = {
+  id: string;
+  username: string;
+  name: string;
+  image: string;
+  title: string;
+};
 
-export type HomeUser = AuthUser & {
-  links: Links;
+export type SearchUser = AuthUser & {
+  following: number;
+  followers: number;
+};
+
+export type ProfileUser = SearchUser & {
   blogName: string;
   title: string;
   introduce: string;
+  links: Links;
+  posts: number;
+};
+
+export type HomeUser = AuthUser & {
+  blogName: string;
+  title: string;
+  introduce: string;
+  posts: number;
+  links: Links;
   following: SimpleUser[];
   followers: SimpleUser[];
   bookmarks: string[];

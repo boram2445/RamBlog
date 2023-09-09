@@ -1,4 +1,4 @@
-import { HomeUser, Links } from '@/model/user';
+import { HomeUser, Links, ProfileUser } from '@/model/user';
 import { client } from './sanity';
 import { uploadImage } from './image';
 
@@ -39,7 +39,26 @@ export async function getUserData(userId: string) {
   );
 }
 
-export async function getUserForProfile(username: string): Promise<HomeUser> {
+export async function getUserByUsername(username: string): Promise<HomeUser> {
+  return client.fetch(
+    `*[_type == "user" && username == "${username}"][0]{
+      ...,
+      "id":_id,
+      following[]->{"id":_id,username,name,image,title},
+      followers[]->{"id":_id,username,name,image,title},
+      "bookmarks":bookmarks[]->_id
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['following'] },
+    }
+  );
+}
+
+export async function getUserForProfile(
+  username: string
+): Promise<ProfileUser> {
   return client
     .fetch(
       `*[_type=='user' && username == "${username}"][0]{
@@ -52,7 +71,7 @@ export async function getUserForProfile(username: string): Promise<HomeUser> {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['profile'] },
+        next: { tags: ['profile', 'following'] },
       }
     )
     .then((user) => ({
@@ -91,4 +110,28 @@ export async function editProfile(
       };
 
   return client.patch(userId).set(newData).commit();
+}
+
+export async function follow(myId: string, targetId: string) {
+  return client
+    .transaction() //
+    .patch(myId, (user) =>
+      user
+        .setIfMissing({ following: [] })
+        .append('following', [{ _ref: targetId, _type: 'reference' }])
+    )
+    .patch(targetId, (user) =>
+      user
+        .setIfMissing({ followers: [] })
+        .append('followers', [{ _ref: myId, _type: 'reference' }])
+    )
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function unfollow(myId: string, targetId: string) {
+  return client
+    .transaction() //
+    .patch(myId, (user) => user.unset([`following[_ref=="${targetId}"]`]))
+    .patch(targetId, (user) => user.unset([`followers[_ref=="${myId}"]`]))
+    .commit({ autoGenerateArrayKeys: true });
 }
