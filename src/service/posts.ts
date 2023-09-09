@@ -214,7 +214,7 @@ export async function getTags(
     )
     .then((tagList) => {
       const tagCountMap: { [tag: string]: number } = {};
-      tagList.forEach((tag: string) => {
+      tagList?.forEach((tag: string) => {
         if (tag === null) return;
         tagCountMap[tag] ? tagCountMap[tag]++ : (tagCountMap[tag] = 1);
       });
