@@ -62,7 +62,9 @@ export default function PasswordForm({
           value={password}
           required
         />
-        <Button color='black'>입력</Button>
+        <Button color='black' type='submit'>
+          입력
+        </Button>
       </div>
       <p>{error && '비밀번호가 틀렸습니다'}</p>
     </form>
