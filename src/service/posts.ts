@@ -229,6 +229,11 @@ export async function getTags(
 
 export async function getTagPosts(username: string, tag: string) {
   return client.fetch(
-    `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`
+    `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['userPosts'] },
+    }
   );
 }
