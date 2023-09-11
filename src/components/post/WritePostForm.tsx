@@ -59,27 +59,15 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
     return true;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = (id?: string) => async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
-    if (handleAlert(content)) {
-      setIsFetching(true);
-      await writePost(content, form);
-      setIsFetching(false);
-      startTransition(() => {
-        router.push(`/${username}`);
-      });
-    }
-  };
-
-  const handleEdit = async () => {
-    const content = editorRef.current?.getInstance().getMarkdown();
-    if (!id) return;
     if (handleAlert(content)) {
       setIsFetching(true);
       await writePost(content, form, id);
       setIsFetching(false);
       startTransition(() => {
-        router.push(`/${username}/posts/${id}`);
+        const url = id ? `/${username}/posts/${id}` : `/${username}`;
+        router.push(url);
       });
     }
   };
@@ -117,7 +105,6 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
         </div>
         <TagsInput tags={form.tags} handleTags={handleTags} />
       </div>
-
       <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
       <div className='m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3'>
         <Button onClick={() => router.back()} size='big'>
@@ -125,7 +112,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
         </Button>
         <Button
           color='black'
-          onClick={postDetail ? handleEdit : handleSubmit}
+          onClick={postDetail ? handleSubmit(id) : handleSubmit()}
           size='big'
         >
           출간하기
