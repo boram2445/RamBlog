@@ -21,8 +21,6 @@ export default function Header() {
     user ? `/api/${user.username}/me` : null
   );
 
-  console.log(loginUser);
-
   const pathname = usePathname();
 
   const [isOpenNav, setIsOpenNav] = useState(false);
