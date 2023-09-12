@@ -3,17 +3,25 @@
 import Link from 'next/link';
 import useSWR from 'swr';
 import logo from '../../asset/icons/logo.svg';
+import PlanetLogo from '../../asset/icons/planet_logo.svg';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../ui/Button';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import UserAvartar from './UserAvartar';
 import { useRef, useState } from 'react';
 import DropDownNav from './DropDownNav';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { UserData } from '@/model/user';
+import useUser from '@/hooks/useUser';
 
 export default function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams();
+
+  const { userProfile } = useUser(params.user as string);
+
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -21,12 +29,9 @@ export default function Header() {
     user ? `/api/${user.username}/me` : null
   );
 
-  const pathname = usePathname();
-
   const [isOpenNav, setIsOpenNav] = useState(false);
   const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const router = useRouter();
   const navList = [
     { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
     {
@@ -36,34 +41,38 @@ export default function Header() {
     { label: '로그아웃', onClick: signOut },
   ];
 
-  const isMyPage =
-    user && (pathname.includes('/write') || pathname.includes(user.username));
   const isWritePage = user && pathname.includes('/write');
 
   return (
-    <header>
-      <div className='max-w-screen-lg mx-auto px-5 py-3 flex justify-between items-center'>
-        <Link href='/' className='text-xl cursor-pointer'>
-          <Image src={logo} alt='RAMBLOG 로고' width={120} />
-        </Link>
+    <header className='sticky top-0 z-40 w-full backdrop-blur-sm flex-none transition-colors duration-500 lg:z-50 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'>
+      <div className='min-h-[64px] max-w-screen-lg mx-auto px-5 py-2 flex justify-between items-center'>
+        <div className='flex gap-2 items-center'>
+          <Link href='/'>
+            <Image src={PlanetLogo} width={38} height={35} alt='RamBlog 로고' />
+          </Link>
+          {params.user ? (
+            <Link href={`/${params.user}`}>
+              <h1 className='text-xl font-semibold hover:text-indigo-600'>
+                {userProfile?.blogName}
+              </h1>
+            </Link>
+          ) : (
+            <Link href='/'>
+              <h1 className='text-xl font-semibold'>RAMBLOG</h1>
+            </Link>
+          )}
+        </div>
         <nav className='flex items-center gap-x-5 mr-4'>
           {loginUser && (
             <>
               <Link
-                href={`${isMyPage ? '/' : `/${loginUser.username}`}`}
-                prefetch={false}
-                className='hover:text-blue-600'
-              >
-                {isMyPage ? 'All Posts' : 'My Blog'}
-              </Link>
-              <Link
                 href='/write'
                 prefetch={false}
-                className={`hover:text-blue-600 ${
-                  isWritePage && 'text-blue-600'
+                className={`hover:text-indigo-600 ${
+                  isWritePage && 'text-indigo-600'
                 }`}
               >
-                Add Post
+                Write Post
               </Link>
               <div ref={btnRef} className='relative'>
                 <UserAvartar
@@ -85,7 +94,6 @@ export default function Header() {
               </div>
             </>
           )}
-
           {!session && <Button onClick={signIn}>로그인</Button>}
         </nav>
       </div>
