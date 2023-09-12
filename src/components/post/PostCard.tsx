@@ -24,7 +24,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <article
       onClick={() => router.push(`/${username}/posts/${id}`)}
-      className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden border-2 border-gray-200 rounded-lg cursor-pointer  hover:drop-shadow-md'
+      className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden border-2 border-gray-200 rounded-lg cursor-pointer hover:shadow-md hover:scale-105 transition-transform ease-in-out duration-300'
     >
       {mainImage && (
         <Image

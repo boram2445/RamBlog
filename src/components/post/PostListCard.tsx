@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import Image from 'next/image';
+import { AiOutlineRight } from 'react-icons/ai';
 
 export default function PostListCard({ post }: { post: Post }) {
   const { title, description, tags, id, mainImage, createdAt, username } = post;
@@ -14,11 +15,14 @@ export default function PostListCard({ post }: { post: Post }) {
   return (
     <article
       onClick={() => router.push(`/${username}/posts/${id}`)}
-      className='p-6 flex justify-between border-b border-gray-200 cursor-pointer hover:bg-gray-50'
+      className='group p-6 flex justify-between border-b border-gray-200 cursor-pointer'
     >
       <div className='flex flex-col'>
         <TagList tags={tags} />
-        <h1 className='py-1 text-black text-lg tablet:text-2xl'>{title}</h1>
+        <h1 className='mt-1 py-1 text-black text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500 transition-all duration-300 ease-in-out'>
+          <AiOutlineRight className='hidden group-hover:block w-4' />
+          {title}
+        </h1>
         <p className='mt-1 h-10 tablet:h-12 text-gray-400 truncate'>
           {description}
         </p>

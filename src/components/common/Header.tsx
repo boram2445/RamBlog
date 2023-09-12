@@ -34,6 +34,7 @@ export default function Header() {
 
   const navList = [
     { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
+    { label: '글 쓰기', onClick: () => router.push(`/write`) },
     {
       label: '프로필 설정',
       onClick: () => router.push(`/${user?.username}/me/setting`),
@@ -44,7 +45,7 @@ export default function Header() {
   const isWritePage = user && pathname.includes('/write');
 
   return (
-    <header className='sticky top-0 z-40 w-full backdrop-blur-sm flex-none transition-colors duration-500 lg:z-50 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'>
+    <header className='sticky top-0 z-10 w-full backdrop-blur-sm flex-none transition-colors duration-500 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'>
       <div className='min-h-[64px] max-w-screen-lg mx-auto px-5 py-2 flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <Link href='/'>
@@ -68,7 +69,7 @@ export default function Header() {
               <Link
                 href='/write'
                 prefetch={false}
-                className={`hover:text-indigo-600 ${
+                className={`hidden tablet:block hover:text-indigo-600 ${
                   isWritePage && 'text-indigo-600'
                 }`}
               >

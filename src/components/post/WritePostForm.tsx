@@ -18,7 +18,7 @@ type Props = {
 
 const inputBoxStyle = 'flex gap-2 items-center';
 const inputStyle =
-  'grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md';
+  'grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md outline-indigo-500';
 
 export default function WritePostForm({ username, id, postDetail }: Props) {
   const editorRef = useRef<Editor | null>(null);
@@ -75,7 +75,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   return (
     <section className='flex flex-col'>
       {isMutating && <PageLoader label='업로드중...' />}
-      <div className='my-3 mx-auto max-w-screen-lg w-full px-4'>
+      <div className='my-3 mx-auto max-w-screen-lg w-full px-4 '>
         <div className={inputBoxStyle}>
           <label htmlFor='title'>제목</label>
           <input
