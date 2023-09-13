@@ -6,6 +6,7 @@ import Date from '../ui/Date';
 import Image from 'next/image';
 import { AiOutlineRight } from 'react-icons/ai';
 import { Post } from '@/model/post';
+import Skeleton from '../ui/Skeleton';
 
 export default function PostListCard({ post }: { post: Post }) {
   const { title, description, tags, id, mainImage, createdAt, username } = post;
@@ -38,5 +39,19 @@ export default function PostListCard({ post }: { post: Post }) {
         />
       )}
     </article>
+  );
+}
+
+export function PostListCardLoading() {
+  return (
+    <div className='p-6 flex justify-between border-b border-gray-200'>
+      <div className='grow flex flex-col gap-2'>
+        <Skeleton className='w-[3rem] h-[1.25rem]' />
+        <Skeleton className='w-2/3 h-[2rem]' />
+        <Skeleton className='w-5/6 h-[1.25rem] mt-2' />
+        <Skeleton className='w-1/2 h-[1.25rem]' />
+      </div>
+      <Skeleton className='w-[180px] h-[160px] object-cover' />
+    </div>
   );
 }
