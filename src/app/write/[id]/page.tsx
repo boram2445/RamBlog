@@ -13,13 +13,14 @@ type Props = {
 export const dynamic = 'force-dynamic';
 
 export default async function EditPage({ params: { id } }: Props) {
-  const postDetail = await getPostDetail(id);
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
   if (!user) {
     redirect('/auth/signin');
   }
+
+  const postDetail = (await getPostDetail(id, user.username))?.currentPost;
 
   return (
     <>

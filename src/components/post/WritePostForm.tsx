@@ -4,7 +4,7 @@ import { ChangeEvent, useRef, useState, useTransition } from 'react';
 import TuiEditors from './TuiEditors';
 import { Editor } from '@toast-ui/react-editor';
 import { useRouter } from 'next/navigation';
-import { PostData } from '@/service/posts';
+import { PostDetail } from '@/model/post';
 import Button from '../ui/Button';
 import TagsInput from './TagsInput';
 import useUserPost from '@/hooks/useUserPost';
@@ -13,7 +13,7 @@ import PageLoader from '../ui/PageLoader';
 type Props = {
   username: string;
   id?: string;
-  postDetail?: PostData;
+  postDetail?: PostDetail;
 };
 
 const inputBoxStyle = 'flex gap-2 items-center';

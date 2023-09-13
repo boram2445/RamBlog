@@ -1,11 +1,11 @@
 'use client';
 
-import { Post } from '@/service/posts';
 import { useRouter } from 'next/navigation';
 import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import Image from 'next/image';
 import { AiOutlineRight } from 'react-icons/ai';
+import { Post } from '@/model/post';
 
 export default function PostListCard({ post }: { post: Post }) {
   const { title, description, tags, id, mainImage, createdAt, username } = post;

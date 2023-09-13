@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { Post } from '@/service/posts';
 import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import UserAvartar from '../common/UserAvartar';
 import { useRouter } from 'next/navigation';
+import { Post } from '@/model/post';
 
 export default function PostCard({ post }: { post: Post }) {
   const {
