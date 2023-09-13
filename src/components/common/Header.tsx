@@ -45,7 +45,7 @@ export default function Header() {
   const isWritePage = user && pathname.includes('/write');
 
   return (
-    <header className='sticky top-0 z-10 w-full backdrop-blur-sm flex-none transition-colors duration-500 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent'>
+    <header className='sticky top-0 z-10 w-full backdrop-blur-sm flex-none transition-colors duration-500 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent animate-fade-in-down'>
       <div className='min-h-[64px] max-w-screen-lg mx-auto px-5 py-2 flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <Link href='/'>
