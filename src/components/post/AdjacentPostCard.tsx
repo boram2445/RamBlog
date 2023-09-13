@@ -1,9 +1,8 @@
-import { Post } from '@/service/posts';
 import Link from 'next/link';
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs';
 
 type Props = {
-  data: Post;
+  data: { username: string; title: string; id: string };
   type: 'prev' | 'next';
 };
 

@@ -1,4 +1,4 @@
-import { Post } from '@/service/posts';
+import { Post } from '@/model/post';
 import MultiCarousel from '../common/MultiCarousel';
 import PostCard from '../post/PostCard';
 

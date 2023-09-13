@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Skeleton from '../ui/Skeleton';
 
 type Props = {
   tags: string[] | { name: string; count: number }[];
@@ -31,6 +32,21 @@ export default function TagList({
             {typeof tag !== 'string' && ` ${tag.count}`}
           </span>
         </li>
+      ))}
+    </ul>
+  );
+}
+
+export function TagListLoading({ type = 'small' }: { type?: 'small' | 'big' }) {
+  return (
+    <ul className='flex gap-2'>
+      {Array.from({ length: 2 }, (_, index) => (
+        <Skeleton
+          className={`${
+            type === 'small' ? 'w-[3rem] h-[1.25rem]' : 'w-[4rem] h-[1.25rem]'
+          }`}
+          key={index}
+        />
       ))}
     </ul>
   );

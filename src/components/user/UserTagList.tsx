@@ -1,7 +1,7 @@
 'use client';
 
 import useSWR from 'swr';
-import TagList from '../common/TagList';
+import TagList, { TagListLoading } from '../common/TagList';
 
 type Props = {
   username: string;
@@ -10,10 +10,11 @@ type Props = {
 };
 
 export default function UserTagList({ username, onClick, selected }: Props) {
-  const { data: tags } = useSWR(`/api/${username}/posts/tags`);
+  const { data: tags, isLoading } = useSWR(`/api/${username}/posts/tags`);
 
   return (
     <div className='px-6 mb-6'>
+      {isLoading && <TagListLoading type='big' />}
       {tags && (
         <TagList
           tags={['all', ...tags]}

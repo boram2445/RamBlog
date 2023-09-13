@@ -45,7 +45,7 @@ export default function DropDownNav({
   return (
     <nav
       ref={navRef}
-      className={`mt-2 absolute right-0 ${
+      className={`mt-1 absolute right-0 ${
         width ? width : 'w-full'
       }  border border-gray-200 flex flex-col rounded-lg overflow-hidden z-10`}
     >

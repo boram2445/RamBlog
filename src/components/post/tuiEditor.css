@@ -1,16 +1,20 @@
 .toastui-editor-contents p,
 .ProseMirror div {
   font-size: 16px;
+  color: #3f3f46;
 }
 
 .toastui-editor-contents h1,
 .toastui-editor-md-heading1 {
   font-size: 32px;
+  border-color: #efefef;
 }
 
 .toastui-editor-contents h2,
 .toastui-editor-md-heading2 {
+  margin-top: 2.5rem;
   font-size: 24px;
+  border-color: #efefef;
 }
 
 .toastui-editor-contents h3,
@@ -26,4 +30,41 @@
 .toastui-editor-contents code,
 .toastui-editor-md-code-block-line-background {
   font-size: 15px;
+}
+
+.toastui-editor-contents code,
+.toastui-editor-md-code.toastui-editor-md-marked-text,
+.toastui-editor-md-delimiter.toastui-editor-md-start,
+.toastui-editor-md-delimiter.toastui-editor-md-end {
+  background-color: #f9f9f9;
+  color: #7661e2;
+}
+
+.toastui-editor-contents blockquote {
+  border-color: #7661e2;
+  background-color: #f9f9f9;
+}
+
+.toastui-editor-contents blockquote p {
+  color: #23262f;
+}
+
+.ProseMirror.toastui-editor-contents blockquote,
+.toastui-editor-md-preview .toastui-editor-contents blockquote {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.toastui-editor-ww-code-block-highlighting pre {
+  background-color: #f9f9f9;
+}
+
+.toastui-editor-contents img {
+  width: 500px;
+  max-height: 500px;
+}
+
+.toastui-editor-contents ul > li::before {
+  background-color: #7661e2;
+  margin-top: 9px;
 }
