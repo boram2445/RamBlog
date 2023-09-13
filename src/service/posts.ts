@@ -8,6 +8,7 @@ const simplePostProjection = `
   mainImage,
   description,
   "username":author->username, 
+  "name":author->name,
   "userImage":author->image,
   "updatedAt":_updatedAt,
   "createdAt":_createdAt,

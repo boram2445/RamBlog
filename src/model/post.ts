@@ -8,6 +8,7 @@ export type Post = {
   tags: string[];
   id: string;
   username: string;
+  name: string;
   userImage: string;
 };
 
