@@ -55,7 +55,12 @@ export async function getPostDetail(
       'currentPost': {${fullPostProjection}},
       'previousPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
       'nextPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
-    }`
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['userPosts'] },
+    }
   );
 
   return postDetail;
