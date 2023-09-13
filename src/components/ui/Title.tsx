@@ -1,6 +1,6 @@
 type Props = {
   title: string;
-  description: string;
+  description?: string;
 };
 
 export default function Title({ title, description }: Props) {

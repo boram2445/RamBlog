@@ -44,11 +44,17 @@ export default {
               title: 'Start date',
               name: 'startDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'End date',
               name: 'endDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'Holding',
@@ -93,11 +99,17 @@ export default {
               title: 'Start date',
               name: 'startDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'End date',
               name: 'endDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'Holding',
@@ -132,11 +144,17 @@ export default {
               title: 'Start date',
               name: 'startDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'End date',
               name: 'endDate',
               type: 'date',
+              options: {
+                dateFormat: 'YYYY-MM',
+              },
             },
             {
               title: 'Holding',

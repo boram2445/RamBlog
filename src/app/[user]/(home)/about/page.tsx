@@ -21,12 +21,17 @@ export default async function AboutPage({ params: { user } }: Props) {
 
   return (
     <>
-      <div className='mb-12'>
-        <Title title='About me' description='나의 모든 발자취들을 기록합니다' />
+      <div className='mb-6'>
+        <Title title='About me' />
       </div>
-      <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
-        <AboutList portfolio={portfolio} />
-      </div>
+      {!portfolio && (
+        <p className='text-gray-700 text-center'>아직 등록된 소개가 없어요😥</p>
+      )}
+      {portfolio && (
+        <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
+          <AboutList portfolio={portfolio} />
+        </div>
+      )}
     </>
   );
 }
