@@ -1,4 +1,6 @@
-type AvartarSize = 'small' | 'medium' | 'big' | 'max';
+import Skeleton from './Skeleton';
+
+export type AvartarSize = 'small' | 'medium' | 'big' | 'max';
 
 type Props = {
   imageUrl?: string;
@@ -23,6 +25,14 @@ export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
         </>
       )}
     </div>
+  );
+}
+
+export function AvartarLoading({ type }: { type: AvartarSize }) {
+  return (
+    <Skeleton
+      className={`rounded-full overflow-hidden ${getSizeStyle(type)}`}
+    />
   );
 }
 
