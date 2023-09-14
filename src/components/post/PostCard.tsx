@@ -25,7 +25,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <article
       onClick={() => router.push(`/${username}/posts/${id}`)}
-      className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden border-2 border-gray-200 rounded-lg cursor-pointer animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300'
+      className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden shadow-md rounded-lg cursor-pointer animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300'
     >
       {mainImage && (
         <Image
@@ -55,7 +55,7 @@ export default function PostCard({ post }: { post: Post }) {
 
 export function PostCardLoading() {
   return (
-    <div className='relative mx-auto w-full h-[350px] tablet:h-76 border-2 border-gray-200 rounded-lg'>
+    <div className='relative mx-auto w-full h-[350px] tablet:h-76 shadow-md rounded-t-lg'>
       <Skeleton className='mx-auto w-full h-1/2 object-cover aspect-square' />
       <div className='h-1/2 flex flex-col'>
         <div className='grow flex flex-col gap-2 p-2'>
