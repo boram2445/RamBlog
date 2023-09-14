@@ -1,34 +1,26 @@
-import Image from 'next/image';
+import { Experience } from '@/service/portfolio';
+import DuringDate from './DuringDate';
 
 type Props = {
-  title: string;
-  description: string;
-  date: string;
-  image: string;
+  experience: Experience;
+  label?: string;
 };
 
-export default function ExperienceArticle({
-  experience,
-}: {
-  experience: Props;
-}) {
-  const { title, description, date, image } = experience;
+export default function ExperienceArticle({ experience, label }: Props) {
+  const { name, startDate, endDate, holding, content } = experience;
 
   return (
-    <div className='mb-10 flex gap-10 items-center '>
-      <div className='relative w-20 h-20'>
-        <Image
-          src={image}
-          alt={`${title} 이미지`}
-          fill
-          className='rounded-lg'
+    <>
+      <div className='flex gap-5 mb-1'>
+        <h4 className='text-lg font-semibold text-gray-800'>{name}</h4>
+        <DuringDate
+          startDate={startDate}
+          endDate={endDate}
+          holding={holding}
+          label={label}
         />
       </div>
-      <div>
-        <h4 className='mb-1 text-xl font-semibold text-black'>{title}</h4>
-        <p>{description}</p>
-        <p className='text-sm mt-3'>{date}</p>
-      </div>
-    </div>
+      <p className='whitespace-pre-line break-all text-gray-700'>{content}</p>
+    </>
   );
 }

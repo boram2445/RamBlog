@@ -3,7 +3,7 @@ import { getDate } from '@/utils/date';
 type Props = {
   date: string;
   type?: 'small' | 'big';
-  dateType?: 'date' | 'time' | 'full';
+  dateType?: 'date' | 'time' | 'full' | 'month';
 };
 
 export default function Date({
@@ -14,7 +14,7 @@ export default function Date({
   return (
     <time
       className={`flex gap-2 items-center ${
-        type === 'small' && 'text-sm'
+        type === 'small' ? 'text-sm' : 'text-lg'
       } text-gray-500`}
     >
       {getDate(date, dateType)}
