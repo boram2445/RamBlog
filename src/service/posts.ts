@@ -1,24 +1,5 @@
+import { Post, PostData } from '@/model/post';
 import { client } from './sanity';
-import slugify from 'slugify';
-
-export type Post = {
-  title: string;
-  description: string;
-  mainImage: string;
-  pinned: boolean;
-  updatedAt: Date;
-  createdAt: Date;
-  tags: string[];
-  id: string;
-  username: string;
-  userImage: string;
-};
-
-export type PostData = Post & {
-  content: string;
-  prev: Post | null;
-  next: Post | null;
-};
 
 const simplePostProjection = `
   "tags":tags[]->tagName,
@@ -27,9 +8,20 @@ const simplePostProjection = `
   mainImage,
   description,
   "username":author->username, 
+  "name":author->name,
   "userImage":author->image,
   "updatedAt":_updatedAt,
   "createdAt":_createdAt,
+  "id":_id
+`;
+
+const fullPostProjection = `
+  ...,
+  "tags":tags[]->tagName,
+  "updatedAt":_updatedAt,
+  "createdAt":_createdAt,
+  "username":author->username, 
+  "userImage":author->image,
   "id":_id
 `;
 
@@ -54,49 +46,24 @@ export async function getAllUserPosts(username: string) {
   );
 }
 
-export async function getPrevPost(username: string, currentDate: string) {
-  if (!currentDate) return null;
-  return client.fetch(
-    `*[_type == "post" && author->username =="${username}" && _createdAt > $currentDate ] | order(_createdAt asc) [0]
-    { "username":author->username, title, "id":_id}`,
-    { currentDate }
-  );
-}
-
-export async function getNextPost(username: string, currentDate: string) {
-  if (!currentDate) return null;
-  return client.fetch(
-    `*[_type == "post" && author->username =="${username}" && _createdAt < $currentDate] | order(_createdAt desc) [0]
-      {"username":author->username, title, "id":_id}`,
-    { currentDate }
-  );
-}
-
 export async function getPostDetail(
   postId: string,
-  username?: string
+  username: string
 ): Promise<PostData> {
   const postDetail = await client.fetch(
-    `*[_type == "post" && _id == "${postId}"][0]{
-        ...,
-        "tags":tags[]->tagName,
-        "updatedAt":_updatedAt,
-        "createdAt":_createdAt,
-        "username":author->username, 
-        "userImage":author->image,
-        "id":_id
-      }`
+    `*[_type == "post" && author->username =="${username}" && _id == "${postId}"][0]{
+      'currentPost': {${fullPostProjection}},
+      'previousPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
+      'nextPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['userPosts'] },
+    }
   );
 
-  const prevPost = username
-    ? await getPrevPost(username, postDetail?.createdAt)
-    : null;
-
-  const nextPost = username
-    ? await getNextPost(username, postDetail?.createdAt)
-    : null;
-
-  return { ...postDetail, prev: prevPost, next: nextPost };
+  return postDetail;
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수

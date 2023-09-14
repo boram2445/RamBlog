@@ -2,8 +2,8 @@ import useSWR from 'swr';
 import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { useCallback } from 'react';
-import { Post } from '@/service/posts';
 import { getMainImageUrl } from '@/utils/mainImage';
+import { Post } from '@/model/post';
 
 export default function useUserPost(username: string, tag: string) {
   const url =

@@ -1,4 +1,7 @@
-type AvartarSize = 'small' | 'medium' | 'big' | 'max';
+import Image from 'next/image';
+import Skeleton from './Skeleton';
+
+export type AvartarSize = 'small' | 'medium' | 'big' | 'max';
 
 type Props = {
   imageUrl?: string;
@@ -8,21 +11,29 @@ type Props = {
 
 export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
   return (
-    <div className={`rounded-full overflow-hidden ${getSizeStyle(type)}`}>
+    <div
+      className={`relative rounded-full overflow-hidden ${getSizeStyle(type)}`}
+    >
       {!imageUrl && (
         <div className='w-full h-full bg-orange-100 border-2 border-dashed border-orange-300 rounded-full'></div>
       )}
       {imageUrl && (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element*/}
-          <img
-            src={imageUrl || ''}
-            alt={username}
-            className='w-full object-cover aspect-square'
-          />
-        </>
+        <Image
+          src={imageUrl || ''}
+          fill
+          alt={username}
+          className='w-full object-cover aspect-square'
+        />
       )}
     </div>
+  );
+}
+
+export function AvartarLoading({ type }: { type: AvartarSize }) {
+  return (
+    <Skeleton
+      className={`rounded-full overflow-hidden ${getSizeStyle(type)}`}
+    />
   );
 }
 

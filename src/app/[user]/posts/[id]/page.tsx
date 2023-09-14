@@ -22,10 +22,15 @@ export default async function PostPage({ params: { user, id } }: Props) {
 
   return (
     <div className='mx-auto p-8'>
-      <PostDetail post={post} loginUserData={loginUserData} />
+      <PostDetail
+        currentPost={post.currentPost}
+        nextPost={post.nextPost}
+        previousPost={post.previousPost}
+        loginUserData={loginUserData}
+      />
       <CommentList
-        postId={post.id}
-        postUser={post.username}
+        postId={post.currentPost.id}
+        postUser={post.currentPost.username}
         loginUserData={loginUserData}
       />
     </div>
@@ -33,6 +38,6 @@ export default async function PostPage({ params: { user, id } }: Props) {
 }
 
 export async function generateMetadata({ params: { user, id } }: Props) {
-  const { title, description } = await getDetail(id, user);
+  const { title, description } = (await getDetail(id, user))?.currentPost;
   return { title, description };
 }

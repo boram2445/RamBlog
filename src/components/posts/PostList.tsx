@@ -3,10 +3,11 @@
 import useUserPost from '@/hooks/useUserPost';
 import { ProfileUser } from '@/model/user';
 import { ClipLoader } from 'react-spinners';
-import PostListCard from '../post/PostListCard';
+import PostListCard, { PostListCardLoading } from '../post/PostListCard';
 import UserTagList from '../user/UserTagList';
 import { useState } from 'react';
 import Title from '../ui/Title';
+import { TagListLoading } from '../common/TagList';
 
 type Props = {
   user: ProfileUser;
@@ -29,11 +30,7 @@ export default function PostList({ user }: Props) {
         onClick={setSelectedTag}
         selected={selectedTag}
       />
-      {isLoading && (
-        <div className='text-center'>
-          <ClipLoader color='gray' />
-        </div>
-      )}
+      {isLoading && <PostListLoading />}
       {!isLoading && !error && (
         <ul className='flex flex-col gap-4'>
           {posts?.map((post) => (
@@ -44,5 +41,15 @@ export default function PostList({ user }: Props) {
         </ul>
       )}
     </>
+  );
+}
+
+export function PostListLoading() {
+  return (
+    <ul>
+      {Array.from({ length: 2 }, (_, index) => (
+        <PostListCardLoading key={index} />
+      ))}
+    </ul>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Avartar from '../ui/Avartar';
+import Avartar, { AvartarLoading, AvartarSize } from '../ui/Avartar';
 import { useRouter } from 'next/navigation';
+import Skeleton from '../ui/Skeleton';
 
 type Props = {
   imageUrl?: string;
@@ -44,6 +45,15 @@ export default function UserAvartar({
         {username}
       </div>
       {icon}
+    </div>
+  );
+}
+
+export function UserAvartarLoading({ size }: { size: 'small' | 'medium' }) {
+  return (
+    <div className='flex gap-2 items-center'>
+      <AvartarLoading type={size} />
+      <Skeleton className={'w-[4rem] h-[1.25rem]'} />
     </div>
   );
 }

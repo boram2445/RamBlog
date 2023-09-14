@@ -50,7 +50,7 @@ export default function TagsInput({ tags, handleTags }: Props) {
         value={tag}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className='grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md'
+        className='grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md outline-indigo-500'
         autoComplete='off'
       />
     </div>

@@ -1,15 +1,14 @@
 'use client';
 
 import useFullPost from '@/hooks/useFullPost';
-import PostGrid from '../common/PostGrid';
-import { ClipLoader } from 'react-spinners';
+import PostGrid, { PostGridLoading } from '../common/PostGrid';
 
 export default function FullPosts() {
   const { posts, isLoading, error } = useFullPost();
 
   return (
     <>
-      {isLoading && <ClipLoader />}
+      {isLoading && <PostGridLoading />}
       {!isLoading && !error && <PostGrid posts={posts ?? []} />}
     </>
   );
