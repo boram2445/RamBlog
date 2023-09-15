@@ -2,7 +2,7 @@
 
 import { Portfolio } from '@/service/portfolio';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { sectionClass, titleClass } from './AboutList';
+import { sectionClass } from './AboutList';
 import TagsInput from '../post/TagsInput';
 import ArticleFormList from './ArticleFormList';
 import AddButton from './AddButton';
@@ -14,6 +14,9 @@ type Props = {
   username: string;
   portfolio: Portfolio;
 };
+
+const titleClass =
+  'text-2xl font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5';
 
 export default function AboutForm({ username, portfolio }: Props) {
   const initialState = {
@@ -44,6 +47,7 @@ export default function AboutForm({ username, portfolio }: Props) {
     axios
       .post(`/api/${username}/about`, { id: portfolio?.id, form })
       .then(() => {
+        router.refresh();
         router.push(`/${username}/about`);
       });
   };
@@ -79,25 +83,27 @@ export default function AboutForm({ username, portfolio }: Props) {
       onSubmit={handleSubmit}
       className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'
     >
-      <Button type='submit'>저장</Button>
+      <div className='flex justify-end'>
+        <Button onClick={(e: FormEvent) => handleSubmit(e)}>저장</Button>
+      </div>
       <section className={sectionClass}>
-        <h3 className={titleClass}>Introduce</h3>
+        <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
         <textarea
-          className='w-full px-4 border border-slate-200 rounded-lg text-gray-700'
+          className='w-full px-4 rounded-lg text-gray-700 border border-gray-200 hover:border-indigo-400'
           value={form.introduce}
           name='introduce'
           onChange={handleChange}
         />
       </section>
       <section className={sectionClass}>
-        <h3 className={titleClass}>Skills</h3>
+        <h3 className={`${titleClass} mb-5 mt-3`}>Skills</h3>
         <div className='px-4'>
-          <TagsInput tags={form.skills} handleTags={handleSkills} />
+          <TagsInput tags={form.skills} handleTags={handleSkills} type='col' />
         </div>
       </section>
       <section className={sectionClass}>
         <div className='flex gap-3 items-center mt-3 mb-5'>
-          <h3 className={`${titleClass} mt-0 mb-0`}>Worked at</h3>
+          <h3 className={titleClass}>Worked at</h3>
           <AddButton onClick={() => addListItem('businessExperiences')} />
         </div>
         {form.businessExperiences && (
@@ -113,7 +119,7 @@ export default function AboutForm({ username, portfolio }: Props) {
       </section>
       <section className={sectionClass}>
         <div className='flex gap-3 items-center mt-3 mb-5'>
-          <h3 className={`${titleClass} mt-0 mb-0`}>Projects</h3>
+          <h3 className={titleClass}>Projects</h3>
           <AddButton onClick={() => addListItem('projects')} />
         </div>
         {form.projects && (
@@ -129,7 +135,7 @@ export default function AboutForm({ username, portfolio }: Props) {
       </section>
       <section className={sectionClass}>
         <div className='flex gap-3 items-center mt-3 mb-5'>
-          <h3 className={`${titleClass} mt-0 mb-0`}>Educations</h3>
+          <h3 className={titleClass}>Educations</h3>
           <AddButton onClick={() => addListItem('educations')} />
         </div>
         {form.educations && (

@@ -19,7 +19,7 @@ export default function TagList({
   const router = useRouter();
 
   return (
-    <ul className='flex gap-2'>
+    <ul className='flex gap-x-2 gap-y-4 flex-wrap '>
       {tags?.map((tag, index) => (
         <li key={index}>
           <span

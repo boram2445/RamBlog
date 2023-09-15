@@ -10,7 +10,7 @@ type Props = {
 
 export default function AboutHero({ loginUser, username }: Props) {
   return (
-    <div className='flex justify-between'>
+    <div className='flex gap-5'>
       <div className='mb-6'>
         <Title title='About me' />
       </div>

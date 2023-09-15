@@ -17,9 +17,9 @@ type Props = {
   ) => void;
 };
 
-const labelStyle = 'mb-1 text-gray-500 text-sm block';
+const labelStyle = 'text-gray-500 text-sm block';
 const inputStyle =
-  'mb-2 py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
+  'mt-1 mb-2 py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
 
 export default function ArticleForm({
   experience,
@@ -70,21 +70,21 @@ export default function ArticleForm({
             <DateForm
               target='endDate'
               disabled={experience?.holding}
-              dateData={!experience?.holding ? experience?.startDate : ''}
+              dateData={isHolding ? '' : experience?.endDate}
               onChange={handleDate}
             />
           </div>
         </div>
-        <div className='flex gap-2 items-center'>
+        <div className='my-2 mx-2 flex gap-2 items-center'>
           <input
             type='checkbox'
             checked={experience?.holding ?? false}
             onChange={handleChange}
             name='holding'
-            id='holding'
-            className='w-4 h-4 accent-indigo-500'
+            id={`holding-${experience?.id}`}
+            className='w-4 h-4 accent-indigo-500 cursor-pointer'
           />
-          <label htmlFor='holding' className={labelStyle}>
+          <label htmlFor={`holding-${experience?.id}`} className={labelStyle}>
             진행 중
           </label>
         </div>
@@ -98,11 +98,11 @@ export default function ArticleForm({
         name='content'
       />
       <button
-        className='absolute top-2 right-2'
+        className='absolute top-4 right-4 hover:text-indigo-500'
         onClick={() => onRemove(experience?.id ?? '')}
         type='button'
       >
-        <IoMdClose />
+        <IoMdClose size='22' />
       </button>
     </div>
   );

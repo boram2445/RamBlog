@@ -1,6 +1,8 @@
+import { ChangeEvent, FormEvent } from 'react';
+
 type Props = {
   color?: 'white' | 'black';
-  onClick?: () => void;
+  onClick?: (e: FormEvent | ChangeEvent) => void;
   children: React.ReactNode;
   size?: ButtonSize;
   type?: 'button' | 'submit';

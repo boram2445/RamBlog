@@ -45,10 +45,10 @@ export default function DateForm({
       id='date'
       maxLength={7}
       onChange={handleChange}
-      className={`py-2 px-3 w-24 rounded-lg outline-indigo-500 text-sm hover:border-indigo-400 ${
+      className={`border border-gray-100 hover:border-indigo-500 disabled:hover:border-gray-100 py-2 px-3 w-24 rounded-lg outline-indigo-500 text-sm ${
         disabled && 'placeholder:text-indigo-500 bg-gray-200'
       }`}
-      value={date}
+      value={disabled ? '' : date}
       disabled={disabled}
     />
   );

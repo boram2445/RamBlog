@@ -3,9 +3,10 @@ import { ChangeEvent, useState } from 'react';
 type Props = {
   tags: string[];
   handleTags: (tagArr: string[]) => void;
+  type?: 'row' | 'col';
 };
 
-export default function TagsInput({ tags, handleTags }: Props) {
+export default function TagsInput({ tags, handleTags, type = 'row' }: Props) {
   const [tag, setTag] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -26,11 +27,15 @@ export default function TagsInput({ tags, handleTags }: Props) {
   };
 
   return (
-    <div className='flex gap-2 items-center'>
+    <div
+      className={`flex gap-2 ${
+        type === 'col' ? 'flex-col' : 'flex-row items-center'
+      }`}
+    >
       <label htmlFor='tags' className='hidden'>
         태그
       </label>
-      <ul className='flex gap-2'>
+      <ul className='flex gap-x-2 gap-y-4 flex-wrap'>
         {tags?.map((tag, index) => (
           <li key={index}>
             <button
