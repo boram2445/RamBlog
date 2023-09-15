@@ -34,6 +34,26 @@ export async function getUserPortfolio(username: string): Promise<Portfolio> {
       businessExperiences[]{...,"id":_key},
       projects[]{...,"id":_key},
       educations[]{...,"id":_key},
-    }`
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['about'] },
+    }
   );
+}
+
+export async function createPortfolio(userId: string, formData: Experience) {
+  return client.create({
+    _type: 'portfolio',
+    author: { _ref: userId },
+    ...formData,
+  });
+}
+
+export async function editPortfolio(portfolioId: string, newData: Experience) {
+  return client
+    .patch(portfolioId)
+    .set(newData)
+    .commit({ autoGenerateArrayKeys: true });
 }

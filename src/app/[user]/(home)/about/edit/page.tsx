@@ -18,7 +18,7 @@ export default async function AboutEditPage() {
       <div className='mb-6'>
         <Title title='About Edit' />
       </div>
-      <AboutForm portfolio={portfolio} />
+      <AboutForm portfolio={portfolio} username={user.username} />
     </>
   );
 }

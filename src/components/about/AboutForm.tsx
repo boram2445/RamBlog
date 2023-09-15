@@ -6,12 +6,16 @@ import { sectionClass, titleClass } from './AboutList';
 import TagsInput from '../post/TagsInput';
 import ArticleFormList from './ArticleFormList';
 import AddButton from './AddButton';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import Button from '../ui/Button';
 
 type Props = {
+  username: string;
   portfolio: Portfolio;
 };
 
-export default function AboutForm({ portfolio }: Props) {
+export default function AboutForm({ username, portfolio }: Props) {
   const initialState = {
     introduce: portfolio.introduce ?? '',
     skills: portfolio.skills ?? [],
@@ -21,6 +25,7 @@ export default function AboutForm({ portfolio }: Props) {
   };
 
   const [form, setForm] = useState(initialState);
+  const router = useRouter();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -35,6 +40,12 @@ export default function AboutForm({ portfolio }: Props) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    axios
+      .post(`/api/${username}/about`, { id: portfolio?.id, form })
+      .then(() => {
+        router.push(`/${username}/about`);
+      });
   };
 
   const handleChangeList = (
@@ -68,6 +79,7 @@ export default function AboutForm({ portfolio }: Props) {
       onSubmit={handleSubmit}
       className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'
     >
+      <Button type='submit'>저장</Button>
       <section className={sectionClass}>
         <h3 className={titleClass}>Introduce</h3>
         <textarea
