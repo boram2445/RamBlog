@@ -36,6 +36,7 @@ export default function TagsInput({ tags, handleTags }: Props) {
             <button
               onClick={handleTagClick}
               className='px-3 border border-gray-300 rounded-full  hover:bg-gray-300'
+              type='button'
             >
               {tag}
             </button>

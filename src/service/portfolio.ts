@@ -12,10 +12,11 @@ export type Portfolio = {
 
 export type Experience = {
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   holding: boolean;
   content: string;
+  id: string;
 };
 
 export type Project = Experience & {
@@ -30,9 +31,9 @@ export async function getUserPortfolio(username: string): Promise<Portfolio> {
       "username":author->username, 
       skills,
       introduce,
-      businessExperiences,
-      projects,
-      educations,
+      businessExperiences[]{...,"id":_key},
+      projects[]{...,"id":_key},
+      educations[]{...,"id":_key},
     }`
   );
 }

@@ -3,15 +3,25 @@
 import { ChangeEvent, useState } from 'react';
 
 type Props = {
+  target: 'startDate' | 'endDate';
+  dateData?: string;
   disabled?: boolean;
+  onChange: (target: 'startDate' | 'endDate', value: string) => void;
 };
 
-export default function DateForm({ disabled }: Props) {
-  const [date, setDate] = useState('');
+export default function DateForm({
+  target,
+  dateData,
+  disabled,
+  onChange,
+}: Props) {
+  const [date, setDate] = useState(dateData ?? '');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const res = replaceValue(e.target.value);
     setDate(res);
+
+    onChange(target, res);
   };
 
   const replaceValue = (value: string) => {
@@ -35,7 +45,7 @@ export default function DateForm({ disabled }: Props) {
       id='date'
       maxLength={7}
       onChange={handleChange}
-      className={`py-2 px-3 w-24 rounded-lg outline-indigo-500 text-sm ${
+      className={`py-2 px-3 w-24 rounded-lg outline-indigo-500 text-sm hover:border-indigo-400 ${
         disabled && 'placeholder:text-indigo-500 bg-gray-200'
       }`}
       value={date}

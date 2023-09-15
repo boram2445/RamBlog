@@ -7,16 +7,20 @@ type Props = {
   portfolio: Portfolio;
 };
 
-const sectionClass = 'mb-8 pb-8 border-b border-gray-200';
-const titleClass =
+export const sectionClass = 'mb-8 pb-8 border-b border-gray-200';
+export const titleClass =
   'mt-3 mb-5 text-2xl font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5';
 
 export default function AboutList({ portfolio }: Props) {
   const { skills, introduce, businessExperiences, projects, educations } =
     portfolio;
 
+  if (!portfolio)
+    return (
+      <p className='text-gray-700 text-center'>아직 등록된 소개가 없어요😥</p>
+    );
   return (
-    <>
+    <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
       {introduce && (
         <section className={sectionClass}>
           <h3 className={titleClass}>Introduce</h3>
@@ -67,6 +71,6 @@ export default function AboutList({ portfolio }: Props) {
           </ul>
         </section>
       )}
-    </>
+    </div>
   );
 }
