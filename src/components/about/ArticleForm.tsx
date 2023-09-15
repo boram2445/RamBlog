@@ -5,6 +5,7 @@ import DateForm from './DateForm';
 import { Experience, Project } from '@/service/portfolio';
 import { IoMdClose } from 'react-icons/io';
 import { ExperienceItem } from './AboutForm';
+import TextArea from '../ui/TextArea';
 
 type Props = {
   experience?: Experience | Project;
@@ -90,12 +91,11 @@ export default function ArticleForm({
         </div>
       </div>
       <label className={labelStyle}>내용</label>
-      <textarea
-        placeholder='구체적인 내용을 작성해 주세요'
-        className={`${inputStyle}`}
+      <TextArea
         value={experience?.content ?? ''}
         onChange={handleChange}
         name='content'
+        placeholder='구체적인 내용을 작성해 주세요'
       />
       <button
         className='absolute top-4 right-4 hover:text-indigo-500'

@@ -15,7 +15,7 @@ export default function AboutHero({ loginUser, username }: Props) {
         <Title title='About me' />
       </div>
       {loginUser?.username === username && (
-        <Link href={`/${loginUser.username}/about/edit`}>
+        <Link href={`/${loginUser.username}/about/edit`} className='mt-1'>
           <Button>수정</Button>
         </Link>
       )}

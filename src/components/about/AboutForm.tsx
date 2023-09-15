@@ -9,6 +9,7 @@ import AddButton from './AddButton';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Button from '../ui/Button';
+import TextArea from '../ui/TextArea';
 
 type Props = {
   username: string;
@@ -83,16 +84,18 @@ export default function AboutForm({ username, portfolio }: Props) {
       onSubmit={handleSubmit}
       className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'
     >
-      <div className='flex justify-end'>
-        <Button onClick={(e: FormEvent) => handleSubmit(e)}>저장</Button>
+      <div className='flex justify-end gap-2'>
+        <Button onClick={() => router.back()}>취소</Button>
+        <Button onClick={(e: FormEvent) => handleSubmit(e)} color='black'>
+          저장
+        </Button>
       </div>
       <section className={sectionClass}>
         <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
-        <textarea
-          className='w-full px-4 rounded-lg text-gray-700 border border-gray-200 hover:border-indigo-400'
+        <TextArea
           value={form.introduce}
-          name='introduce'
           onChange={handleChange}
+          name='introduce'
         />
       </section>
       <section className={sectionClass}>
