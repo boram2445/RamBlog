@@ -22,7 +22,9 @@ export async function POST(req: NextRequest) {
     ? () => editPortfolio(id, form)
     : () => createPortfolio(user.id, form);
 
+  const result = await request().then((data) => NextResponse.json(data));
+
   revalidateTag('about');
 
-  return await request().then((data) => NextResponse.json(data));
+  return result;
 }
