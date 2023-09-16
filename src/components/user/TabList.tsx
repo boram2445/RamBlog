@@ -25,7 +25,7 @@ export default function TabList({ user }: Props) {
           <Link
             href={`/${user.username}${href}`}
             className={`${tabStyle} ${
-              pathname.split(`/${user.username}`)[1] === href
+              getOnPath(pathname, href, user.username)
                 ? 'border-gray-700 font-semibold text-gray-900'
                 : ''
             }`}
@@ -36,4 +36,11 @@ export default function TabList({ user }: Props) {
       ))}
     </ul>
   );
+}
+
+function getOnPath(url: string, href: string, username: string) {
+  const path = url.split(`/${username}`)[1];
+  if (href === '' && path === '') return true;
+  else if (href === '/about' && path.includes(href)) return true;
+  else if (href === '/log' && path.includes(href)) return true;
 }
