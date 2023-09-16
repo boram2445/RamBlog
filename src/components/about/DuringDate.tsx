@@ -1,8 +1,8 @@
 import Date from '../ui/Date';
 
 type Props = {
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   holding: boolean;
   size?: 'small' | 'big';
   label?: string;
