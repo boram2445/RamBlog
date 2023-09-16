@@ -1,8 +1,11 @@
 import { client } from './sanity';
 
-export type Portfolio = {
+export type Portfolio = PostPortfolio & {
   id: string;
   username: string;
+};
+
+export type PostPortfolio = {
   skills: string[];
   introduce: string;
   businessExperiences: Experience[];
@@ -20,7 +23,7 @@ export type Experience = {
 };
 
 export type Project = Experience & {
-  image: string;
+  image: string | File;
   link: string;
 };
 
@@ -43,7 +46,7 @@ export async function getUserPortfolio(username: string): Promise<Portfolio> {
   );
 }
 
-export async function createPortfolio(userId: string, formData: Experience) {
+export async function createPortfolio(userId: string, formData: PostPortfolio) {
   return client.create({
     _type: 'portfolio',
     author: { _ref: userId },
@@ -51,7 +54,10 @@ export async function createPortfolio(userId: string, formData: Experience) {
   });
 }
 
-export async function editPortfolio(portfolioId: string, newData: Experience) {
+export async function editPortfolio(
+  portfolioId: string,
+  newData: PostPortfolio
+) {
   return client
     .patch(portfolioId)
     .set(newData)

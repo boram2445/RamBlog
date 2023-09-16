@@ -4,16 +4,18 @@ import { ChangeEvent, useState } from 'react';
 import DateForm from './DateForm';
 import { Experience, Project } from '@/service/portfolio';
 import { IoMdClose } from 'react-icons/io';
-import { ExperienceItem } from './AboutForm';
+import { ExperienceItem, ExperienceList } from './AboutForm';
 import TextArea from '../ui/TextArea';
+import ImageUpload from '../ui/ImageUpload';
 
 type Props = {
   experience?: Experience | Project;
   label: string;
+  type: ExperienceList;
   onRemove: (id: string) => void;
   onChange?: (
     target: ExperienceItem,
-    value: string | boolean,
+    value: string | boolean | File,
     id: string
   ) => void;
 };
@@ -25,11 +27,11 @@ const inputStyle =
 export default function ArticleForm({
   experience,
   label,
+  type,
   onRemove,
   onChange,
 }: Props) {
   const [isHolding, setIsHolding] = useState(experience?.holding ?? false);
-
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -41,6 +43,15 @@ export default function ArticleForm({
     }
     experience?.id &&
       onChange?.(name as ExperienceItem, newData, experience?.id);
+  };
+
+  const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const files = e.target?.files;
+    if (files && files[0]) {
+      experience?.id && onChange?.('image', files[0], experience?.id);
+    }
   };
 
   const handleDate = (target: 'startDate' | 'endDate', res: string) => {
@@ -90,6 +101,26 @@ export default function ArticleForm({
           </label>
         </div>
       </div>
+      {type === 'projects' && (
+        <>
+          <ImageUpload
+            file={(experience as Project)?.image ?? ''}
+            onChange={handleFile}
+            styleClass={`h-60 max-w-md rounded-md`}
+            text='프로젝트 사진'
+          />
+          <label className={`${labelStyle} mt-2`}>링크</label>
+          <input
+            type='text'
+            name='link'
+            placeholder='링크'
+            className={inputStyle}
+            value={(experience as Project)?.link ?? ''}
+            onChange={handleChange}
+          />
+        </>
+      )}
+
       <label className={labelStyle}>내용</label>
       <TextArea
         value={experience?.content ?? ''}

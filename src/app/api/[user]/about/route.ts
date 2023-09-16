@@ -14,8 +14,6 @@ export async function POST(req: NextRequest) {
 
   const { id, form } = await req.json();
 
-  revalidateTag('about');
-
   if (!form) {
     return new Response('Bad request', { status: 400 });
   }
@@ -23,6 +21,8 @@ export async function POST(req: NextRequest) {
   const request = id
     ? () => editPortfolio(id, form)
     : () => createPortfolio(user.id, form);
+
+  revalidateTag('about');
 
   return await request().then((data) => NextResponse.json(data));
 }

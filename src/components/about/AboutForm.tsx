@@ -42,20 +42,48 @@ export default function AboutForm({ username, portfolio }: Props) {
     setForm((prev) => ({ ...prev, ['skills']: [...tagArr] }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  //재사용 함수
+  const uploadImg = async (file: Blob | File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return axios.post('/api/image', formData).then((res) => res.data.document);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    axios
-      .post(`/api/${username}/about`, { id: portfolio?.id, form })
-      .then(() => {
-        router.refresh();
-        router.push(`/${username}/about`);
+    const uploadTasks = [];
+    for (const project of form.projects) {
+      if (project.image instanceof File) {
+        const uploadTask = uploadImg(project.image)
+          .then((data) => data.url)
+          .then((imageUrl) => (project.image = imageUrl))
+          .catch((error) => console.error('이미지 업로드 오류:', error));
+
+        uploadTasks.push(uploadTask);
+      }
+    }
+
+    try {
+      const result = await Promise.all(uploadTasks);
+
+      console.log(result);
+
+      await axios.post(`/api/${username}/about`, {
+        id: portfolio?.id,
+        form,
       });
+
+      router.refresh();
+      router.push(`/${username}/about`);
+    } catch (error) {
+      console.error('데이터 전송 오류:', error);
+    }
   };
 
   const handleChangeList = (
     target: ExperienceItem,
-    value: string | boolean,
+    value: string | boolean | File,
     type: ExperienceList,
     id: string
   ) => {
@@ -113,6 +141,7 @@ export default function AboutForm({ username, portfolio }: Props) {
           <ArticleFormList
             list={form.businessExperiences}
             label='회사'
+            type='businessExperiences'
             onRemove={(id) => handleRemoveList(id, 'businessExperiences')}
             onChange={(target, value, id) =>
               handleChangeList(target, value, 'businessExperiences', id)
@@ -129,6 +158,7 @@ export default function AboutForm({ username, portfolio }: Props) {
           <ArticleFormList
             list={form.projects}
             label='프로젝트'
+            type='projects'
             onRemove={(id) => handleRemoveList(id, 'projects')}
             onChange={(target, value, id) =>
               handleChangeList(target, value, 'projects', id)
@@ -145,6 +175,7 @@ export default function AboutForm({ username, portfolio }: Props) {
           <ArticleFormList
             list={form.educations}
             label='교육'
+            type='educations'
             onRemove={(id) => handleRemoveList(id, 'educations')}
             onChange={(target, value, id) =>
               handleChangeList(target, value, 'educations', id)
@@ -176,4 +207,6 @@ export type ExperienceItem =
   | 'startDate'
   | 'endDate'
   | 'holding'
-  | 'content';
+  | 'content'
+  | 'image'
+  | 'link';
