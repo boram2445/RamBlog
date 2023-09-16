@@ -1,7 +1,7 @@
 import { authOptions } from '../../auth/[...nextauth]/options';
 import { deletePost, editPost } from '@/service/posts';
 import { getServerSession } from 'next-auth';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 import { NextRequest, NextResponse } from 'next/server';
 

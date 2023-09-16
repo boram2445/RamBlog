@@ -27,7 +27,7 @@ export default async function AboutEditPage({ params: { user } }: Props) {
         </div>
         {loginUser?.username === user && (
           <Link href={`/${loginUser.username}/about`} className='mt-1'>
-            <Button>취소</Button>
+            <Button>뒤로 가기</Button>
           </Link>
         )}
       </div>

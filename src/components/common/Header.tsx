@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import useSWR from 'swr';
-import logo from '../../asset/icons/logo.svg';
 import PlanetLogo from '../../asset/icons/planet_logo.svg';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -95,7 +94,7 @@ export default function Header() {
               </div>
             </>
           )}
-          {!session && <Button onClick={signIn}>로그인</Button>}
+          {!session && <Button onClick={() => signIn()}>로그인</Button>}
         </nav>
       </div>
     </header>
