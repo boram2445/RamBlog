@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Title from '@/components/ui/Title';
 import { getUserPortfolio } from '@/service/portfolio';
 import { notFound } from 'next/navigation';
 import AboutList from '@/components/about/AboutList';

@@ -22,11 +22,11 @@ const titleClass =
 
 export default function AboutForm({ username, portfolio }: Props) {
   const initialState = {
-    introduce: portfolio.introduce ?? '',
-    skills: portfolio.skills ?? [],
-    businessExperiences: portfolio.businessExperiences ?? [],
-    projects: portfolio.projects ?? [],
-    educations: portfolio.educations ?? [],
+    introduce: portfolio?.introduce ?? '',
+    skills: portfolio?.skills ?? [],
+    businessExperiences: portfolio?.businessExperiences ?? [],
+    projects: portfolio?.projects ?? [],
+    educations: portfolio?.educations ?? [],
   };
 
   const [form, setForm] = useState(initialState);
@@ -123,11 +123,13 @@ export default function AboutForm({ username, portfolio }: Props) {
       >
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
-          <TextArea
-            value={form.introduce}
-            onChange={handleChange}
-            name='introduce'
-          />
+          <div className='px-4'>
+            <TextArea
+              value={form.introduce}
+              onChange={handleChange}
+              name='introduce'
+            />
+          </div>
         </section>
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Skills</h3>

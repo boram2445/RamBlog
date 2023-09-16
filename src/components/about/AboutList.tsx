@@ -12,13 +12,13 @@ export const titleClass =
   'mt-3 mb-5 text-2xl font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5';
 
 export default function AboutList({ portfolio }: Props) {
-  const { skills, introduce, businessExperiences, projects, educations } =
-    portfolio;
-
   if (!portfolio)
     return (
       <p className='text-gray-700 text-center'>아직 등록된 소개가 없어요😥</p>
     );
+
+  const { skills, introduce, businessExperiences, projects, educations } =
+    portfolio;
   return (
     <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
       {introduce && (
