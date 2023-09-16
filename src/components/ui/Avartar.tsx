@@ -20,6 +20,7 @@ export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
       {imageUrl && (
         <Image
           src={imageUrl || ''}
+          sizes={getSizeStyle(type)}
           fill
           alt={username}
           className='w-full object-cover aspect-square'
