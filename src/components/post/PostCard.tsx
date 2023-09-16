@@ -34,6 +34,7 @@ export default function PostCard({ post }: { post: Post }) {
           width={200}
           height={200}
           className='mx-auto w-full h-1/2 object-cover aspect-square'
+          priority
         />
       )}
       <div className={`${mainImage ? 'h-1/2' : 'h-full'} flex flex-col`}>

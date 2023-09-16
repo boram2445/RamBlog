@@ -48,7 +48,7 @@ export default function Header() {
       <div className='min-h-[64px] max-w-screen-lg mx-auto px-5 py-2 flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <Link href='/'>
-            <Image src={PlanetLogo} width={38} height={35} alt='RamBlog 로고' />
+            <Image src={PlanetLogo} width={38} alt='RamBlog 로고' />
           </Link>
           {params.user ? (
             <Link href={`/${params.user}`}>
