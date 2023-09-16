@@ -1,8 +1,11 @@
 import { client } from './sanity';
 
-export type Portfolio = {
+export type Portfolio = PostPortfolio & {
   id: string;
   username: string;
+};
+
+export type PostPortfolio = {
   skills: string[];
   introduce: string;
   businessExperiences: Experience[];
@@ -12,14 +15,15 @@ export type Portfolio = {
 
 export type Experience = {
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   holding: boolean;
   content: string;
+  id: string;
 };
 
 export type Project = Experience & {
-  image: string;
+  image: string | File;
   link: string;
 };
 
@@ -30,9 +34,32 @@ export async function getUserPortfolio(username: string): Promise<Portfolio> {
       "username":author->username, 
       skills,
       introduce,
-      businessExperiences,
-      projects,
-      educations,
-    }`
+      businessExperiences[]{...,"id":_key},
+      projects[]{...,"id":_key},
+      educations[]{...,"id":_key},
+    }`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['about'] },
+    }
   );
+}
+
+export async function createPortfolio(userId: string, formData: PostPortfolio) {
+  return client.create({
+    _type: 'portfolio',
+    author: { _ref: userId },
+    ...formData,
+  });
+}
+
+export async function editPortfolio(
+  portfolioId: string,
+  newData: PostPortfolio
+) {
+  return client
+    .patch(portfolioId)
+    .set(newData)
+    .commit({ autoGenerateArrayKeys: true });
 }
