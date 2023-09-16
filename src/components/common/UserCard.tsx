@@ -1,4 +1,4 @@
-import { HomeUser, SimpleUser } from '@/model/user';
+import { SimpleUser } from '@/model/user';
 import FollowButton from './FollowButton';
 import Avartar from '../ui/Avartar';
 import { useRouter } from 'next/navigation';

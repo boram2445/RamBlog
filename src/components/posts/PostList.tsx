@@ -2,12 +2,10 @@
 
 import useUserPost from '@/hooks/useUserPost';
 import { ProfileUser } from '@/model/user';
-import { ClipLoader } from 'react-spinners';
 import PostListCard, { PostListCardLoading } from '../post/PostListCard';
 import UserTagList from '../user/UserTagList';
 import { useState } from 'react';
 import Title from '../ui/Title';
-import { TagListLoading } from '../common/TagList';
 
 type Props = {
   user: ProfileUser;

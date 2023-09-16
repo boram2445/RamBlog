@@ -1,9 +1,5 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import {
-  editProfile,
-  getUserByUsername,
-  getUserForProfile,
-} from '@/service/user';
+import { editProfile, getUserByUsername } from '@/service/user';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';

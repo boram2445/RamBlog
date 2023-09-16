@@ -3,8 +3,6 @@ import Hero from '@/components/user/Hero';
 import { notFound } from 'next/navigation';
 import TabList from '@/components/user/TabList';
 import { ReactNode } from 'react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 type Props = {
   params: { user: string };
