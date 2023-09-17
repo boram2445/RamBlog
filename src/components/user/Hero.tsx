@@ -20,7 +20,9 @@ export default function Hero({ user }: Props) {
             <h2 className='text-2xl font-semibold text-gray-900'>
               {user.title}
             </h2>
-            <p className='grow my-4 text-gray-700'>{user.introduce}</p>
+            <p className='grow my-4 text-gray-700 whitespace-pre-line'>
+              {user.introduce}
+            </p>
           </div>
           <FollowButton userId={user.id} username={user.username} />
         </div>

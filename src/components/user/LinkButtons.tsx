@@ -14,10 +14,18 @@ export default function LinkButtons({ links }: Props) {
     <ul className='flex gap-2'>
       {Object.entries(links).map(([key, value]) => {
         if (!value) return;
-        if (key === 'email') return getIcon(key);
+        if (key === 'email')
+          return (
+            <div className='relative group'>
+              {getIcon(key)}
+              <span className='absolute hidden group-hover:block py-1 px-2 bg-gray-700 text-white text-xs rounded-full'>
+                {value}
+              </span>
+            </div>
+          );
         return (
           <a href={value} key={key} target='_blank'>
-            {getIcon(key)}
+            {getIcon(key, value)}
           </a>
         );
       })}
@@ -25,7 +33,7 @@ export default function LinkButtons({ links }: Props) {
   );
 }
 
-export function getIcon(linkType: string) {
+export function getIcon(linkType: string, content?: string) {
   switch (linkType) {
     case 'github':
       return <BsGithub className={linkButtonStyle} />;
