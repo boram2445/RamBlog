@@ -1,9 +1,5 @@
-import Image from 'next/image';
-import love from '../../../public/images/emotions/1.png';
-import happy from '../../../public/images/emotions/2.png';
-import normal from '../../../public/images/emotions/3.png';
-import bad from '../../../public/images/emotions/4.png';
-import heart from '../../../public/images/emotions/5.png';
+import { Emotion } from '@/service/log';
+import EmotionItem from './EmotionItem';
 
 type Props = {
   selected?: string;
@@ -21,7 +17,7 @@ export default function EmotionList({ selected, onClick }: Props) {
           } hover:grayscale-0`}
           onClick={() => onClick(item.label)}
         >
-          <Image src={item.image} alt={item.label} width={40} height={40} />
+          <EmotionItem label={item.label as Emotion} size='big' />
         </li>
       ))}
     </ul>
@@ -32,26 +28,21 @@ const emotionList = [
   {
     id: 1,
     label: 'love',
-    image: love,
   },
   {
     id: 2,
     label: 'happy',
-    image: happy,
   },
   {
     id: 3,
     label: 'normal',
-    image: normal,
   },
   {
     id: 4,
     label: 'bad',
-    image: bad,
   },
   {
     id: 5,
     label: 'heart',
-    image: heart,
   },
 ];

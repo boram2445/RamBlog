@@ -1,7 +1,7 @@
 import { uploadImage } from '@/service/image';
-import axios from 'axios';
-import { assetURL, client, urlFor } from './sanity';
+import { client, urlFor } from './sanity';
 
+export type Emotion = 'love' | 'happy' | 'normal' | 'bad' | 'heart';
 export type Log = {
   title: string;
   content: string;
@@ -9,7 +9,8 @@ export type Log = {
   username: string;
   userImage: string;
   id: string;
-  createdAt: Date;
+  date: Date;
+  emotion: Emotion;
 };
 
 const logProjection = `
@@ -19,7 +20,8 @@ const logProjection = `
   "userImage":author->image,
   "image":photo,
   "id":_id,
-  "createdAt":_createdAt
+  date,
+  emotion
 `;
 
 export async function getAllUserLogs(username: string) {
