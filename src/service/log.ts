@@ -39,6 +39,8 @@ export async function createLog(
   userId: string,
   title: string,
   content: string,
+  date: string,
+  emotion?: string,
   file?: Blob
 ) {
   const res = file && (await uploadImage(file));
@@ -48,6 +50,8 @@ export async function createLog(
     author: { _ref: userId },
     title,
     content,
+    date,
+    emotion,
   };
 
   let logCreateProjectionFile = file

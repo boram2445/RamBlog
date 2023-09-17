@@ -1,17 +1,26 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import Button from '../ui/Button';
 import axios from 'axios';
-import Image from 'next/image';
-import { FaPhotoVideo } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
+import ImageUpload from '../ui/ImageUpload';
+import EmotionList from './EmotionList';
+import { getDate } from '@/utils/date';
+import { mutate } from 'swr';
 
 type Props = {
   username: string;
   closeForm: () => void;
 };
 
+const inputStyle =
+  'py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
+
 export default function LogForm({ username, closeForm }: Props) {
   const [file, setFile] = useState<File>();
+  const [date, setDate] = useState<string>(
+    getDate(new Date().toISOString(), 'day')
+  );
+  const [selectedEmotion, setSelectedEmotion] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const titleRef = useRef<HTMLInputElement>(null);
@@ -33,9 +42,12 @@ export default function LogForm({ username, closeForm }: Props) {
     file && formData.append('file', file);
     formData.append('title', titleRef.current?.value ?? '');
     formData.append('content', contentRef.current?.value ?? '');
+    formData.append('emotion', selectedEmotion?.toString() ?? '');
+    formData.append('date', date);
 
     axios
       .post(`/api/${username}/logs`, formData)
+      .then(() => mutate(`/api/${username}/logs`))
       .catch((err) => setError(err.toString()))
       .finally(() => {
         setLoading(false);
@@ -44,68 +56,59 @@ export default function LogForm({ username, closeForm }: Props) {
   };
 
   return (
-    <form
-      className='relative bg-gray-50 h-300 w-full p-2 mb-5'
-      onSubmit={handleSubmit}
-    >
+    <>
       {loading && (
         <div className='bg-gray-200 absolute inset-0 flex flex-col items-center justify-center z-20 bg-opacity-20'>
           <ClipLoader />
-          <p>업로드중...</p>
+          <p>저장중...</p>
         </div>
       )}
-      <div className='flex justify-end mb-1'>
-        <Button color='black'>저장</Button>
-      </div>
-      <div className='flex'>
-        <div className='grow flex flex-col'>
-          <input
-            type='text'
-            placeholder='제목'
-            ref={titleRef}
-            className='px-2 py-1 border border-gray-100 rounded-lg'
-          />
-          <textarea
-            name='content'
-            id='content'
-            ref={contentRef}
-            className='grow px-2 py-1 border-gray-100 rounded-lg'
-            placeholder='오늘의 기록'
-          />
-        </div>
+      <form
+        className='relative w-full p-5 rounded-lg bg-white'
+        onSubmit={handleSubmit}
+      >
+        <h2 className='ml-2 text-2xl mt-3 mb-5 font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5'>
+          오늘의 기록
+        </h2>
         <input
-          className='hidden'
-          name='input'
-          id='input-upload'
-          type='file'
-          accept='image/*'
-          onChange={handleChange}
+          type='date'
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className='ml-2 mb-3 px-1 border outline-indigo-500 border-gray-200 hover:border-indigo-400 rounded-lg cursor-pointer'
         />
-        <label
-          htmlFor='input-upload'
-          className={`ml-3 h-[200px] w-[200px] rounded-md flex flex-col items-center justify-center hover:bg-gray-200 hover:bg-opacity-90 ${
-            !file && 'border-2 border-dashed border-orange-400'
-          }`}
-        >
-          {!file && (
-            <>
-              <FaPhotoVideo />
-              <p>Select Image</p>
-            </>
-          )}
-          {file && (
-            <div className='relative w-full aspect-square'>
-              <Image
-                src={URL.createObjectURL(file)}
-                alt='local file'
-                fill
-                sizes='200px'
-                className='object-cover'
-              />
-            </div>
-          )}
-        </label>
-      </div>
-    </form>
+        <div className='flex gap-3'>
+          <ImageUpload
+            file={file}
+            onChange={handleChange}
+            styleClass='ml-3 h-[200px] w-[300px] rounded-md'
+            text='오늘의 사진'
+          />
+          <div className='grow flex flex-col gap-2'>
+            <input
+              type='text'
+              placeholder='제목'
+              ref={titleRef}
+              className={inputStyle}
+            />
+            <textarea
+              name='content'
+              id='content'
+              ref={contentRef}
+              className={`grow ${inputStyle}`}
+              placeholder='내용을 적어 주세요.'
+            />
+          </div>
+        </div>
+        <EmotionList
+          selected={selectedEmotion}
+          onClick={(label: string) => setSelectedEmotion(label)}
+        />
+        <div className='mt-3'>
+          <Button color='black' size='max' onClick={handleSubmit}>
+            등록
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }

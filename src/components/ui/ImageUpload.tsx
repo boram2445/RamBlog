@@ -28,7 +28,7 @@ export default function ImageUpload({
       <label
         htmlFor='input-upload'
         className={`${styleClass} ${
-          !file && 'border border-dashed border-orange-400'
+          !file && 'border-2 border-dashed border-indigo-300'
         } flex flex-col items-center justify-center hover:brightness-75 hover:bg-gray-50 overflow-hidden cursor-pointer`}
       >
         {!file && (

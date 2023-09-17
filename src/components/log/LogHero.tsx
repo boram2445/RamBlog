@@ -5,6 +5,7 @@ import Button from '../ui/Button';
 import { useState } from 'react';
 import LogForm from './LogForm';
 import Title from '../ui/Title';
+import ModalContainer from '../ui/ModalContainer';
 
 type Props = {
   username: string;
@@ -18,22 +19,18 @@ export default function LogHero({ username }: Props) {
 
   return (
     <>
-      <div className='flex justify-between items-center mb-12'>
-        <Title
-          title='Short Diary'
-          description='오늘의 생각, 일상, 기분, 공부한것들을 기록합니다'
-        />
-        {user?.username === username && (
-          <Button onClick={() => setIsOpenForm((prev) => !prev)}>
-            {isOpenForm ? '닫기' : '일기쓰기'}
-          </Button>
-        )}
-      </div>
+      {user?.username === username && (
+        <div className='mb-3 ml-3'>
+          <Button onClick={() => setIsOpenForm(true)}>일기쓰기</Button>
+        </div>
+      )}
       {isOpenForm && (
-        <LogForm
-          username={username}
-          closeForm={() => setIsOpenForm((prev) => !prev)}
-        />
+        <ModalContainer
+          onClose={() => setIsOpenForm(false)}
+          className='bg-gray-100 rounded-lg p-5'
+        >
+          <LogForm username={username} closeForm={() => setIsOpenForm(false)} />
+        </ModalContainer>
       )}
     </>
   );
