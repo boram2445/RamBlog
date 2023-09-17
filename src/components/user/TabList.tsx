@@ -8,25 +8,25 @@ type Props = {
   user: ProfileUser;
 };
 
-const tabStyle = `px-16 py-3 cursor-pointer text-gray-600 border-b-2 border-gray-200 hover:text-gray-900`;
+const tabStyle = `px-5 py-1.5 cursor-pointer text-gray-600 hover:text-gray-900`;
 const tabs = [
-  { href: '/about', name: 'About' },
   { href: '', name: 'Posts' },
   { href: '/log', name: 'Log' },
+  { href: '/about', name: 'About' },
 ];
 
 export default function TabList({ user }: Props) {
   const pathname = usePathname();
 
   return (
-    <ul className='mt-3 mb-6 flex justify-center'>
+    <ul className='mt-3 mb-6 pt-3 pb-5 flex border-b border-gray-200'>
       {tabs.map(({ href, name }) => (
         <li key={href}>
           <Link
             href={`/${user.username}${href}`}
             className={`${tabStyle} ${
               getOnPath(pathname, href, user.username)
-                ? 'border-gray-700 font-semibold text-gray-900'
+                ? 'font-semibold text-gray-900 bg-gray-100 rounded-full'
                 : ''
             }`}
           >
