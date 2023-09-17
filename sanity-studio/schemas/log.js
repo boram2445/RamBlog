@@ -24,5 +24,15 @@ export default {
       name: 'photo',
       type: 'image',
     },
+    {
+      title: 'Emotion',
+      name: 'emotion',
+      type: 'string',
+    },
+    {
+      title: 'Date',
+      name: 'date',
+      type: 'string',
+    },
   ],
 }
