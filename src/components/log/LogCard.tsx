@@ -4,7 +4,6 @@ import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';
 import LogDetail from './LogDetail';
 import { AiFillHeart } from 'react-icons/ai';
-import { useRouter } from 'next/navigation';
 
 type Props = {
   log: SimpleLog;
@@ -12,13 +11,12 @@ type Props = {
 
 export default function LogCard({ log }: Props) {
   const { title, image, id, username } = log;
-  // const [openModal, setOpenModal] = useState(false);
-  const router = useRouter();
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
       <div
-        onClick={() => router.push(`/${username}/log/${id}`)}
+        onClick={() => setOpenModal(true)}
         className='group relative w-full aspect-square cursor-pointer'
       >
         {image ? (
@@ -38,14 +36,20 @@ export default function LogCard({ log }: Props) {
           </div>
         </div>
       </div>
-      {/* {openModal && (
+      {openModal && (
         <ModalContainer
           onClose={() => setOpenModal(false)}
-          className='overflow-y-auto bg-white rounded-2xl laptop:w-[700px] laptop:h-[410px] desktop:w-[900px] desktop:h-[650px]'
+          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:w-[900px] desktop:h-[650px]'
         >
-          <LogDetail log={log} onClose={() => setOpenModal(false)} />
+          <LogDetail
+            logId={id}
+            username={username}
+            thumbnail={image}
+            title={title}
+            onClose={() => setOpenModal(false)}
+          />
         </ModalContainer>
-      )} */}
+      )}
     </>
   );
 }
