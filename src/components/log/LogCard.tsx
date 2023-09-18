@@ -1,48 +1,40 @@
 import { Log } from '@/service/log';
-import Date from '../ui/Date';
 import Image from 'next/image';
-import EmotionItem from './EmotionItem';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';
 import LogDetail from './LogDetail';
-import FlipHover from '../ui/FlipHover';
+import { AiFillHeart } from 'react-icons/ai';
 
 type Props = {
   log: Log;
 };
 
 export default function LogCard({ log }: Props) {
-  const { title, content, image, id, date, emotion } = log;
+  const { title, image } = log;
   const [openModal, setOpenModal] = useState(false);
-
-  const front = (
-    <div className='relative w-full aspect-square'>
-      {image ? (
-        <Image
-          src={image}
-          alt={title}
-          fill
-          sizes='400px'
-          className='object-cover'
-        />
-      ) : (
-        <div className='bg-gray-50 w-full h-full'></div>
-      )}
-    </div>
-  );
-
-  const back = (
-    <div className='flex flex-col gap-2 items-center justify-center text-gray-600'>
-      <Date date={date.toString()} dateType='date' />
-      <EmotionItem label={emotion} />
-      <h2>{title}</h2>
-    </div>
-  );
 
   return (
     <>
-      <div onClick={() => setOpenModal(true)}>
-        <FlipHover front={front} back={back} />
+      <div
+        onClick={() => setOpenModal(true)}
+        className='group relative w-full aspect-square cursor-pointer'
+      >
+        {image ? (
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes='400px'
+            className='object-cover'
+          />
+        ) : (
+          <div className='bg-gray-50 w-full h-full'></div>
+        )}
+        <div className='hidden group-hover:flex items-center justify-center absolute inset-0 bg-black bg-opacity-20'>
+          <div className=''>
+            <AiFillHeart size='25' color='white' />
+          </div>
+        </div>
       </div>
       {openModal && (
         <ModalContainer
