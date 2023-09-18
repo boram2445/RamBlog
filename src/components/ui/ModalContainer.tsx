@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom';
+import { AiOutlineClose } from 'react-icons/ai';
 
 type Props = {
   children: React.ReactNode;
@@ -31,6 +32,13 @@ export default function ModalContainer({
           <article className={`${className} animate-fade-in`}>
             {children}
           </article>
+          <button
+            className='absolute top-4 right-4'
+            type='button'
+            onClick={onClose}
+          >
+            <AiOutlineClose className='w-6 h-6 text-white' />
+          </button>
         </div>,
         document.body
       )}
