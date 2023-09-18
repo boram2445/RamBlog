@@ -16,7 +16,6 @@ export default function ModalContainer({
   }
 
   const handleClickContainer = (e: React.MouseEvent) => {
-    console.log(e.target, e.currentTarget);
     if (e.target === e.currentTarget) {
       onClose();
     }

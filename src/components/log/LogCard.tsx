@@ -41,7 +41,7 @@ export default function LogCard({ log }: Props) {
 
   return (
     <>
-      <div onClick={() => setOpenModal(true)} className='hover:brightness-95'>
+      <div onClick={() => setOpenModal(true)}>
         <FlipHover front={front} back={back} />
       </div>
       {openModal && (
@@ -49,7 +49,7 @@ export default function LogCard({ log }: Props) {
           onClose={() => setOpenModal(false)}
           className='overflow-y-auto bg-white rounded-2xl laptop:w-[700px] laptop:h-[410px] desktop:w-[900px] desktop:h-[650px]'
         >
-          <LogDetail log={log} />
+          <LogDetail log={log} onClose={() => setOpenModal(false)} />
         </ModalContainer>
       )}
     </>

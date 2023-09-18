@@ -64,3 +64,7 @@ export async function createLog(
     autoGenerateArrayKeys: true,
   });
 }
+
+export async function deleteLog(logId: string) {
+  return client.delete(logId);
+}
