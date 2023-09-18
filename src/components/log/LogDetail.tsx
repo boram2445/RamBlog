@@ -11,6 +11,8 @@ import { useSWRConfig } from 'swr';
 
 type Props = {
   log: Log;
+  previousId?: string;
+  nextId?: string;
   onClose: () => void;
 };
 

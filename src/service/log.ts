@@ -2,16 +2,41 @@ import { uploadImage } from '@/service/image';
 import { client, urlFor } from './sanity';
 
 export type Emotion = 'love' | 'happy' | 'normal' | 'bad' | 'heart';
+export type SimpleLog = {
+  image: string;
+  id: string;
+  title: string;
+  date: Date;
+  username: string;
+  likes: number;
+};
+
 export type Log = {
   title: string;
   content: string;
-  image: string;
   username: string;
   userImage: string;
+  image: string;
   id: string;
   date: Date;
   emotion: Emotion;
+  likes: string[];
 };
+
+export type DetailLog = {
+  currentLog: Log;
+  previousLog: { id: string };
+  nextLog: { id: string };
+};
+
+const simpleLogProjection = `
+  "id":_id,
+  date,
+  title,
+  "image":photo,
+  "likes":count(likes[]),
+  "username":author->username,
+`;
 
 const logProjection = `
   title,
@@ -21,20 +46,41 @@ const logProjection = `
   "image":photo,
   "id":_id,
   date,
-  emotion
+  emotion,
+  "likes":likes[]->username,
 `;
 
 export async function getAllUserLogs(username: string) {
   return client
     .fetch(
-      `*[_type == "log" && author->username=="${username}"]| order(_createdAt desc){${logProjection}}`
+      `*[_type == "log" && author->username=="${username}"]| order(date desc){${simpleLogProjection}}
+      `
     )
     .then((logs) =>
-      logs.map((log: Log) => ({
+      logs.map((log: SimpleLog) => ({
         ...log,
         image: log.image ? urlFor(log.image) : '',
       }))
     );
+}
+
+export async function getUserLog(username: string, logId: string) {
+  return client
+    .fetch(
+      `*[_type == "log" && author->username=="${username}" && _id == "${logId}"][0]{
+  'currentLog':{${logProjection}},
+  'previousLog': *[_type == 'log' && author->username =="${username}" && date < ^.date][0]{ "id":_id},
+  'nextLog': *[_type == 'log' && author->username =="${username}"  && date > ^.date] | order(_createdAt asc)[0]{ "id":_id}
+  }
+`
+    )
+    .then((log) => ({
+      ...log,
+      currentLog: {
+        ...log.currentLog,
+        image: log.currentLog.image ? urlFor(log.currentLog.image) : '',
+      },
+    }));
 }
 
 export async function createLog(
