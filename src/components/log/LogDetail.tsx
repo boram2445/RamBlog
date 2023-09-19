@@ -31,7 +31,7 @@ export default function LogDetail({
   const [detailId, setDetailId] = useState(logId);
 
   const { data: log, isLoading } = useSWR<DetailLog>(
-    `/api/${username}/logs/${detailId}`
+    `/api/${username}/log/${detailId}`
   );
 
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function LogDetail({
     if (confirm('정말로 삭제하시겠습니까?😥')) {
       setIsFetching(true);
       await axios
-        .delete(`/api/${username}/logs/${logId}`)
+        .delete(`/api/${username}/log/${logId}`)
         .catch((err) => setError(err.toString()));
       setIsFetching(false);
       startTransition(() => {

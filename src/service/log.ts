@@ -8,7 +8,8 @@ export type SimpleLog = {
   title: string;
   date: Date;
   username: string;
-  likes: number;
+  emotion: Emotion;
+  // likes: number;
 };
 
 export type Log = {
@@ -34,7 +35,8 @@ const simpleLogProjection = `
   date,
   title,
   "image":photo,
-  "likes":count(likes[]),
+  emotion,
+  content,
   "username":author->username,
 `;
 
@@ -54,6 +56,20 @@ export async function getAllUserLogs(username: string) {
   return client
     .fetch(
       `*[_type == "log" && author->username=="${username}"]| order(date desc){${simpleLogProjection}}
+      `
+    )
+    .then((logs) =>
+      logs.map((log: SimpleLog) => ({
+        ...log,
+        image: log.image ? urlFor(log.image) : '',
+      }))
+    );
+}
+
+export async function getUserEmotionLogs(username: string, emotion: Emotion) {
+  return client
+    .fetch(
+      `*[_type == "log" && author->username=="${username}" && emotion == "${emotion}"]| order(date desc){${simpleLogProjection}}
       `
     )
     .then((logs) =>

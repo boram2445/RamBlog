@@ -1,23 +1,24 @@
-import { Log, SimpleLog } from '@/service/log';
+import { SimpleLog } from '@/service/log';
 import Image from 'next/image';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';
 import LogDetail from './LogDetail';
-import { AiFillHeart } from 'react-icons/ai';
+import EmotionItem from './EmotionItem';
+import { getDate } from '@/utils/date';
 
 type Props = {
   log: SimpleLog;
 };
 
 export default function LogCard({ log }: Props) {
-  const { title, image, id, username } = log;
+  const { title, image, id, username, emotion, date } = log;
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
       <div
         onClick={() => setOpenModal(true)}
-        className='group relative w-full aspect-square cursor-pointer'
+        className='group relative w-full aspect-square cursor-pointer shadow-sm'
       >
         {image ? (
           <Image
@@ -30,10 +31,13 @@ export default function LogCard({ log }: Props) {
         ) : (
           <div className='bg-gray-50 w-full h-full'></div>
         )}
-        <div className='hidden group-hover:flex items-center justify-center absolute inset-0 bg-black bg-opacity-20'>
-          <div className=''>
-            <AiFillHeart size='25' color='white' />
-          </div>
+
+        <div className='absolute top-3 right-3 p-2 bg-white bg-opacity-90 rounded-full'>
+          <EmotionItem label={emotion} />
+        </div>
+        <div className='hidden group-hover:flex flex-col items-center justify-center absolute inset-0 bg-black bg-opacity-40 text-white '>
+          <h2 className='text-xl font-semibold mb-3'>{title}</h2>
+          <small>{getDate(date.toString(), 'date')}</small>
         </div>
       </div>
       {openModal && (

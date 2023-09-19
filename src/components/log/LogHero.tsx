@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import Button from '../ui/Button';
 import { useState } from 'react';
 import LogForm from './LogForm';
-import Title from '../ui/Title';
 import ModalContainer from '../ui/ModalContainer';
 
 type Props = {
