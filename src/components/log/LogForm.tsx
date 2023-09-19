@@ -36,18 +36,24 @@ export default function LogForm({ username, closeForm }: Props) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
+    console.log(date + 'T' + new Date().toISOString().split('T')[1]);
     setLoading(true);
     const formData = new FormData();
     file && formData.append('file', file);
     formData.append('title', titleRef.current?.value ?? '');
     formData.append('content', contentRef.current?.value ?? '');
     formData.append('emotion', selectedEmotion?.toString() ?? '');
-    formData.append('date', date);
+    formData.append(
+      'date',
+      date + 'T' + new Date().toISOString().split('T')[1]
+    );
 
     axios
       .post(`/api/${username}/logs`, formData)
-      .then(() => mutate(`/api/${username}/logs`))
+      .then(() => {
+        mutate(`/api/${username}/logs`);
+        mutate(`/api/${username}/log`);
+      })
       .catch((err) => setError(err.toString()))
       .finally(() => {
         setLoading(false);

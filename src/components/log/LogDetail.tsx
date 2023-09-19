@@ -1,4 +1,4 @@
-import { DetailLog, Log } from '@/service/log';
+import { DetailLog, Emotion, Log } from '@/service/log';
 import Image from 'next/image';
 import EmotionItem from './EmotionItem';
 import Button from '../ui/Button';
@@ -9,31 +9,28 @@ import { useRouter } from 'next/navigation';
 import PageLoader from '../ui/PageLoader';
 import { useSWRConfig } from 'swr';
 import UserAvartar from '../common/UserAvartar';
-import { AiOutlineHeart, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import useSWR from 'swr';
+import { AiOutlineHeart } from 'react-icons/ai';
 import ArrowButton from '../ui/ArrowButton';
+import useLogDetail from '@/hooks/useLogDetail';
 
 type Props = {
   logId: string;
   username: string;
   thumbnail?: string;
   title: string;
+  selectedEmotion: 'all' & Emotion;
   onClose: () => void;
 };
 
 export default function LogDetail({
   logId,
   username,
-  thumbnail,
-  title,
+  selectedEmotion,
   onClose,
 }: Props) {
   const [detailId, setDetailId] = useState(logId);
-
-  const { data: log, isLoading } = useSWR<DetailLog>(
-    `/api/${username}/log/${detailId}`
-  );
-
+  const { log } = useLogDetail(username, detailId, selectedEmotion);
+  console.log(log, selectedEmotion);
   const router = useRouter();
   const { mutate } = useSWRConfig();
 

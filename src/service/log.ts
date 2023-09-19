@@ -56,7 +56,12 @@ export async function getAllUserLogs(username: string) {
   return client
     .fetch(
       `*[_type == "log" && author->username=="${username}"]| order(date desc){${simpleLogProjection}}
-      `
+      `,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['log'] },
+      }
     )
     .then((logs) =>
       logs.map((log: SimpleLog) => ({
@@ -70,7 +75,12 @@ export async function getUserEmotionLogs(username: string, emotion: Emotion) {
   return client
     .fetch(
       `*[_type == "log" && author->username=="${username}" && emotion == "${emotion}"]| order(date desc){${simpleLogProjection}}
-      `
+      `,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['log'] },
+      }
     )
     .then((logs) =>
       logs.map((log: SimpleLog) => ({
@@ -80,15 +90,47 @@ export async function getUserEmotionLogs(username: string, emotion: Emotion) {
     );
 }
 
+export async function getUserEmotionLog(
+  username: string,
+  logId: string,
+  emotion: Emotion
+) {
+  return client
+    .fetch(
+      `*[_type == "log" && author->username=="${username}" && emotion == "${emotion}" && _id == "${logId}"][0]{
+      'currentLog':{${logProjection}},
+      'nextLog': *[_type == 'log' && author->username =="${username}"  && emotion == "${emotion}" && date > ^.date][0]{ "id":_id},
+      'previousLog': *[_type == 'log' && author->username =="${username}"  && emotion == "${emotion}" && date < ^.date]| order(date desc)[0]{ "id":_id}
+      }
+    `,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['log'] },
+      }
+    )
+    .then((log) => ({
+      ...log,
+      currentLog: {
+        ...log.currentLog,
+        image: log.currentLog.image ? urlFor(log.currentLog.image) : '',
+      },
+    }));
+}
+
 export async function getUserLog(username: string, logId: string) {
   return client
     .fetch(
       `*[_type == "log" && author->username=="${username}" && _id == "${logId}"][0]{
-  'currentLog':{${logProjection}},
-  'previousLog': *[_type == 'log' && author->username =="${username}" && date < ^.date][0]{ "id":_id},
-  'nextLog': *[_type == 'log' && author->username =="${username}"  && date > ^.date] | order(_createdAt asc)[0]{ "id":_id}
-  }
-`
+      'currentLog':{${logProjection}},
+      'nextLog': *[_type == 'log' && author->username =="${username}" && date > ^.date][0]{ "id":_id},
+      'previousLog': *[_type == 'log' && author->username =="${username}"  && date < ^.date] | order(date desc)[0]{ "id":_id}
+      }`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['log'] },
+      }
     )
     .then((log) => ({
       ...log,

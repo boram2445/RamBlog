@@ -1,4 +1,4 @@
-import { SimpleLog } from '@/service/log';
+import { Emotion, SimpleLog } from '@/service/log';
 import Image from 'next/image';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';
@@ -8,9 +8,10 @@ import { getDate } from '@/utils/date';
 
 type Props = {
   log: SimpleLog;
+  selectedEmotion: 'all' & Emotion;
 };
 
-export default function LogCard({ log }: Props) {
+export default function LogCard({ log, selectedEmotion }: Props) {
   const { title, image, id, username, emotion, date } = log;
   const [openModal, setOpenModal] = useState(false);
 
@@ -50,6 +51,7 @@ export default function LogCard({ log }: Props) {
             username={username}
             thumbnail={image}
             title={title}
+            selectedEmotion={selectedEmotion}
             onClose={() => setOpenModal(false)}
           />
         </ModalContainer>

@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache';
 import { createLog, getAllUserLogs } from '@/service/log';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -36,7 +37,16 @@ export async function POST(req: NextRequest) {
     return new Response('Bad request', { status: 400 });
   }
 
-  return await createLog(user.id, title, content, date, emotion, file).then(
-    (data) => NextResponse.json(data)
-  );
+  const result = await createLog(
+    user.id,
+    title,
+    content,
+    date,
+    emotion,
+    file
+  ).then((data) => NextResponse.json(data));
+
+  revalidateTag('log');
+
+  return result;
 }

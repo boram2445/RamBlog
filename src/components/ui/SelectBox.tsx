@@ -40,7 +40,7 @@ export default function SelectBox({
   }, [isOpen]);
 
   return (
-    <article ref={selectBoxRef}>
+    <article ref={selectBoxRef} className='inline-block'>
       <button
         onClick={openHandler}
         className='flex items-center gap-1 py-2 pl-4 pr-3 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 '
