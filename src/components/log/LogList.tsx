@@ -9,6 +9,7 @@ import { Emotion } from '@/service/log';
 import Button from '../ui/Button';
 import ModalContainer from '../ui/ModalContainer';
 import LogForm from './LogForm';
+import { ClipLoader } from 'react-spinners';
 
 type Props = {
   username: string;
@@ -19,14 +20,17 @@ export default function LogList({ username }: Props) {
   const user = session?.user;
 
   const [selected, setSelected] = useState<SelectItem>(selectList[0]);
-  const { logs } = useLogs(username, selected.label as Emotion & 'all');
+  const { logs, isLoading, error } = useLogs(
+    username,
+    selected.label as Emotion & 'all'
+  );
 
   const [isOpenForm, setIsOpenForm] = useState(false);
   const handleChangeSelect = (item: SelectItem) => setSelected(item);
 
   return (
     <>
-      <div className='flex justify-between'>
+      <div className='flex justify-between items-center'>
         <SelectBox
           list={selectList}
           selected={selected}
@@ -34,30 +38,44 @@ export default function LogList({ username }: Props) {
           type='emoji'
         />
         {user?.username === username && (
-          <div className='mb-3 ml-3'>
-            <Button onClick={() => setIsOpenForm(true)}>일기쓰기</Button>
-          </div>
+          <Button onClick={() => setIsOpenForm(true)}>일기쓰기</Button>
         )}
       </div>
-      {logs?.length === 0 && (
-        <p className='text-center text-gray-700'>아직 등록된 일기가 없어요😥</p>
+
+      {isLoading && (
+        <div className='my-6 text-center'>
+          <ClipLoader color='gray' />
+        </div>
       )}
-      <ul className='mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2'>
-        {logs?.map((log) => (
-          <li key={log.id}>
-            <LogCard
-              log={log}
-              selectedEmotion={selected.label as 'all' & Emotion}
-            />
-          </li>
-        ))}
-      </ul>
+      {!isLoading && logs?.length === 0 && (
+        <p className='text-center py-8 px-4 text-gray-600'>
+          아직 등록된 일기가 없어요😥
+        </p>
+      )}
+      {!isLoading && !error && (
+        <ul className='mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2'>
+          {logs?.map((log) => (
+            <li key={log.id}>
+              <LogCard
+                log={log}
+                resetSelect={() => handleChangeSelect(selectList[0])}
+                selectedEmotion={selected.label as 'all' & Emotion}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+
       {isOpenForm && (
         <ModalContainer
           onClose={() => setIsOpenForm(false)}
-          className='bg-gray-100 rounded-lg p-5'
+          className='overflow-y-hidden bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[650px]'
         >
-          <LogForm username={username} closeForm={() => setIsOpenForm(false)} />
+          <LogForm
+            username={username}
+            closeForm={() => setIsOpenForm(false)}
+            resetSelect={() => handleChangeSelect(selectList[0])}
+          />
         </ModalContainer>
       )}
     </>

@@ -6,16 +6,18 @@ import ImageUpload from '../ui/ImageUpload';
 import EmotionList from './EmotionList';
 import { getDate } from '@/utils/date';
 import { mutate } from 'swr';
+import PageLoader from '../ui/PageLoader';
 
 type Props = {
   username: string;
+  resetSelect: () => void;
   closeForm: () => void;
 };
 
 const inputStyle =
   'py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
 
-export default function LogForm({ username, closeForm }: Props) {
+export default function LogForm({ username, resetSelect, closeForm }: Props) {
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<string>(
     getDate(new Date().toISOString(), 'day')
@@ -36,7 +38,7 @@ export default function LogForm({ username, closeForm }: Props) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(date + 'T' + new Date().toISOString().split('T')[1]);
+
     setLoading(true);
     const formData = new FormData();
     file && formData.append('file', file);
@@ -51,6 +53,7 @@ export default function LogForm({ username, closeForm }: Props) {
     axios
       .post(`/api/${username}/logs`, formData)
       .then(() => {
+        resetSelect();
         mutate(`/api/${username}/logs`);
         mutate(`/api/${username}/log`);
       })
@@ -63,30 +66,32 @@ export default function LogForm({ username, closeForm }: Props) {
 
   return (
     <>
-      {loading && (
-        <div className='bg-gray-200 absolute inset-0 flex flex-col items-center justify-center z-20 bg-opacity-20'>
-          <ClipLoader />
-          <p>저장중...</p>
-        </div>
-      )}
+      {loading && <PageLoader label='일기 작성중...' />}
       <form
         className='relative w-full p-5 rounded-lg bg-white'
         onSubmit={handleSubmit}
       >
-        <h2 className='ml-2 text-2xl mt-3 mb-5 font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5'>
-          오늘의 기록
-        </h2>
-        <input
-          type='date'
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className='ml-2 mb-3 px-1 border outline-indigo-500 border-gray-200 hover:border-indigo-400 rounded-lg cursor-pointer'
-        />
+        <div className='flex justify-between items-center'>
+          <div>
+            <h2 className='ml-2 text-2xl mt-3 mb-5 font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5'>
+              오늘의 기록
+            </h2>
+            <input
+              type='date'
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className='ml-2 mb-3 px-1 border outline-indigo-500 border-gray-200 hover:border-indigo-400 rounded-lg cursor-pointer'
+            />
+          </div>
+          <Button color='black' onClick={handleSubmit}>
+            등록
+          </Button>
+        </div>
         <div className='flex gap-3'>
           <ImageUpload
             file={file}
             onChange={handleChange}
-            styleClass='ml-3 h-[200px] w-[300px] rounded-md'
+            styleClass='w-1/2 aspect-square'
             text='오늘의 사진'
           />
           <div className='grow flex flex-col gap-2'>
@@ -103,16 +108,11 @@ export default function LogForm({ username, closeForm }: Props) {
               className={`grow ${inputStyle}`}
               placeholder='내용을 적어 주세요.'
             />
+            <EmotionList
+              selected={selectedEmotion}
+              onClick={(label: string) => setSelectedEmotion(label)}
+            />
           </div>
-        </div>
-        <EmotionList
-          selected={selectedEmotion}
-          onClick={(label: string) => setSelectedEmotion(label)}
-        />
-        <div className='mt-3'>
-          <Button color='black' size='max' onClick={handleSubmit}>
-            등록
-          </Button>
         </div>
       </form>
     </>

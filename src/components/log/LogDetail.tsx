@@ -19,6 +19,7 @@ type Props = {
   thumbnail?: string;
   title: string;
   selectedEmotion: 'all' & Emotion;
+  resetSelect: () => void;
   onClose: () => void;
 };
 
@@ -26,6 +27,7 @@ export default function LogDetail({
   logId,
   username,
   selectedEmotion,
+  resetSelect,
   onClose,
 }: Props) {
   const [detailId, setDetailId] = useState(logId);
@@ -48,6 +50,7 @@ export default function LogDetail({
       setIsFetching(false);
       startTransition(() => {
         onClose();
+        resetSelect();
         mutate(`/api/${username}/logs`);
         router.refresh();
         router.push(`/${username}/log`);

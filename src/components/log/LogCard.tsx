@@ -9,9 +9,10 @@ import { getDate } from '@/utils/date';
 type Props = {
   log: SimpleLog;
   selectedEmotion: 'all' & Emotion;
+  resetSelect: () => void;
 };
 
-export default function LogCard({ log, selectedEmotion }: Props) {
+export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
   const { title, image, id, username, emotion, date } = log;
   const [openModal, setOpenModal] = useState(false);
 
@@ -44,7 +45,7 @@ export default function LogCard({ log, selectedEmotion }: Props) {
       {openModal && (
         <ModalContainer
           onClose={() => setOpenModal(false)}
-          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:w-[900px] desktop:h-[650px]'
+          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[650px]'
         >
           <LogDetail
             logId={id}
@@ -52,6 +53,7 @@ export default function LogCard({ log, selectedEmotion }: Props) {
             thumbnail={image}
             title={title}
             selectedEmotion={selectedEmotion}
+            resetSelect={resetSelect}
             onClose={() => setOpenModal(false)}
           />
         </ModalContainer>
