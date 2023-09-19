@@ -5,6 +5,7 @@ import ModalContainer from '../ui/ModalContainer';
 import LogDetail from './LogDetail';
 import EmotionItem from './EmotionItem';
 import { getDate } from '@/utils/date';
+import Skeleton from '../ui/Skeleton';
 
 type Props = {
   log: SimpleLog;
@@ -60,4 +61,8 @@ export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
       )}
     </>
   );
+}
+
+export function LogCardLoading() {
+  return <Skeleton className='w-full aspect-square' />;
 }

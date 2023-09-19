@@ -2,18 +2,19 @@
 
 import { useSession } from 'next-auth/react';
 import useLogs from '@/hooks/useLogs';
-import LogCard from './LogCard';
+import LogCard, { LogCardLoading } from './LogCard';
 import SelectBox, { SelectItem } from '../ui/SelectBox';
 import { useState } from 'react';
 import { Emotion } from '@/service/log';
 import Button from '../ui/Button';
 import ModalContainer from '../ui/ModalContainer';
 import LogForm from './LogForm';
-import { ClipLoader } from 'react-spinners';
 
 type Props = {
   username: string;
 };
+
+const listStyle = 'mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
 
 export default function LogList({ username }: Props) {
   const { data: session } = useSession();
@@ -41,19 +42,14 @@ export default function LogList({ username }: Props) {
           <Button onClick={() => setIsOpenForm(true)}>일기쓰기</Button>
         )}
       </div>
-
-      {isLoading && (
-        <div className='my-6 text-center'>
-          <ClipLoader color='gray' />
-        </div>
-      )}
+      {isLoading && <LogListLoading />}
       {!isLoading && logs?.length === 0 && (
         <p className='text-center py-8 px-4 text-gray-600'>
           아직 등록된 일기가 없어요😥
         </p>
       )}
       {!isLoading && !error && (
-        <ul className='mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2'>
+        <ul className={listStyle}>
           {logs?.map((log) => (
             <li key={log.id}>
               <LogCard
@@ -79,6 +75,16 @@ export default function LogList({ username }: Props) {
         </ModalContainer>
       )}
     </>
+  );
+}
+
+export function LogListLoading() {
+  return (
+    <ul className={listStyle}>
+      {Array.from({ length: 3 }, (_, index) => (
+        <LogCardLoading key={index} />
+      ))}
+    </ul>
   );
 }
 

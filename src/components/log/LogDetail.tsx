@@ -12,6 +12,7 @@ import UserAvartar from '../common/UserAvartar';
 import { AiOutlineHeart } from 'react-icons/ai';
 import ArrowButton from '../ui/ArrowButton';
 import useLogDetail from '@/hooks/useLogDetail';
+import Skeleton from '../ui/Skeleton';
 
 type Props = {
   logId: string;
@@ -32,7 +33,7 @@ export default function LogDetail({
 }: Props) {
   const [detailId, setDetailId] = useState(logId);
   const { log } = useLogDetail(username, detailId, selectedEmotion);
-  console.log(log, selectedEmotion);
+
   const router = useRouter();
   const { mutate } = useSWRConfig();
 
@@ -65,6 +66,7 @@ export default function LogDetail({
   return (
     <>
       {isMutating && <PageLoader label='삭제중...' />}
+      {!log && <LogDetailLoading />}
       {log && (
         <div className='overflow-hidden w-full h-full flex flex-col tablet:flex-row'>
           <div className='w-1/2 h-full bg-black flex items-center'>
@@ -131,5 +133,13 @@ export default function LogDetail({
         </div>
       )}
     </>
+  );
+}
+
+export function LogDetailLoading() {
+  return (
+    <div className='w-full h-full flex flex-col tablet:flex-row'>
+      <Skeleton className='w-1/2 h-full rounded-none' />
+    </div>
   );
 }
