@@ -7,9 +7,12 @@ type Props = {
   posts: Post[];
 };
 
+const gridStyle =
+  'mx-auto grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-6';
+
 export default function PostGrid({ posts }: Props) {
   return (
-    <ul className='mx-auto grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-6'>
+    <ul className={gridStyle}>
       {posts?.map((post, index) => (
         <li key={index}>
           <PostCard post={post} />
@@ -21,7 +24,7 @@ export default function PostGrid({ posts }: Props) {
 
 export function PostGridLoading() {
   return (
-    <ul className='mx-auto grid grid-cols-1 tablet:grid-cols-2  laptop:grid-cols-3 gap-6'>
+    <ul className={gridStyle}>
       {Array.from({ length: 6 }, (_, index) => (
         <PostCardLoading key={index} />
       ))}

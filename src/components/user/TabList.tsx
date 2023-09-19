@@ -19,7 +19,7 @@ export default function TabList({ user }: Props) {
   const pathname = usePathname();
 
   return (
-    <ul className='mt-3 mb-6 pt-3 pb-5 flex border-b border-gray-200'>
+    <ul className='mt-3 pt-3 pb-5 flex border-b border-gray-200'>
       {tabs.map(({ href, name }) => (
         <li key={href}>
           <Link

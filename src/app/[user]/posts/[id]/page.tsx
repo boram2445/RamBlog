@@ -21,7 +21,7 @@ export default async function PostPage({ params: { user, id } }: Props) {
   const post = await getDetail(id, user);
 
   return (
-    <div className='mx-auto p-8'>
+    <div className='mx-auto max-w-screen-lg p-8'>
       <PostDetail
         currentPost={post.currentPost}
         nextPost={post.nextPost}

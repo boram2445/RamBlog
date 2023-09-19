@@ -38,7 +38,10 @@ export default function ProjectArticle({ project }: Props) {
         </div>
       </article>
       {openModal && (
-        <ModalContainer onClose={() => setOpenModal(false)}>
+        <ModalContainer
+          onClose={() => setOpenModal(false)}
+          className='overflow-y-auto bg-white rounded-2xl w-full max-w-[650px] tablet:w-3/4 min-h-[300px] tablet:h-3/4'
+        >
           <ProjectModal project={project} />
         </ModalContainer>
       )}

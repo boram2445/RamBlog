@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache';
 import { createLog, getAllUserLogs } from '@/service/log';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -28,13 +29,24 @@ export async function POST(req: NextRequest) {
   const form = await req.formData();
   const title = form.get('title')?.toString();
   const content = form.get('content')?.toString();
+  const emotion = form.get('emotion')?.toString();
+  const date = form.get('date')?.toString() ?? '';
   const file = (form.get('file') as Blob) ?? '';
 
   if (!title || !content) {
     return new Response('Bad request', { status: 400 });
   }
 
-  return await createLog(user.id, title, content, file).then((data) =>
-    NextResponse.json(data)
-  );
+  const result = await createLog(
+    user.id,
+    title,
+    content,
+    date,
+    emotion,
+    file
+  ).then((data) => NextResponse.json(data));
+
+  revalidateTag('log');
+
+  return result;
 }

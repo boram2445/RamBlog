@@ -21,7 +21,7 @@ export default async function UserTemplate({
     <div className='max-w-[820px] mx-auto'>
       <Hero user={userData} />
       <TabList user={userData} />
-      <div className='mt-12 min-h-[500px]'>{children}</div>
+      <div className='mt-8 min-h-[500px]'>{children}</div>
     </div>
   );
 }
