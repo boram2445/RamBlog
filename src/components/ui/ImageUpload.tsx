@@ -27,9 +27,11 @@ export default function ImageUpload({
       />
       <label
         htmlFor='input-upload'
-        className={`${styleClass} ${
-          !file && 'border-2 border-dashed border-indigo-300'
-        } flex flex-col items-center justify-center hover:brightness-75 hover:bg-gray-50 overflow-hidden cursor-pointer`}
+        className={`${styleClass}  ${
+          !file && 'border-2 bg-white border-dashed border-indigo-300'
+        } ${
+          file && 'bg-black'
+        } flex flex-col items-center justify-center hover:brightness-75 overflow-hidden cursor-pointer`}
       >
         {!file && (
           <>
@@ -38,13 +40,13 @@ export default function ImageUpload({
           </>
         )}
         {file && (
-          <div className='relative w-full aspect-square overflow-hidden'>
+          <div className='relative w-full overflow-hidden'>
             <Image
               src={typeof file === 'string' ? file : URL.createObjectURL(file)}
               alt='local file'
-              fill
-              sizes='400px'
-              className='object-cover '
+              width={300}
+              height={200}
+              className='w-full object-cover'
             />
           </div>
         )}
