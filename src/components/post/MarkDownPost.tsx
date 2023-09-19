@@ -35,13 +35,15 @@ export default function MarkDownPost({ content }: { content: string }) {
             );
           },
           img: (image) => (
-            <Image
-              className='max-height-[500px] object-cover'
-              src={image.src || ''}
-              alt={image.alt || ''}
-              width={500}
-              height={300}
-            />
+            <div className='mx-auto w-5/6 flex items-center justify-center'>
+              <Image
+                src={image.src || ''}
+                alt={image.alt || ''}
+                width={500}
+                height={300}
+                className='w-full max-h-[500px] object-cover'
+              />
+            </div>
           ),
           a: ({ node, ...props }) => (
             <a {...props} className='text-indigo-500 no-underline' />
