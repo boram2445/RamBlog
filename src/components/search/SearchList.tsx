@@ -7,14 +7,18 @@ import useSWR from 'swr';
 import PostGrid from '../common/PostGrid';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import useDebounce from '@/hooks/useDebounce';
 
 export default function SearchList() {
-  const [keyword, setKeyword] = useState('java');
+  const [keyword, setKeyword] = useState('');
+  const debouncedKeyword = useDebounce(keyword);
   const {
     data: posts,
     isLoading,
     error,
-  } = useSWR<Post[]>(keyword ? `/api/search/${keyword}` : null);
+  } = useSWR<Post[]>(
+    debouncedKeyword ? `/api/search/${debouncedKeyword}` : null
+  );
 
   console.log(posts);
 
