@@ -1,75 +1,66 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import PostIcons from './PostIcons';
 
 export default function Toc() {
-  // 목차 리스트
-  const [indexList, setIndexList] = useState<{ index: string; size: string }[]>(
-    []
-  );
-  //현재 보이는 목차
+  const [indexList, setIndexList] = useState<
+    { id: number; text: string; size: string }[]
+  >([]);
   const [currentIndex, setCurrentIndex] = useState<string>('');
 
   useEffect(() => {
-    // toastui-editor-contents에서 h1, h2, h3 찾기
+    //header 파싱
     const headerNodeList = document
-      .querySelector('.toastui-editor-contents')
+      .querySelector('#content')
       ?.querySelectorAll('h1, h2, h3') as NodeListOf<Element>;
+    const observer = new IntersectionObserver(observerCallback);
 
-    // IntersectionObserver들이 들어갈 배열 ( 이벤트 해제를 위해 )
-    const IOList: IntersectionObserver[] = [];
-    let IO: IntersectionObserver;
-
-    [...headerNodeList].forEach((node) => {
-      //header에 id로 컨텐츠내용 등록
-      const index = node.textContent as string;
-
+    headerNodeList.forEach((node, index) => {
+      const text = node.textContent as string;
       const size = node.nodeName[1];
-      node.id = index;
+      node.id = text;
 
-      //이렇게 처리해주지 않으면 반복됨
       setIndexList((prev) => {
-        if (prev.map((item) => item.index).includes(index)) return prev;
-        return [...prev, { index, size }];
+        if (prev.map((item) => item.text).includes(text)) return prev;
+        return [...prev, { id: index, text, size }];
       });
 
-      IO = new IntersectionObserver(
-        ([
-          {
-            isIntersecting,
-            target: { textContent },
-          },
-        ]) => {
-          if (!isIntersecting) return;
-          setCurrentIndex(textContent!);
-        },
-        { threshold: 0.6 }
-      );
-
-      IO.observe(node);
-
-      // 이벤트 해제를 위해 등록
-      IOList.push(IO);
+      observer.observe(node);
     });
 
-    // 이벤트 해제
-    return () => IOList.forEach((IO) => IO.disconnect());
+    function observerCallback(entries: IntersectionObserverEntry[]) {
+      entries?.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        setCurrentIndex(entry.target.textContent!);
+      });
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <aside className='pl-2 border-l border-gray-200'>
-      <ul>
-        {indexList?.map(({ index: text, size }, index) => (
-          <li
-            key={index}
-            className={`${
-              currentIndex === text && 'text-blue-500 font-semibold'
-            } pl-${size} hover:text-blue-300`}
-          >
-            <a href={`#${text}`}>{text}</a>
-          </li>
-        ))}
-      </ul>
+    <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] self-start laptop:block border border-gray-200 rounded-xl overflow-hidden'>
+      {indexList.length > 0 && (
+        <div className='p-4 pr-2'>
+          <p className='font-semibold'>On this Page</p>
+          <ul className='mt-2'>
+            {indexList?.map(({ text, size }, index) => (
+              <li
+                key={index}
+                className={`text-gray-500 ${
+                  currentIndex === text && 'text-indigo-500 font-semibold'
+                } pl-${size} hover:text-blue-300 mt-0.5`}
+              >
+                <a href={`#${text}`} className=' break-all'>
+                  {text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <PostIcons />
     </aside>
   );
 }
