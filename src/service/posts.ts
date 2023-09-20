@@ -1,7 +1,7 @@
 import { Post, PostData } from '@/model/post';
 import { client } from './sanity';
 
-const simplePostProjection = `
+export const simplePostProjection = `
   "tags":tags[]->tagName,
   title,
   pinned,
