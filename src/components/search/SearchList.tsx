@@ -9,18 +9,21 @@ import { BsSearch } from 'react-icons/bs';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import useDebounce from '@/hooks/useDebounce';
 
-export default function SearchList() {
+type Props = {
+  username?: string;
+};
+
+export default function SearchList({ username }: Props) {
   const [keyword, setKeyword] = useState('');
   const debouncedKeyword = useDebounce(keyword);
+  const url = !username
+    ? `/api/search/${debouncedKeyword}`
+    : `/api/${username}/search/${debouncedKeyword}`;
   const {
     data: posts,
     isLoading,
     error,
-  } = useSWR<Post[]>(
-    debouncedKeyword ? `/api/search/${debouncedKeyword}` : null
-  );
-
-  console.log(posts);
+  } = useSWR<Post[]>(debouncedKeyword ? url : null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -29,18 +32,23 @@ export default function SearchList() {
   const deleteKeyword = () => setKeyword('');
 
   return (
-    <section className='mx-auto'>
-      <form onSubmit={handleSubmit} className='my-8 flex justify-center'>
-        <div className='relative shadow-md w-5/6 tablet:w-3/4 laptop:w-1/2 rounded-2xl'>
+    <section className='mx-auto px-5'>
+      <form onSubmit={handleSubmit} className='my-8 flex flex-col items-center'>
+        {username && (
+          <p className='text-gray-600 text-sm'>
+            {username}님의 포스트를 검색해보세요✨
+          </p>
+        )}
+        <div className='relative shadow-md w-5/6 tablet:w-3/4 laptop:w-1/2 rounded-xl'>
           <input
             type='text'
             placeholder='검색어를 입력하세요'
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            className='pl-14 pr-5 py-4 w-full rounded-2xl'
+            className='pl-14 pr-5 py-4 w-full rounded-xl'
             autoFocus
           />
-          <BsSearch className='absolute top-1/2 left-6 -translate-y-1/2 text-gray-400 outline-indigo-300' />
+          <BsSearch className='w-5 h-5 absolute top-1/2 left-6 -translate-y-1/2 text-gray-400 outline-indigo-300' />
           {keyword && (
             <button
               type='button'
@@ -53,9 +61,13 @@ export default function SearchList() {
         </div>
       </form>
       {error && <p>{error}</p>}
-      {isLoading && <ClipLoader />}
+      {isLoading && (
+        <div className='text-center'>
+          <ClipLoader className='text-gray-400' />
+        </div>
+      )}
       {!isLoading && !error && posts?.length === 0 && (
-        <p>찾는 포스트가 없습니다🙄</p>
+        <p className='text-center'>찾는 포스트가 없습니다🙄</p>
       )}
       {posts && <PostGrid posts={posts} />}
     </section>

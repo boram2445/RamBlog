@@ -1,4 +1,4 @@
-import { searchAll } from '@/service/search';
+import { searchAllPosts } from '@/service/search';
 import { NextRequest, NextResponse } from 'next/server';
 
 type Context = {
@@ -6,7 +6,7 @@ type Context = {
 };
 
 export async function GET(_: NextRequest, context: Context) {
-  return searchAll(context.params.keyword).then((data) =>
+  return searchAllPosts(context.params.keyword).then((data) =>
     NextResponse.json(data)
   );
 }
