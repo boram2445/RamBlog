@@ -9,6 +9,7 @@ import UserAvartar, { UserAvartarLoading } from '../common/UserAvartar';
 import { AdjacentPost, PostDetail as PostDetailType } from '@/model/post';
 import PostIcons from './PostIcons';
 import Skeleton from '../ui/Skeleton';
+import PostUserProfile from './PostUserProfile';
 
 type Props = {
   currentPost: PostDetailType;
@@ -29,10 +30,10 @@ export default async function PostDetail({
   const isMyPost = loginUserData?.username === username;
 
   return (
-    <section className='pb-16 relative '>
-      <div className='flex flex-col mt-8 mb-7 pb-3 border-b '>
+    <section className='pb-16 relative'>
+      <div className='flex flex-col mt-11 mb-7 pb-3 border-b '>
         {tags && (
-          <div className='mb-4 flex justify-between items-center'>
+          <div className='mb-2 flex justify-between items-center'>
             <TagList tags={currentPost.tags} type='big' />
           </div>
         )}
@@ -51,8 +52,8 @@ export default async function PostDetail({
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
       </div>
-      <div className='flex mx-auto min-h-[300px] gap-8'>
-        <div className='grow' id='content'>
+      <div className='flex mx-auto min-h-[300px] gap-12 pb-12'>
+        <div className='grow pb-5' id='content'>
           <MarkDownPost content={content} />
         </div>
         <div className='mt-8 ml-auto'>
@@ -62,8 +63,14 @@ export default async function PostDetail({
           </aside>
         </div>
       </div>
+      {tags && (
+        <div className='flex justify-between items-center'>
+          <TagList tags={currentPost.tags} type='big' />
+        </div>
+      )}
+      <PostUserProfile username={username} />
       {(previousPost || nextPost) && (
-        <div className='mx-auto px-4 mt-32 flex gap-4 flex-col laptop:flex-row'>
+        <div className='mx-auto px-4 flex gap-4 flex-col laptop:flex-row'>
           {previousPost && <AdjacentPostCard data={previousPost} type='prev' />}
           {nextPost && <AdjacentPostCard data={nextPost} type='next' />}
         </div>
