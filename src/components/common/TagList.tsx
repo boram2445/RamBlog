@@ -18,19 +18,30 @@ export default function TagList({
 }: Props) {
   const router = useRouter();
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) =>
+    e.stopPropagation();
+
   return (
     <ul className='flex gap-x-2 gap-y-4 flex-wrap '>
       {tags?.map((tag, index) => (
         <li key={index}>
-          <span
-            onClick={onClick ? () => onClick(getTagName(tag)) : () => {}}
+          <button
+            type='button'
+            onClick={
+              onClick
+                ? () => onClick(getTagName(tag))
+                : (e: React.MouseEvent<HTMLButtonElement>) => {
+                    handleClick(e);
+                    router.push(`/tags/${tag}`);
+                  }
+            }
             className={`py-0.5 border border-gray-200 rounded-full hover:bg-gray-200 cursor-pointer ${
               type === 'small' ? 'text-xs px-2' : 'text-base px-3'
             } ${checked === getTagName(tag) ? 'bg-gray-200' : ''}`}
           >
             {getTagName(tag)}
             {typeof tag !== 'string' && ` ${tag.count}`}
-          </span>
+          </button>
         </li>
       ))}
     </ul>

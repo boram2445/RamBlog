@@ -196,7 +196,13 @@ export async function getTags(
     });
 }
 
-export async function getTagPosts(username: string, tag: string) {
+export async function getTagPosts(tag: string) {
+  return client.fetch(
+    `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`
+  );
+}
+
+export async function getUserTagPosts(username: string, tag: string) {
   return client.fetch(
     `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
     {},
