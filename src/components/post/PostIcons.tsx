@@ -9,9 +9,10 @@ import {
 } from 'react-icons/bs';
 import ToggleButton from '../ui/ToggleButton';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { PostDetail } from '@/model/post';
 import axios from 'axios';
+import useMe from '@/hooks/useMe';
+import { useRouter } from 'next/navigation';
 
 const buttonStyle = 'p-1 rounded-lg hover:bg-gray-200 flex items-center';
 const iconStyle = 'w-5 h-5 text-gray-700';
@@ -21,18 +22,34 @@ type Props = {
 };
 
 export default function PostIcons({ post }: Props) {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { loggedInUser, setBookmark } = useMe();
+  const router = useRouter();
 
   const [onLike, setOnLike] = useState(
-    user ? post.likes?.includes(user.username) : false
+    loggedInUser ? post.likes?.includes(loggedInUser?.username) : false
   );
-  const [onBookMark, setOnBookMark] = useState(false);
+  const [onBookMark, setOnBookMark] = useState(
+    loggedInUser ? loggedInUser.bookmarks?.includes(post?.id) : false
+  );
 
   const handleLike = (like: boolean) => {
-    axios
-      .put(`/api/likes/`, { id: post.id, like: onLike })
-      .then(() => setOnLike(like));
+    if (!loggedInUser) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    axios.put(`/api/likes/`, { id: post.id, like });
+    setOnLike(like);
+  };
+
+  const handleBookmark = (bookmark: boolean) => {
+    if (!loggedInUser) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    setBookmark(post.id, bookmark);
+    setOnBookMark(bookmark);
   };
 
   return (
@@ -50,7 +67,7 @@ export default function PostIcons({ post }: Props) {
         />
         <ToggleButton
           toggled={onBookMark}
-          onToggle={setOnBookMark}
+          onToggle={handleBookmark}
           onIcon={<BsFillBookmarkFill className={iconStyle} />}
           offIcon={<BsBookmark className={iconStyle} />}
           className={buttonStyle}
