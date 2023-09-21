@@ -43,7 +43,7 @@ export function TagListLoading({ type = 'small' }: { type?: 'small' | 'big' }) {
       {Array.from({ length: 2 }, (_, index) => (
         <Skeleton
           className={`${
-            type === 'small' ? 'w-[3rem] h-[1.25rem]' : 'w-[4rem] h-[1.25rem]'
+            type === 'small' ? 'w-[3rem] h-[1.25rem]' : 'w-[4rem] h-[1.5rem]'
           }`}
           key={index}
         />
