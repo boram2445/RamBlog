@@ -17,7 +17,6 @@ export function useScrollSpy(ids: string[], options?: { rootMargin: string }) {
       });
 
       const navIndex = findfirstIntersecting(visibleHeaders);
-      console.log(visibleHeaders, navIndex, ids[navIndex]);
       setActiveId(ids[navIndex]);
     }, options);
 

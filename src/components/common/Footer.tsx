@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer className=' bg-slate-700 text-slate-300'>
-      <div className='max-w-screen-lg mx-auto p-4'>
+      <div className='max-w-screen-2xl mx-auto p-4'>
         <div className='flex gap-2 text-sm '>
           <small>김보람</small>
           <small>boram2445@gmail.com</small>

@@ -28,7 +28,7 @@ export default function MarkDownPost({ content }: { content: string }) {
             ) : (
               <code
                 {...props}
-                className={`${className} bg-gray-50 text-indigo-500  before:hidden after:hidden`}
+                className={`${className} bg-indigo-50 rounded-lg px-2 py-0.5 text-indigo-500 before:hidden after:hidden`}
               >
                 {children}
               </code>
@@ -49,7 +49,11 @@ export default function MarkDownPost({ content }: { content: string }) {
             <a {...props} className='text-indigo-500 no-underline' />
           ),
           input: ({ node, ...props }) => (
-            <input {...props} aria-label={props.title ?? ''} />
+            <input
+              {...props}
+              aria-label={props.title ?? ''}
+              className='mt-0 mb-0'
+            />
           ),
           blockquote: ({ node, ...props }) => (
             <blockquote

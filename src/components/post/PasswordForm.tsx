@@ -57,7 +57,7 @@ export default function PasswordForm({
           type='password'
           id='password'
           placeholder='비밀번호'
-          className='rounded-lg border border-gray-200 px-3'
+          className='rounded-lg border border-gray-200 px-5'
           onChange={handleChange}
           value={password}
           required

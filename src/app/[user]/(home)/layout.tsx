@@ -18,7 +18,7 @@ export default async function UserTemplate({
   if (!user) notFound();
 
   return (
-    <div className='max-w-[820px] mx-auto'>
+    <div className='mx-auto max-w-3xl laptop:max-w-5xl'>
       <Hero user={userData} />
       <TabList user={userData} />
       <div className='mt-8 min-h-[500px]'>{children}</div>

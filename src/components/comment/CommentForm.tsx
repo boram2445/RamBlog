@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import Button from '../ui/Button';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import useComment from '@/hooks/useComment';
 
 type Props = {
@@ -55,7 +55,7 @@ export default function CommentForm({ postId, commentId }: Props) {
   };
 
   return (
-    <div>
+    <form onSubmit={(e: FormEvent) => e.preventDefault()}>
       <textarea
         name='text'
         placeholder='여러분의 소중한 댓글을 입력해주세요'
@@ -89,7 +89,7 @@ export default function CommentForm({ postId, commentId }: Props) {
           등록
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 
