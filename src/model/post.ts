@@ -10,6 +10,7 @@ export type Post = {
   username: string;
   name: string;
   userImage: string;
+  likes: string[];
 };
 
 export type AdjacentPost = { username: string; title: string; id: string };
