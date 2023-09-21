@@ -39,7 +39,7 @@ export default function PostButtonList({
   return (
     <>
       {isMutating && <PageLoader label='삭제중...' />}
-      <div className='ml-auto flex justify-end gap-2'>
+      <div className='ml-auto flex justify-end items-center gap-2'>
         <Link href={`/write/${id}`} prefetch={false}>
           <Button>수정</Button>
         </Link>

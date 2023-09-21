@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import CommentList from '@/components/comment/CommentList';
-import PostDetail from '@/components/post/PostDetail';
+import PostDetail, { PostDetailLoading } from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
 import { getServerSession } from 'next-auth';
 import { cache } from 'react';

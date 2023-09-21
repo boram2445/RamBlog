@@ -1,13 +1,14 @@
 import MarkDownPost from './MarkDownPost';
 import AdjacentPostCard from './AdjacentPostCard';
-import TagList from '../common/TagList';
+import TagList, { TagListLoading } from '../common/TagList';
 import Date from '../ui/Date';
 import Toc from './Toc';
 import PostButtonList from './PostButtonList';
 import { AuthUser } from '@/model/user';
-import UserAvartar from '../common/UserAvartar';
+import UserAvartar, { UserAvartarLoading } from '../common/UserAvartar';
 import { AdjacentPost, PostDetail as PostDetailType } from '@/model/post';
 import PostIcons from './PostIcons';
+import Skeleton from '../ui/Skeleton';
 
 type Props = {
   currentPost: PostDetailType;
@@ -67,6 +68,23 @@ export default async function PostDetail({
           {nextPost && <AdjacentPostCard data={nextPost} type='next' />}
         </div>
       )}
+    </section>
+  );
+}
+
+export function PostDetailLoading() {
+  return (
+    <section className='pb-16 relative '>
+      <div className='flex flex-col mt-8 mb-7 pb-3 border-b '>
+        <TagListLoading type='big' />
+        <Skeleton className='mb-6 mt-4 w-2/3 h-[3rem]' />
+        <div className='flex justify-between'>
+          <div className='flex gap-4 items-center'>
+            <UserAvartarLoading size='small' />
+            <Skeleton className='w-[10rem] h-[1.5rem]' />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -53,7 +53,7 @@ export function UserAvartarLoading({ size }: { size: 'small' | 'medium' }) {
   return (
     <div className='flex gap-2 items-center'>
       <AvartarLoading type={size} />
-      <Skeleton className={'w-[4rem] h-[1.25rem]'} />
+      <Skeleton className={'w-[5rem] h-[1.5rem]'} />
     </div>
   );
 }
