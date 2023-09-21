@@ -1,6 +1,5 @@
 'use client';
 
-import PostIcons from './PostIcons';
 import { useHeadings } from '@/hooks/useHeadings';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 
@@ -9,7 +8,7 @@ export default function Toc() {
   const activeId = useScrollSpy(headings.map((head) => head.text));
 
   return (
-    <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] self-start laptop:block border border-gray-200 rounded-xl overflow-hidden'>
+    <>
       {headings.length > 0 && (
         <div className='p-4 pr-2'>
           <p className='font-semibold'>On this Page</p>
@@ -29,7 +28,6 @@ export default function Toc() {
           </ul>
         </div>
       )}
-      <PostIcons />
-    </aside>
+    </>
   );
 }

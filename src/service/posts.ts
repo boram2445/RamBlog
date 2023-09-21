@@ -12,6 +12,7 @@ export const simplePostProjection = `
   "userImage":author->image,
   "updatedAt":_updatedAt,
   "createdAt":_createdAt,
+  "likes":likes[]->username,
   "id":_id
 `;
 
@@ -22,6 +23,7 @@ const fullPostProjection = `
   "createdAt":_createdAt,
   "username":author->username, 
   "userImage":author->image,
+  "likes":likes[]->username,
   "id":_id
 `;
 
@@ -203,4 +205,24 @@ export async function getTagPosts(username: string, tag: string) {
       next: { tags: ['userPosts'] },
     }
   );
+}
+
+export async function likePost(postId: string, userId: string) {
+  return client
+    .patch(postId) //
+    .setIfMissing({ likes: [] })
+    .append('likes', [
+      {
+        _ref: userId,
+        _type: 'reference',
+      },
+    ])
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function dislikePost(postId: string, userId: string) {
+  return client
+    .patch(postId)
+    .unset([`likes[_ref=="${userId}"]`])
+    .commit({ autoGenerateArrayKeys: true });
 }
