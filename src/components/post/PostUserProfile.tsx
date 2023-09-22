@@ -18,7 +18,7 @@ export default function PostUserProfile({ username }: Props) {
   return (
     <div className='mt-3'>
       {userProfile && (
-        <div className='border-t border-gray-200 p-10 flex gap-6 items-center justify-center'>
+        <div className='p-10 flex gap-6 items-center justify-center'>
           <div onClick={handleClick} className='cursor-pointer'>
             <Avartar
               imageUrl={userProfile?.image}

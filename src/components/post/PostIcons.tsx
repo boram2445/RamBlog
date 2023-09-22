@@ -55,11 +55,12 @@ export default function PostIcons({ post }: Props) {
         <BsLink45Deg className='w-6 h-6 text-gray-600' />
       </button>
       <div className='flex gap-2 items-center'>
+        <p className='text-gray-600'>{post.likes.length}</p>
         <ToggleButton
           toggled={liked}
           onToggle={handleLike}
-          onIcon={<BsHeartFill className={iconStyle} />}
-          offIcon={<BsHeart className={iconStyle} />}
+          onIcon={<BsHeartFill className={`${iconStyle} -mb-0.5`} />}
+          offIcon={<BsHeart className={`${iconStyle} -mb-0.5`} />}
           className={buttonStyle}
         />
         <ToggleButton

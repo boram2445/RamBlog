@@ -85,8 +85,8 @@ export async function getPostDetail(
   const postDetail = await client.fetch(
     `*[_type == "post" && author->username =="${username}" && _id == "${postId}"][0]{
       'currentPost': {${fullPostProjection}},
-      'previousPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
-      'nextPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
+      'nextPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
+      'previousPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
     }`,
     {},
     {
