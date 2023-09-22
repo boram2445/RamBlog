@@ -1,8 +1,10 @@
 import { getDate } from '@/utils/date';
 
+type Size = 'xsmall' | 'small' | 'big';
+
 type Props = {
   date: string;
-  type?: 'small' | 'big';
+  type?: Size;
   dateType?: 'date' | 'time' | 'full' | 'month';
 };
 
@@ -12,12 +14,19 @@ export default function Date({
   dateType = 'full',
 }: Props) {
   return (
-    <time
-      className={`flex gap-2 items-center ${
-        type === 'small' ? 'text-sm' : 'text-lg'
-      } text-gray-500`}
-    >
+    <time className={`flex gap-2 items-center ${getSize(type)} text-gray-500`}>
       {getDate(date, dateType)}
     </time>
   );
+}
+
+function getSize(type: Size) {
+  switch (type) {
+    case 'xsmall':
+      return 'text-xs';
+    case 'small':
+      return 'text-sm';
+    case 'big':
+      return 'text-lg';
+  }
 }

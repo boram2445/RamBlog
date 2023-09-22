@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { addBookmark, removeBookmark } from '@/service/user';
 import { getServerSession } from 'next-auth';
@@ -19,7 +20,11 @@ export async function PUT(req: NextRequest) {
 
   const request = bookmark ? addBookmark : removeBookmark;
 
-  return request(user.id, id)
+  const result = request(user.id, id)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+
+  revalidateTag('bookmark');
+
+  return result;
 }

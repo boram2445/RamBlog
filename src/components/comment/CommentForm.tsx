@@ -10,7 +10,7 @@ type Props = {
   commentId?: string;
 };
 
-const inputStyle = 'p-2 border border-gray-300 rounded-lg placeholder:text-sm';
+const inputStyle = 'p-3 border border-gray-300 rounded-lg placeholder:text-sm';
 
 export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();

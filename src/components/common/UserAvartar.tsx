@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Avartar, { AvartarLoading, AvartarSize } from '../ui/Avartar';
+import Avartar, { AvartarLoading } from '../ui/Avartar';
 import { useRouter } from 'next/navigation';
 import Skeleton from '../ui/Skeleton';
 
@@ -24,17 +24,12 @@ export default function UserAvartar({
 }: Props) {
   const router = useRouter();
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    router.push(`/${username}`);
-  };
-
   return (
     <div
       className={`flex gap-2 items-center cursor-pointer ${
         type === 'button' ? 'hover:bg-gray-50 rounded-full px-2 py-1' : ''
       }`}
-      onClick={type === 'link' ? handleClick : onClick}
+      onClick={type === 'link' ? () => router.push(`/${username}`) : onClick}
     >
       <Avartar imageUrl={imageUrl} username={username} type={size} />
       <div
@@ -53,7 +48,7 @@ export function UserAvartarLoading({ size }: { size: 'small' | 'medium' }) {
   return (
     <div className='flex gap-2 items-center'>
       <AvartarLoading type={size} />
-      <Skeleton className={'w-[5rem] h-[1.5rem]'} />
+      <Skeleton className={'w-[5rem] h-[1.25rem]'} />
     </div>
   );
 }

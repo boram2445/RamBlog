@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Skeleton from './Skeleton';
 
-export type AvartarSize = 'small' | 'medium' | 'big' | 'max';
+export type AvartarSize = 'small' | 'medium' | 'big' | 'xl' | 'max';
 
 type Props = {
   imageUrl?: string;
@@ -46,6 +46,8 @@ function getSizeStyle(size: AvartarSize) {
       return 'w-10 h-10';
     case 'big':
       return 'w-14 h-14';
+    case 'xl':
+      return 'w-[110px] h-[110px]';
     case 'max':
       return 'w-[135px] h-[135px]';
   }

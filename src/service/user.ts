@@ -51,7 +51,7 @@ export async function getUserByUsername(username: string): Promise<HomeUser> {
     {},
     {
       cache: 'force-cache',
-      next: { tags: ['following'] },
+      next: { tags: ['following', 'bookmark'] },
     }
   );
 }
