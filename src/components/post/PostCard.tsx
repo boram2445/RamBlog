@@ -5,10 +5,10 @@ import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import UserAvartar, { UserAvartarLoading } from '../common/UserAvartar';
 import { useRouter } from 'next/navigation';
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 import Skeleton from '../ui/Skeleton';
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post }: { post: SimplePost }) {
   const {
     title,
     description,
@@ -19,6 +19,8 @@ export default function PostCard({ post }: { post: Post }) {
     username,
     userImage,
   } = post;
+
+  console.log(post);
 
   const router = useRouter();
 

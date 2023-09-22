@@ -1,6 +1,6 @@
 'use client';
 
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 import { FormEvent, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import useSWR from 'swr';
@@ -23,7 +23,7 @@ export default function SearchList({ username }: Props) {
     data: posts,
     isLoading,
     error,
-  } = useSWR<Post[]>(debouncedKeyword ? url : null);
+  } = useSWR<SimplePost[]>(debouncedKeyword ? url : null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

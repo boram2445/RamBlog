@@ -5,10 +5,10 @@ import TagList from '../common/TagList';
 import Date from '../ui/Date';
 import Image from 'next/image';
 import { AiOutlineRight } from 'react-icons/ai';
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 import Skeleton from '../ui/Skeleton';
 
-export default function PostListCard({ post }: { post: Post }) {
+export default function PostListCard({ post }: { post: SimplePost }) {
   const { title, description, tags, id, mainImage, createdAt, username } = post;
 
   const router = useRouter();

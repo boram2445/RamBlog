@@ -1,10 +1,10 @@
 'use client';
 
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 import PostCard, { PostCardLoading } from '../post/PostCard';
 
 type Props = {
-  posts: Post[];
+  posts: SimplePost[];
 };
 
 const gridStyle =
