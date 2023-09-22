@@ -8,7 +8,6 @@ import {
   BsBookmark,
 } from 'react-icons/bs';
 import ToggleButton from '../ui/ToggleButton';
-import { useState } from 'react';
 import { PostDetail } from '@/model/post';
 import axios from 'axios';
 import useMe from '@/hooks/useMe';
@@ -25,12 +24,10 @@ export default function PostIcons({ post }: Props) {
   const { loggedInUser, setBookmark } = useMe();
   const router = useRouter();
 
-  const [onLike, setOnLike] = useState(
-    loggedInUser ? post.likes?.includes(loggedInUser?.username) : false
-  );
-  const [onBookMark, setOnBookMark] = useState(
-    loggedInUser ? loggedInUser.bookmarks?.includes(post?.id) : false
-  );
+  const liked = loggedInUser
+    ? post.likes.includes(loggedInUser?.username)
+    : false;
+  const bookmarked = loggedInUser?.bookmarks.includes(post.id) ?? false;
 
   const handleLike = (like: boolean) => {
     if (!loggedInUser) {
@@ -38,8 +35,9 @@ export default function PostIcons({ post }: Props) {
       return;
     }
 
-    axios.put(`/api/likes/`, { id: post.id, like });
-    setOnLike(like);
+    axios
+      .put(`/api/likes/`, { id: post.id, like })
+      .then(() => router.refresh());
   };
 
   const handleBookmark = (bookmark: boolean) => {
@@ -48,8 +46,7 @@ export default function PostIcons({ post }: Props) {
       return;
     }
 
-    setBookmark(post.id, bookmark);
-    setOnBookMark(bookmark);
+    setBookmark(post.id, bookmark).then(() => router.refresh());
   };
 
   return (
@@ -59,14 +56,14 @@ export default function PostIcons({ post }: Props) {
       </button>
       <div className='flex gap-2 items-center'>
         <ToggleButton
-          toggled={onLike}
+          toggled={liked}
           onToggle={handleLike}
           onIcon={<BsHeartFill className={iconStyle} />}
           offIcon={<BsHeart className={iconStyle} />}
           className={buttonStyle}
         />
         <ToggleButton
-          toggled={onBookMark}
+          toggled={bookmarked}
           onToggle={handleBookmark}
           onIcon={<BsFillBookmarkFill className={iconStyle} />}
           offIcon={<BsBookmark className={iconStyle} />}

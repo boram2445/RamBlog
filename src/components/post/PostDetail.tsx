@@ -10,6 +10,7 @@ import { AdjacentPost, PostDetail as PostDetailType } from '@/model/post';
 import PostIcons from './PostIcons';
 import Skeleton from '../ui/Skeleton';
 import PostUserProfile from './PostUserProfile';
+import LikeNumIcon from '../common/LikeNumIcon';
 
 type Props = {
   currentPost: PostDetailType;
@@ -24,7 +25,7 @@ export default async function PostDetail({
   previousPost,
   loginUserData,
 }: Props) {
-  const { title, tags, createdAt, content, id, username, userImage } =
+  const { title, tags, createdAt, content, id, username, userImage, likes } =
     currentPost;
 
   const isMyPost = loginUserData?.username === username;
@@ -48,6 +49,7 @@ export default async function PostDetail({
               size='small'
             />
             <Date date={createdAt?.toString()} type='small' />
+            <LikeNumIcon likes={likes.length ?? 0} className='text-gray-700' />
           </div>
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
@@ -69,6 +71,9 @@ export default async function PostDetail({
         </div>
       )}
       <PostUserProfile username={username} />
+      <div className='laptop:hidden border border-gray-200 rounded-xl overflow-hidden'>
+        <PostIcons post={currentPost} />
+      </div>
       {(previousPost || nextPost) && (
         <div className='mx-auto px-4 flex gap-4 flex-col laptop:flex-row'>
           {previousPost && <AdjacentPostCard data={previousPost} type='prev' />}

@@ -1,3 +1,4 @@
+import { revalidateTag } from 'next/cache';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { dislikePost, likePost } from '@/service/posts';
 import { getServerSession } from 'next-auth';
@@ -19,7 +20,11 @@ export async function PUT(req: NextRequest) {
 
   const request = like ? likePost : dislikePost;
 
-  return request(id, user.id)
+  const result = request(id, user.id)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+
+  revalidateTag('userPosts');
+
+  return result;
 }
