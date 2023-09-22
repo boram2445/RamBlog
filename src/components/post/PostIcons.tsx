@@ -29,6 +29,15 @@ export default function PostIcons({ post }: Props) {
     : false;
   const bookmarked = loggedInUser?.bookmarks.includes(post.id) ?? false;
 
+  const handleCopyLink = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(window && window.location.href)
+        .then(() => alert('링크가 복사되었습니다🔗'))
+        .catch(() => alert('다시 시도해주세요😅'));
+    }
+  };
+
   const handleLike = (like: boolean) => {
     if (!loggedInUser) {
       router.push('/auth/signin');
@@ -51,7 +60,7 @@ export default function PostIcons({ post }: Props) {
 
   return (
     <div className='py-2 px-3 bg-gray-100 flex justify-between items-center'>
-      <button className={buttonStyle}>
+      <button className={buttonStyle} onClick={handleCopyLink}>
         <BsLink45Deg className='w-6 h-6 text-gray-600' />
       </button>
       <div className='flex gap-2 items-center'>
