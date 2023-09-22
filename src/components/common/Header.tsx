@@ -13,7 +13,9 @@ import DropDownNav from './DropDownNav';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { UserData } from '@/model/user';
 import useUser from '@/hooks/useUser';
-import { BsSearch } from 'react-icons/bs';
+import { BsSearch, BsSun, BsMoonStars } from 'react-icons/bs';
+import ToggleButton from '../ui/ToggleButton';
+import DarkMode from '../ui/DarkMode';
 
 export default function Header() {
   const router = useRouter();
@@ -63,10 +65,14 @@ export default function Header() {
             </Link>
           )}
         </div>
-        <nav className='flex items-center gap-x-5 mr-4'>
-          <Link href={params.user ? `/${params.user}/search` : '/search'}>
-            <BsSearch className='w-5 h-5 text-gray-500 hover:text-indigo-500' />
+        <nav className='flex items-center gap-x-3 mr-4'>
+          <Link
+            href={params.user ? `/${params.user}/search` : '/search'}
+            className='p-2 rounded-full hover:bg-gray-100'
+          >
+            <BsSearch className='w-5 h-5 text-gray-600' />
           </Link>
+          <DarkMode />
           {loginUser && (
             <>
               <Link

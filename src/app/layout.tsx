@@ -5,6 +5,7 @@ import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
 import AuthContext from '@/context/AuthContext';
+import DarkModeProvider from '@/context/DarkModeProvider';
 
 const notoSansKr = Noto_Sans_KR({
   weight: ['100', '400', '700', '900'],
@@ -25,17 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning={true}>
       <body className={`h-screen flex flex-col ${notoSansKr.className}`}>
-        <AuthContext>
-          <SWRConfigContext>
-            <Header />
-            <main className='grow w-full mx-auto px-6 laptop:px-8'>
-              {children}
-            </main>
-          </SWRConfigContext>
-        </AuthContext>
-        <Footer />
+        <DarkModeProvider>
+          <AuthContext>
+            <SWRConfigContext>
+              <Header />
+              <main className='grow w-full mx-auto px-6 laptop:px-8'>
+                {children}
+              </main>
+            </SWRConfigContext>
+          </AuthContext>
+          <Footer />
+        </DarkModeProvider>
       </body>
     </html>
   );
