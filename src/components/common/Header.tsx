@@ -79,7 +79,7 @@ export default function Header() {
                 href='/write'
                 prefetch={false}
                 className={`hidden tablet:block ${
-                  isWritePage && 'text-indigo-600'
+                  isWritePage && 'text-indigo-600 dark:text-white'
                 }`}
               >
                 Write Post

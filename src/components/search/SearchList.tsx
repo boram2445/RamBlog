@@ -35,7 +35,7 @@ export default function SearchList({ username }: Props) {
     <section className='mx-auto px-5'>
       <form onSubmit={handleSubmit} className='my-8 flex flex-col items-center'>
         {username && (
-          <p className='text-gray-600 text-sm'>
+          <p className='mb-2 text-gray-600 text-sm dark:text-slate-300'>
             {username}님의 포스트를 검색해보세요✨
           </p>
         )}
@@ -63,7 +63,7 @@ export default function SearchList({ username }: Props) {
       {error && <p>{error}</p>}
       {isLoading && (
         <div className='text-center'>
-          <ClipLoader className='text-gray-400' />
+          <ClipLoader className='text-gray-400 dark:text-slate-200' />
         </div>
       )}
       {!isLoading && !error && posts?.length === 0 && (
