@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import PageLoader from '../ui/PageLoader';
 import { mutate } from 'swr';
+import UserImageForm from './UserImageForm';
 
 type Props = {
   userData: ProfileUser;
@@ -96,57 +97,26 @@ export default function ProfileForm({ userData }: Props) {
     <section>
       {isLoading && <PageLoader label='수정중...' />}
       <form onSubmit={handleSubmit}>
-        <div className='flex gap-10'>
-          <div>
-            <div className='relative'>
-              <div className='p-3 border border-gray-100 rounded-full'>
-                <Avartar
-                  imageUrl={
-                    !image
-                      ? ''
-                      : typeof image === 'string'
-                      ? image
-                      : URL.createObjectURL(image)
-                  }
-                  username={userData.username}
-                  type='max'
-                />
-              </div>
-              <input
-                className='hidden'
-                name='input'
-                id='input-upload'
-                type='file'
-                accept='image/*'
-                onChange={handleChangeImage}
-              />
-              <label
-                htmlFor='input-upload'
-                className='absolute bottom-0 right-0 flex items-center justify-center w-12 h-12 bg-white border border-gray-200 padding-4 rounded-full'
-              >
-                <AiOutlineCamera className='w-6 h-6 text-gray-300' />
-              </label>
-            </div>
-          </div>
+        <div className='flex gap-10 items-center'>
+          <UserImageForm
+            image={image ?? ''}
+            username={userData.username}
+            onChange={handleChangeImage}
+          />
           <div className='grow mt-5 flex flex-col'>
-            <label className='text-xs mb-2'>
-              블로그 타이틀
-              <span className='text-pink-500 font-semibold'>*</span>
-            </label>
+            <label className='text-sm mb-2 must'>블로그 타이틀</label>
             <input
               type='text'
               name='title'
-              className='text-2xl font-semibold text-gray-900 border-b border-gray-200 outline-none placeholder:text-lg placeholder:font-medium '
+              className='text-2xl px-3 py-1 font-semibold input'
               defaultValue={title}
               onChange={handleChange}
               placeholder='한문장으로 나를 어필해 보세요.'
             />
-            <label className='text-xs mb-2 mt-4'>
-              소개 <span className='text-pink-500 font-semibold'>*</span>
-            </label>
+            <label className='text-sm mb-2 mt-4 must'>소개</label>
             <textarea
               name='introduce'
-              className='h-28 p-2 grow text-gray-700 border border-gray-200 outline-none '
+              className='h-28 p-2 grow textarea'
               defaultValue={introduce}
               onChange={handleChange}
               placeholder='간단한 소개를 입력해주세요.'
@@ -155,8 +125,8 @@ export default function ProfileForm({ userData }: Props) {
         </div>
         <div className='my-8 flex flex-col'>
           <div className='flex items-center'>
-            <label className='text-lg font-semibold' htmlFor='name'>
-              닉네임 <span className='text-pink-500'>*</span>
+            <label className='mb-1 text-lg font-semibold must' htmlFor='name'>
+              닉네임
             </label>
             <small className='ml-5 text-xs text-gray-400'>
               1에서 10자까지 입력 가능합니다.
@@ -168,16 +138,16 @@ export default function ProfileForm({ userData }: Props) {
             type='text'
             value={name}
             onChange={handleChange}
-            className='p-2 border-b border-gray-200 outline-none text-sm'
+            className='p-2 border-b text-sm max-w-sm input'
             autoComplete='off'
           />
         </div>
         <section>
           <div className='my-4'>
             <div className='flex justify-between'>
-              <div>
+              <div className='mb-3'>
                 <h4 className='text-lg font-semibold'>소셜 정보</h4>
-                <small className='text-xs text-gray-400'>
+                <small className='text-sm text-gray-400'>
                   포스트 및 블로그에서 보여지는 프로필에 사용되는 소셜
                   정보입니다.
                 </small>
@@ -197,9 +167,8 @@ export default function ProfileForm({ userData }: Props) {
             <SocialForm links={linkForm} onChange={setlinkForm} />
           )}
         </section>
-
-        <div className='mt-8 flex gap-3 justify-center'>
-          <Button onClick={() => setIsOpenSocial(false)}>취소하기</Button>
+        <div className='mt-20 flex gap-3 justify-center'>
+          <Button onClick={() => router.back()}>취소하기</Button>
           <Button color='black' type='submit'>
             저장하기
           </Button>

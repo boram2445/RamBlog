@@ -1,6 +1,6 @@
 type Props = {
   color?: 'white' | 'black';
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
   size?: ButtonSize;
   type?: 'button' | 'submit';
@@ -19,8 +19,8 @@ export default function Button({
 }: Props) {
   const colorStyle =
     color === 'white'
-      ? 'border-gray-300  hover:bg-gray-100 text-gray-700'
-      : 'bg-gray-900 hover:bg-gray-700 text-white';
+      ? 'border-gray-300 hover:bg-gray-100 text-gray-700 dark:text-slate-100 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:opacity-80'
+      : 'bg-gray-800 hover:bg-gray-700 text-white dark:bg-slate-100 dark:text-neutral-800 dark:hover:opacity-80';
 
   return (
     <button

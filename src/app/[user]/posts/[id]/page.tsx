@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import CommentList from '@/components/comment/CommentList';
-import PostDetail from '@/components/post/PostDetail';
+import PostDetail, { PostDetailLoading } from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
 import { getServerSession } from 'next-auth';
 import { cache } from 'react';
@@ -21,7 +21,7 @@ export default async function PostPage({ params: { user, id } }: Props) {
   const post = await getDetail(id, user);
 
   return (
-    <div className='mx-auto p-8'>
+    <div className='mx-auto max-w-3xl laptop:max-w-6xl laptop:px-7 pb-20 '>
       <PostDetail
         currentPost={post.currentPost}
         nextPost={post.nextPost}

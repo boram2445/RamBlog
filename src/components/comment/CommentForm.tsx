@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import Button from '../ui/Button';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import useComment from '@/hooks/useComment';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   commentId?: string;
 };
 
-const inputStyle = 'p-2 border border-gray-300 rounded-lg placeholder:text-sm';
+const inputStyle = 'p-3 placeholder:text-sm input';
 
 export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();
@@ -55,15 +55,19 @@ export default function CommentForm({ postId, commentId }: Props) {
   };
 
   return (
-    <div>
+    <form onSubmit={(e: FormEvent) => e.preventDefault()}>
       <textarea
         name='text'
         placeholder='여러분의 소중한 댓글을 입력해주세요'
-        className={`w-full h-28 ${inputStyle}`}
+        className='w-full h-28 textarea'
         onChange={handleChange}
         value={form.text}
       />
-      <div className={`flex ${user ? 'justify-end' : 'justify-between'}`}>
+      <div
+        className={`flex ${
+          user ? 'justify-end' : 'justify-between'
+        } items-center`}
+      >
         {!user && (
           <div className='flex gap-2'>
             <input
@@ -89,7 +93,7 @@ export default function CommentForm({ postId, commentId }: Props) {
           등록
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 

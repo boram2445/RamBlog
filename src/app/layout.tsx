@@ -1,12 +1,14 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Open_Sans } from 'next/font/google';
+import { Noto_Sans_KR } from 'next/font/google';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
 import AuthContext from '@/context/AuthContext';
+import DarkModeProvider from '@/context/DarkModeProvider';
 
-const openSans = Open_Sans({
+const notoSansKr = Noto_Sans_KR({
+  weight: ['100', '400', '700', '900'],
   subsets: ['latin'],
 });
 
@@ -24,17 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
-      <body className={`h-screen flex flex-col ${openSans.className}`}>
-        <AuthContext>
-          <SWRConfigContext>
-            <Header />
-            <main className='grow max-w-screen-lg mx-auto mb-32 w-full'>
-              {children}
-            </main>
-          </SWRConfigContext>
-        </AuthContext>
-        <Footer />
+    <html lang='en' suppressHydrationWarning={true}>
+      <body className={`h-screen flex flex-col ${notoSansKr.className}`}>
+        <DarkModeProvider>
+          <AuthContext>
+            <SWRConfigContext>
+              <Header />
+              <main className='grow w-full mx-auto px-6 laptop:px-8'>
+                {children}
+              </main>
+            </SWRConfigContext>
+          </AuthContext>
+          <Footer />
+        </DarkModeProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState, useTransition } from 'react';
 import { HashLoader } from 'react-spinners';
+import PageLoader from '../ui/PageLoader';
 
 export default function PostButtonList({
   id,
@@ -37,13 +38,8 @@ export default function PostButtonList({
 
   return (
     <>
-      {isMutating && (
-        <div className='absolute bg-gray-200 inset-0 z-20 bg-opacity-40 flex flex-col items-center justify-center gap-4'>
-          <HashLoader />
-          <p>삭제중...</p>
-        </div>
-      )}
-      <div className='ml-auto flex justify-end gap-2'>
+      {isMutating && <PageLoader label='삭제중...' />}
+      <div className='ml-auto flex justify-end items-center gap-2'>
         <Link href={`/write/${id}`} prefetch={false}>
           <Button>수정</Button>
         </Link>

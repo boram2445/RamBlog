@@ -19,18 +19,23 @@ export default function TagList({
   const router = useRouter();
 
   return (
-    <ul className='flex gap-2'>
+    <ul className='flex gap-x-2 gap-y-4 flex-wrap '>
       {tags?.map((tag, index) => (
         <li key={index}>
-          <span
-            onClick={onClick ? () => onClick(getTagName(tag)) : () => {}}
-            className={`py-0.5 border border-gray-200 rounded-full hover:bg-gray-200 cursor-pointer ${
+          <button
+            type='button'
+            onClick={
+              onClick
+                ? () => onClick(getTagName(tag))
+                : () => router.push(`/tags/${tag}`)
+            }
+            className={`py-[1px] border border-gray-200 rounded-full hover:bg-gray-200 cursor-pointer dark:text-slate-300 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:bg-neutral-600 dark:hover:text-slate-200 ${
               type === 'small' ? 'text-xs px-2' : 'text-base px-3'
             } ${checked === getTagName(tag) ? 'bg-gray-200' : ''}`}
           >
             {getTagName(tag)}
             {typeof tag !== 'string' && ` ${tag.count}`}
-          </span>
+          </button>
         </li>
       ))}
     </ul>
@@ -43,7 +48,7 @@ export function TagListLoading({ type = 'small' }: { type?: 'small' | 'big' }) {
       {Array.from({ length: 2 }, (_, index) => (
         <Skeleton
           className={`${
-            type === 'small' ? 'w-[3rem] h-[1.25rem]' : 'w-[4rem] h-[1.25rem]'
+            type === 'small' ? 'w-[3rem] h-[1.25rem]' : 'w-[4rem] h-[1.5rem]'
           }`}
           key={index}
         />

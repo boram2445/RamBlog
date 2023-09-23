@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { useCallback } from 'react';
 import { getMainImageUrl } from '@/utils/mainImage';
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 
 export default function useUserPost(username: string, tag: string) {
   const url =
@@ -11,7 +11,7 @@ export default function useUserPost(username: string, tag: string) {
       ? `/api/${username}/posts`
       : `/api/${username}/posts/tags/${tag}`;
 
-  const { data: posts, isLoading, error } = useSWR<Post[]>(url);
+  const { data: posts, isLoading, error } = useSWR<SimplePost[]>(url);
   const { mutate } = useSWRConfig();
 
   const writePost = useCallback(

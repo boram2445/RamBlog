@@ -17,8 +17,7 @@ type Props = {
 };
 
 const inputBoxStyle = 'flex gap-2 items-center';
-const inputStyle =
-  'grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md outline-indigo-500';
+const inputStyle = 'grow my-1 py-2 px-3';
 
 export default function WritePostForm({ username, id, postDetail }: Props) {
   const editorRef = useRef<Editor | null>(null);
@@ -86,7 +85,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
             autoFocus
             value={form.title}
             onChange={handleChange}
-            className={inputStyle}
+            className={`${inputStyle} input`}
             autoComplete='off'
           />
         </div>
@@ -99,7 +98,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
             placeholder='한줄 설명을 입력해주세요'
             value={form.description}
             onChange={handleChange}
-            className={inputStyle}
+            className={`${inputStyle} input`}
             autoComplete='off'
           />
         </div>

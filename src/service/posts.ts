@@ -1,17 +1,18 @@
-import { Post, PostData } from '@/model/post';
+import { PostData, SimplePost } from '@/model/post';
 import { client } from './sanity';
 
-const simplePostProjection = `
-  "tags":tags[]->tagName,
+export const simplePostProjection = `
   title,
-  pinned,
-  mainImage,
   description,
+  mainImage,
+  pinned,
+  "updatedAt":_updatedAt,
+  "createdAt":_createdAt,
+  "tags":tags[]->tagName,
   "username":author->username, 
   "name":author->name,
   "userImage":author->image,
-  "updatedAt":_updatedAt,
-  "createdAt":_createdAt,
+  "likes":count(likes),
   "id":_id
 `;
 
@@ -22,28 +23,59 @@ const fullPostProjection = `
   "createdAt":_createdAt,
   "username":author->username, 
   "userImage":author->image,
+  "likes":likes[]->username,
   "id":_id
 `;
 
-export async function getAllPostsData(): Promise<Post[]> {
+function mapPosts(posts: SimplePost[]) {
+  return posts.map((post: SimplePost) => ({
+    ...post,
+    tags: post.tags ?? [],
+    pinned: post.pinned ?? false,
+    likes: post.likes ?? 0,
+  }));
+}
+
+export async function getAllPostsData(): Promise<SimplePost[]> {
   return client
     .fetch(
       `*[_type == "post"]| order(_createdAt desc){${simplePostProjection}}`
     )
-    .then((posts) =>
-      posts.map((post: Post) => ({ ...post, pinned: post.pinned ?? false }))
-    );
+    .then(mapPosts);
 }
 
 export async function getAllUserPosts(username: string) {
-  return client.fetch(
-    `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`,
-    {},
-    {
-      cache: 'force-cache',
-      next: { tags: ['userPosts'] },
-    }
-  );
+  return client
+    .fetch(
+      `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['userPosts'] },
+      }
+    )
+    .then(mapPosts);
+}
+
+export async function getTagPosts(tag: string) {
+  return client
+    .fetch(
+      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`
+    )
+    .then(mapPosts);
+}
+
+export async function getUserTagPosts(username: string, tag: string) {
+  return client
+    .fetch(
+      `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['userPosts'] },
+      }
+    )
+    .then(mapPosts);
 }
 
 export async function getPostDetail(
@@ -53,8 +85,8 @@ export async function getPostDetail(
   const postDetail = await client.fetch(
     `*[_type == "post" && author->username =="${username}" && _id == "${postId}"][0]{
       'currentPost': {${fullPostProjection}},
-      'previousPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
-      'nextPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
+      'nextPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
+      'previousPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
     }`,
     {},
     {
@@ -100,6 +132,7 @@ export async function createPost(
     description?: string;
     tags?: { _ref: string; _type: string }[];
     mainImage?: string;
+    likes: { _ref: string }[];
   } = {
     _type: 'post',
     author: { _ref: userId },
@@ -108,6 +141,7 @@ export async function createPost(
     content,
     ...(description && { description }),
     ...(mainImage && { mainImage }),
+    likes: [],
   };
 
   if (tagArr && tagArr.length !== 0) {
@@ -194,13 +228,22 @@ export async function getTags(
     });
 }
 
-export async function getTagPosts(username: string, tag: string) {
-  return client.fetch(
-    `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
-    {},
-    {
-      cache: 'force-cache',
-      next: { tags: ['userPosts'] },
-    }
-  );
+export async function likePost(postId: string, userId: string) {
+  return client
+    .patch(postId) //
+    .setIfMissing({ likes: [] })
+    .append('likes', [
+      {
+        _ref: userId,
+        _type: 'reference',
+      },
+    ])
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function dislikePost(postId: string, userId: string) {
+  return client
+    .patch(postId)
+    .unset([`likes[_ref=="${userId}"]`])
+    .commit({ autoGenerateArrayKeys: true });
 }

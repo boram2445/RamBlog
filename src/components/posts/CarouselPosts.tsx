@@ -1,9 +1,9 @@
-import { Post } from '@/model/post';
+import { SimplePost } from '@/model/post';
 import MultiCarousel from '../common/MultiCarousel';
 import PostCard from '../post/PostCard';
 
 type Props = {
-  posts: Post[];
+  posts: SimplePost[];
 };
 
 export default async function CarouselPosts({ posts }: Props) {

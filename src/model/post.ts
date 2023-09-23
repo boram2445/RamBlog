@@ -6,11 +6,13 @@ export type Post = {
   updatedAt: Date;
   createdAt: Date;
   tags: string[];
-  id: string;
   username: string;
   name: string;
   userImage: string;
+  id: string;
 };
+
+export type SimplePost = Post & { likes: number };
 
 export type AdjacentPost = { username: string; title: string; id: string };
 
@@ -20,4 +22,4 @@ export type PostData = {
   nextPost: AdjacentPost;
 };
 
-export type PostDetail = Post & { content: string };
+export type PostDetail = Post & { content: string; likes: string[] };

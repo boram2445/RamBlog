@@ -51,7 +51,7 @@ export async function getUserByUsername(username: string): Promise<HomeUser> {
     {},
     {
       cache: 'force-cache',
-      next: { tags: ['following'] },
+      next: { tags: ['following', 'bookmark'] },
     }
   );
 }
@@ -133,5 +133,25 @@ export async function unfollow(myId: string, targetId: string) {
     .transaction() //
     .patch(myId, (user) => user.unset([`following[_ref=="${targetId}"]`]))
     .patch(targetId, (user) => user.unset([`followers[_ref=="${myId}"]`]))
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function addBookmark(userId: string, postId: string) {
+  return client
+    .patch(userId) //
+    .setIfMissing({ bookmarks: [] })
+    .append('bookmarks', [
+      {
+        _ref: postId,
+        _type: 'reference',
+      },
+    ])
+    .commit({ autoGenerateArrayKeys: true });
+}
+
+export async function removeBookmark(userId: string, postId: string) {
+  return client
+    .patch(userId)
+    .unset([`bookmarks[_ref=="${postId}"]`])
     .commit({ autoGenerateArrayKeys: true });
 }

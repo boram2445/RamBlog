@@ -26,7 +26,7 @@ export default function ProjectModal({ project }: Props) {
       )}
       <div className='mt-4 relative w-full h-1/2 min-h-[300px]'>
         <Image
-          src={image}
+          src={image as string}
           alt={name}
           fill
           className='object-cover aspect-square'

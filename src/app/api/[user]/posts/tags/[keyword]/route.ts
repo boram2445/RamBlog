@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getTagPosts } from '@/service/posts';
+import { getUserTagPosts } from '@/service/posts';
 
 type Context = {
   params: { user: string; keyword: string };
@@ -12,7 +12,7 @@ export async function GET(_: Request, context: Context) {
     return new NextResponse('Bad Reqest', { status: 400 });
   }
 
-  return await getTagPosts(user, keyword).then((data) =>
+  return await getUserTagPosts(user, keyword).then((data) =>
     NextResponse.json(data)
   );
 }

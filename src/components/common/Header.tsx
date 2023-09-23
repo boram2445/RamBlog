@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import useSWR from 'swr';
-import logo from '../../asset/icons/logo.svg';
 import PlanetLogo from '../../asset/icons/planet_logo.svg';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -14,6 +13,9 @@ import DropDownNav from './DropDownNav';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { UserData } from '@/model/user';
 import useUser from '@/hooks/useUser';
+import { BsSearch, BsSun, BsMoonStars } from 'react-icons/bs';
+import ToggleButton from '../ui/ToggleButton';
+import DarkMode from '../ui/DarkMode';
 
 export default function Header() {
   const router = useRouter();
@@ -46,10 +48,10 @@ export default function Header() {
 
   return (
     <header className='sticky top-0 z-10 w-full backdrop-blur-sm flex-none transition-colors duration-500 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent animate-fade-in-down'>
-      <div className='min-h-[64px] max-w-screen-lg mx-auto px-5 py-2 flex justify-between items-center'>
+      <div className='min-h-[64px] max-w-screen-2xl mx-auto px-5 py-2 flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <Link href='/'>
-            <Image src={PlanetLogo} width={38} height={35} alt='RamBlog 로고' />
+            <Image src={PlanetLogo} width={38} alt='RamBlog 로고' />
           </Link>
           {params.user ? (
             <Link href={`/${params.user}`}>
@@ -63,14 +65,21 @@ export default function Header() {
             </Link>
           )}
         </div>
-        <nav className='flex items-center gap-x-5 mr-4'>
+        <nav className='flex items-center gap-x-3 mr-4'>
+          <Link
+            href={params.user ? `/${params.user}/search` : '/search'}
+            className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800'
+          >
+            <BsSearch className='w-5 h-5 text-gray-600 dark:text-gray-100' />
+          </Link>
+          <DarkMode />
           {loginUser && (
             <>
               <Link
                 href='/write'
                 prefetch={false}
-                className={`hidden tablet:block hover:text-indigo-600 ${
-                  isWritePage && 'text-indigo-600'
+                className={`hidden tablet:block ${
+                  isWritePage && 'text-indigo-600 dark:text-white'
                 }`}
               >
                 Write Post
@@ -95,7 +104,7 @@ export default function Header() {
               </div>
             </>
           )}
-          {!session && <Button onClick={signIn}>로그인</Button>}
+          {!session && <Button onClick={() => signIn()}>로그인</Button>}
         </nav>
       </div>
     </header>

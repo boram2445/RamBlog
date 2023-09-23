@@ -1,17 +1,26 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import Button from '../ui/Button';
 import axios from 'axios';
-import Image from 'next/image';
-import { FaPhotoVideo } from 'react-icons/fa';
-import { ClipLoader } from 'react-spinners';
+import ImageUpload from '../ui/ImageUpload';
+import EmotionList from './EmotionList';
+import { getDate } from '@/utils/date';
+import { mutate } from 'swr';
+import PageLoader from '../ui/PageLoader';
 
 type Props = {
   username: string;
+  resetSelect: () => void;
   closeForm: () => void;
 };
 
-export default function LogForm({ username, closeForm }: Props) {
+const inputStyle = 'py-2 px-3 w-full input';
+
+export default function LogForm({ username, resetSelect, closeForm }: Props) {
   const [file, setFile] = useState<File>();
+  const [date, setDate] = useState<string>(
+    getDate(new Date().toISOString(), 'day')
+  );
+  const [selectedEmotion, setSelectedEmotion] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const titleRef = useRef<HTMLInputElement>(null);
@@ -33,9 +42,19 @@ export default function LogForm({ username, closeForm }: Props) {
     file && formData.append('file', file);
     formData.append('title', titleRef.current?.value ?? '');
     formData.append('content', contentRef.current?.value ?? '');
+    formData.append('emotion', selectedEmotion?.toString() ?? '');
+    formData.append(
+      'date',
+      date + 'T' + new Date().toISOString().split('T')[1]
+    );
 
     axios
       .post(`/api/${username}/logs`, formData)
+      .then(() => {
+        resetSelect();
+        mutate(`/api/${username}/logs`);
+        mutate(`/api/${username}/log`);
+      })
       .catch((err) => setError(err.toString()))
       .finally(() => {
         setLoading(false);
@@ -44,68 +63,54 @@ export default function LogForm({ username, closeForm }: Props) {
   };
 
   return (
-    <form
-      className='relative bg-gray-50 h-300 w-full p-2 mb-5'
-      onSubmit={handleSubmit}
-    >
-      {loading && (
-        <div className='bg-gray-200 absolute inset-0 flex flex-col items-center justify-center z-20 bg-opacity-20'>
-          <ClipLoader />
-          <p>업로드중...</p>
+    <>
+      {loading && <PageLoader label='일기 작성중...' />}
+      <form
+        className='relative w-full p-5 rounded-lg bg-white dark:bg-neutral-800'
+        onSubmit={handleSubmit}
+      >
+        <div className='flex justify-between items-center'>
+          <div>
+            <h2 className='ml-2 mt-3 mb-5 color-title'>오늘의 기록</h2>
+            <input
+              type='date'
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className='ml-2 mb-3 px-1 input'
+            />
+          </div>
+          <Button color='black' onClick={handleSubmit}>
+            등록
+          </Button>
         </div>
-      )}
-      <div className='flex justify-end mb-1'>
-        <Button color='black'>저장</Button>
-      </div>
-      <div className='flex'>
-        <div className='grow flex flex-col'>
-          <input
-            type='text'
-            placeholder='제목'
-            ref={titleRef}
-            className='px-2 py-1 border border-gray-100 rounded-lg'
+        <div className='flex gap-3'>
+          <ImageUpload
+            file={file}
+            onChange={handleChange}
+            styleClass='w-1/2 aspect-square'
+            text='오늘의 사진'
           />
-          <textarea
-            name='content'
-            id='content'
-            ref={contentRef}
-            className='grow px-2 py-1 border-gray-100 rounded-lg'
-            placeholder='오늘의 기록'
-          />
+          <div className='grow flex flex-col gap-2'>
+            <input
+              type='text'
+              placeholder='제목'
+              ref={titleRef}
+              className={inputStyle}
+            />
+            <textarea
+              name='content'
+              id='content'
+              ref={contentRef}
+              className={`grow w-full textarea`}
+              placeholder='내용을 적어 주세요.'
+            />
+            <EmotionList
+              selected={selectedEmotion}
+              onClick={(label: string) => setSelectedEmotion(label)}
+            />
+          </div>
         </div>
-        <input
-          className='hidden'
-          name='input'
-          id='input-upload'
-          type='file'
-          accept='image/*'
-          onChange={handleChange}
-        />
-        <label
-          htmlFor='input-upload'
-          className={`ml-3 h-[200px] w-[200px] rounded-md flex flex-col items-center justify-center hover:bg-gray-200 hover:bg-opacity-90 ${
-            !file && 'border-2 border-dashed border-orange-400'
-          }`}
-        >
-          {!file && (
-            <>
-              <FaPhotoVideo />
-              <p>Select Image</p>
-            </>
-          )}
-          {file && (
-            <div className='relative w-full aspect-square'>
-              <Image
-                src={URL.createObjectURL(file)}
-                alt='local file'
-                fill
-                sizes='200px'
-                className='object-cover'
-              />
-            </div>
-          )}
-        </label>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }

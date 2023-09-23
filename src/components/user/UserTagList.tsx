@@ -13,7 +13,7 @@ export default function UserTagList({ username, onClick, selected }: Props) {
   const { data: tags, isLoading } = useSWR(`/api/${username}/posts/tags`);
 
   return (
-    <div className='px-6 mb-6'>
+    <div className='px-6 pb-2'>
       {isLoading && <TagListLoading type='big' />}
       {tags && (
         <TagList

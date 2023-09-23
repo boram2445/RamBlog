@@ -24,5 +24,27 @@ export default {
       name: 'photo',
       type: 'image',
     },
+    {
+      title: 'Emotion',
+      name: 'emotion',
+      type: 'string',
+    },
+    {
+      title: 'Date',
+      name: 'date',
+      type: 'datetime',
+    },
+    {
+      title: 'Likes',
+      name: 'likes',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'user'}],
+        },
+      ],
+      validation: (Rule) => Rule.unique(),
+    },
   ],
 }

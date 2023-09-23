@@ -2,7 +2,7 @@
 
 import useUser from '@/hooks/useUser';
 import UserCard from '../common/UserCard';
-import { ClipLoader } from 'react-spinners';
+import MiniLoader from '../ui/MiniLoader';
 
 type Props = {
   username: string;
@@ -17,16 +17,15 @@ export default function FollowLists({ username, type }: Props) {
   const count = list?.length || '';
 
   return (
-    <section>
-      <h1 className='my-2 text-xl'>
+    <section className='mt-14'>
+      <h1 className='mb-4 text-xl'>
         {type === 'follower' ? '팔로워' : '팔로잉'}
-        <span className='text-pink-400 font-semibold'>{` ${count}`}</span>명
+        <span className='text-pink-400 font-semibold'>
+          {count ? ` ${count}` : ` 0`}
+        </span>
+        명
       </h1>
-      {isLoading && (
-        <div>
-          <ClipLoader />
-        </div>
-      )}
+      {isLoading && <MiniLoader />}
       {!isLoading && !error && (
         <ul>
           {list?.map((item) => (

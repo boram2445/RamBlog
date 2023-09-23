@@ -1,4 +1,5 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import { Editor } from '@toast-ui/react-editor';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
@@ -10,6 +11,7 @@ import Prism from 'prismjs';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './tuiEditor.css';
+import { useTheme } from 'next-themes';
 import { ClipLoader } from 'react-spinners';
 
 type Props = {
@@ -20,6 +22,7 @@ type Props = {
 export default function TuiEditors({ content = '', editorRef }: Props) {
   const [previewStyle, setPreviewStyle] = useState<'tab' | 'vertical'>('tab');
   const [loading, setLoading] = useState(false);
+  const { theme } = useTheme();
 
   //화면 사이즈가 작아지면 tab형식으로 변환
   //mount될때 실행되는건 알겠는데, 왜 window사이즈가 변할때도 실행되는지 모르겠다.
@@ -36,6 +39,16 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    let el = document.getElementsByClassName('toastui-editor-defaultUI')[0];
+    if (theme === 'light') {
+      if (el.classList.contains('toastui-editor-dark'))
+        el.classList.remove('toastui-editor-dark');
+    } else {
+      el.classList.add('toastui-editor-dark');
+    }
+  }, [theme]);
 
   const uploadImg = async (file: Blob | File) => {
     const formData = new FormData();

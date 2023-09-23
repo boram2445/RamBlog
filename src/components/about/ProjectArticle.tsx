@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';
 import ProjectModal from './ProjectModal';
-import Date from '../ui/Date';
 import DuringDate from './DuringDate';
 
 type Props = {
@@ -23,7 +22,7 @@ export default function ProjectArticle({ project }: Props) {
         className='w-full h-60 tablet:h-56 laptop:h-52 shadow-md relative rounded-lg overflow-hidden hover:-translate-y-3 transition-transform ease-in-out duration-300 cursor-pointer'
       >
         <Image
-          src={image}
+          src={image as string}
           alt={name}
           width={300}
           height={200}
@@ -39,7 +38,10 @@ export default function ProjectArticle({ project }: Props) {
         </div>
       </article>
       {openModal && (
-        <ModalContainer onClose={() => setOpenModal(false)}>
+        <ModalContainer
+          onClose={() => setOpenModal(false)}
+          className='overflow-y-auto bg-white rounded-2xl w-full max-w-[650px] tablet:w-3/4 min-h-[300px] tablet:h-3/4'
+        >
           <ProjectModal project={project} />
         </ModalContainer>
       )}
