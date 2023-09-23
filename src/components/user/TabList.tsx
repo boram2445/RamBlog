@@ -8,7 +8,7 @@ type Props = {
   user: ProfileUser;
 };
 
-const tabStyle = `px-5 py-1.5 cursor-pointer text-gray-600 hover:text-gray-900`;
+const tabStyle = `px-5 py-1.5 cursor-pointer text-gray-600 hover:text-gray-900 dark:hover:text-slate-300`;
 const tabs = [
   { href: '', name: 'Posts' },
   { href: '/log', name: 'Log' },
@@ -19,7 +19,7 @@ export default function TabList({ user }: Props) {
   const pathname = usePathname();
 
   return (
-    <ul className='mt-3 pt-3 pb-5 flex border-b border-gray-200'>
+    <ul className='mt-3 pt-3 pb-5 flex border-b border-gray-200 dark:border-neutral-500'>
       {tabs.map(({ href, name }) => (
         <li key={href}>
           <Link
