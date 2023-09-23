@@ -28,15 +28,20 @@ export default function ImageUpload({
       <label
         htmlFor='input-upload'
         className={`${styleClass}  ${
-          !file && 'border-2 bg-white border-dashed border-indigo-300'
+          !file &&
+          'border-2 bg-slate-200 border-dashed border-indigo-300 dark:bg-neutral-600'
         } ${
           file && 'bg-black'
         } flex flex-col items-center justify-center hover:brightness-75 overflow-hidden cursor-pointer`}
       >
         {!file && (
           <>
-            <FaPhotoVideo size='30' color='gray' />
-            {text && <p className='text-gray-600 text-sm'>{text}</p>}
+            <FaPhotoVideo className='w-8 h-8 text-gray-600 dark:text-slate-200' />
+            {text && (
+              <p className='mt-2 text-gray-600 text-sm dark:text-slate-200'>
+                {text}
+              </p>
+            )}
           </>
         )}
         {file && (

@@ -43,22 +43,22 @@ export default function SelectBox({
     <article ref={selectBoxRef} className='inline-block'>
       <button
         onClick={openHandler}
-        className='flex items-center gap-1 py-2 pl-4 pr-3 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 '
+        className='flex items-center gap-1 py-2 pl-4 pr-3 text-sm font-medium text-center text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:border-neutral-700'
       >
         <ListItem type={type} item={selected} />
         {!isOpen ? <AiFillCaretUp /> : <AiFillCaretDown />}
       </button>
       <div
-        className={`absolute ${
+        className={`absolute mt-1 ${
           isOpen ? 'block' : 'hidden'
-        } z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44`}
+        } z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-neutral-800 dark:border dark:border-neutral-700`}
       >
         <ul className='py-2 text-sm text-gray-700 dark:text-gray-200'>
           {list.map((item, index) => (
             <li key={index}>
               <button
                 type='button'
-                className='w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 '
+                className='w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-neutral-700'
                 onClick={() => selectHandler(item)}
               >
                 <ListItem type={type} item={item} />
@@ -86,7 +86,9 @@ function ListItem({
           {item.label !== 'all' && (
             <EmotionItem label={item.label as Emotion} />
           )}
-          <small className='text-sm text-gray-600'>{item.text}</small>
+          <small className='text-sm text-gray-600 dark:text-slate-300'>
+            {item.text}
+          </small>
         </div>
       )}
     </>
