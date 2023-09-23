@@ -17,8 +17,7 @@ type Props = {
   portfolio: Portfolio;
 };
 
-const titleClass =
-  'text-2xl font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5';
+const titleClass = 'px-2 color-title';
 
 export default function AboutForm({ username, portfolio }: Props) {
   const initialState = {
@@ -117,10 +116,7 @@ export default function AboutForm({ username, portfolio }: Props) {
   return (
     <>
       {isMutating && <PageLoader label='수정중...' />}
-      <form
-        onSubmit={handleSubmit}
-        className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'
-      >
+      <form className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
           <div className='px-4'>
@@ -128,6 +124,7 @@ export default function AboutForm({ username, portfolio }: Props) {
               value={form.introduce}
               onChange={handleChange}
               name='introduce'
+              placeholder='자기 소개를 작성해주세요'
             />
           </div>
         </section>
@@ -194,7 +191,7 @@ export default function AboutForm({ username, portfolio }: Props) {
         </section>
         <div className='flex justify-end gap-2'>
           <Button onClick={() => router.back()}>취소</Button>
-          <Button onClick={(e: FormEvent) => handleSubmit(e)} color='black'>
+          <Button onClick={handleSubmit} color='black'>
             저장
           </Button>
         </div>

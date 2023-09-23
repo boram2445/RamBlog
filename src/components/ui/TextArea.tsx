@@ -41,7 +41,7 @@ export default function TextArea({
   return (
     <textarea
       ref={textareaRef}
-      className='w-full px-4 py-2 rounded-lg text-gray-700 border border-gray-200 hover:border-indigo-400 overflow-hidden outline-indigo-500 resize-none'
+      className='w-full px-4 py-2 textarea'
       value={value}
       name={name}
       onChange={handleChange}

@@ -7,18 +7,29 @@ type Props = {
   portfolio: Portfolio;
 };
 
-export const sectionClass = 'mb-8 pb-8 border-b border-gray-200';
-export const titleClass =
-  'mt-3 mb-5 text-2xl font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5';
+export const sectionClass =
+  'mb-8 pb-8 border-b border-gray-200 dark:border-neutral-700';
+export const titleClass = 'mt-3 mb-5 color-title';
+const noContent = (
+  <p className='text-gray-700 text-center dark:text-slate-300'>
+    아직 등록된 소개가 없어요😥
+  </p>
+);
 
 export default function AboutList({ portfolio }: Props) {
-  if (!portfolio)
-    return (
-      <p className='text-gray-700 text-center'>아직 등록된 소개가 없어요😥</p>
-    );
-
+  if (!portfolio) return noContent;
   const { skills, introduce, businessExperiences, projects, educations } =
     portfolio;
+
+  if (
+    !introduce &&
+    skills.length === 0 &&
+    businessExperiences.length === 0 &&
+    projects.length === 0 &&
+    educations.length === 0
+  )
+    return noContent;
+
   return (
     <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
       {introduce && (
@@ -29,7 +40,7 @@ export default function AboutList({ portfolio }: Props) {
           </p>
         </section>
       )}
-      {skills && (
+      {skills.length > 0 && (
         <section className={sectionClass}>
           <h3 className={titleClass}>Skills</h3>
           <div className='px-4'>
@@ -37,7 +48,7 @@ export default function AboutList({ portfolio }: Props) {
           </div>
         </section>
       )}
-      {businessExperiences && (
+      {businessExperiences.length > 0 && (
         <section className={sectionClass}>
           <h3 className={titleClass}>Worked at</h3>
           <ul className='px-4'>
@@ -49,7 +60,7 @@ export default function AboutList({ portfolio }: Props) {
           </ul>
         </section>
       )}
-      {projects && (
+      {projects.length > 0 && (
         <section className={sectionClass}>
           <h3 className={titleClass}>Projects</h3>
           <ul className='px-4 mx-auto grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-6'>
@@ -59,7 +70,7 @@ export default function AboutList({ portfolio }: Props) {
           </ul>
         </section>
       )}
-      {educations && (
+      {educations.length > 0 && (
         <section className={sectionClass}>
           <h3 className={titleClass}>Education</h3>
           <ul className='px-4 flex flex-col gap-6'>

@@ -67,14 +67,14 @@ export default function PostCard({ post }: { post: SimplePost }) {
 
 export function PostCardLoading() {
   return (
-    <div className='relative mx-auto w-full h-[350px] tablet:h-76 shadow-md rounded-t-lg'>
+    <div className='relative mx-auto w-full h-[350px] tablet:h-76 shadow-md rounded-lg dark:border dark:border-neutral-800'>
       <Skeleton className='mx-auto w-full h-1/2 object-cover aspect-square' />
       <div className='h-1/2 flex flex-col'>
         <div className='grow flex flex-col gap-2 p-2'>
           <Skeleton className='w-full h-[1.25rem]' />
           <Skeleton className='w-5/6 h-[1.25rem]' />
         </div>
-        <div className='p-2 flex justify-between items-center border-t border-gray-100'>
+        <div className='p-2 flex justify-between items-center border-t border-gray-100 dark:border-neutral-700'>
           <UserAvartarLoading size='small' />
           <Skeleton className='w-[4rem] h-[1.25rem]' />
         </div>

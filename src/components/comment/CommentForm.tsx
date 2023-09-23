@@ -10,8 +10,7 @@ type Props = {
   commentId?: string;
 };
 
-const inputStyle =
-  'p-3 border border-gray-300 rounded-lg placeholder:text-sm dark:border-neutral-800 dark:outline-slate-700';
+const inputStyle = 'p-3 placeholder:text-sm input';
 
 export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();
@@ -60,7 +59,7 @@ export default function CommentForm({ postId, commentId }: Props) {
       <textarea
         name='text'
         placeholder='여러분의 소중한 댓글을 입력해주세요'
-        className={`w-full h-28 ${inputStyle}`}
+        className='w-full h-28 textarea'
         onChange={handleChange}
         value={form.text}
       />

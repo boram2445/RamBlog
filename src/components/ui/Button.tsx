@@ -1,8 +1,6 @@
-import { MouseEvent } from 'react';
-
 type Props = {
   color?: 'white' | 'black';
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
   size?: ButtonSize;
   type?: 'button' | 'submit';

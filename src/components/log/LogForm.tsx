@@ -71,9 +71,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
       >
         <div className='flex justify-between items-center'>
           <div>
-            <h2 className='ml-2 text-2xl mt-3 mb-5 font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5 dark:text-slate-200 dark:bg-indigo-500'>
-              오늘의 기록
-            </h2>
+            <h2 className='ml-2 mt-3 mb-5 color-title'>오늘의 기록</h2>
             <input
               type='date'
               value={date}
@@ -103,7 +101,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
               name='content'
               id='content'
               ref={contentRef}
-              className={`grow ${inputStyle}`}
+              className={`grow w-full textarea`}
               placeholder='내용을 적어 주세요.'
             />
             <EmotionList

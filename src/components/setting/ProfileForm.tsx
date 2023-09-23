@@ -146,7 +146,7 @@ export default function ProfileForm({ userData }: Props) {
             </label>
             <textarea
               name='introduce'
-              className='h-28 p-2 grow text-gray-700 border border-gray-200 outline-none '
+              className='h-28 p-2 grow text-area'
               defaultValue={introduce}
               onChange={handleChange}
               placeholder='간단한 소개를 입력해주세요.'
