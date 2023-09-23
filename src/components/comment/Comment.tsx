@@ -57,7 +57,7 @@ export default function Comment({
 
   return (
     <div
-      className={`relative p-4 rounded-lg ${
+      className={`relative p-4 rounded-lg dark:bg-neutral-800 ${
         commentType === 'comment' ? 'bg-gray-50' : 'bg-gray-100'
       }`}
     >
@@ -96,7 +96,7 @@ export default function Comment({
       <p className='ml-2 pt-3 pb-5'>{text}</p>
 
       <button
-        className='ml-2 flex items-center gap-2 hover:text-gray-700'
+        className='ml-2 flex items-center gap-2 hover:text-gray-700 dark:hover:text-white'
         onClick={() => setOpenForm((prev) => !prev)}
       >
         {commentType === 'comment' && !openForm && (
