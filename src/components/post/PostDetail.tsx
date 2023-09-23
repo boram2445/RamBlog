@@ -50,7 +50,7 @@ export default async function PostDetail({
             />
             <Date date={createdAt?.toString()} type='small' />
             <LikeNumIcon
-              likes={likes.length ?? 0}
+              likes={likes?.length ?? 0}
               className='text-gray-700 dark:text-slate-400'
             />
           </div>
