@@ -47,7 +47,7 @@ export default function DropDownNav({
       ref={navRef}
       className={`mt-1 absolute right-0 ${
         width ? width : 'w-full'
-      }  border border-gray-200 flex flex-col rounded-lg overflow-hidden z-10`}
+      }  border border-gray-200 flex flex-col rounded-lg overflow-hidden z-10 dark:border-neutral-700`}
     >
       {navList.map((nav, index) => (
         <button
@@ -56,7 +56,7 @@ export default function DropDownNav({
             nav.onClick();
             closeModal();
           }}
-          className='bg-white hover:bg-gray-50 w-full py-2 px-2 text-sm text-gray-700'
+          className='bg-white hover:bg-gray-50 w-full py-2 px-2 text-sm text-gray-700 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:text-slate-300 '
         >
           {nav.label}
         </button>

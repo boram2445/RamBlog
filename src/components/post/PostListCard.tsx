@@ -26,11 +26,11 @@ export default function PostListCard({ post }: { post: SimplePost }) {
   return (
     <article
       onClick={() => router.push(`/${username}/posts/${id}`)}
-      className='group p-6 flex justify-between border-b border-gray-200 cursor-pointer animate-fade-in'
+      className='group p-6 flex justify-between border-b border-gray-200 cursor-pointer animate-fade-in dark:border-neutral-700'
     >
       <div className='flex flex-col'>
         <TagList tags={tags} />
-        <h1 className='mt-1 py-1 text-black text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500'>
+        <h1 className='mt-1 py-1 text-gray-900 text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500 dark:group-hover:text-slate-100 dark:text-slate-300'>
           <AiOutlineRight className='hidden group-hover:block w-4  animate-fade-in-left' />
           {title}
         </h1>
@@ -57,7 +57,7 @@ export default function PostListCard({ post }: { post: SimplePost }) {
 
 export function PostListCardLoading() {
   return (
-    <div className='p-6 flex justify-between border-b border-gray-200'>
+    <div className='p-6 flex justify-between border-b border-gray-200 dark:border-neutral-700'>
       <div className='grow flex flex-col gap-2'>
         <Skeleton className='w-[3rem] h-[1.25rem]' />
         <Skeleton className='w-2/3 h-[2rem]' />

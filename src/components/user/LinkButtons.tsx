@@ -7,7 +7,8 @@ type Props = {
   links: Links;
 };
 
-const linkButtonStyle = 'text-gray-500 hover:text-gray-900 w-6 h-6';
+const linkButtonStyle =
+  'text-gray-500 hover:text-gray-900 w-6 h-6 dark:text-neutral-500 dark:hover:text-slate-300';
 
 export default function LinkButtons({ links }: Props) {
   return (
@@ -18,7 +19,7 @@ export default function LinkButtons({ links }: Props) {
           return (
             <div className='relative group'>
               {getIcon(key)}
-              <span className='absolute hidden group-hover:block py-1 px-2 bg-gray-700 text-white text-xs rounded-full'>
+              <span className='absolute hidden group-hover:block py-1 px-2 bg-gray-700  text-white text-xs rounded-full'>
                 {value}
               </span>
             </div>

@@ -44,7 +44,7 @@ export default function LogList({ username }: Props) {
       </div>
       {isLoading && <LogListLoading />}
       {!isLoading && logs?.length === 0 && (
-        <p className='text-center py-8 px-4 text-gray-600'>
+        <p className='text-center py-8 px-4 text-gray-600 dark:text-slate-300'>
           아직 등록된 일기가 없어요😥
         </p>
       )}
@@ -65,7 +65,7 @@ export default function LogList({ username }: Props) {
       {isOpenForm && (
         <ModalContainer
           onClose={() => setIsOpenForm(false)}
-          className='overflow-y-hidden bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[650px]'
+          className='overflow-y-hidden bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] rounded-lg dark:bg-neutral-800'
         >
           <LogForm
             username={username}

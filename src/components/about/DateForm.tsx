@@ -45,11 +45,13 @@ export default function DateForm({
       id='date'
       maxLength={7}
       onChange={handleChange}
-      className={`border border-gray-100 hover:border-indigo-500 disabled:hover:border-gray-100 py-2 px-3 w-24 rounded-lg outline-indigo-500 text-sm ${
-        disabled && 'placeholder:text-indigo-500 bg-gray-200'
+      className={`input disabled:hover:border-gray-100 dark:disabled:hover:border-neutral-700 dark:disabled:bg-neutral-700 py-2 px-3 w-24 text-sm ${
+        disabled &&
+        'placeholder:text-indigo-500 bg-gray-200 dark:placeholder:text-indigo-100 '
       }`}
       value={disabled ? '' : date}
       disabled={disabled}
+      autoComplete='off'
     />
   );
 }

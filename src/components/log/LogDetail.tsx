@@ -69,7 +69,7 @@ export default function LogDetail({
       {!log && <LogDetailLoading />}
       {log && (
         <div className='overflow-hidden w-full h-full flex flex-col tablet:flex-row'>
-          <div className='w-1/2 h-full bg-black flex items-center'>
+          <div className='w-1/2 h-full bg-neutral-900 flex items-center'>
             <Image
               src={log.currentLog.image ?? ''}
               alt={log.currentLog.title}
@@ -79,7 +79,7 @@ export default function LogDetail({
             />
           </div>
           <div className='w-1/2 flex flex-col'>
-            <div className='flex justify-between p-3 border-b border-gray-200'>
+            <div className='flex justify-between p-3 border-b border-gray-200 dark:border-neutral-700'>
               <UserAvartar
                 username={username}
                 imageUrl={log.currentLog.userImage}
@@ -90,7 +90,7 @@ export default function LogDetail({
               </div>
             </div>
             <div className='grow p-4'>
-              <div className='flex gap-3 items-center border border-gray-200 px-3 py-2 rounded-lg'>
+              <div className='flex gap-3 items-center border border-gray-200 px-3 py-2 rounded-lg dark:border-neutral-700'>
                 <EmotionItem
                   label={log.currentLog.emotion}
                   size='small'
@@ -100,11 +100,11 @@ export default function LogDetail({
               <h2 className='text-xl font-semibold my-3'>
                 {log.currentLog.title}
               </h2>
-              <p className='whitespace-pre-line text-gray-700'>
+              <p className='whitespace-pre-line text-gray-700 dark:text-slate-300'>
                 {log.currentLog.content}
               </p>
             </div>
-            <div className='flex justify-between items-center border-t border-gray-200 p-3'>
+            <div className='flex justify-between items-center border-t border-gray-200 p-3 dark:border-neutral-700'>
               <div className='flex gap-1'>
                 <Date
                   date={log.currentLog.date.toString()}

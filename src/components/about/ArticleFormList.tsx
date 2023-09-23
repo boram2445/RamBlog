@@ -24,7 +24,7 @@ export default function ArticleFormList({
   return (
     <ul>
       {list.map((experience) => (
-        <li key={experience.id} className='mb-2'>
+        <li key={experience.id} className='mb-2 mx-4'>
           <ArticleForm
             experience={experience}
             label={label}

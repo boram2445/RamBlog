@@ -46,7 +46,7 @@ export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
       {openModal && (
         <ModalContainer
           onClose={() => setOpenModal(false)}
-          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[650px]'
+          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
         >
           <LogDetail
             logId={id}

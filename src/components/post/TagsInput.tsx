@@ -40,7 +40,7 @@ export default function TagsInput({ tags, handleTags, type = 'row' }: Props) {
           <li key={index}>
             <button
               onClick={handleTagClick}
-              className='px-3 border border-gray-300 rounded-full  hover:bg-gray-300'
+              className='px-3 border border-gray-300 rounded-full hover:bg-gray-300 dark:text-slate-300 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:bg-neutral-600 dark:hover:text-slate-200'
               type='button'
             >
               {tag}
@@ -52,11 +52,11 @@ export default function TagsInput({ tags, handleTags, type = 'row' }: Props) {
         type='text'
         id='tags'
         name='tags'
-        placeholder='태그를 입력해주세요'
+        placeholder='입력 후 엔터를 누르면 태그가 생성되고, 태그를 클릭하면 삭제됩니다'
         value={tag}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className='grow my-1 py-2 px-3 border border-gray-200 bg-gray-50 rounded-md outline-indigo-500'
+        className='grow my-1 py-2 px-3 input'
         autoComplete='off'
       />
     </div>

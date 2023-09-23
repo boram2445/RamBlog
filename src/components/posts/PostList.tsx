@@ -5,7 +5,6 @@ import { ProfileUser } from '@/model/user';
 import PostListCard, { PostListCardLoading } from '../post/PostListCard';
 import UserTagList from '../user/UserTagList';
 import { useState } from 'react';
-import Title from '../ui/Title';
 
 type Props = {
   user: ProfileUser;

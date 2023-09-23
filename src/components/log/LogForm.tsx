@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import Button from '../ui/Button';
 import axios from 'axios';
-import { ClipLoader } from 'react-spinners';
 import ImageUpload from '../ui/ImageUpload';
 import EmotionList from './EmotionList';
 import { getDate } from '@/utils/date';
@@ -14,8 +13,7 @@ type Props = {
   closeForm: () => void;
 };
 
-const inputStyle =
-  'py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
+const inputStyle = 'py-2 px-3 w-full input';
 
 export default function LogForm({ username, resetSelect, closeForm }: Props) {
   const [file, setFile] = useState<File>();
@@ -68,19 +66,17 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
     <>
       {loading && <PageLoader label='일기 작성중...' />}
       <form
-        className='relative w-full p-5 rounded-lg bg-white'
+        className='relative w-full p-5 rounded-lg bg-white dark:bg-neutral-800'
         onSubmit={handleSubmit}
       >
         <div className='flex justify-between items-center'>
           <div>
-            <h2 className='ml-2 text-2xl mt-3 mb-5 font-semibold text-gray-800 bg-indigo-200 inline-block px-2 bg-opacity-50 leading-5'>
-              오늘의 기록
-            </h2>
+            <h2 className='ml-2 mt-3 mb-5 color-title'>오늘의 기록</h2>
             <input
               type='date'
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className='ml-2 mb-3 px-1 border outline-indigo-500 border-gray-200 hover:border-indigo-400 rounded-lg cursor-pointer'
+              className='ml-2 mb-3 px-1 input'
             />
           </div>
           <Button color='black' onClick={handleSubmit}>
@@ -105,7 +101,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
               name='content'
               id='content'
               ref={contentRef}
-              className={`grow ${inputStyle}`}
+              className={`grow w-full textarea`}
               placeholder='내용을 적어 주세요.'
             />
             <EmotionList

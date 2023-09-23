@@ -32,13 +32,13 @@ export default async function PostDetail({
 
   return (
     <section className='pb-16 relative'>
-      <div className='flex flex-col mt-11 mb-7 pb-3 border-b '>
+      <div className='flex flex-col mt-11 mb-7 pb-3 border-b dark:border-slate-700'>
         {tags && (
-          <div className='mb-2 flex justify-between items-center'>
+          <div className='mb-3 flex justify-between items-center'>
             <TagList tags={currentPost.tags} type='big' />
           </div>
         )}
-        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] font-semibold text-gray-800'>
+        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] font-semibold text-gray-800 dark:text-slate-200'>
           {title}
         </h1>
         <div className='flex justify-between'>
@@ -49,29 +49,32 @@ export default async function PostDetail({
               size='small'
             />
             <Date date={createdAt?.toString()} type='small' />
-            <LikeNumIcon likes={likes.length ?? 0} className='text-gray-700' />
+            <LikeNumIcon
+              likes={likes.length ?? 0}
+              className='text-gray-700 dark:text-slate-400'
+            />
           </div>
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
       </div>
       <div className='flex mx-auto min-h-[300px] laptop:gap-12 pb-12'>
-        <div className='grow pb-5' id='content'>
+        <div className='grow pb-5 ' id='content'>
           <MarkDownPost content={content} />
         </div>
         <div className='mt-8 ml-auto'>
-          <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] self-start laptop:block border border-gray-200 rounded-xl overflow-hidden'>
+          <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] laptop:block border border-gray-200 rounded-xl overflow-hidden dark:bg-neutral-800 dark:border-neutral-700'>
             <Toc />
             <PostIcons post={currentPost} />
           </aside>
         </div>
       </div>
       {tags && (
-        <div className='flex justify-between items-center pb-2 border-b border-gray-200'>
+        <div className='flex justify-between items-center pb-2 border-b border-gray-200 dark:border-slate-700'>
           <TagList tags={currentPost.tags} type='big' />
         </div>
       )}
       <PostUserProfile username={username} />
-      <div className='laptop:hidden my-2 border border-gray-200 rounded-xl overflow-hidden'>
+      <div className='laptop:hidden my-2 border border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden'>
         <PostIcons post={currentPost} />
       </div>
       {(previousPost || nextPost) && (

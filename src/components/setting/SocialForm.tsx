@@ -27,7 +27,7 @@ export default function SocialForm({ links, onChange }: Props) {
             type='text'
             value={links[item.name as SocialType]}
             onChange={(e) => handleChange(e, item.name as SocialType)}
-            className='p-2 grow border border-gray-200 rounded-md outline-blue-500 text-sm'
+            className='p-2 grow text-sm input max-w-[500px]'
             placeholder={item.placeholder}
           />
         </li>

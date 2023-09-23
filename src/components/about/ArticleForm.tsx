@@ -20,9 +20,8 @@ type Props = {
   ) => void;
 };
 
-const labelStyle = 'text-gray-500 text-sm block';
-const inputStyle =
-  'mt-1 mb-2 py-2 px-3 w-full rounded-lg outline-indigo-500 border border-gray-200 hover:border-indigo-400';
+const labelStyle = 'mb-1 text-gray-500 text-sm block';
+const inputStyle = 'mb-2 py-2 px-3 w-full input';
 
 export default function ArticleForm({
   experience,
@@ -59,15 +58,16 @@ export default function ArticleForm({
   };
 
   return (
-    <div className='relative bg-slate-100 p-5 rounded-lg shadow-sm'>
+    <div className='relative bg-slate-100 p-5 rounded-lg shadow-sm dark:bg-neutral-800 dark:border dark:border-neutral-700'>
       <label className={labelStyle}>기본정보</label>
       <input
         type='text'
         name='name'
         placeholder={`${label} 이름`}
-        className={inputStyle}
+        className={`${inputStyle} max-w-[400px]`}
         value={experience?.name ?? ''}
         onChange={handleChange}
+        autoComplete='off'
       />
       <label className={labelStyle}>기간</label>
       <div>
@@ -95,6 +95,7 @@ export default function ArticleForm({
             name='holding'
             id={`holding-${experience?.id}`}
             className='w-4 h-4 accent-indigo-500 cursor-pointer'
+            autoComplete='off'
           />
           <label htmlFor={`holding-${experience?.id}`} className={labelStyle}>
             진행 중
@@ -117,6 +118,7 @@ export default function ArticleForm({
             className={inputStyle}
             value={(experience as Project)?.link ?? ''}
             onChange={handleChange}
+            autoComplete='off'
           />
         </>
       )}
