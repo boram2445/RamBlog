@@ -26,7 +26,7 @@ export default function PostIcons({ post }: Props) {
   const router = useRouter();
 
   const liked = loggedInUser
-    ? post.likes.includes(loggedInUser?.username)
+    ? post.likes?.includes(loggedInUser?.username)
     : false;
   const bookmarked = loggedInUser?.bookmarks.includes(post.id) ?? false;
 
@@ -65,7 +65,9 @@ export default function PostIcons({ post }: Props) {
         <BsLink45Deg className='w-6 h-6 text-gray-600 dark:text-slate-400' />
       </button>
       <div className='flex gap-2 items-center'>
-        <p className='text-gray-600 dark:text-slate-400'>{post.likes.length}</p>
+        <p className='text-gray-600 dark:text-slate-400'>
+          {post.likes?.length}
+        </p>
         <ToggleButton
           toggled={liked}
           onToggle={handleLike}
