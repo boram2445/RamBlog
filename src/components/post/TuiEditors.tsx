@@ -40,6 +40,16 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    let el = document.getElementsByClassName('toastui-editor-defaultUI')[0];
+    if (theme === 'light') {
+      if (el.classList.contains('toastui-editor-dark'))
+        el.classList.remove('toastui-editor-dark');
+    } else {
+      el.classList.add('toastui-editor-dark');
+    }
+  }, [theme]);
+
   const uploadImg = async (file: Blob | File) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -56,7 +66,6 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
         initialValue={content || ' '}
         previewStyle={previewStyle}
         height='600px'
-        theme={theme === 'dark' ? 'dark' : ''}
         initialEditType='markdown'
         useCommandShortcut={true}
         plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}

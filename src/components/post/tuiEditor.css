@@ -1,7 +1,6 @@
 .toastui-editor-contents p,
 .ProseMirror div {
   font-size: 16px;
-  color: #3f3f46;
 }
 
 .toastui-editor-contents h1,
@@ -43,10 +42,6 @@
 .toastui-editor-contents blockquote {
   border-color: #7661e2;
   background-color: #f9f9f9;
-}
-
-.toastui-editor-contents blockquote p {
-  color: #23262f;
 }
 
 .ProseMirror.toastui-editor-contents blockquote,
