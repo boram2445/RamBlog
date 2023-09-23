@@ -10,7 +10,8 @@ type Props = {
   commentId?: string;
 };
 
-const inputStyle = 'p-3 border border-gray-300 rounded-lg placeholder:text-sm';
+const inputStyle =
+  'p-3 border border-gray-300 rounded-lg placeholder:text-sm dark:border-neutral-800 dark:outline-slate-700';
 
 export default function CommentForm({ postId, commentId }: Props) {
   const { data: session } = useSession();
@@ -63,7 +64,11 @@ export default function CommentForm({ postId, commentId }: Props) {
         onChange={handleChange}
         value={form.text}
       />
-      <div className={`flex ${user ? 'justify-end' : 'justify-between'}`}>
+      <div
+        className={`flex ${
+          user ? 'justify-end' : 'justify-between'
+        } items-center`}
+      >
         {!user && (
           <div className='flex gap-2'>
             <input

@@ -9,9 +9,6 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        darkModeBg: '#0B1120',
-      },
       screens: {
         tablet: '640px',
         laptop: '1024px',

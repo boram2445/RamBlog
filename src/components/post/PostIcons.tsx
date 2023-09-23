@@ -13,8 +13,9 @@ import axios from 'axios';
 import useMe from '@/hooks/useMe';
 import { useRouter } from 'next/navigation';
 
-const buttonStyle = 'p-1 rounded-lg hover:bg-gray-200 flex items-center';
-const iconStyle = 'w-5 h-5 text-gray-700';
+const buttonStyle =
+  'p-1 rounded-lg hover:bg-gray-200 flex items-center dark:hover:bg-neutral-800';
+const iconStyle = 'w-5 h-5 dark:text-slate-400';
 
 type Props = {
   post: PostDetail;
@@ -59,24 +60,28 @@ export default function PostIcons({ post }: Props) {
   };
 
   return (
-    <div className='py-2 px-3 bg-gray-100 flex justify-between items-center'>
+    <div className='py-2 px-3 bg-gray-100 flex justify-between items-center dark:bg-neutral-700'>
       <button className={buttonStyle} onClick={handleCopyLink}>
-        <BsLink45Deg className='w-6 h-6 text-gray-600' />
+        <BsLink45Deg className='w-6 h-6 text-gray-600 dark:text-slate-400' />
       </button>
       <div className='flex gap-2 items-center'>
-        <p className='text-gray-600'>{post.likes.length}</p>
+        <p className='text-gray-600 dark:text-slate-400'>{post.likes.length}</p>
         <ToggleButton
           toggled={liked}
           onToggle={handleLike}
-          onIcon={<BsHeartFill className={`${iconStyle} -mb-0.5`} />}
-          offIcon={<BsHeart className={`${iconStyle} -mb-0.5`} />}
+          onIcon={
+            <BsHeartFill className={`${iconStyle} -mb-0.5 text-red-500`} />
+          }
+          offIcon={<BsHeart className={`${iconStyle} -mb-0.5 text-gray-500`} />}
           className={buttonStyle}
         />
         <ToggleButton
           toggled={bookmarked}
           onToggle={handleBookmark}
-          onIcon={<BsFillBookmarkFill className={iconStyle} />}
-          offIcon={<BsBookmark className={iconStyle} />}
+          onIcon={
+            <BsFillBookmarkFill className={`${iconStyle} text-gray-500`} />
+          }
+          offIcon={<BsBookmark className={`${iconStyle} text-gray-500`} />}
           className={buttonStyle}
         />
       </div>

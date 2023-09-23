@@ -14,7 +14,7 @@ export default function AdjacentPostCard({ data, type }: Props) {
   return (
     <Link
       href={`/${username}/posts/${id}`}
-      className='w-full h-20 flex items-center cursor-pointer hover:shadow-lg bg-gray-50'
+      className='w-full h-20 flex items-center cursor-pointer hover:shadow-lg bg-gray-50 dark:bg-neutral-800'
     >
       <div
         className={`group w-full px-5 flex items-center gap-4 ${

@@ -68,9 +68,9 @@ export default function Header() {
         <nav className='flex items-center gap-x-3 mr-4'>
           <Link
             href={params.user ? `/${params.user}/search` : '/search'}
-            className='p-2 rounded-full hover:bg-gray-100'
+            className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800'
           >
-            <BsSearch className='w-5 h-5 text-gray-600' />
+            <BsSearch className='w-5 h-5 text-gray-600 dark:text-gray-100' />
           </Link>
           <DarkMode />
           {loginUser && (
@@ -78,7 +78,7 @@ export default function Header() {
               <Link
                 href='/write'
                 prefetch={false}
-                className={`hidden tablet:block hover:text-indigo-600 ${
+                className={`hidden tablet:block ${
                   isWritePage && 'text-indigo-600'
                 }`}
               >

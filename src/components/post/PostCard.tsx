@@ -26,7 +26,7 @@ export default function PostCard({ post }: { post: SimplePost }) {
   const handleClick = () => router.push(`/${username}/posts/${id}`);
 
   return (
-    <article className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden shadow-md rounded-lg animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300'>
+    <article className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden shadow-md rounded-lg animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300 dark:bg-neutral-800'>
       {mainImage && (
         <Image
           src={mainImage}
@@ -45,8 +45,10 @@ export default function PostCard({ post }: { post: SimplePost }) {
             className='grow flex flex-col cursor-pointer'
             onClick={handleClick}
           >
-            <h3 className='py-1 text-black font-semibold'>{title}</h3>
-            <p className='grow w-full text-sm text-gray-600 truncate'>
+            <h3 className='py-1 text-gray-900 font-semibold dark:text-slate-300'>
+              {title}
+            </h3>
+            <p className='grow w-full text-sm text-gray-600 dark:text-slate-400 truncate'>
               {description}
             </p>
           </div>
@@ -54,9 +56,9 @@ export default function PostCard({ post }: { post: SimplePost }) {
             <Date date={createdAt?.toString()} dateType='date' type='xsmall' />
           </div>
         </div>
-        <div className='p-2 flex justify-between border-t border-gray-100'>
+        <div className='p-2 flex justify-between border-t border-gray-100 dark:border-neutral-700'>
           <UserAvartar username={username} imageUrl={userImage} />
-          <LikeNumIcon likes={likes} className='mr-2' />
+          <LikeNumIcon likes={likes} className='mr-2 dark:text-slate-500' />
         </div>
       </div>
     </article>

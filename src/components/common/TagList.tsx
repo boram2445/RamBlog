@@ -29,7 +29,7 @@ export default function TagList({
                 ? () => onClick(getTagName(tag))
                 : () => router.push(`/tags/${tag}`)
             }
-            className={`py-0.5 border border-gray-200 rounded-full hover:bg-gray-200 cursor-pointer ${
+            className={`py-[1px] border border-gray-200 rounded-full hover:bg-gray-200 cursor-pointer  dark:text-slate-300 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:bg-neutral-600 dark:hover:text-slate-200 ${
               type === 'small' ? 'text-xs px-2' : 'text-base px-3'
             } ${checked === getTagName(tag) ? 'bg-gray-200' : ''}`}
           >

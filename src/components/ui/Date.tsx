@@ -14,7 +14,11 @@ export default function Date({
   dateType = 'full',
 }: Props) {
   return (
-    <time className={`flex gap-2 items-center ${getSize(type)} text-gray-500`}>
+    <time
+      className={`flex gap-2 items-center ${getSize(
+        type
+      )} text-gray-500 dark:text-slate-400`}
+    >
       {getDate(date, dateType)}
     </time>
   );

@@ -27,7 +27,9 @@ export default function UserAvartar({
   return (
     <div
       className={`flex gap-2 items-center cursor-pointer ${
-        type === 'button' ? 'hover:bg-gray-50 rounded-full px-2 py-1' : ''
+        type === 'button'
+          ? 'hover:bg-gray-50 rounded-full px-2 py-1 dark:hover:bg-neutral-800'
+          : ''
       }`}
       onClick={type === 'link' ? () => router.push(`/${username}`) : onClick}
     >
