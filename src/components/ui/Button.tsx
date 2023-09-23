@@ -19,8 +19,8 @@ export default function Button({
 }: Props) {
   const colorStyle =
     color === 'white'
-      ? 'border-gray-300 hover:bg-gray-100 text-gray-700 dark:text-slate-300 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:bg-neutral-600 dark:hover:text-slate-200'
-      : 'bg-gray-900 hover:bg-gray-700 text-white dark:bg-slate-300 dark:text-neutral-800 dark:border-slate-300 dark:hover:bg-slate-200';
+      ? 'border-gray-300 hover:bg-gray-100 text-gray-700 dark:text-slate-300 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:brightness-125'
+      : 'bg-gray-800 hover:bg-gray-700 text-white dark:bg-slate-300 dark:text-neutral-800 dark:hover:brightness-125';
 
   return (
     <button

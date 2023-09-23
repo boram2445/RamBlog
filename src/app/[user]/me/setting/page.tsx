@@ -13,12 +13,9 @@ export default async function SettingPage() {
   const userData = user && (await getUserForProfile(user.username));
 
   return (
-    <section className='max-w-screen-md mx-auto p-5'>
-      <div className='mb-8'>
-        <Title
-          title='프로필 설정'
-          description='현재 프로필을 수정할수 있어요.'
-        />
+    <section className='mt-12 mx-auto max-w-3xl laptop:max-w-5xl'>
+      <div className='my-6'>
+        <Title title='프로필 설정' description='현재 프로필을 수정해보세요' />
       </div>
       <ProfileForm userData={userData} />
     </section>

@@ -11,7 +11,10 @@ export default function SocialLinks({ links }: Props) {
       {Object.entries(links).map(([key, value]) => {
         if (!value) return;
         return (
-          <li key={key} className='flex items-center gap-3 text-gray-600'>
+          <li
+            key={key}
+            className='flex items-center gap-3 text-gray-600 dark:text-slate-400'
+          >
             {getIcon(key)}
             <p>{value}</p>
           </li>
