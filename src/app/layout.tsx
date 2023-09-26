@@ -13,8 +13,8 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'RamBlog', template: 'RamBlog | %s' },
-  description: 'frontend engineer Boram blog🐥',
+  title: 'RamBlog',
+  description: 'Blog for all developers',
   icons: {
     icon: '/favicon.ico',
   },

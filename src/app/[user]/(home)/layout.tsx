@@ -1,8 +1,8 @@
+import { notFound } from 'next/navigation';
+import { ReactNode } from 'react';
 import { getUserForProfile } from '@/service/user';
 import Hero from '@/components/user/Hero';
-import { notFound } from 'next/navigation';
 import TabList from '@/components/user/TabList';
-import { ReactNode } from 'react';
 
 type Props = {
   params: { user: string };
@@ -24,4 +24,11 @@ export default async function UserTemplate({
       <div className='mt-8 min-h-[500px]'>{children}</div>
     </div>
   );
+}
+
+export function generateMetadata({ params: { user } }: Props) {
+  return {
+    title: `${user} | RamBlog`,
+    description: `${user} 블로그`,
+  };
 }

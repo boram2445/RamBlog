@@ -17,3 +17,10 @@ export default function TagsPage({ params: { keyword } }: Props) {
     </section>
   );
 }
+
+export function generateMetadata({ params: { keyword } }: Props) {
+  return {
+    title: `#${keyword} | RamBlog`,
+    description: `${keyword} 검색 결과`,
+  };
+}

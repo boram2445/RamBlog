@@ -11,3 +11,10 @@ export default function LogPage({ params: { user } }: Props) {
     </>
   );
 }
+
+export function generateMetadata({ params: { user } }: Props) {
+  return {
+    title: `${user} / Logs | RamBlog`,
+    description: `하루 감정 기록`,
+  };
+}
