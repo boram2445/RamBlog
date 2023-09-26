@@ -60,7 +60,7 @@ export default function MarkDownPost({ content }: { content: string }) {
           input: ({ node, ...props }) => (
             <input
               {...props}
-              aria-label={props.title ?? ''}
+              aria-label={props.alt ?? ''}
               className='mt-0 mb-0'
             />
           ),

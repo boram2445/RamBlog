@@ -17,15 +17,15 @@ export default function LinkButtons({ links }: Props) {
         if (!value) return;
         if (key === 'email')
           return (
-            <div className='relative group'>
+            <li className='relative group'>
               {getIcon(key)}
               <span className='absolute hidden group-hover:block py-1 px-2 bg-gray-700  text-white text-xs rounded-full'>
                 {value}
               </span>
-            </div>
+            </li>
           );
         return (
-          <a href={value} key={key} target='_blank'>
+          <a href={value} key={key} target='_blank' aria-label={key}>
             {getIcon(key, value)}
           </a>
         );

@@ -2,20 +2,19 @@
 
 import Link from 'next/link';
 import useSWR from 'swr';
-import PlanetLogo from '../../asset/icons/planet_logo.svg';
 import Image from 'next/image';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import Button from '../ui/Button';
-import { useParams, usePathname, useRouter } from 'next/navigation';
-import UserAvartar from './UserAvartar';
 import { useRef, useState } from 'react';
-import DropDownNav from './DropDownNav';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { UserData } from '@/model/user';
 import useUser from '@/hooks/useUser';
-import { BsSearch, BsSun, BsMoonStars } from 'react-icons/bs';
-import ToggleButton from '../ui/ToggleButton';
+import Button from '../ui/Button';
 import DarkMode from '../ui/DarkMode';
+import UserAvartar from './UserAvartar';
+import DropDownNav from './DropDownNav';
+import PlanetLogo from '../../asset/icons/planet_logo.svg';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { BsSearch } from 'react-icons/bs';
 
 export default function Header() {
   const router = useRouter();
@@ -69,6 +68,7 @@ export default function Header() {
           <Link
             href={params.user ? `/${params.user}/search` : '/search'}
             className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800'
+            aria-label='search'
           >
             <BsSearch className='w-5 h-5 text-gray-600 dark:text-gray-100' />
           </Link>
