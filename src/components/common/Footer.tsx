@@ -17,7 +17,11 @@ export default function Footer() {
           <small>Copyright ⓒ 2023 Kim Boram All Rights Reserved.</small>
           <div className='flex gap-4 items-center'>
             <small>김보람 | boram2445@gmail.com</small>
-            <a href='https://github.com/boram2445' target='_blank'>
+            <a
+              href='https://github.com/boram2445'
+              target='_blank'
+              aria-label='github'
+            >
               <BsGithub className='hover:opacity-60 h-5 w-5' />
             </a>
           </div>

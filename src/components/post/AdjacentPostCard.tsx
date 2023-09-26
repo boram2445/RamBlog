@@ -24,7 +24,7 @@ export default function AdjacentPostCard({ data, type }: Props) {
         {type === 'prev' && <BsArrowLeftCircleFill className={ICON_CLASS} />}
         <div className={`${type === 'next' ? 'text-end' : ''}`}>
           <small>{type === 'prev' ? '이전 포스트' : '다음 포스트'}</small>
-          <h4 className='text-xl font-semibold'>{title}</h4>
+          <h2 className='text-xl font-semibold'>{title}</h2>
         </div>
         {type === 'next' && <BsArrowRightCircleFill className={ICON_CLASS} />}
       </div>
