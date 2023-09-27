@@ -1,10 +1,4 @@
-import type { Metadata } from 'next';
 import FollowLists from '@/components/follow/FollowLists';
-
-export const metadata: Metadata = {
-  title: 'Profile Edit | RamBlog',
-  description: '사용자 프로필 설정',
-};
 
 type Props = {
   params: {
