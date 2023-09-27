@@ -15,6 +15,9 @@ const notoSansKr = Noto_Sans_KR({
 export const metadata: Metadata = {
   title: 'RamBlog',
   description: 'Blog for all developers',
+  verification: {
+    google: process.env.GOOGLE_VERIFICATION_ID,
+  },
   icons: {
     icon: '/favicon.ico',
   },
