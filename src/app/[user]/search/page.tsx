@@ -13,3 +13,10 @@ export default function SearchPage({ params: { user } }: Props) {
     </>
   );
 }
+
+export function generateMetadata({ params: { user } }: Props) {
+  return {
+    title: `${user} / Search | RamBlog`,
+    description: `${user} 블로그내 포스트 검색`,
+  };
+}

@@ -45,9 +45,9 @@ export default function PostCard({ post }: { post: SimplePost }) {
             className='grow flex flex-col cursor-pointer'
             onClick={handleClick}
           >
-            <h3 className='py-1 text-gray-900 font-semibold dark:text-slate-300'>
+            <h2 className='py-1 text-gray-900 font-semibold dark:text-slate-300'>
               {title}
-            </h3>
+            </h2>
             <p className='grow w-full text-sm text-gray-600 dark:text-slate-400 truncate'>
               {description}
             </p>

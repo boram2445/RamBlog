@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint"
   },
@@ -45,6 +46,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/nodemailer": "^6.4.9",
     "@types/prismjs": "^1.26.0",
-    "@types/react-syntax-highlighter": "^15.5.7"
+    "@types/react-syntax-highlighter": "^15.5.7",
+    "next-sitemap": "^4.2.3"
   }
 }

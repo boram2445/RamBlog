@@ -6,6 +6,7 @@ type Props = {
   onIcon: ReactNode;
   offIcon: ReactNode;
   className?: string;
+  title: string;
 };
 
 export default function ToggleButton({
@@ -14,12 +15,14 @@ export default function ToggleButton({
   onIcon,
   offIcon,
   className,
+  title,
 }: Props) {
   return (
     <button
       onClick={() => onToggle(!toggled)}
       type='button'
       className={className}
+      title={title}
     >
       {toggled ? onIcon : offIcon}
     </button>

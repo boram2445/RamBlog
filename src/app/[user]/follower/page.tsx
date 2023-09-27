@@ -13,3 +13,10 @@ export default function FollowerPage({ params: { user } }: Props) {
     </div>
   );
 }
+
+export function generateMetadata({ params: { user } }: Props) {
+  return {
+    title: `${user} / Follower | RamBlog`,
+    description: `${user}님이 팔로우 하는 유저 리스트`,
+  };
+}
