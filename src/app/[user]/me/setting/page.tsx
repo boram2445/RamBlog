@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getUserForProfile } from '@/service/user';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import ProfileForm from '@/components/setting/ProfileForm';
 import Title from '@/components/ui/Title';
 
@@ -9,7 +9,7 @@ export default async function SettingPage() {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
-  if (!user) notFound();
+  if (!user) redirect('/auth/signin');
   const userData = user && (await getUserForProfile(user.username));
 
   return (
