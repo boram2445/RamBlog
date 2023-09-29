@@ -27,6 +27,60 @@ export async function addUser({ id, username, email, image, name }: OAuthUser) {
   });
 }
 
+export async function addEmailUser({
+  name,
+  username,
+  email,
+  password,
+}: {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+}) {
+  return client.create({
+    _type: 'user',
+    username,
+    email,
+    password,
+    name,
+    image: '',
+    blogName: name,
+    title: `${name}`,
+    introduce: `안녕하세요 ${name}의 멋진 블로그입니다 :)`,
+    following: [],
+    followers: [],
+    bookmarks: [],
+  });
+}
+
+export async function checkUsernameValid(username: string) {
+  const isExistUsername = await client.fetch(
+    `*[_type=='user' && username == "${username}"][0]`
+  );
+  return !!isExistUsername;
+}
+
+export async function checkEmailValid(email: string) {
+  const isExistEmail = await client.fetch(
+    `*[_type=='user' && email == "${email}"][0]`
+  );
+  return !!isExistEmail;
+}
+
+export async function loginWithEmail(email: string) {
+  return await client.fetch(
+    `*[_type=='user' && email == "${email}"][0]{
+      "id":_id,
+      email,
+      name,
+      username,
+      password,
+      image,
+    }`
+  );
+}
+
 export async function getUserData(userId: string) {
   return client.fetch(
     `*[_type=='user' && _id == "${userId}"][0]

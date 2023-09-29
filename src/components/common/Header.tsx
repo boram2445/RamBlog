@@ -104,7 +104,16 @@ export default function Header() {
               </div>
             </>
           )}
-          {!session && <Button onClick={() => signIn()}>로그인</Button>}
+          {!session && (
+            <div className='flex gap-2'>
+              <Button onClick={() => router.push('/auth/signin')}>
+                로그인
+              </Button>
+              <Button onClick={() => router.push('/auth/register')}>
+                회원가입
+              </Button>
+            </div>
+          )}
         </nav>
       </div>
     </header>
