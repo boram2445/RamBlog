@@ -16,7 +16,9 @@ export default function BookmarkPosts() {
     <>
       {isLoading && <PostGridLoading />}
       {posts && posts.length > 0 && <PostGrid posts={posts} />}
-      {posts && posts.length === 0 && <NoContent text='북마크한 포스트가' />}
+      {posts && posts.length === 0 && (
+        <NoContent text='북마크한 포스트가 없어요😥' />
+      )}
     </>
   );
 }
