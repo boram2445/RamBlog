@@ -116,7 +116,7 @@ export default function AboutForm({ username, portfolio }: Props) {
   return (
     <>
       {isMutating && <PageLoader label='수정중...' />}
-      <form className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
+      <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
           <div className='px-4'>
@@ -195,7 +195,7 @@ export default function AboutForm({ username, portfolio }: Props) {
             저장
           </Button>
         </div>
-      </form>
+      </div>
     </>
   );
 }
