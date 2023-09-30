@@ -65,6 +65,18 @@ export async function getTagPosts(tag: string) {
     .then(mapPosts);
 }
 
+export async function getBookmarkPosts(username: string) {
+  return client.fetch(
+    `*[_type == "post" && _id in *[_type == "user" && username == "${username}"].bookmarks[]._ref]
+  | order(_createdAt desc){${simplePostProjection}}`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: ['bookmark'] },
+    }
+  );
+}
+
 export async function getUserTagPosts(username: string, tag: string) {
   return client
     .fetch(
