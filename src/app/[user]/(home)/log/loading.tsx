@@ -1,3 +1,10 @@
+import Skeleton from '@/components/ui/Skeleton';
+
 export default function Loading() {
-  return <p>로그 준비중...</p>;
+  return (
+    <div className='flex justify-between items-center'>
+      <Skeleton className='w-[5rem] h-[1.5rem]' />
+      <Skeleton className='w-[5rem] h-[1.5rem]' />
+    </div>
+  );
 }
