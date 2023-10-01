@@ -9,6 +9,7 @@ import { Emotion } from '@/service/log';
 import Button from '../ui/Button';
 import ModalContainer from '../ui/ModalContainer';
 import LogForm from './LogForm';
+import NoContent from '../ui/NoContent';
 
 type Props = {
   username: string;
@@ -44,9 +45,7 @@ export default function LogList({ username }: Props) {
       </div>
       {isLoading && <LogListLoading />}
       {!isLoading && logs?.length === 0 && (
-        <p className='text-center py-8 px-4 text-gray-600 dark:text-slate-300'>
-          아직 등록된 일기가 없어요😥
-        </p>
+        <NoContent text='아직 등록된 일기가 없어요😥' />
       )}
       {!isLoading && !error && (
         <ul className={listStyle}>

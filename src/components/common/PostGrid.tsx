@@ -13,7 +13,7 @@ const gridStyle =
 export default function PostGrid({ posts }: Props) {
   return (
     <ul className={gridStyle}>
-      {posts?.map((post, index) => (
+      {posts.map((post, index) => (
         <li key={index}>
           <PostCard post={post} />
         </li>

@@ -2,6 +2,7 @@ import { Portfolio } from '@/service/portfolio';
 import TagList from '../common/TagList';
 import ProjectArticle from './ProjectArticle';
 import ExperienceArticle from './ExperienceArticle';
+import NoContent from '../ui/NoContent';
 
 type Props = {
   portfolio: Portfolio;
@@ -10,11 +11,7 @@ type Props = {
 export const sectionClass =
   'mb-8 pb-8 border-b border-gray-200 dark:border-neutral-700';
 export const titleClass = 'mt-3 mb-5 color-title';
-const noContent = (
-  <p className='text-gray-700 text-center dark:text-slate-300'>
-    아직 등록된 소개가 없어요😥
-  </p>
-);
+const noContent = <NoContent text='아직 등록된 소개가 없어요😥' />;
 
 export default function AboutList({ portfolio }: Props) {
   if (!portfolio) return noContent;
