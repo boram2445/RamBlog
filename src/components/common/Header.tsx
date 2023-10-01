@@ -34,6 +34,10 @@ export default function Header() {
   const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const navList = [
+    {
+      label: '북마크 포스트',
+      onClick: () => router.push(`/${user?.username}/bookmarks`),
+    },
     { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
     { label: '글 쓰기', onClick: () => router.push(`/write`) },
     {
