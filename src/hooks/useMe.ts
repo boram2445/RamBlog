@@ -32,9 +32,23 @@ export default function useMe() {
 
   const setBookmark = useCallback(
     (postId: string, bookmark: boolean) => {
-      return mutate(updateBookmark(postId, bookmark), { populateCache: false });
+      if (!loggedInUser) return;
+      const bookmarks = loggedInUser.bookmarks ?? [];
+      const newUserData = {
+        ...loggedInUser,
+        bookmarks: bookmark
+          ? [...bookmarks, postId]
+          : bookmarks.filter((id) => id !== postId),
+      };
+
+      return mutate(updateBookmark(postId, bookmark), {
+        optimisticData: newUserData,
+        populateCache: false,
+        revalidate: false,
+        rollbackOnError: true,
+      });
     },
-    [mutate]
+    [mutate, loggedInUser]
   );
 
   return { loggedInUser, error, isLoading, toggleFollow, setBookmark };

@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { PostDetail } from '@/model/post';
 import axios from 'axios';
 import useMe from '@/hooks/useMe';
 import ToggleButton from '../ui/ToggleButton';
@@ -12,7 +11,7 @@ import {
   BsFillBookmarkFill,
   BsBookmark,
 } from 'react-icons/bs';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 
 type Props = {
   postId: string;
@@ -25,10 +24,12 @@ const iconStyle = 'w-5 h-5 dark:text-slate-400';
 export default function PostIcons({ postId }: Props) {
   const { loggedInUser, setBookmark } = useMe();
 
-  const { data: like } = useSWR<string[]>(`/api/posts/${postId}/like`);
+  const { data: likes, mutate: likeMutate } = useSWR<string[]>(
+    `/api/posts/${postId}/like`
+  );
   const router = useRouter();
 
-  const liked = like ? like?.includes(loggedInUser?.username ?? '') : false;
+  const liked = likes ? likes?.includes(loggedInUser?.username ?? '') : false;
   const bookmarked = loggedInUser?.bookmarks.includes(postId) ?? false;
 
   const handleCopyLink = () => {
@@ -40,16 +41,26 @@ export default function PostIcons({ postId }: Props) {
     }
   };
 
+  const setLike = (postId: string, like: boolean) =>
+    axios.put(`/api/likes`, { id: postId, like });
+
   const handleLike = (like: boolean) => {
-    console.log(like);
     if (!loggedInUser) {
       router.push('/auth/signin');
       return;
     }
+    if (!likes) return;
 
-    axios
-      .put(`/api/likes`, { id: postId, like })
-      .then(() => mutate(`/api/posts/${postId}/like`));
+    const newLikesArr = like
+      ? [...likes, loggedInUser.username]
+      : likes.filter((user) => user !== loggedInUser.username);
+
+    likeMutate(setLike(postId, like), {
+      optimisticData: newLikesArr,
+      populateCache: false,
+      revalidate: false,
+      rollbackOnError: true,
+    });
   };
 
   const handleBookmark = (bookmark: boolean) => {
@@ -71,7 +82,9 @@ export default function PostIcons({ postId }: Props) {
         <BsLink45Deg className='w-6 h-6 text-gray-600 dark:text-slate-400' />
       </button>
       <div className='flex gap-2 items-center'>
-        <p className='text-gray-600 dark:text-slate-400'>{like?.length ?? 0}</p>
+        <p className='text-gray-600 dark:text-slate-400'>
+          {likes?.length ?? 0}
+        </p>
         <ToggleButton
           toggled={liked}
           onToggle={handleLike}
