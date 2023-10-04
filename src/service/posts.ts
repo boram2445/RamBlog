@@ -95,7 +95,7 @@ export async function getPostDetail(
   username: string
 ): Promise<PostData> {
   const postDetail = await client.fetch(
-    `*[_type == "post" && author->username =="${username}" && _id == "${postId}"][0]{
+    `*[_type == "post" && _id == "${postId}"][0]{
       'currentPost': {${fullPostProjection}},
       'nextPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
       'previousPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
@@ -108,6 +108,22 @@ export async function getPostDetail(
   );
 
   return postDetail;
+}
+
+export async function getPostDetailLike(postId: string) {
+  const res = await client
+    .fetch(
+      `*[_type == "post" && _id == "${postId}"][0]{
+      "likes":likes[]->username,
+    }.likes`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['like'] },
+      }
+    )
+    .then((res) => res ?? []);
+  return res;
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수

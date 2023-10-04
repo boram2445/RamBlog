@@ -12,23 +12,24 @@ import {
   BsFillBookmarkFill,
   BsBookmark,
 } from 'react-icons/bs';
+import useSWR, { mutate } from 'swr';
 
 type Props = {
-  post: PostDetail;
+  postId: string;
 };
 
 const buttonStyle =
   'p-1 rounded-lg hover:bg-gray-200 flex items-center dark:hover:bg-neutral-800';
 const iconStyle = 'w-5 h-5 dark:text-slate-400';
 
-export default function PostIcons({ post }: Props) {
+export default function PostIcons({ postId }: Props) {
   const { loggedInUser, setBookmark } = useMe();
+
+  const { data: like } = useSWR<string[]>(`/api/posts/${postId}/like`);
   const router = useRouter();
 
-  const liked = loggedInUser
-    ? post.likes?.includes(loggedInUser?.username)
-    : false;
-  const bookmarked = loggedInUser?.bookmarks.includes(post.id) ?? false;
+  const liked = like ? like?.includes(loggedInUser?.username ?? '') : false;
+  const bookmarked = loggedInUser?.bookmarks.includes(postId) ?? false;
 
   const handleCopyLink = () => {
     if (navigator.clipboard) {
@@ -40,14 +41,15 @@ export default function PostIcons({ post }: Props) {
   };
 
   const handleLike = (like: boolean) => {
+    console.log(like);
     if (!loggedInUser) {
       router.push('/auth/signin');
       return;
     }
 
     axios
-      .put(`/api/likes/`, { id: post.id, like })
-      .then(() => router.refresh());
+      .put(`/api/likes`, { id: postId, like })
+      .then(() => mutate(`/api/posts/${postId}/like`));
   };
 
   const handleBookmark = (bookmark: boolean) => {
@@ -56,7 +58,7 @@ export default function PostIcons({ post }: Props) {
       return;
     }
 
-    setBookmark(post.id, bookmark).then(() => router.refresh());
+    setBookmark(postId, bookmark);
   };
 
   return (
@@ -69,9 +71,7 @@ export default function PostIcons({ post }: Props) {
         <BsLink45Deg className='w-6 h-6 text-gray-600 dark:text-slate-400' />
       </button>
       <div className='flex gap-2 items-center'>
-        <p className='text-gray-600 dark:text-slate-400'>
-          {post.likes?.length}
-        </p>
+        <p className='text-gray-600 dark:text-slate-400'>{like?.length ?? 0}</p>
         <ToggleButton
           toggled={liked}
           onToggle={handleLike}
