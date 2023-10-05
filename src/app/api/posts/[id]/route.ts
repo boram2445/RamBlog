@@ -39,8 +39,8 @@ export async function POST(req: NextRequest, context: Context) {
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  revalidateTag('userTags');
-  revalidateTag('userPosts');
+  revalidateTag(`tags/${user.username}`);
+  revalidateTag(`posts/${user.username}`);
 
   return result;
 }
@@ -57,8 +57,8 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-  revalidateTag('userTags');
-  revalidateTag('userPosts');
+  revalidateTag(`tags/${user.username}`);
+  revalidateTag(`posts/${user.username}`);
 
   return result;
 }

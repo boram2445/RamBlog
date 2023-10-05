@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
     mainImage
   ).then((data) => NextResponse.json(data));
 
-  revalidateTag('userTags');
-  revalidateTag('userPosts');
+  revalidateTag(`tags/${user.username}`);
+  revalidateTag(`posts/${user.username}`);
 
   return result;
 }

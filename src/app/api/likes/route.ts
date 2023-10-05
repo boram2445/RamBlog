@@ -24,7 +24,7 @@ export async function PUT(req: NextRequest) {
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
-  revalidateTag('userPosts');
+  revalidateTag(`posts/${user.username}`);
 
   return result;
 }

@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   const result = await request().then((data) => NextResponse.json(data));
 
-  revalidateTag('about');
+  revalidateTag(`about/${user.username}`);
 
   return result;
 }

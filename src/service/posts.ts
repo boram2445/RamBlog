@@ -51,7 +51,7 @@ export async function getAllUserPosts(username: string) {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['userPosts'] },
+        next: { tags: [`posts/${username}`] },
       }
     )
     .then(mapPosts);
@@ -84,7 +84,7 @@ export async function getUserTagPosts(username: string, tag: string) {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['userPosts'] },
+        next: { tags: [`posts/${username}`] },
       }
     )
     .then(mapPosts);
@@ -103,7 +103,7 @@ export async function getPostDetail(
     {},
     {
       cache: 'force-cache',
-      next: { tags: ['userPosts'] },
+      next: { tags: [`posts/${username}`] },
     }
   );
 
@@ -238,7 +238,7 @@ export async function getTags(
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['userTags'] },
+        next: { tags: [`tags/${username}`] },
       }
     )
     .then((tagList) => {
