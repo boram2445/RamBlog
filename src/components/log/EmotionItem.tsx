@@ -1,4 +1,4 @@
-import { Emotion } from '@/service/log';
+import { Emotion } from '@/model/log';
 import Image from 'next/image';
 import love from '../../../public/images/emotions/1.png';
 import happy from '../../../public/images/emotions/2.png';

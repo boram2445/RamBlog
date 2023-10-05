@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSWRConfig } from 'swr';
-import { Emotion, Log } from '@/service/log';
+import { Emotion, Log } from '@/model/log';
 
 export default function useLogs(username: string, type: 'all' & Emotion) {
   const url =

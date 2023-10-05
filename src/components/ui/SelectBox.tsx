@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import EmotionItem from '../log/EmotionItem';
-import { Emotion } from '@/service/log';
+import { Emotion } from '@/model/log';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 
 export type SelectItem = { id: number; label: string; text?: string };
