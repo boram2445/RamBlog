@@ -30,7 +30,7 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   const result = await deleteLog(id).then((data) => NextResponse.json(data));
 
-  revalidateTag('logs');
+  revalidateTag(`log/${user}`);
 
   return result;
 }

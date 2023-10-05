@@ -9,8 +9,8 @@ export default function useLogDetail(
 ) {
   const url =
     type === 'all'
-      ? `/api/${username}/log/${logId}`
-      : `/api/${username}/log/${logId}/${type}`;
+      ? `/api/${username}/logs/log/${logId}`
+      : `/api/${username}/logs/log/${logId}/${type}`;
 
   const { data: log, isLoading, error } = useSWR<DetailLog>(url);
   const { mutate } = useSWRConfig();

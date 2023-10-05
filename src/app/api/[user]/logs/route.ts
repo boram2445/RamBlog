@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     file
   ).then((data) => NextResponse.json(data));
 
-  revalidateTag('log');
+  revalidateTag(`log/${user.username}`);
 
   return result;
 }

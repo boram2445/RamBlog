@@ -46,7 +46,7 @@ export default function LogDetail({
     if (confirm('정말로 삭제하시겠습니까?😥')) {
       setIsFetching(true);
       await axios
-        .delete(`/api/${username}/log/${logId}`)
+        .delete(`/api/${username}/logs/log/${logId}`)
         .catch((err) => setError(err.toString()));
       setIsFetching(false);
       startTransition(() => {
