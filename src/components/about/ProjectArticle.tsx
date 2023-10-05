@@ -1,6 +1,6 @@
 'use client';
 
-import { Project } from '@/service/portfolio';
+import { Project } from '@/model/portfolio';
 import Image from 'next/image';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';

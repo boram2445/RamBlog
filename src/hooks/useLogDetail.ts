@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSWRConfig } from 'swr';
-import { DetailLog, Emotion } from '@/service/log';
+import { DetailLog, Emotion } from '@/model/log';
 
 export default function useLogDetail(
   username: string,

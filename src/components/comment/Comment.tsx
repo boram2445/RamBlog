@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BsPlusSquare } from 'react-icons/bs';
 import { AiOutlineMinusSquare } from 'react-icons/ai';
 import { useState } from 'react';
-import { Comment } from '@/service/comment';
+import { Comment } from '@/model/comment';
 import ReCommentList from './RecommentList';
 import { AuthUser } from '@/model/user';
 import PasswordForm from '../post/PasswordForm';

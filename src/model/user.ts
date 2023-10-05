@@ -1,3 +1,11 @@
+export type OAuthUser = {
+  id: string;
+  email: string;
+  name: string;
+  image?: string | null;
+  username: string;
+};
+
 export type AuthUser = {
   id: string;
   name: string;

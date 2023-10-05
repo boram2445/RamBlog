@@ -1,4 +1,4 @@
-import { DetailLog, Emotion, Log } from '@/service/log';
+import { DetailLog, Emotion, Log } from '@/model/log';
 import Image from 'next/image';
 import EmotionItem from './EmotionItem';
 import Button from '../ui/Button';

@@ -1,4 +1,5 @@
-import { Emotion, getUserEmotionLogs } from '@/service/log';
+import { Emotion } from '@/model/log';
+import { getUserEmotionLogs } from '@/service/log';
 import { NextResponse } from 'next/server';
 type Context = {
   params: { user: string; emotion: string };

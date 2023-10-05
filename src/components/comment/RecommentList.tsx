@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Comment as CommentType } from '@/service/comment';
+import { Comment as CommentType } from '@/model/comment';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 import Button from '../ui/Button';

@@ -1,4 +1,4 @@
-import { Emotion, SimpleLog } from '@/service/log';
+import { Emotion, SimpleLog } from '@/model/log';
 import Image from 'next/image';
 import { useState } from 'react';
 import ModalContainer from '../ui/ModalContainer';

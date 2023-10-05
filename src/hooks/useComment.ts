@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import axios from 'axios';
-import { Comment } from '@/service/comment';
+import { Comment } from '@/model/comment';
 import { useSWRConfig } from 'swr';
 import { useCallback } from 'react';
 

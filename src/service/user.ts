@@ -1,14 +1,6 @@
-import { HomeUser, Links, ProfileUser } from '@/model/user';
+import { HomeUser, Links, OAuthUser, ProfileUser } from '@/model/user';
 import { client } from './sanity';
 import { uploadImage } from './image';
-
-type OAuthUser = {
-  id: string;
-  email: string;
-  name: string;
-  image?: string | null;
-  username: string;
-};
 
 export async function addUser({ id, username, email, image, name }: OAuthUser) {
   return client.createIfNotExists({
