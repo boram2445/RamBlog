@@ -23,6 +23,7 @@ export default async function PostPage({ params: { user, id } }: Props) {
   return (
     <div className='mx-auto max-w-3xl laptop:max-w-6xl laptop:px-7 pb-20 '>
       <PostDetail
+        postId={id}
         currentPost={post.currentPost}
         nextPost={post.nextPost}
         previousPost={post.previousPost}

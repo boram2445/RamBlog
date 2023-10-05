@@ -15,6 +15,7 @@ const headerStyle =
 
 export default function MarkDownPost({ content }: { content: string }) {
   const { theme } = useTheme();
+  const replacedContent = content.replace(/<br\s*\/?>/gi, '\n &nbsp;');
 
   return (
     <>
@@ -84,7 +85,7 @@ export default function MarkDownPost({ content }: { content: string }) {
           h3: ({ node, ...props }) => <h3 {...props} className={headerStyle} />,
         }}
       >
-        {content}
+        {replacedContent}
       </ReactMarkdown>
     </>
   );
