@@ -1,8 +1,7 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { withSessionUser } from '@/utils/session';
 import { revalidateTag } from 'next/cache';
 import { createLog, getAllUserLogs } from '@/service/log';
-import { getServerSession } from 'next-auth';
-import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '../../auth/[...nextauth]/options';
 
 type Context = {
   params: { user: string };
@@ -19,34 +18,29 @@ export async function GET(_: Request, context: Context) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
+  return withSessionUser(async (user) => {
+    const form = await req.formData();
+    const title = form.get('title')?.toString();
+    const content = form.get('content')?.toString();
+    const emotion = form.get('emotion')?.toString();
+    const date = form.get('date')?.toString() ?? '';
+    const file = (form.get('file') as Blob) ?? '';
 
-  if (!user) {
-    return new Response(`Authentication Error`, { status: 401 });
-  }
+    if (!title || !content) {
+      return new Response('Bad request', { status: 400 });
+    }
 
-  const form = await req.formData();
-  const title = form.get('title')?.toString();
-  const content = form.get('content')?.toString();
-  const emotion = form.get('emotion')?.toString();
-  const date = form.get('date')?.toString() ?? '';
-  const file = (form.get('file') as Blob) ?? '';
+    const result = await createLog(
+      user.id,
+      title,
+      content,
+      date,
+      emotion,
+      file
+    ).then((data) => NextResponse.json(data));
 
-  if (!title || !content) {
-    return new Response('Bad request', { status: 400 });
-  }
+    revalidateTag(`log/${user.username}`);
 
-  const result = await createLog(
-    user.id,
-    title,
-    content,
-    date,
-    emotion,
-    file
-  ).then((data) => NextResponse.json(data));
-
-  revalidateTag(`log/${user.username}`);
-
-  return result;
+    return result;
+  });
 }

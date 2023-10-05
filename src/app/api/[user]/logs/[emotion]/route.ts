@@ -11,7 +11,7 @@ export async function GET(_: Request, context: Context) {
     return new NextResponse('Bad Reqest', { status: 400 });
   }
 
-  return await getUserEmotionLogs(user, emotion as Emotion).then((data) =>
+  return getUserEmotionLogs(user, emotion as Emotion).then((data) =>
     NextResponse.json(data)
   );
 }

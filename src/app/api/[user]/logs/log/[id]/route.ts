@@ -1,7 +1,6 @@
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { withSessionUser } from '@/utils/session';
 import { deleteLog, getUserLog } from '@/service/log';
 
 type Context = {
@@ -15,22 +14,18 @@ export async function GET(_: Request, context: Context) {
     return new NextResponse('Bad Reqest', { status: 400 });
   }
 
-  return await getUserLog(user, id).then((data) => NextResponse.json(data));
+  return getUserLog(user, id).then((data) => NextResponse.json(data));
 }
 
 export async function DELETE(_: NextRequest, context: Context) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-  if (!user) {
-    return new Response(`Authentication Error`, { status: 401 });
-  }
+  return withSessionUser(async (user) => {
+    const id = context.params.id;
+    if (!id) return new Response('Bad Request', { status: 400 });
 
-  const id = context.params.id;
-  if (!id) return new Response('Bad Request', { status: 400 });
+    const result = await deleteLog(id).then((data) => NextResponse.json(data));
 
-  const result = await deleteLog(id).then((data) => NextResponse.json(data));
+    revalidateTag(`log/${user.username}`);
 
-  revalidateTag(`log/${user}`);
-
-  return result;
+    return result;
+  });
 }
