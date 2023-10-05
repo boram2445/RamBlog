@@ -14,5 +14,7 @@ export async function GET(_: Request) {
     });
   }
 
-  return await getUserData(user.id).then((data) => NextResponse.json(data));
+  return await getUserData(user.id, user.username).then((data) =>
+    NextResponse.json(data)
+  );
 }

@@ -81,14 +81,14 @@ export async function loginWithEmail(email: string) {
   );
 }
 
-export async function getUserData(userId: string) {
+export async function getUserData(userId: string, username: string) {
   return client.fetch(
     `*[_type=='user' && _id == "${userId}"][0]
     {"id":_id,name,username,email,image,blogName}`,
     {},
     {
       cache: 'force-cache',
-      next: { tags: ['profile'] },
+      next: { tags: [`profile/${username}`] },
     }
   );
 }
@@ -125,7 +125,7 @@ export async function getUserForProfile(
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['profile', 'following'] },
+        next: { tags: [`profile/${username}`, 'following'] },
       }
     )
     .then((user) => ({
