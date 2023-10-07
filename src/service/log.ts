@@ -60,7 +60,7 @@ export async function getAllUserLogs(username: string) {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['log'] },
+        next: { tags: [`log/${username}`] },
       }
     )
     .then((logs) =>
@@ -79,7 +79,7 @@ export async function getUserEmotionLogs(username: string, emotion: Emotion) {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['log'] },
+        next: { tags: [`log/${username}`] },
       }
     )
     .then((logs) =>
@@ -106,7 +106,7 @@ export async function getUserEmotionLog(
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['log'] },
+        next: { tags: [`log/${username}`] },
       }
     )
     .then((log) => ({
@@ -129,7 +129,7 @@ export async function getUserLog(username: string, logId: string) {
       {},
       {
         cache: 'force-cache',
-        next: { tags: ['log'] },
+        next: { tags: [`log/${username}`] },
       }
     )
     .then((log) => ({

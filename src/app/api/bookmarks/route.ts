@@ -1,44 +1,33 @@
 import { revalidateTag } from 'next/cache';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { addBookmark, removeBookmark } from '@/service/user';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { getBookmarkPosts } from '@/service/posts';
+import { withSessionUser } from '@/utils/session';
 
 export async function GET(_: Request) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-
-  if (!user) {
-    return new Response('Authentication Error', { status: 401 });
-  }
-
-  return await getBookmarkPosts(user.username).then((data) =>
-    NextResponse.json(data)
-  );
+  return withSessionUser(async (user) => {
+    return getBookmarkPosts(user.username).then((data) =>
+      NextResponse.json(data)
+    );
+  });
 }
 
 export async function PUT(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
+  return withSessionUser(async (user) => {
+    const { id, bookmark } = await req.json();
 
-  if (!user) {
-    return new Response('Authentication Error', { status: 401 });
-  }
+    if (!id || bookmark === undefined) {
+      return new Response('Bad Request', { status: 400 });
+    }
 
-  const { id, bookmark } = await req.json();
+    const request = bookmark ? addBookmark : removeBookmark;
 
-  if (!id || bookmark === undefined) {
-    return new Response('Bad Request', { status: 400 });
-  }
+    const result = await request(user.id, id)
+      .then((res) => NextResponse.json(res))
+      .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
-  const request = bookmark ? addBookmark : removeBookmark;
+    revalidateTag('bookmark');
 
-  const result = request(user.id, id)
-    .then((res) => NextResponse.json(res))
-    .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
-
-  revalidateTag('bookmark');
-
-  return result;
+    return result;
+  });
 }

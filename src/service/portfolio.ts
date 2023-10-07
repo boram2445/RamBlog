@@ -41,7 +41,7 @@ export async function getUserPortfolio(username: string): Promise<Portfolio> {
     {},
     {
       cache: 'force-cache',
-      next: { tags: ['about'] },
+      next: { tags: [`about/${username}`] },
     }
   );
 }

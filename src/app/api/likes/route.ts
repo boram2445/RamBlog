@@ -1,30 +1,24 @@
 import { revalidateTag } from 'next/cache';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { dislikePost, likePost } from '@/service/posts';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { withSessionUser } from '@/utils/session';
 
 export async function PUT(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
+  return withSessionUser(async (user) => {
+    const { id, like } = await req.json();
 
-  if (!user) {
-    return new Response('Authentication Error', { status: 401 });
-  }
+    if (!id || like === undefined) {
+      return new Response('Bad Request', { status: 400 });
+    }
 
-  const { id, like } = await req.json();
+    const request = like ? likePost : dislikePost;
 
-  if (!id || like === undefined) {
-    return new Response('Bad Request', { status: 400 });
-  }
+    const result = await request(id, user.id)
+      .then((res) => NextResponse.json(res))
+      .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
-  const request = like ? likePost : dislikePost;
+    revalidateTag(`posts/${user.username}`);
 
-  const result = request(id, user.id)
-    .then((res) => NextResponse.json(res))
-    .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
-
-  revalidateTag('userPosts');
-
-  return result;
+    return result;
+  });
 }

@@ -53,7 +53,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
       .then(() => {
         resetSelect();
         mutate(`/api/${username}/logs`);
-        mutate(`/api/${username}/log`);
+        mutate(`/api/${username}/logs/log`);
       })
       .catch((err) => setError(err.toString()))
       .finally(() => {

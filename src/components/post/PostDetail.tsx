@@ -13,6 +13,7 @@ import PostUserProfile from './PostUserProfile';
 import LikeNumIcon from '../common/LikeNumIcon';
 
 type Props = {
+  postId: string;
   currentPost: PostDetailType;
   nextPost?: AdjacentPost;
   previousPost?: AdjacentPost;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default async function PostDetail({
+  postId,
   currentPost,
   nextPost,
   previousPost,
@@ -49,10 +51,10 @@ export default async function PostDetail({
               size='small'
             />
             <Date date={createdAt?.toString()} type='small' />
-            <LikeNumIcon
+            {/* <LikeNumIcon
               likes={likes?.length ?? 0}
               className='text-gray-700 dark:text-slate-400'
-            />
+            /> */}
           </div>
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
@@ -64,7 +66,7 @@ export default async function PostDetail({
         <div className='mt-8 ml-auto'>
           <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] laptop:block border border-gray-200 rounded-xl overflow-hidden dark:bg-neutral-800 dark:border-neutral-700'>
             <Toc />
-            <PostIcons post={currentPost} />
+            <PostIcons postId={postId} />
           </aside>
         </div>
       </div>
@@ -75,7 +77,7 @@ export default async function PostDetail({
       )}
       <PostUserProfile username={username} />
       <div className='laptop:hidden my-2 border border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden'>
-        <PostIcons post={currentPost} />
+        <PostIcons postId={postId} />
       </div>
       {(previousPost || nextPost) && (
         <div className='mx-auto mt-5 px-4 flex gap-4 flex-col laptop:flex-row'>
