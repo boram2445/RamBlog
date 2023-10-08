@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState } from 'react';
 import DateForm from './DateForm';
-import { Experience, Project } from '@/service/portfolio';
+import { Experience, Project } from '@/model/portfolio';
 import { IoMdClose } from 'react-icons/io';
 import { ExperienceItem, ExperienceList } from './AboutForm';
 import TextArea from '../ui/TextArea';

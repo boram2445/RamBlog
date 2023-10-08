@@ -1,31 +1,5 @@
+import { Portfolio, PostPortfolio } from '@/model/portfolio';
 import { client } from './sanity';
-
-export type Portfolio = PostPortfolio & {
-  id: string;
-  username: string;
-};
-
-export type PostPortfolio = {
-  skills: string[];
-  introduce: string;
-  businessExperiences: Experience[];
-  projects: Project[];
-  educations: Experience[];
-};
-
-export type Experience = {
-  name: string;
-  startDate: string;
-  endDate: string;
-  holding: boolean;
-  content: string;
-  id: string;
-};
-
-export type Project = Experience & {
-  image: string | File;
-  link: string;
-};
 
 export async function getUserPortfolio(username: string): Promise<Portfolio> {
   return client.fetch(

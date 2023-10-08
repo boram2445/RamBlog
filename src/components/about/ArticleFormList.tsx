@@ -1,4 +1,4 @@
-import { Experience, Project } from '@/service/portfolio';
+import { Experience, Project } from '@/model/portfolio';
 import ArticleForm from './ArticleForm';
 import { ExperienceItem, ExperienceList } from './AboutForm';
 

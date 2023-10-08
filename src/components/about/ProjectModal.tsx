@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Project } from '@/service/portfolio';
+import { Project } from '@/model/portfolio';
 import DuringDate from './DuringDate';
 
 type Props = {

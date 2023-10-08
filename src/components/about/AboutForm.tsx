@@ -1,6 +1,6 @@
 'use client';
 
-import { Portfolio } from '@/service/portfolio';
+import { Portfolio } from '@/model/portfolio';
 import { ChangeEvent, FormEvent, useState, useTransition } from 'react';
 import { sectionClass } from './AboutList';
 import TagsInput from '../post/TagsInput';

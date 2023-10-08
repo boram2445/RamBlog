@@ -1,4 +1,4 @@
-import { Emotion } from '@/service/log';
+import { Emotion } from '@/model/log';
 import EmotionItem from './EmotionItem';
 
 type Props = {

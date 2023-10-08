@@ -1,4 +1,4 @@
-import { Portfolio } from '@/service/portfolio';
+import { Portfolio } from '@/model/portfolio';
 import TagList from '../common/TagList';
 import ProjectArticle from './ProjectArticle';
 import ExperienceArticle from './ExperienceArticle';

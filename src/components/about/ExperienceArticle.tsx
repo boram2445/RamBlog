@@ -1,4 +1,4 @@
-import { Experience } from '@/service/portfolio';
+import { Experience } from '@/model/portfolio';
 import DuringDate from './DuringDate';
 
 type Props = {

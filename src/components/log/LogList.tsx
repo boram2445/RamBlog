@@ -5,7 +5,7 @@ import useLogs from '@/hooks/useLogs';
 import LogCard, { LogCardLoading } from './LogCard';
 import SelectBox, { SelectItem } from '../ui/SelectBox';
 import { useState } from 'react';
-import { Emotion } from '@/service/log';
+import { Emotion } from '@/model/log';
 import Button from '../ui/Button';
 import ModalContainer from '../ui/ModalContainer';
 import LogForm from './LogForm';
