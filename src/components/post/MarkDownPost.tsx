@@ -9,6 +9,7 @@ import {
 } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
+import { extractImageSize } from '@/utils/extractImageSize';
 
 const headerStyle =
   'pb-1 border-b border-gray-200 dark:border-slate-700 dark:text-slate-200';
@@ -44,17 +45,21 @@ export default function MarkDownPost({ content }: { content: string }) {
               </code>
             );
           },
-          img: (image) => (
-            <div className='mx-auto w-5/6 flex items-center justify-center'>
-              <Image
-                src={image.src || ''}
-                alt={image.alt || ''}
-                width={500}
-                height={300}
-                className='w-full max-h-[500px] object-cover'
-              />
-            </div>
-          ),
+          img: (image) => {
+            const size = extractImageSize(image.src ?? '');
+            return (
+              <div className='mx-auto flex items-center justify-center'>
+                <Image
+                  src={image.src || ''}
+                  alt={image.alt || ''}
+                  width={size.width ?? 500}
+                  height={size.height ?? 300}
+                  className='max-h-[500px] object-contain my-0'
+                />
+              </div>
+            );
+          },
+
           a: ({ node, ...props }) => (
             <a {...props} className='text-indigo-500 dark:text-yellow-400' />
           ),
