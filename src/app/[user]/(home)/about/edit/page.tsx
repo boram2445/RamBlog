@@ -21,10 +21,8 @@ export default async function AboutEditPage({ params: { user } }: Props) {
 
   return (
     <>
-      <div className='flex gap-5'>
-        <div className='mb-6'>
-          <Title title='About Edit' />
-        </div>
+      <div className='flex gap-5 items-center mb-6'>
+        <Title title='About Edit' />
         {loginUser?.username === user && (
           <Link href={`/${loginUser.username}/about`} className='mt-1'>
             <Button>뒤로 가기</Button>

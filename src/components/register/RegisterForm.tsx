@@ -59,7 +59,7 @@ export default function RegisterForm({ closeForm }: Props) {
         Sign up to RamBlog
       </h1>
       <form className='mb-4 flex flex-col gap-5'>
-        <div className='flex gap-2'>
+        <div className='flex flex-col tablet:flex-row gap-2'>
           <div className={inputBoxStyle}>
             <label htmlFor='name'>Name</label>
             <input

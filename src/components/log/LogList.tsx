@@ -15,7 +15,8 @@ type Props = {
   username: string;
 };
 
-const listStyle = 'mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
+const listStyle =
+  'mx-auto py-8 px-1 tablet:px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
 
 export default function LogList({ username }: Props) {
   const { data: session } = useSession();

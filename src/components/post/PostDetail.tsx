@@ -44,7 +44,7 @@ export default async function PostDetail({
           {title}
         </h1>
         <div className='flex justify-between'>
-          <div className='flex gap-4'>
+          <div className='flex gap-4 flex-col tablet:flex-row'>
             <UserAvartar
               imageUrl={userImage}
               username={username}
@@ -80,7 +80,7 @@ export default async function PostDetail({
         <PostIcons postId={postId} />
       </div>
       {(previousPost || nextPost) && (
-        <div className='mx-auto mt-5 px-4 flex gap-4 flex-col laptop:flex-row'>
+        <div className='mx-auto mt-5 tablet:px-4 flex gap-4 flex-col laptop:flex-row'>
           {previousPost && <AdjacentPostCard data={previousPost} type='prev' />}
           {nextPost && <AdjacentPostCard data={nextPost} type='next' />}
         </div>

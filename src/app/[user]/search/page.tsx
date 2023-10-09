@@ -8,9 +8,9 @@ type Props = {
 
 export default function SearchPage({ params: { user } }: Props) {
   return (
-    <>
+    <div className='mx-auto max-w-3xl laptop:max-w-7xl my-10'>
       <SearchList username={user} />
-    </>
+    </div>
   );
 }
 
