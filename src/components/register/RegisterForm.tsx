@@ -48,14 +48,14 @@ export default function RegisterForm({ closeForm }: Props) {
   };
 
   return (
-    <section className='absolute bg-white inset-0'>
+    <section className='absolute bg-white dark:bg-darkBg inset-0'>
       <button
         onClick={closeForm}
         className='p-2 rounded-full border border-gray-300'
       >
         <IoIosArrowBack />
       </button>
-      <h1 className='mb-7 text-gray-800 text-3xl font-semibold py-4'>
+      <h1 className='mb-7 text-gray-800 text-3xl font-semibold py-4 dark:text-slate-300'>
         Sign up to RamBlog
       </h1>
       <form className='mb-4 flex flex-col gap-5'>

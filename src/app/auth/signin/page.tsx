@@ -24,7 +24,7 @@ export default async function SigninPage({
 
   return (
     <section className='mx-auto max-w-2xl my-10 first-letter:flex justify-center flex-col '>
-      <h1 className='mb-7 text-gray-800 text-3xl font-semibold py-4'>
+      <h1 className='mb-7 text-gray-800 dark:text-slate-300 text-3xl font-semibold py-4'>
         Sign in to RamBlog
       </h1>
       <Signin callbackUrl={callbackUrl ?? '/'} />
