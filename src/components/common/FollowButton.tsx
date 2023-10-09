@@ -41,7 +41,7 @@ export default function FollowButton({ userId, username }: Props) {
         <div className='relative h-[30px]'>
           {isUpdating && (
             <div className='absolute inset-0 flex justify-center items-center z-20'>
-              <PulseLoader size='6' className='text-gray-800 dark:text-white' />
+              <PulseLoader size='6' className='text-gray-500 dark:text-white' />
             </div>
           )}
           <Button
@@ -52,7 +52,7 @@ export default function FollowButton({ userId, username }: Props) {
             {following ? (
               <AiOutlineCheck className='text-white dark:text-neutral-800' />
             ) : (
-              <AiOutlinePlus className='text-white' />
+              <AiOutlinePlus className='text-neutral-800' />
             )}
             {text}
           </Button>
