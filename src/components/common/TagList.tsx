@@ -35,7 +35,7 @@ export default function TagList({
           >
             {getTagName(tag)}
             {typeof tag !== 'string' && (
-              <span className='text-sm text-indigo-600'>{`${tag.count}`}</span>
+              <span className='text-sm text-indigo-600 dark:text-indigo-100'>{`${tag.count}`}</span>
             )}
           </button>
         </li>

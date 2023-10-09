@@ -66,7 +66,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
     <>
       {loading && <PageLoader label='일기 작성중...' />}
       <form
-        className='relative w-full p-5 rounded-lg bg-white dark:bg-neutral-800'
+        className='relative w-full h-full p-5 rounded-lg bg-white dark:bg-neutral-800'
         onSubmit={handleSubmit}
       >
         <div className='flex justify-between items-center'>
@@ -83,14 +83,16 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
             등록
           </Button>
         </div>
-        <div className='flex gap-3'>
-          <ImageUpload
-            file={file}
-            onChange={handleChange}
-            styleClass='w-1/2 aspect-square'
-            text='오늘의 사진'
-          />
-          <div className='grow flex flex-col gap-2'>
+        <div className='h-5/6 flex flex-col tablet:flex-row gap-3'>
+          <div className='h-full tablet:w-1/2'>
+            <ImageUpload
+              file={file}
+              onChange={handleChange}
+              styleClass='h-full w-full'
+              text='오늘의 사진'
+            />
+          </div>
+          <div className='h-full tablet:w-1/2 flex flex-col gap-2'>
             <input
               type='text'
               placeholder='제목'

@@ -8,7 +8,9 @@ type Props = {
   user: ProfileUser;
 };
 
-const tabStyle = `px-5 py-1.5 cursor-pointer text-gray-600 hover:text-gray-900 dark:hover:text-slate-300`;
+const tabStyle =
+  'px-5 py-1.5 cursor-pointer text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-300';
+
 const tabs = [
   { href: '', name: 'Posts' },
   { href: '/log', name: 'Log' },
@@ -26,7 +28,7 @@ export default function TabList({ user }: Props) {
             href={`/${user.username}${href}`}
             className={`${tabStyle} ${
               getOnPath(pathname, href, user.username)
-                ? 'font-semibold text-gray-900 bg-gray-100 rounded-full'
+                ? 'font-semibold text-gray-900 bg-gray-100 rounded-full dark:text-gray-700'
                 : ''
             }`}
           >
