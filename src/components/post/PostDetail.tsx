@@ -40,7 +40,7 @@ export default async function PostDetail({
             <TagList tags={currentPost.tags} type='big' />
           </div>
         )}
-        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] font-semibold text-gray-800 dark:text-slate-200'>
+        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[52px] font-semibold break-all text-gray-800 dark:text-slate-200'>
           {title}
         </h1>
         <div className='flex justify-between'>

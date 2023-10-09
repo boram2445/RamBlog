@@ -39,16 +39,20 @@ export default function PostCard({ post }: { post: SimplePost }) {
         />
       )}
       <div className={`${mainImage ? 'h-1/2' : 'h-full'} flex flex-col`}>
-        <div className='grow px-3 py-2 flex flex-col'>
+        <div className='grow px-3 pt-1 pb-2 flex flex-col'>
           <TagList tags={tags} />
           <div
             className='grow flex flex-col cursor-pointer'
             onClick={handleClick}
           >
-            <h2 className='py-1 text-gray-900 font-semibold dark:text-slate-300'>
+            <h2 className='py-1 text-gray-900 font-semibold dark:text-slate-300 break-all line-clamp-1'>
               {title}
             </h2>
-            <p className='grow w-full text-sm text-gray-600 dark:text-slate-400 truncate'>
+            <p
+              className={`text-sm text-gray-600 dark:text-slate-400 break-all ${
+                mainImage ? 'line-clamp-2' : 'line-clamp-5'
+              }`}
+            >
               {description}
             </p>
           </div>
