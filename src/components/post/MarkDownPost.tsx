@@ -59,9 +59,13 @@ export default function MarkDownPost({ content }: { content: string }) {
               </div>
             );
           },
-
+          p: ({ node, ...props }) => <p {...props} className='before:hidden' />,
           a: ({ node, ...props }) => (
-            <a {...props} className='text-indigo-500 dark:text-yellow-400' />
+            <a
+              {...props}
+              className='text-indigo-500 dark:text-yellow-400'
+              target='_blank'
+            />
           ),
           input: ({ node, ...props }) => (
             <input

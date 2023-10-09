@@ -26,10 +26,10 @@ export default function PostListCard({ post }: { post: SimplePost }) {
 
   return (
     <article className='group p-6 flex gap-4 justify-between border-b border-gray-200 cursor-pointer animate-fade-in dark:border-neutral-700 overflow-hidden'>
-      <div className='flex flex-col min-h-[160px]'>
+      <div className='grow flex flex-col min-h-[160px]'>
         <TagList tags={tags} />
-        <div className='flex flex-col h-full' onClick={handleClick}>
-          <div className='mt-1 py-1 text-gray-900 text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500 dark:group-hover:text-slate-100 dark:text-slate-300'>
+        <div className='mt-1.5 flex flex-col h-full' onClick={handleClick}>
+          <div className='py-1 text-gray-900 text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500 dark:group-hover:text-slate-100 dark:text-slate-300'>
             <AiOutlineRight className='hidden group-hover:block w-4 animate-fade-in-left' />
             <h1 className='line-clamp-1 w-11/12'>{title}</h1>
           </div>

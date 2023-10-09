@@ -40,7 +40,7 @@ export default async function PostDetail({
             <TagList tags={currentPost.tags} type='big' />
           </div>
         )}
-        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[52px] font-semibold break-all text-gray-800 dark:text-slate-200'>
+        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[53px] font-semibold break-all text-gray-800 dark:text-slate-200'>
           {title}
         </h1>
         <div className='flex justify-between'>
@@ -59,7 +59,7 @@ export default async function PostDetail({
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
       </div>
-      <div className='flex mx-auto min-h-[300px] laptop:gap-12 pb-12'>
+      <div className='flex mx-auto min-h-[450px] laptop:gap-12 pb-12'>
         <div className='grow pb-5 ' id='content'>
           <MarkDownPost content={content} />
         </div>

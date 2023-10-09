@@ -26,7 +26,7 @@ export default function PostCard({ post }: { post: SimplePost }) {
   const handleClick = () => router.push(`/${username}/posts/${id}`);
 
   return (
-    <article className='relative mx-auto w-full h-[350px] tablet:h-76 overflow-hidden shadow-md rounded-lg animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300 dark:bg-neutral-800'>
+    <article className='relative mx-auto w-full h-[352px] tablet:h-76 overflow-hidden shadow-md rounded-lg animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300 dark:bg-neutral-800'>
       {mainImage && (
         <Image
           src={mainImage}
@@ -39,18 +39,18 @@ export default function PostCard({ post }: { post: SimplePost }) {
         />
       )}
       <div className={`${mainImage ? 'h-1/2' : 'h-full'} flex flex-col`}>
-        <div className='grow px-3 pt-1 pb-2 flex flex-col'>
+        <div className='grow px-3 py-2 flex flex-col'>
           <TagList tags={tags} />
           <div
             className='grow flex flex-col cursor-pointer'
             onClick={handleClick}
           >
-            <h2 className='py-1 text-gray-900 font-semibold dark:text-slate-300 break-all line-clamp-1'>
+            <h2 className='py-1 text-gray-900 font-semibold dark:text-slate-300 break-all line-clamp-2'>
               {title}
             </h2>
             <p
               className={`text-sm text-gray-600 dark:text-slate-400 break-all ${
-                mainImage ? 'line-clamp-2' : 'line-clamp-5'
+                mainImage ? 'line-clamp-1' : 'line-clamp-5'
               }`}
             >
               {description}
