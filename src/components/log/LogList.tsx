@@ -64,7 +64,7 @@ export default function LogList({ username }: Props) {
       {isOpenForm && (
         <ModalContainer
           onClose={() => setIsOpenForm(false)}
-          className='overflow-y-hidden bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] rounded-lg dark:bg-neutral-800'
+          className='overflow-y-hidden bg-white w-4/5 h-4/5 tablet:h-[440px] laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
         >
           <LogForm
             username={username}

@@ -101,7 +101,7 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
               name='content'
               id='content'
               ref={contentRef}
-              className={`grow w-full textarea`}
+              className={`grow w-full textarea p-3`}
               placeholder='내용을 적어 주세요.'
             />
             <EmotionList

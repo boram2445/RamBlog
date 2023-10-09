@@ -24,6 +24,7 @@ export default function EmotionItem({
         alt={label}
         width={size === 'small' ? 30 : 40}
         height={size === 'small' ? 30 : 40}
+        placeholder='blur'
       />
       {type === 'text' && <span>{getImage(label)?.text}</span>}
     </>
@@ -39,8 +40,8 @@ function getImage(label: Emotion) {
     case 'normal':
       return { icon: normal, text: '그럭저럭 괜찮아요（ΦωΦ）' };
     case 'bad':
-      return { icon: bad, text: '너무 힘들어요( ´△｀)' };
-    case 'heart':
       return { icon: heart, text: '열받아 죽겠어요＼(´◓Д◔`)／' };
+    case 'heart':
+      return { icon: bad, text: '너무 힘들어요( ´△｀)' };
   }
 }
