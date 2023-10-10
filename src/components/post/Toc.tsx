@@ -16,12 +16,14 @@ export default function Toc() {
             {headings?.map(({ text, level }, index) => (
               <li
                 key={index}
-                className={`text-gray-500 ${
+                className={`mt-1 text-gray-500 text-sm ${
                   activeId === text &&
                   'text-indigo-500 font-semibold dark:text-yellow-400'
-                } pl-${level} hover:text-blue-300 mt-0.5 dark:text-slate-400 dark:hover:text-slate-300`}
+                } ml-${
+                  Number(level) - 1
+                } hover:text-blue-300 mt-0.5 dark:text-slate-400 dark:hover:text-slate-300`}
               >
-                <a href={`#${text}`} className=' break-all'>
+                <a href={`#${text}`} className='break-all'>
                   {text}
                 </a>
               </li>

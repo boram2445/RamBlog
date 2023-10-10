@@ -119,7 +119,7 @@ export default function AboutForm({ username, portfolio }: Props) {
       <div className='mx-auto max-w-screen-lg px-2 tablet:px-5 laptop:px-8'>
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Introduce</h3>
-          <div className='px-4'>
+          <div className='tablet:px-4'>
             <TextArea
               value={form.introduce}
               onChange={handleChange}
@@ -130,7 +130,7 @@ export default function AboutForm({ username, portfolio }: Props) {
         </section>
         <section className={sectionClass}>
           <h3 className={`${titleClass} mb-5 mt-3`}>Skills</h3>
-          <div className='px-4'>
+          <div className='tablet:px-4'>
             <TagsInput
               tags={form.skills}
               handleTags={handleSkills}

@@ -24,8 +24,6 @@ export default function TuiEditors({ content = '', editorRef }: Props) {
   const [loading, setLoading] = useState(false);
   const { theme } = useTheme();
 
-  //화면 사이즈가 작아지면 tab형식으로 변환
-  //mount될때 실행되는건 알겠는데, 왜 window사이즈가 변할때도 실행되는지 모르겠다.
   useEffect(() => {
     const handleResize = () => {
       window.innerWidth > 800

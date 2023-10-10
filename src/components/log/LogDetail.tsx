@@ -69,7 +69,7 @@ export default function LogDetail({
       {!log && <LogDetailLoading />}
       {log && (
         <div className='overflow-hidden w-full h-full flex flex-col tablet:flex-row'>
-          <div className='w-1/2 h-full bg-neutral-900 flex items-center'>
+          <div className='w-full h-1/2 tablet:w-1/2 tablet:h-full bg-neutral-900 flex items-center'>
             <Image
               src={log.currentLog.image ?? ''}
               alt={log.currentLog.title}
@@ -78,7 +78,7 @@ export default function LogDetail({
               className='w-full object-cover'
             />
           </div>
-          <div className='w-1/2 flex flex-col'>
+          <div className='w-full h-full tablet:w-1/2 flex flex-col'>
             <div className='flex justify-between p-3 border-b border-gray-200 dark:border-neutral-700'>
               <UserAvartar
                 username={username}

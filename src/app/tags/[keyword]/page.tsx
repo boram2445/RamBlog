@@ -11,7 +11,7 @@ export default function TagsPage({ params: { keyword } }: Props) {
   return (
     <section className='mx-auto max-w-3xl laptop:max-w-7xl my-10'>
       <h1 className='mb-8 pb-4 px-3 text-3xl laptop:text-4xl text-gray-800 font-bold border-b border-gray-200 flex items-center dark:border-neutral-700 dark:text-slate-300'>
-        <AiFillTag className='-mb-3 mr-2' /> Tag - {keyword}
+        <AiFillTag className='-mb-3 mr-2' /> Tag - {decodeURIComponent(keyword)}
       </h1>
       <TagPosts tag={keyword} />
     </section>
@@ -19,8 +19,9 @@ export default function TagsPage({ params: { keyword } }: Props) {
 }
 
 export function generateMetadata({ params: { keyword } }: Props) {
+  const tag = decodeURIComponent(keyword);
   return {
-    title: `#${keyword} | RamBlog`,
-    description: `${keyword} 검색 결과`,
+    title: `#${tag} | RamBlog`,
+    description: `${tag} 검색 결과`,
   };
 }

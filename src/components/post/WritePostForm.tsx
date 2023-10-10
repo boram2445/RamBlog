@@ -74,7 +74,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   return (
     <section className='flex flex-col'>
       {isMutating && <PageLoader label='업로드중...' />}
-      <div className='my-3 mx-auto max-w-screen-lg w-full px-4 '>
+      <div className='my-3 mx-auto max-w-screen-lg w-full tablet:px-4 '>
         <div className={inputBoxStyle}>
           <label htmlFor='title'>제목</label>
           <input

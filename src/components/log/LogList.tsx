@@ -15,7 +15,8 @@ type Props = {
   username: string;
 };
 
-const listStyle = 'mx-auto py-8 px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
+const listStyle =
+  'mx-auto py-8 px-1 tablet:px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
 
 export default function LogList({ username }: Props) {
   const { data: session } = useSession();
@@ -64,7 +65,7 @@ export default function LogList({ username }: Props) {
       {isOpenForm && (
         <ModalContainer
           onClose={() => setIsOpenForm(false)}
-          className='overflow-y-hidden bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] rounded-lg dark:bg-neutral-800'
+          className='overflow-y-hidden bg-white w-4/5 h-4/5 tablet:h-[440px] laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
         >
           <LogForm
             username={username}

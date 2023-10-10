@@ -38,7 +38,7 @@ export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
         <div className='absolute top-3 right-3 p-2 bg-white bg-opacity-90 rounded-full'>
           <EmotionItem label={emotion} />
         </div>
-        <div className='hidden group-hover:flex flex-col items-center justify-center absolute inset-0 bg-black bg-opacity-40 text-white '>
+        <div className='hidden p-2 group-hover:flex flex-col items-center justify-center absolute inset-0 bg-black bg-opacity-40 text-white '>
           <h2 className='text-xl font-semibold mb-3'>{title}</h2>
           <small>{getDate(date.toString(), 'date')}</small>
         </div>
@@ -46,7 +46,7 @@ export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
       {openModal && (
         <ModalContainer
           onClose={() => setOpenModal(false)}
-          className='overflow-y-auto bg-white w-4/5 laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
+          className='overflow-y-auto bg-white w-4/5 h-4/5 tablet:h-[440px] laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
         >
           <LogDetail
             logId={id}
