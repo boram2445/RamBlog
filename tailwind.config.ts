@@ -14,6 +14,9 @@ const config: Config = {
         laptop: '1024px',
         desktop: '1280px',
       },
+      colors: {
+        darkBg: 'rgb(18,18,18)',
+      },
       typography: {
         DEFAULT: {
           css: {

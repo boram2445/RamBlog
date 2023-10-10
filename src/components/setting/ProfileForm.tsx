@@ -2,9 +2,7 @@
 
 import { Links, ProfileUser } from '@/model/user';
 import Button from '../ui/Button';
-import Avartar from '../ui/Avartar';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { AiOutlineCamera } from 'react-icons/ai';
 import SocialForm from './SocialForm';
 import SocialLinks from './SocialLinks';
 import axios from 'axios';
@@ -97,7 +95,7 @@ export default function ProfileForm({ userData }: Props) {
     <section>
       {isLoading && <PageLoader label='수정중...' />}
       <form onSubmit={handleSubmit}>
-        <div className='flex gap-10 items-center'>
+        <div className='flex flex-col tablet:flex-row gap-10 items-center'>
           <UserImageForm
             image={image ?? ''}
             username={userData.username}
@@ -144,9 +142,9 @@ export default function ProfileForm({ userData }: Props) {
         </div>
         <section>
           <div className='my-4'>
-            <div className='flex justify-between'>
+            <div className='flex justify-between flex-col tablet:flex-row'>
               <div className='mb-3'>
-                <h4 className='text-lg font-semibold'>소셜 정보</h4>
+                <h4 className='text-lg font-semibold block'>소셜 정보</h4>
                 <small className='text-sm text-gray-400'>
                   포스트 및 블로그에서 보여지는 프로필에 사용되는 소셜
                   정보입니다.

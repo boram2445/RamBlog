@@ -10,7 +10,7 @@ type Props = {
 
 export default function Hero({ user }: Props) {
   return (
-    <section className='relative mt-5 py-7 px-12 flex flex-col tablet:flex-row items-center tablet:items-stretch gap-10'>
+    <section className='relative mt-5 py-7 px-8 tablet:px-12 flex flex-col tablet:flex-row items-center tablet:items-stretch gap-10'>
       <div className='p-3 border border-gray-100 rounded-full dark:border-neutral-700'>
         <Avartar imageUrl={user.image} username={user.username} type='max' />
       </div>

@@ -32,7 +32,7 @@ export default function SearchList({ username }: Props) {
   const deleteKeyword = () => setKeyword('');
 
   return (
-    <section className='mx-auto px-5'>
+    <section className='mx-auto tablet:px-5'>
       <form onSubmit={handleSubmit} className='my-8 flex flex-col items-center'>
         {username && (
           <p className='mb-2 text-gray-600 text-sm dark:text-slate-300'>

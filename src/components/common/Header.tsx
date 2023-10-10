@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { UserData } from '@/model/user';
 import useUser from '@/hooks/useUser';
 import Button from '../ui/Button';
@@ -34,11 +34,11 @@ export default function Header() {
   const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const navList = [
+    { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
     {
       label: '북마크 포스트',
       onClick: () => router.push(`/${user?.username}/bookmarks`),
     },
-    { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
     { label: '글 쓰기', onClick: () => router.push(`/write`) },
     {
       label: '프로필 설정',
@@ -51,24 +51,26 @@ export default function Header() {
 
   return (
     <header className='sticky top-0 z-10 w-full backdrop-blur-sm flex-none transition-colors duration-500 shadow-sm dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent animate-fade-in-down'>
-      <div className='min-h-[64px] max-w-screen-2xl mx-auto px-5 py-2 flex justify-between items-center'>
+      <div className='min-h-[64px] max-w-screen-2xl mx-auto px-3 tabelt:px-5 py-2 flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           <Link href='/'>
             <Image src={PlanetLogo} width={38} alt='RamBlog 로고' />
           </Link>
           {params.user ? (
             <Link href={`/${params.user}`}>
-              <h1 className='text-xl font-semibold hover:text-indigo-600'>
+              <h1 className='hidden tablet:block text-xl font-semibold hover:text-indigo-600'>
                 {userProfile?.blogName}
               </h1>
             </Link>
           ) : (
             <Link href='/'>
-              <h1 className='text-xl font-semibold'>RAMBLOG</h1>
+              <h1 className='hidden tablet:block text-xl font-semibold'>
+                RAMBLOG
+              </h1>
             </Link>
           )}
         </div>
-        <nav className='flex items-center gap-x-3 mr-4'>
+        <nav className='flex items-center gap-x-3 tablet:mr-4'>
           <Link
             href={params.user ? `/${params.user}/search` : '/search'}
             className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800'

@@ -23,7 +23,7 @@ export default function PostList({ user }: Props) {
       />
       {isLoading && <PostListLoading />}
       {!isLoading && !error && (
-        <ul className='flex flex-col gap-4'>
+        <ul className='flex flex-col'>
           {posts?.map((post) => (
             <li key={post.id}>
               <PostListCard post={post} />

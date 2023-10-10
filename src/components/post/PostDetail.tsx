@@ -40,11 +40,11 @@ export default async function PostDetail({
             <TagList tags={currentPost.tags} type='big' />
           </div>
         )}
-        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] font-semibold text-gray-800 dark:text-slate-200'>
+        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[53px] font-semibold break-all text-gray-800 dark:text-slate-200'>
           {title}
         </h1>
         <div className='flex justify-between'>
-          <div className='flex gap-4'>
+          <div className='flex gap-4 flex-col tablet:flex-row'>
             <UserAvartar
               imageUrl={userImage}
               username={username}
@@ -59,7 +59,7 @@ export default async function PostDetail({
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
       </div>
-      <div className='flex mx-auto min-h-[300px] laptop:gap-12 pb-12'>
+      <div className='flex mx-auto min-h-[450px] laptop:gap-12 pb-12'>
         <div className='grow pb-5 ' id='content'>
           <MarkDownPost content={content} />
         </div>
@@ -80,7 +80,7 @@ export default async function PostDetail({
         <PostIcons postId={postId} />
       </div>
       {(previousPost || nextPost) && (
-        <div className='mx-auto mt-5 px-4 flex gap-4 flex-col laptop:flex-row'>
+        <div className='mx-auto mt-5 tablet:px-4 flex gap-4 flex-col laptop:flex-row'>
           {previousPost && <AdjacentPostCard data={previousPost} type='prev' />}
           {nextPost && <AdjacentPostCard data={nextPost} type='next' />}
         </div>

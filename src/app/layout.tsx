@@ -35,7 +35,7 @@ export default function RootLayout({
           <AuthContext>
             <SWRConfigContext>
               <Header />
-              <main className='grow w-full mx-auto px-6 laptop:px-8'>
+              <main className='grow w-full mx-auto px-4 tablet:px-6 laptop:px-8'>
                 {children}
               </main>
             </SWRConfigContext>
