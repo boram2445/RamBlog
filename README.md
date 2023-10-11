@@ -1,3 +1,5 @@
+
+
 # 💙 RamBlog | 모든 개발자들을 위한 블로그
 
 
@@ -12,9 +14,7 @@
 
 🎀 블로그에 포토폴리오 기능을 담아, 다른 사용자들이 해당 사용자의 기술, 프로젝트를 구경할 수 있습니다. 
 ```
-
-### 👉 [서비스 바로가기](https://ram-blog.vercel.app/)
-### 👉 [WIKI 바로가기](https://github.com/boram2445/RamBlog/wiki)
+<a href="https://www.google.com/" target="_blank">👉 RamBlog 서비스 바로가기</a>
 
 <br/>
 
