@@ -52,7 +52,7 @@ export default function ProfileForm({ userData }: Props) {
   ) => {
     const { name, value } = e.target;
     if (name === 'title') setTitle(value);
-    else if (name === 'introeuce') setIntroduce(value);
+    else if (name === 'introduce') setIntroduce(value);
     else if (name === 'name') setName(value);
   };
 
