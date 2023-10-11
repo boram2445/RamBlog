@@ -116,7 +116,7 @@ NextJS 13을 이용한 풀스택 프로젝트 입니다.
 
 ##  포스팅
 ### <span id="posting">1. 포스팅✨ / 포스트 수정 및 삭제</span>
-- Toast UI Editor를 통한 `wizwig` 기능 제공
+- Toast UI Editor를 통한 `WYSIWYG` 기능 제공
     - 이미지 선택시 이미지 Sanity에 업로드 후 url받아와 표시
     - Content내용중 첫번째 이미지 부분의 url을 parsing하여 대표 이미지로 자동 선정후 저장
   
