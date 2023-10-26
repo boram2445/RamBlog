@@ -92,6 +92,9 @@ export default function MarkDownPost({ content }: { content: string }) {
           h1: ({ node, ...props }) => <h1 {...props} className={headerStyle} />,
           h2: ({ node, ...props }) => <h2 {...props} className={headerStyle} />,
           h3: ({ node, ...props }) => <h3 {...props} className={headerStyle} />,
+          strong: ({ node, ...props }) => (
+            <strong {...props} className=' dark:text-slate-200' />
+          ),
         }}
       >
         {replacedContent}
