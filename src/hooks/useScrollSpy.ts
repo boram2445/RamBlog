@@ -16,8 +16,8 @@ export function useScrollSpy(ids: string[], options?: { rootMargin: string }) {
         visibleHeaders[index] = entry.isIntersecting;
       });
 
-      const navIndex = findfirstIntersecting(visibleHeaders);
-      setActiveId(ids[navIndex]);
+      const navIndex = visibleHeaders.indexOf(true); //첫번째 header 찾기
+      navIndex !== -1 && setActiveId(ids[navIndex]); //header 발견시 변경, 없으면 이전값 유지
     }, options);
 
     elements.forEach((el) => {
@@ -30,9 +30,4 @@ export function useScrollSpy(ids: string[], options?: { rootMargin: string }) {
   }, [ids, options]);
 
   return activeId;
-}
-
-function findfirstIntersecting(visibleHeaders: boolean[]) {
-  const index = visibleHeaders.indexOf(true);
-  return index >= 0 ? index : visibleHeaders.length - 1;
 }
