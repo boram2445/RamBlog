@@ -33,7 +33,7 @@
 
 | Day | 작업 | 변경 파일 |
 |---|---|---|
-| 1 | **작업 브랜치 분리**(`git checkout -b refactor/migration`) + `.env.example` 작성. 기존 production 배포는 그대로 두되 30일간 main 머지 금지로 신규 배포 차단 | `.env.example`, git 브랜치 |
+| ✅ 1 | **작업 브랜치 분리**(`git checkout -b refactor/migration`) + `.env.example` 작성. 기존 production 배포는 그대로 두되 30일간 main 머지 금지로 신규 배포 차단 | `.env.example`, git 브랜치 |
 | 2 | `src/lib/env.ts` zod 환경변수 검증 도입, 흩어진 `process.env.X` 정리 | `src/lib/env.ts` (신규), `service/sanity.ts:5-11`, `api/auth/[...nextauth]/options.ts:10-11`, `app/layout.tsx:19` |
 | 3 | **Next 마이그레이션 ① codemod 적용**: 새 브랜치 생성 → `npx @next/codemod@latest upgrade latest` 실행 → 자동 변경분 커밋 → 빌드/타입 에러 목록화 | `package.json`, codemod 변경 결과 전체, 빌드 로그 |
 | 4 | **Next 마이그레이션 ② async params 잔여**: codemod가 못 잡은 동적 라우트 (`[user]`, `[id]`, `[keyword]`) 의 `await params`/`await searchParams` 수동 보정 | `src/app/[user]/**/*.tsx`, `src/app/tags/[keyword]/page.tsx`, `src/app/api/**/[*]/route.ts` |
