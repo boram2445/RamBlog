@@ -6,6 +6,7 @@ import Footer from '@/components/common/Footer';
 import SWRConfigContext from '@/context/SWRConfigContext';
 import AuthContext from '@/context/AuthContext';
 import DarkModeProvider from '@/context/DarkModeProvider';
+import { env } from '@/lib/env';
 
 const notoSansKr = Noto_Sans_KR({
   weight: ['100', '400', '700', '900'],
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   title: 'RamBlog',
   description: 'Blog for all developers',
   verification: {
-    google: process.env.GOOGLE_VERIFICATION_ID,
+    google: env.GOOGLE_VERIFICATION_ID,
   },
   icons: {
     icon: '/favicon.ico',
