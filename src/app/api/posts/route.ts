@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
 
     revalidateTag(`tags/${user.username}`, 'max');
     revalidateTag(`posts/${user.username}`, 'max');
+    revalidateTag('posts', 'max');
 
     return result;
   });

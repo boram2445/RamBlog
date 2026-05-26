@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { NextResponse, NextRequest } from "next/server";
 import { addComment, deleteComment, getPostComments } from '@/service/comment';
+import { revalidateTag } from 'next/cache';
 import bcrypt from 'bcrypt';
 
 type Context = {
@@ -35,9 +36,13 @@ export async function POST(req: NextRequest, context: Context) {
       ? data
       : { ...data, password: bcrypt.hashSync(data.password, 2) };
 
-  return addComment((await context.params).id, newData, user?.id)
+  const postId = (await context.params).id;
+  const result = await addComment(postId, newData, user?.id)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+
+  revalidateTag(`comments/${postId}`, 'max');
+  return result;
 }
 
 export async function DELETE(req: NextRequest, context: Context) {
@@ -50,7 +55,11 @@ export async function DELETE(req: NextRequest, context: Context) {
     return new Response('Bad Request', { status: 400 });
   }
 
-  return deleteComment((await context.params).id, commentId, parentCommentId)
+  const postId = (await context.params).id;
+  const result = await deleteComment(postId, commentId, parentCommentId)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+
+  revalidateTag(`comments/${postId}`, 'max');
+  return result;
 }

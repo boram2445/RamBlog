@@ -25,7 +25,12 @@ export async function getPostComments(postId: string) {
         ${commentProjection}
        } | order(createdAt desc),
       } | order(createdAt desc),
-    }.comments`
+    }.comments`,
+    {},
+    {
+      cache: 'force-cache',
+      next: { tags: [`comments/${postId}`] },
+    }
   );
 }
 
@@ -116,7 +121,7 @@ export async function checkPassword(
     `;
   }
 
-  const res = await client.fetch(passwordProjection);
+  const res = await client.fetch(passwordProjection, {}, { cache: 'no-store' });
   const isSame = bcrypt.compareSync(password, res.password);
   return isSame;
 }
@@ -131,7 +136,9 @@ async function findComment(
     : `comments[_key == "${commentId}"]`;
 
   const existingComment = await client.fetch(
-    `*[_id == "${postId}"][0].${commentPath}`
+    `*[_id == "${postId}"][0].${commentPath}`,
+    {},
+    { cache: 'no-store' }
   );
 
   return [commentPath, existingComment[0]];

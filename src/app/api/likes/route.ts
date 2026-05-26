@@ -18,6 +18,7 @@ export async function PUT(req: NextRequest) {
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
     revalidateTag(`posts/${user.username}`, 'max');
+    revalidateTag('posts', 'max');
 
     return result;
   });

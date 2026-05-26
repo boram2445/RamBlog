@@ -104,6 +104,8 @@
 
 #### Day 6 — fetch caching 정상화 + Turbopack 빌드
 
+> **왜 필요한가?** Next.js 14→15→16 업그레이드 과정에서 fetch 캐싱 디폴트가 두 번 바뀌었다. 결과적으로 `service/*.ts`의 25개 read fetch 중 11개가 옵션 없이 방치된 상태 — 디폴트가 어떻게 적용될지 버전마다 달라 예측 불가. 각 fetch에 `force-cache + tags` 또는 `no-store`를 명시해 캐시 동작을 결정론적으로 확보하고, 댓글·글로벌 포스트 영역에 태그 컨벤션(`comments/${postId}`, `posts`)을 새로 도입해 mutation 후 stale 데이터 위험을 제거한다.
+
 | # | 할 일 | ✓ |
 |---|---|---|
 | 1 | `src/service/*.ts` 전 fetch 호출 목록 파악 | [ ] |

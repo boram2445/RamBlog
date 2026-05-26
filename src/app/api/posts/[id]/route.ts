@@ -33,6 +33,7 @@ export async function POST(req: NextRequest, context: Context) {
 
     revalidateTag(`tags/${user.username}`, 'max');
     revalidateTag(`posts/${user.username}`, 'max');
+    revalidateTag('posts', 'max');
 
     return result;
   });
@@ -47,6 +48,7 @@ export async function DELETE(_: NextRequest, context: Context) {
 
     revalidateTag(`tags/${user.username}`, 'max');
     revalidateTag(`posts/${user.username}`, 'max');
+    revalidateTag('posts', 'max');
 
     return result;
   });

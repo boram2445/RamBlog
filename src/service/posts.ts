@@ -39,7 +39,12 @@ function mapPosts(posts: SimplePost[]) {
 export async function getAllPostsData(): Promise<SimplePost[]> {
   return client
     .fetch(
-      `*[_type == "post"]| order(_createdAt desc){${simplePostProjection}}`
+      `*[_type == "post"]| order(_createdAt desc){${simplePostProjection}}`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['posts'] },
+      }
     )
     .then(mapPosts);
 }
@@ -60,7 +65,12 @@ export async function getAllUserPosts(username: string) {
 export async function getTagPosts(tag: string) {
   return client
     .fetch(
-      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`
+      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
+      {},
+      {
+        cache: 'force-cache',
+        next: { tags: ['posts'] },
+      }
     )
     .then(mapPosts);
 }
@@ -129,7 +139,9 @@ export async function getPostDetailLike(postId: string) {
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
 async function checkAndAddTag(tagName: string) {
   const existingTags = await client.fetch(
-    `*[_type == "tag" && tagName == "${tagName}"]`
+    `*[_type == "tag" && tagName == "${tagName}"]`,
+    {},
+    { cache: 'no-store' }
   );
   if (existingTags.length === 0) {
     const newTag = {

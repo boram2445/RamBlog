@@ -48,14 +48,18 @@ export async function addEmailUser({
 
 export async function checkUsernameValid(username: string) {
   const isExistUsername = await client.fetch(
-    `*[_type=='user' && username == "${username}"][0]`
+    `*[_type=='user' && username == "${username}"][0]`,
+    {},
+    { cache: 'no-store' }
   );
   return !!isExistUsername;
 }
 
 export async function checkEmailValid(email: string) {
   const isExistEmail = await client.fetch(
-    `*[_type=='user' && email == "${email}"][0]`
+    `*[_type=='user' && email == "${email}"][0]`,
+    {},
+    { cache: 'no-store' }
   );
   return !!isExistEmail;
 }
@@ -69,7 +73,9 @@ export async function loginWithEmail(email: string) {
       username,
       password,
       image,
-    }`
+    }`,
+    {},
+    { cache: 'no-store' }
   );
 }
 

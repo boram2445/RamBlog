@@ -2,7 +2,7 @@
 
 3년 전(2023년경) 신입 시절에 만든 개발자용 블로그 사이드 프로젝트. 일기·포트폴리오 통합 컨셉.
 
-**스택**: Next.js 16 App Router · React 19 · TypeScript · Tailwind · SWR · Sanity CMS · NextAuth v4 (Google OAuth + Credentials) · Toast UI Editor · Vercel 배포 · ESLint 9 flat config
+**스택**: Next.js 16 App Router · React 19 · TypeScript · Tailwind · SWR · Sanity CMS · NextAuth v5/Auth.js (Google OAuth + Credentials) · Toast UI Editor · Vercel 배포 · ESLint 9 flat config
 
 ## 현재 상황 (2026-05~)
 
@@ -13,7 +13,7 @@
 | 🔴 **보안**   | IDOR(소유권 검증 0건), GROQ Injection 전 쿼리, bcrypt salt 2~4, 이미지 업로드 무인증 |
 | 🟠 **SEO**    | sitemap·robots 사실상 부재, 홈이 CSR-only라 크롤러가 포스트 발견 불가, metadata 빈약 |
 | 🟠 **렌더링** | `'use client'` 45/161 (~28%) — 인터랙션 잎으로 더 잘게 쪼개 RSC 비중 확대 필요        |
-| 🟡 **DX**     | error.tsx 0, 테스트 0, CI 0, env 검증 없음, `Avartar` 오타 11파일 전파               |
+| 🟡 **DX**     | error.tsx 0, 테스트 0, CI 0, ~~env 검증~~ ✅(Day 2), `Avartar` 오타 11파일 전파     |
 
 ## 진행 방식
 
@@ -31,7 +31,7 @@
 ### 개발 환경
 
 - Node 20+, 패키지 매니저 **yarn** (`yarn.lock` 기준)
-- 주요 명령어: `yarn dev` / `yarn build` (postbuild로 next-sitemap 자동 실행) / `yarn lint` (`eslint .` flat config — `eslint.config.mjs`)
+- 주요 명령어: `yarn dev` / `yarn build` (postbuild로 next-sitemap 자동 실행) / `yarn lint` / `npx tsc --noEmit` (typecheck — 스크립트 없어서 직접 실행)
 - `sanity-studio/` 는 별도 yarn 워크스페이스 — 루트 `yarn` 으로는 설치되지 않음
 - 환경변수: `.env.local` 사용 (`.env.example` 참고)
 
@@ -54,7 +54,7 @@ src/
 
 ### 핵심 패턴
 
-- **인증**: NextAuth v4 (`getServerSession(authOptions)`). API 보호는 세션 + 소유권 둘 다
+- **인증**: NextAuth v5 (`auth()`). `src/auth.ts`에서 export. API 보호는 세션 + 소유권 둘 다
 - **데이터 페칭**: 서버(RSC/API 라우트)는 `service/*.ts` 직접 호출, 클라이언트 동적 갱신은 SWR
 - **상태**: 별도 글로벌 store 없음. 서버 상태는 Sanity, 클라 캐시는 SWR
 - **스타일**: Tailwind 유틸리티 + `@tailwindcss/typography` 만. CSS-in-JS 금지
@@ -63,12 +63,7 @@ src/
 
 ### 파일/폴더 네이밍
 
-| 대상           | 규칙           | 예시                                        |
-| -------------- | -------------- | ------------------------------------------- |
-| 컴포넌트       | PascalCase     | `PostCard.tsx`                              |
-| 훅/유틸/서비스 | camelCase      | `usePost.ts`, `mainImage.ts`                |
-| 폴더           | 도메인 소문자  | `post/`, `comment/`                         |
-| 라우트 파일    | Next.js 컨벤션 | `route.ts`, `page.tsx`, `[slug]`, `(group)` |
+컴포넌트 PascalCase, 훅/유틸/서비스 camelCase, 폴더 도메인 소문자, 라우트 파일 Next.js 컨벤션(`[slug]`, `(group)`)
 
 ### 컴포넌트 작성 규칙
 
@@ -96,10 +91,7 @@ src/
 
 ### CSS 규칙
 
-- Tailwind 유틸리티 우선. `global.css` 는 폰트 import / 최소 reset 외 변경 금지
-- 다크모드: `dark:` prefix
-- 임의 px 값 (`p-[13px]` 등)은 Tailwind 단위로 표현 불가능할 때만
-- 본문 타이포그래피: `prose` 클래스 (`@tailwindcss/typography`)
+Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래스. `global.css` 폰트·reset 외 금지.
 
 ### 작업 절차
 
