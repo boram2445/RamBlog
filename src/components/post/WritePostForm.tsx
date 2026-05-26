@@ -60,7 +60,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
     return true;
   };
 
-  const handleSubmit = (id?: string) => async () => {
+  const handleSubmit = async () => {
     const content = editorRef.current?.getInstance().getMarkdown();
     if (handleAlert(content)) {
       setIsFetching(true);
@@ -113,7 +113,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
         </Button>
         <Button
           color='black'
-          onClick={postDetail ? handleSubmit(id) : handleSubmit()}
+          onClick={handleSubmit}
           size='big'
         >
           출간하기

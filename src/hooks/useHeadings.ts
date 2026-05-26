@@ -18,6 +18,8 @@ export function useHeadings() {
         level: node.nodeName[1],
       };
     });
+    // 외부 DOM(#content)을 1회 읽어 목차 state 초기화 — 동기화 effect의 정당한 사용
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHeadings(headerArray);
   }, []);
 

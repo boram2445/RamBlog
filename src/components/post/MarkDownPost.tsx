@@ -49,15 +49,13 @@ export default function MarkDownPost({ content }: { content: string }) {
             const src = typeof image.src === 'string' ? image.src : '';
             const size = extractImageSize(src);
             return (
-              <div className='mx-auto flex items-center justify-center'>
-                <Image
-                  src={src || ''}
-                  alt={image.alt || ''}
-                  width={size.width ?? 500}
-                  height={size.height ?? 300}
-                  className='max-h-[500px] object-contain my-0'
-                />
-              </div>
+              <Image
+                src={src || ''}
+                alt={image.alt || ''}
+                width={size.width ?? 500}
+                height={size.height ?? 300}
+                className='block mx-auto max-h-[500px] object-contain my-0'
+              />
             );
           },
           p: ({ node, ...props }) => <p {...props} className='before:hidden' />,
@@ -84,7 +82,7 @@ export default function MarkDownPost({ content }: { content: string }) {
           pre: ({ node, ...props }) => (
             <pre {...props} className='bg-gray-50 dark:bg-neutral-800' />
           ),
-          li: ({ node, ...props }) => (
+          li: ({ node, ordered, index, checked, ...props }) => (
             <li
               {...props}
               className='marker:text-indigo-500 dark:marker:text-yellow-500'

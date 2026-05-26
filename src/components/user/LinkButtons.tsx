@@ -17,7 +17,7 @@ export default function LinkButtons({ links }: Props) {
         if (!value) return;
         if (key === 'email')
           return (
-            <li className='relative group'>
+            <li key={key} className='relative group'>
               {getIcon(key)}
               <span className='absolute hidden group-hover:block py-1 px-2 bg-gray-700  text-white text-xs rounded-full'>
                 {value}

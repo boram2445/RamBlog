@@ -97,10 +97,10 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `yarn build && yarn lint && yarn typecheck` 무경고 통과 | [ ] |
-| 2 | `yarn dev` 후 스모크: 홈, Google 로그인, 포스트 상세, 글쓰기(이미지 업로드 포함) | [ ] |
-| 3 | credentials 로그인 스모크 + 한국어 에러 메시지 확인 | [ ] |
-| 4 | 댓글/좋아요/북마크/팔로우 mutation 경로 1회 스모크 (`withSessionUser` 경로 검증) | [ ] |
+| 1 | `yarn build && yarn lint && yarn typecheck` 무경고 통과 | [x] |
+| 2 | `yarn dev` 후 스모크: 홈, Google 로그인, 포스트 상세, 글쓰기(이미지 업로드 포함) | [x] |
+| 3 | credentials 로그인 스모크 + 한국어 에러 메시지 확인 | [x] |
+| 4 | 댓글/좋아요/북마크/팔로우 mutation 경로 1회 스모크 (`withSessionUser` 경로 검증) | [x] |
 
 #### Day 6 — fetch caching 정상화 + Turbopack 빌드
 

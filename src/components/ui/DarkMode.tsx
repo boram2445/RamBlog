@@ -11,6 +11,8 @@ export default function DarkMode() {
   const { systemTheme, theme, setTheme } = useTheme();
 
   useEffect(() => {
+    // next-themes 공식 hydration guard 패턴 — useEffect로 mount 시점 마킹
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

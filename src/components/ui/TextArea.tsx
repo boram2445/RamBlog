@@ -17,6 +17,14 @@ export default function TextArea({
 }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const changeTextAreaHeight = () => {
+    if (textareaRef?.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + 'px';
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('resize', changeTextAreaHeight);
     changeTextAreaHeight();
@@ -28,14 +36,6 @@ export default function TextArea({
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e);
     changeTextAreaHeight();
-  };
-
-  const changeTextAreaHeight = () => {
-    if (textareaRef?.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + 'px';
-    }
   };
 
   return (
