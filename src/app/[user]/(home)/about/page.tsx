@@ -1,8 +1,7 @@
 import { getUserPortfolio } from '@/service/portfolio';
 import { notFound } from 'next/navigation';
 import AboutList from '@/components/about/AboutList';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import AboutHero from '@/components/about/AboutHero';
 
 type Props = {
@@ -20,7 +19,7 @@ export default async function AboutPage(props: Props) {
 
   if (!user) notFound();
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const loginUser = session?.user;
 
   return (

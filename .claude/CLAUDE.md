@@ -113,7 +113,19 @@ src/
 ### Git 규칙
 
 - **커밋은 사용자가 명시적으로 요청할 때만** 실행. 작업 완료 후 자동 커밋 금지
+- 커밋 메시지에 진행 단위(`Day N`, `Week N` 등) 표기 **금지**. 변경 내용(무엇이/왜 바뀌었는지)만 적기. roadmap 매핑은 `docs/roadmap1/week{N}.md`가 관리
 
 ### 30-day-plan 진행 표기
 
 - `docs/roadmap1/week{N}.md`의 Day 작업을 완료하면 해당 행 앞에 ✅ 이모지 추가
+- 작업 중 발생한 이슈는 `docs/roadmap1/week{N}-issues.md`에 기록 (week{N}.md 본문에는 적지 않음)
+
+### 30-day-plan 실행 단위
+
+`docs/roadmap1/week{N}.md`의 Day 작업은 `#1, #2, …` task로 쪼개져 있다. 실행 규칙:
+
+- **task/step 1개 단위로만 진행 후 정지**. Day·week 단위로 묶어 실행 금지. "Day N 해줘" 같은 광범위 지시도 첫 task만 실행 후 멈춤
+- task/step 종료 후 반드시 **2단 ask** 순서 준수. 침묵=동의 금지:
+  1. 변경 파일 한 문장 요약 + **"코드 검토해 주시겠어요?"** → 사용자 검토 대기
+  2. 검토 완료 후 **"다음 스텝 시작할까요? — `{다음 task/step 요약}`"** → `다음`/`진행`/`ok` 등 명시적 승인 대기
+- task 안에 명시된 빌드 확인(`yarn build`·`yarn lint`)은 별도로 끊지 않고 그 task에 포함

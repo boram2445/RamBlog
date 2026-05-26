@@ -1,6 +1,5 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import BookmarkPosts from '@/components/bookmarks/BookmarkPosts';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 
@@ -17,7 +16,7 @@ export default async function BookmarksPage(props: Props) {
     user
   } = params;
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const loginUser = session?.user;
 
   if (!loginUser) redirect('/auth/signin');

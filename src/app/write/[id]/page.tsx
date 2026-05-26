@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import WritePostForm from '@/components/post/WritePostForm';
 import { getPostDetail } from '@/service/posts';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
@@ -25,7 +24,7 @@ export default async function EditPage(props: Props) {
     id
   } = params;
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
 
   if (!user) {

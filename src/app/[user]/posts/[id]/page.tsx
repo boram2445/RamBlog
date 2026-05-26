@@ -1,8 +1,7 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import CommentList from '@/components/comment/CommentList';
 import PostDetail from '@/components/post/PostDetail';
 import { getPostDetail } from '@/service/posts';
-import { getServerSession } from 'next-auth';
 import { cache } from 'react';
 
 type Props = {
@@ -22,7 +21,7 @@ export default async function PostPage(props: Props) {
     id
   } = params;
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const loginUserData = session?.user;
 
   const post = await getDetail(id, user);

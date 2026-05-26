@@ -1,8 +1,7 @@
 import Register from '@/components/register/Register';
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 export const metadata: Metadata = {
   title: 'Signup',
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RegisterPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session) redirect('/');
 

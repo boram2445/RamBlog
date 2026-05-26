@@ -1,3 +1,5 @@
+import type { DefaultUser } from '@auth/core/types';
+import type { DefaultJWT } from 'next-auth/jwt';
 import { AuthUser } from '@/model/user';
 
 declare module 'next-auth' {

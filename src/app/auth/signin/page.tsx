@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import Signin from '@/components/signin/Signin';
 
 export const metadata: Metadata = {
@@ -22,7 +21,7 @@ export default async function SigninPage(props: Props) {
     callbackUrl
   } = searchParams;
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (session) redirect('/');
 

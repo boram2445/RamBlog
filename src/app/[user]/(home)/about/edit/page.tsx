@@ -1,8 +1,7 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import AboutForm from '@/components/about/AboutForm';
 import Title from '@/components/ui/Title';
 import { getUserPortfolio } from '@/service/portfolio';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -18,7 +17,7 @@ export default async function AboutEditPage(props: Props) {
     user
   } = params;
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const loginUser = session?.user;
 
   if (!loginUser) redirect('/auth/signin');

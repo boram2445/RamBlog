@@ -7,8 +7,7 @@
 | ✅ 1 | **작업 브랜치 분리**(`git checkout -b refactor/migration`) + `.env.example` 작성. 기존 production 배포는 그대로 두되 30일간 main 머지 금지로 신규 배포 차단 | `.env.example`, git 브랜치 |
 | ✅ 2 | `src/lib/env.ts` zod 환경변수 검증 도입, 흩어진 `process.env.X` 정리 | `src/lib/env.ts` (신규), `service/sanity.ts:5-11`, `api/auth/[...nextauth]/options.ts:10-11`, `app/layout.tsx:19` |
 | ✅ 3 | **Next 마이그레이션 ① codemod 적용**: 새 브랜치 생성 → `npx @next/codemod@latest upgrade latest` 실행 → 자동 변경분 커밋 → 빌드/타입 에러 목록화 | `package.json`, codemod 변경 결과 전체, 빌드 로그 |
-| 4 | **Next 마이그레이션 ② async params 잔여** + **env 토큰 복구**: codemod가 못 잡은 동적 라우트 (`[user]`, `[id]`, `[keyword]`) 의 `await params`/`await searchParams` 수동 보정 | `src/app/[user]/**/*.tsx`, `src/app/tags/[keyword]/page.tsx`, `src/app/api/**/[*]/route.ts` |
-| 5 | **Next 마이그레이션 ③ async API 잔여**: `cookies()`, `headers()`, `draftMode()` async 호출 + NextAuth v4가 Next 16에서 안 깨지는지 검증 (깨지면 Track A를 앞당길지 결정) | `src/app/api/auth/[...nextauth]/options.ts`, 영향 받는 컴포넌트 |
+| ✅ 4·5 | **Next 마이그레이션 ② async params·타입 잔여** + **env 토큰 복구** + **NextAuth v4→v5(Auth.js) 앞당김**: Turbopack CSS 패치(tui-color-picker), React 19 타입 보정(useRef/img.src/JSX), revalidateTag 2번째 인자 추가, Sanity 토큰 mismatch 해소. Day 5 #4 결정("Track A 앞당길지")에서 v5 마이그레이션 즉시 진행으로 확정 → Day 4·5 통합 | `src/auth.ts`(신규), `src/app/api/auth/[...nextauth]/route.ts`, `src/utils/session.ts`, 호출부 전체 13개 파일, `.yarn/patches/` |
 | 6 | **Next 마이그레이션 ④ caching 정상화**: `fetch` 캐싱 디폴트가 Next 14~16 사이에 두 번 바뀌었으니 `service/*.ts` 전 fetch에 **명시적** `cache`/`next.revalidate`/`tags` 부여. Turbopack 빌드 통과 확인 | `src/service/*.ts` 전체, `next.config.js` |
 | 7 | **블로그 1편 발행** — Next 13 → 16 마이그레이션기 | (블로그) |
 
@@ -50,33 +49,58 @@
 | 4 | `yarn typecheck` 실행 → 타입 에러 목록 기록 (→ `day3-error-inventory.md`) | [x] |
 | 5 | 변경분 커밋 | [x] |
 
-#### Day 4 — async params 보정 + env 토큰 복구 + yarn 4 업그레이드
+#### Day 4·5 — Next 16 마이그레이션
 
-> env 토큰 복구를 먼저 해야 Day 4 이후 스모크 테스트가 가능합니다
-
-| # | 할 일 | ✓ |
-|---|---|---|
-| 0 | yarn 1.22.22 → yarn 4.15.0 업그레이드<br>- corepack 활성화<br>- `.yarnrc.yml` 생성 (`nodeLinker: node-modules`)<br>- `package.json`에 `packageManager` 필드 고정<br>- `.gitignore` yarn 4 항목 추가<br>- lockfile 재생성 | ✅ |
-| 1 | Sanity Manage (sanity.io/manage) → 해당 프로젝트 → API → Tokens → Editor 권한 토큰 신규 발급, 이전 토큰 revoke | [ ] |
-| 2 | 발급한 값을 `.env.local`의 `SANITY_SECRET_TOKEN=` 에 채움 | [ ] |
-| 3 | Google Cloud Console (console.cloud.google.com/apis/credentials) → 기존 OAuth 2.0 Client ID 열기, Client ID 복사 + Secret Reset하여 신규 값 확보 | [ ] |
-| 4 | `.env.local`의 `GOOGLE_OAUTH_ID`, `GOOGLE_OAUTH_SECRET` 채움. Redirect URI에 `http://localhost:3000/api/auth/callback/google` 포함 여부 재확인 | [ ] |
-| 5 | `yarn build` → `src/lib/env.ts` zod 검증 통과 확인 (실패 시 stderr에 어떤 키가 비었는지 표시됨) | [ ] |
-| 6 | `yarn dev` 후 홈 `/`, Google 로그인 1회, 포스트 상세, 글쓰기(이미지 업로드 포함) 스모크 | [ ] |
-| 7 | codemod가 못 잡은 `[user]` 동적 라우트 page/layout의 `params`/`searchParams` await 보정 (`src/app/[user]/**/*.tsx`) | [ ] |
-| 8 | `[id]`, `[keyword]` 동적 라우트도 동일하게 await 보정 (`src/app/[user]/posts/[id]/**`, `src/app/tags/[keyword]/page.tsx`) | [ ] |
-| 9 | 동적 API 라우트 `params` await 보정 (`src/app/api/**/[*]/route.ts`) | [ ] |
-| 10 | `yarn build && yarn lint && yarn typecheck` 무경고 통과 + 스모크 재실행 | [ ] |
-
-#### Day 5 — async API 잔여 + NextAuth v4 호환성 검증
+##### Step 1·2 — env / Sanity 토큰 + yarn 4 업그레이드
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `cookies()`, `headers()`, `draftMode()` 사용 파일 목록 파악 | [ ] |
-| 2 | 각 파일에서 `const x = await cookies()` 패턴으로 전환 | [ ] |
-| 3 | `yarn build` → NextAuth v4 관련 에러 여부 확인 | [ ] |
-| 4 | NextAuth 에러 발생 시: 수동 패치 범위 파악 후 Track A 앞당길지 결정 | [ ] |
-| 5 | `yarn build && yarn lint && yarn typecheck` 통과 + 로그인/세션 스모크 | [ ] |
+| 1 | yarn 1.22.22 → 4.15.0 업그레이드 (corepack, `.yarnrc.yml`, `packageManager`, lockfile 재생성) | ✅ |
+| 2 | Sanity Manage에서 Editor 권한 토큰 신규 발급, 이전 토큰 revoke | [x] |
+| 3 | `.env.local`의 `SANITY_SECRET_TOKEN` 교체 | [x] |
+| 4 | Google Cloud Console에서 OAuth Client Secret reset, redirect URI 확인 | [x] |
+| 5 | `.env.local`의 `GOOGLE_OAUTH_ID`/`GOOGLE_OAUTH_SECRET` 교체 | [x] |
+| 6 | `yarn build`로 zod env 검증 통과 확인 | [x] |
+
+##### Step 3 — Next 16 호환성 패치 (Turbopack / React 19 타입 / async params / revalidateTag)
+
+| # | 할 일 | ✓ |
+|---|---|---|
+| 1 | `[user]` 동적 라우트 page/layout `await params`/`await searchParams` 보정 | [x] |
+| 2 | `[id]`, `[keyword]` 동적 라우트 동일 보정 | [x] |
+| 3 | 동적 API 라우트 `params` await 보정 | [x] |
+| 4 | `tui-color-picker.css` IE6 hack `yarn patch`로 제거 (Turbopack Lightning CSS 대응) | [x] |
+| 5 | `react-markdown@8` React 19 JSX 글로벌 의존 — `yarn patch`로 `import type { JSX }` 추가 | [x] |
+| 6 | `revalidateTag(tag, profile)` 2번째 인자 일괄 `'max'` 추가 (14개 호출 / 10 파일) | [x] |
+| 7 | React 19 `useRef<T>(null)` no-arg 제거 대응 (4곳) | [x] |
+| 8 | React 19 `img.src` 타입 확장 대응 (`MarkDownPost.tsx` narrowing) | [x] |
+
+> 상세 이슈/해결 로그는 `week1-issues.md` Step 3 참조.
+
+##### Step 4 — NextAuth v4 → v5(Auth.js) 마이그레이션 (Track A 앞당김)
+
+| # | 할 일 | ✓ |
+|---|---|---|
+| 1 | `cookies()`/`headers()`/`draftMode()` 사용 파일 파악 — 사용처 없음 확인 | skip |
+| 2 | (위 사용처 없으므로) async 전환 작업 skip | skip |
+| 3 | `yarn build`로 NextAuth 관련 빌드/타입 에러 인벤토리 | [x] |
+| 4 | Track A 앞당김 결정 — v4 호환 패치 대신 v5 즉시 마이그레이션 | [x] |
+| 5 | `src/auth.ts` 신설 — `handlers/auth/signIn/signOut` export, `options.ts` 옵션 이관 (`NextAuthOptions` → `NextAuthConfig`) | [x] |
+| 6 | `src/app/api/auth/[...nextauth]/route.ts` → `export { GET, POST } from '@/auth'` 한 줄로 축소 | [x] |
+| 7 | `src/utils/session.ts`의 `getServerSession(authOptions)` → `auth()` 교체 (11개 consumer 무변경) | [x] |
+| 8 | RSC 페이지 / API 라우트 12곳의 `getServerSession(authOptions)` → `auth()` 교체 | [x] |
+| 9 | `src/types/next-auth.d.ts` — `DefaultUser`/`DefaultJWT` import 보강, augmentation 유지 | [x] |
+| 10 | `next-auth/react` 클라이언트 훅(8개 파일) 변경 불필요 확인 | [x] |
+| 11 | credentials 한국어 에러 메시지 v5 마스킹 대응 — `SigninForm` 에러 표시 분기 보정 | [x] |
+
+##### Step 5·6 — 빌드 / 린트 / 타입체크 / 스모크
+
+| # | 할 일 | ✓ |
+|---|---|---|
+| 1 | `yarn build && yarn lint && yarn typecheck` 무경고 통과 | [ ] |
+| 2 | `yarn dev` 후 스모크: 홈, Google 로그인, 포스트 상세, 글쓰기(이미지 업로드 포함) | [ ] |
+| 3 | credentials 로그인 스모크 + 한국어 에러 메시지 확인 | [ ] |
+| 4 | 댓글/좋아요/북마크/팔로우 mutation 경로 1회 스모크 (`withSessionUser` 경로 검증) | [ ] |
 
 #### Day 6 — fetch caching 정상화 + Turbopack 빌드
 

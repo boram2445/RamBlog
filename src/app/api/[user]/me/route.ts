@@ -1,10 +1,9 @@
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { NextResponse } from "next/server";
-import { authOptions } from '../../auth/[...nextauth]/options';
 import { getUserData } from '@/service/user';
 
 export async function GET(_: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
 
   if (!user) {

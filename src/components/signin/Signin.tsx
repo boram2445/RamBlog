@@ -1,6 +1,6 @@
 'use client';
 
-import { ClientSafeProvider, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import Button from '../ui/Button';
 import Link from 'next/link';
 import { FcGoogle } from 'react-icons/fc';

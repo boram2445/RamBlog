@@ -1,11 +1,10 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import { AuthUser } from '@/model/user';
 
 export async function withSessionUser(
   handler: (user: AuthUser) => Promise<Response>
 ): Promise<Response> {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
 
   if (!user) {

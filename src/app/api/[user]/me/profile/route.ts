@@ -1,12 +1,11 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { auth } from '@/auth';
 import { editProfile, getUserByUsername } from '@/service/user';
 import { withSessionUser } from '@/utils/session';
-import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
 
   if (!user) {

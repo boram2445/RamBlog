@@ -1,7 +1,6 @@
-import { getServerSession } from 'next-auth';
+import { auth } from '@/auth';
 import { NextResponse, NextRequest } from "next/server";
 import { addComment, deleteComment, getPostComments } from '@/service/comment';
-import { authOptions } from '../../auth/[...nextauth]/options';
 import bcrypt from 'bcrypt';
 
 type Context = {
@@ -19,7 +18,7 @@ export async function POST(req: NextRequest, context: Context) {
 
   let user;
   if (data.type === 'loggedInUserComment') {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     user = session?.user;
 
     if (!user) {

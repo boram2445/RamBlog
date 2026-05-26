@@ -37,7 +37,7 @@ export default function SigninForm() {
     });
 
     if (status?.error) {
-      alert(status.error);
+      alert('이메일 또는 패스워드가 일치하지 않습니다.');
     } else if (status?.ok) {
       router.push('/');
     }
