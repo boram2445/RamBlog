@@ -1,17 +1,17 @@
 import { getPostDetailLike } from '@/service/posts';
 import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 type Context = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function GET(_: NextRequest, context: Context) {
-  const res = await getPostDetailLike(context.params.id).then((data) =>
+  const res = await getPostDetailLike((await context.params).id).then((data) =>
     NextResponse.json(data)
   );
 
-  revalidateTag('like');
+  revalidateTag('like', 'max');
 
   return res;
 }

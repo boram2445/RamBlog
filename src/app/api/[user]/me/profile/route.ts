@@ -3,7 +3,7 @@ import { editProfile, getUserByUsername } from '@/service/user';
 import { withSessionUser } from '@/utils/session';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_: Request) {
   const session = await getServerSession(authOptions);
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       image
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`profile/${user.username}`);
+    revalidateTag(`profile/${user.username}`, 'max');
 
     return result;
   });

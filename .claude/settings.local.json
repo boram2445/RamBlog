@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": ["WebSearch", "Bash", "WebFetch"],
+    "defaultMode": "plan",
+    "language": "korean"
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["context7"],
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"RamBlog가 기다리는 중...🌴\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ]
+  },
+  "plansDirectory": ".claude/plans/"
+}

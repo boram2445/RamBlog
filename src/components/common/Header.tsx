@@ -31,7 +31,7 @@ export default function Header() {
   );
 
   const [isOpenNav, setIsOpenNav] = useState(false);
-  const btnRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const btnRef = useRef<HTMLDivElement>(null) as React.MutableRefObject<HTMLDivElement>;
 
   const navList = [
     { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },

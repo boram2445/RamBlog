@@ -6,7 +6,7 @@ type Props = {
   navList: { label: string; onClick: () => void }[];
   isOpen: boolean;
   closeModal: () => void;
-  btnRef: React.MutableRefObject<HTMLInputElement | HTMLButtonElement>;
+  btnRef: React.MutableRefObject<HTMLElement>;
   width?: string;
 };
 
@@ -17,7 +17,7 @@ export default function DropDownNav({
   btnRef,
   width,
 }: Props) {
-  const navRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const navRef = useRef<HTMLElement>(null) as React.MutableRefObject<HTMLElement>;
 
   //밖을 클릭함
   const handleClickOutside = useCallback(

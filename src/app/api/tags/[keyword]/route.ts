@@ -1,12 +1,12 @@
 import { getTagPosts } from '@/service/posts';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 type Context = {
-  params: { keyword: string };
+  params: Promise<{ keyword: string }>;
 };
 
 export async function GET(_: Request, context: Context) {
-  const { keyword } = context.params;
+  const { keyword } = (await context.params);
 
   if (!keyword) {
     return new NextResponse('Bad Reqest', { status: 400 });

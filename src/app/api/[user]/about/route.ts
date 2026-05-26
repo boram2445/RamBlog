@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { createPortfolio, editPortfolio } from '@/service/portfolio';
 import { revalidateTag } from 'next/cache';
 import { withSessionUser } from '@/utils/session';
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const result = await request().then((data) => NextResponse.json(data));
 
-    revalidateTag(`about/${user.username}`);
+    revalidateTag(`about/${user.username}`, 'max');
 
     return result;
   });

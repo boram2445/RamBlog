@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export function useScrollSpy(ids: string[], options?: { rootMargin: string }) {
   const [activeId, setActiveId] = useState<string>();
-  const observer = useRef() as any;
+  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const elements = ids.map((id) => document.getElementById(id));

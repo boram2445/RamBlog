@@ -46,11 +46,12 @@ export default function MarkDownPost({ content }: { content: string }) {
             );
           },
           img: (image) => {
-            const size = extractImageSize(image.src ?? '');
+            const src = typeof image.src === 'string' ? image.src : '';
+            const size = extractImageSize(src);
             return (
               <div className='mx-auto flex items-center justify-center'>
                 <Image
-                  src={image.src || ''}
+                  src={src || ''}
                   alt={image.alt || ''}
                   width={size.width ?? 500}
                   height={size.height ?? 300}

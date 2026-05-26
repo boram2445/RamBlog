@@ -3,12 +3,18 @@ import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  params: {
+  params: Promise<{
     user: string;
-  };
+  }>;
 };
 
-export default async function UserPage({ params: { user } }: Props) {
+export default async function UserPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   const userData = await getUserForProfile(user);
 
   if (!user) notFound();

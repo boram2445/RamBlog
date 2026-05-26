@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 import { revalidateTag } from 'next/cache';
 import { createLog, getAllUserLogs } from '@/service/log';
 
 type Context = {
-  params: { user: string };
+  params: Promise<{ user: string }>;
 };
 
 export async function GET(_: Request, context: Context) {
-  const { user } = context.params;
+  const { user } = (await context.params);
 
   if (!user) {
     return new NextResponse('Bad Reqest', { status: 400 });
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       file
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`log/${user.username}`);
+    revalidateTag(`log/${user.username}`, 'max');
 
     return result;
   });

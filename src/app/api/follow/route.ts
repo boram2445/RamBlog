@@ -1,5 +1,5 @@
 import { follow, unfollow } from '@/service/user';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from 'next/cache';
 import { withSessionUser } from '@/utils/session';
 
@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest) {
       .then((res) => NextResponse.json(res))
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
-    revalidateTag('following');
+    revalidateTag('following', 'max');
 
     return result;
   });

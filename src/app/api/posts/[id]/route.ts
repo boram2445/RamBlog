@@ -1,16 +1,16 @@
 import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 import { deletePost, editPost } from '@/service/posts';
 
 type Context = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function POST(req: NextRequest, context: Context) {
   return withSessionUser(async (user) => {
     const form = await req.formData();
-    const id = context.params.id;
+    const id = (await context.params).id;
 
     const mainImage = form.get('mainImageUrl')?.toString();
     const title = form.get('title')?.toString();
@@ -31,8 +31,8 @@ export async function POST(req: NextRequest, context: Context) {
       mainImage
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`);
-    revalidateTag(`posts/${user.username}`);
+    revalidateTag(`tags/${user.username}`, 'max');
+    revalidateTag(`posts/${user.username}`, 'max');
 
     return result;
   });
@@ -40,13 +40,13 @@ export async function POST(req: NextRequest, context: Context) {
 
 export async function DELETE(_: NextRequest, context: Context) {
   return withSessionUser(async (user) => {
-    const id = context.params.id;
+    const id = (await context.params).id;
     if (!id) return new Response('Bad Request', { status: 400 });
 
     const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`);
-    revalidateTag(`posts/${user.username}`);
+    revalidateTag(`tags/${user.username}`, 'max');
+    revalidateTag(`posts/${user.username}`, 'max');
 
     return result;
   });

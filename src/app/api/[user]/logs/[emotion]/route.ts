@@ -1,12 +1,12 @@
 import { Emotion } from '@/model/log';
 import { getUserEmotionLogs } from '@/service/log';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 type Context = {
-  params: { user: string; emotion: string };
+  params: Promise<{ user: string; emotion: string }>;
 };
 
 export async function GET(_: Request, context: Context) {
-  const { user, emotion } = context.params;
+  const { user, emotion } = (await context.params);
 
   if (!user || !emotion) {
     return new NextResponse('Bad Reqest', { status: 400 });

@@ -5,6 +5,14 @@
 /.pnp
 .pnp.js
 
+# yarn 4
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
 # testing
 /coverage
 
@@ -35,3 +43,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code
+.claude/plans/
+.claude/logs/

@@ -11,14 +11,20 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditPage({ params: { id } }: Props) {
+export default async function EditPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const session = await getServerSession(authOptions);
   const user = session?.user;
 

@@ -10,14 +10,18 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     callbackUrl: string;
-  };
+  }>;
 };
 
-export default async function SigninPage({
-  searchParams: { callbackUrl },
-}: Props) {
+export default async function SigninPage(props: Props) {
+  const searchParams = await props.searchParams;
+
+  const {
+    callbackUrl
+  } = searchParams;
+
   const session = await getServerSession(authOptions);
 
   if (session) redirect('/');

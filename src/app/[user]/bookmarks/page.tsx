@@ -5,12 +5,18 @@ import { redirect } from 'next/navigation';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 
 type Props = {
-  params: {
+  params: Promise<{
     user: string;
-  };
+  }>;
 };
 
-export default async function BookmarksPage({ params: { user } }: Props) {
+export default async function BookmarksPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   const session = await getServerSession(authOptions);
   const loginUser = session?.user;
 

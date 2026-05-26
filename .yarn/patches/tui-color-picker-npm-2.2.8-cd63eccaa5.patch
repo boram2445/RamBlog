@@ -1,0 +1,27 @@
+diff --git a/dist/tui-color-picker.css b/dist/tui-color-picker.css
+index 2b2f258828bcfe10535acbfbbcf326f0bed8a2e5..977763d89f3e414ff7c3888baab75a5ca9676505 100644
+--- a/dist/tui-color-picker.css
++++ b/dist/tui-color-picker.css
+@@ -56,14 +56,12 @@
+ .tui-colorpicker-palette-hex {
+   font-family: monospace;
+   display: inline-block;
+-  *display: inline;
+   zoom: 1;
+   width: 60px;
+   vertical-align: middle;
+ }
+ .tui-colorpicker-palette-preview {
+   display: inline-block;
+-  *display: inline;
+   zoom: 1;
+   width: 12px;
+   height: 12px;
+@@ -74,7 +72,6 @@
+ }
+ .tui-colorpicker-palette-toggle-slider {
+   display: inline-block;
+-  *display: inline;
+   zoom: 1;
+   vertical-align: middle;
+   float: right;

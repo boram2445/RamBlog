@@ -1,7 +1,9 @@
 'use client';
 
 import { ChangeEvent, useRef, useState, useTransition } from 'react';
-import TuiEditors from './TuiEditors';
+import dynamic from 'next/dynamic';
+
+const TuiEditors = dynamic(() => import('./TuiEditors'), { ssr: false });
 import { Editor } from '@toast-ui/react-editor';
 import { useRouter } from 'next/navigation';
 import { PostDetail } from '@/model/post';

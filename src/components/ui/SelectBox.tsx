@@ -18,7 +18,7 @@ export default function SelectBox({
   type = 'label',
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const selectBoxRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const selectBoxRef = useRef<HTMLElement>(null) as React.MutableRefObject<HTMLElement>;
 
   const clickOutsideHandler = ({ target }: MouseEvent) => {
     if (!selectBoxRef?.current.contains(target as Node)) setIsOpen(false);

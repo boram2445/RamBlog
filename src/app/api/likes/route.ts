@@ -1,6 +1,6 @@
 import { revalidateTag } from 'next/cache';
 import { dislikePost, likePost } from '@/service/posts';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 
 export async function PUT(req: NextRequest) {
@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest) {
       .then((res) => NextResponse.json(res))
       .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 
-    revalidateTag(`posts/${user.username}`);
+    revalidateTag(`posts/${user.username}`, 'max');
 
     return result;
   });

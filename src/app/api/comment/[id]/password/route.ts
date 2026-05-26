@@ -1,8 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse, NextRequest } from "next/server";
 import { checkPassword } from '@/service/comment';
 
 type Context = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function POST(req: NextRequest, context: Context) {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, context: Context) {
 
   const res = await checkPassword(
     data.password,
-    context.params.id,
+    (await context.params).id,
     data.commentId,
     data.parentCommentId ?? ''
   );

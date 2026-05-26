@@ -1,0 +1,18 @@
+diff --git a/lib/complex-types.d.ts b/lib/complex-types.d.ts
+index f67d04acc5dd441c35b002d00b44f4cbc247903b..b0854b0484b5feb581de5c6d761c4cf4e71ca5bf 100644
+--- a/lib/complex-types.d.ts
++++ b/lib/complex-types.d.ts
+@@ -1,3 +1,4 @@
++import type { JSX } from 'react'
+ import type {ReactNode, ComponentType, ComponentPropsWithoutRef} from 'react'
+ import type {Position} from 'unist'
+ import type {Element} from 'hast'
+diff --git a/lib/complex-types.ts b/lib/complex-types.ts
+index 5319a88b622d6f14833f932a6eb36a1ff1378698..b8ba0480f8df0bb772683afcfbdb021135d75785 100644
+--- a/lib/complex-types.ts
++++ b/lib/complex-types.ts
+@@ -1,3 +1,4 @@
++import type { JSX } from 'react'
+ import type {ReactNode, ComponentType, ComponentPropsWithoutRef} from 'react'
+ import type {Position} from 'unist'
+ import type {Element} from 'hast'

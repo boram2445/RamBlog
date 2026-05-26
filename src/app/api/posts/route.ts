@@ -1,7 +1,7 @@
 import { withSessionUser } from '@/utils/session';
 import { createPost, getAllPostsData } from '@/service/posts';
 import { revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(_: Request) {
   return await getAllPostsData().then((data) => NextResponse.json(data));
@@ -32,8 +32,8 @@ export async function POST(req: NextRequest) {
       mainImage
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`);
-    revalidateTag(`posts/${user.username}`);
+    revalidateTag(`tags/${user.username}`, 'max');
+    revalidateTag(`posts/${user.username}`, 'max');
 
     return result;
   });

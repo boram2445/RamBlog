@@ -5,14 +5,21 @@ import Hero from '@/components/user/Hero';
 import TabList from '@/components/user/TabList';
 
 type Props = {
-  params: { user: string };
+  params: Promise<{ user: string }>;
   children: ReactNode;
 };
 
-export default async function UserTemplate({
-  params: { user },
-  children,
-}: Props) {
+export default async function UserTemplate(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const userData = await getUserForProfile(user);
 
   if (!user) notFound();
@@ -26,7 +33,13 @@ export default async function UserTemplate({
   );
 }
 
-export function generateMetadata({ params: { user } }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   return {
     title: `${user} | RamBlog`,
     description: `${user} 블로그`,

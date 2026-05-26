@@ -1,12 +1,12 @@
 import { getAllUserPosts } from '@/service/posts';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 type Context = {
-  params: { user: string };
+  params: Promise<{ user: string }>;
 };
 
 export async function GET(_: Request, context: Context) {
-  const { user } = context.params;
+  const { user } = (await context.params);
 
   if (!user) {
     return new NextResponse('Bad Reqest', { status: 400 });

@@ -6,10 +6,16 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import AboutHero from '@/components/about/AboutHero';
 
 type Props = {
-  params: { user: string };
+  params: Promise<{ user: string }>;
 };
 
-export default async function AboutPage({ params: { user } }: Props) {
+export default async function AboutPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   const portfolio = await getUserPortfolio(user);
 
   if (!user) notFound();
@@ -25,7 +31,13 @@ export default async function AboutPage({ params: { user } }: Props) {
   );
 }
 
-export function generateMetadata({ params: { user } }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   return {
     title: `${user} / About | RamBlog`,
     description: `${user} 커리어 소개`,

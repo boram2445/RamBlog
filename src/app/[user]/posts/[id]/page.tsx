@@ -6,15 +6,22 @@ import { getServerSession } from 'next-auth';
 import { cache } from 'react';
 
 type Props = {
-  params: {
+  params: Promise<{
     user: string;
     id: string;
-  };
+  }>;
 };
 
 const getDetail = cache(getPostDetail);
 
-export default async function PostPage({ params: { user, id } }: Props) {
+export default async function PostPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    user,
+    id
+  } = params;
+
   const session = await getServerSession(authOptions);
   const loginUserData = session?.user;
 
@@ -38,7 +45,14 @@ export default async function PostPage({ params: { user, id } }: Props) {
   );
 }
 
-export async function generateMetadata({ params: { user, id } }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params;
+
+  const {
+    user,
+    id
+  } = params;
+
   const { title, description } = (await getDetail(id, user))?.currentPost;
   return { title, description };
 }

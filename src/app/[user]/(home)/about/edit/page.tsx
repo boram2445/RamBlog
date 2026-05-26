@@ -8,10 +8,16 @@ import Link from 'next/link';
 import Button from '@/components/ui/Button';
 
 type Props = {
-  params: { user: string };
+  params: Promise<{ user: string }>;
 };
 
-export default async function AboutEditPage({ params: { user } }: Props) {
+export default async function AboutEditPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    user
+  } = params;
+
   const session = await getServerSession(authOptions);
   const loginUser = session?.user;
 
