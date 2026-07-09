@@ -1,8 +1,16 @@
 import { auth } from '@/auth';
 import { NextResponse, NextRequest } from "next/server";
-import { addComment, deleteComment, getPostComments } from '@/service/comment';
+import {
+  addComment,
+  checkPassword,
+  deleteComment,
+  getCommentMeta,
+  getPostComments,
+} from '@/service/comment';
+import { getPostAuthorId } from '@/service/posts';
 import { revalidateTag } from 'next/cache';
 import bcrypt from 'bcrypt';
+import { commentKeySchema } from '@/lib/validation';
 
 type Context = {
   params: Promise<{ id: string }>;
@@ -31,10 +39,14 @@ export async function POST(req: NextRequest, context: Context) {
     }
   }
 
+  if (data.commentId && !commentKeySchema.safeParse(data.commentId).success) {
+    return new Response('Bad Request', { status: 400 });
+  }
+
   const newData =
     data.type === 'loggedInUserComment'
       ? data
-      : { ...data, password: bcrypt.hashSync(data.password, 2) };
+      : { ...data, password: bcrypt.hashSync(data.password, 12) };
 
   const postId = (await context.params).id;
   const result = await addComment(postId, newData, user?.id)
@@ -51,11 +63,53 @@ export async function DELETE(req: NextRequest, context: Context) {
   const commentId = searchParams.get('commentId');
   const parentCommentId = searchParams.get('parentCommentId');
 
-  if (!commentId) {
+  if (!commentId || !commentKeySchema.safeParse(commentId).success) {
+    return new Response('Bad Request', { status: 400 });
+  }
+  if (parentCommentId && !commentKeySchema.safeParse(parentCommentId).success) {
     return new Response('Bad Request', { status: 400 });
   }
 
   const postId = (await context.params).id;
+  const meta = await getCommentMeta(postId, commentId, parentCommentId);
+
+  if (!meta) {
+    return new Response('Not Found', { status: 404 });
+  }
+
+  if (meta.type === 'guestComment') {
+    const body = await req.json().catch(() => ({}));
+    const password = body?.password;
+
+    if (!password) {
+      return new Response('Bad Request', { status: 400 });
+    }
+
+    const isValid = await checkPassword(
+      password,
+      postId,
+      commentId,
+      parentCommentId ?? undefined
+    );
+    if (!isValid) {
+      return new Response('Authentication Error', { status: 401 });
+    }
+  } else {
+    const session = await auth();
+    const user = session?.user;
+
+    if (!user) {
+      return new Response('Authentication Error', { status: 401 });
+    }
+
+    const postAuthorId = (await getPostAuthorId(postId))?.authorId;
+    const isOwner = user.id === meta.authorId || user.id === postAuthorId;
+
+    if (!isOwner) {
+      return new Response('Forbidden', { status: 403 });
+    }
+  }
+
   const result = await deleteComment(postId, commentId, parentCommentId)
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));

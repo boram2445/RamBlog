@@ -27,23 +27,16 @@ export default function useComment(postId: string) {
   );
 
   const deleteComment = useCallback(
-    async (commentId: string, parentCommentId?: string) => {
+    async (commentId: string, parentCommentId?: string, password?: string) => {
       let url = `/api/comment/${postId}?commentId=${commentId}${
         parentCommentId ? `&parentCommentId=${parentCommentId}` : ''
       }`;
 
       await axios
-        .delete(url) //
+        .delete(url, password ? { data: { password } } : undefined) //
         .then(() => mutate(`/api/comment/${postId}`));
     },
     [mutate, postId]
-  );
-
-  const checkPassword = useCallback(
-    async (data: PostPassword) => {
-      return await axios.post(`/api/comment/${postId}/password`, data);
-    },
-    [postId]
   );
 
   return {
@@ -52,7 +45,6 @@ export default function useComment(postId: string) {
     error,
     setComment,
     deleteComment,
-    checkPassword,
   };
 }
 
@@ -66,10 +58,4 @@ type PostGuestComment = {
 type PostUserComment = {
   text: string;
   commentId?: string;
-};
-
-type PostPassword = {
-  parentCommentId?: string;
-  commentId: string;
-  password: string;
 };

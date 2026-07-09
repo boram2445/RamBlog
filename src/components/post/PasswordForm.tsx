@@ -20,7 +20,7 @@ export default function PasswordForm({
 }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { deleteComment, checkPassword } = useComment(postId);
+  const { deleteComment } = useComment(postId);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
@@ -29,17 +29,9 @@ export default function PasswordForm({
     e.preventDefault();
 
     if (confirm('정말 댓글을 삭제하시겠습니까?😥')) {
-      const data = {
-        parentCommentId,
-        commentId,
-        password,
-      };
-      const passwordMatch = await checkPassword(data) //
+      await deleteComment(commentId, parentCommentId, password)
+        .then(() => setForm(false))
         .catch(() => setError('비밀번호가 일치하지 않습니다.'));
-
-      if (passwordMatch) {
-        deleteComment(commentId, parentCommentId).then(() => setForm(false));
-      }
     }
   };
 

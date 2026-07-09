@@ -5,13 +5,20 @@ import {
   checkUsernameValid,
 } from '@/service/user';
 import bcrypt from 'bcrypt';
+import { registerSchema } from '@/lib/validation';
 
 export async function POST(req: NextRequest) {
-  const { name, username, email, password } = await req.json();
+  const body = await req.json();
+  const parsed = registerSchema.safeParse(body);
 
-  if (!name || !username || !email || !password) {
-    return new Response('Bad request', { status: 400 });
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: parsed.error.flatten().fieldErrors },
+      { status: 400 }
+    );
   }
+
+  const { name, username, email, password } = parsed.data;
 
   const isExistUsername = await checkUsernameValid(username);
   const isExistEmail = await checkEmailValid(email);
@@ -28,7 +35,7 @@ export async function POST(req: NextRequest) {
     name,
     username,
     email,
-    password: bcrypt.hashSync(password, 4),
+    password: bcrypt.hashSync(password, 12),
   };
 
   return await addEmailUser(newData).then((data) => NextResponse.json(data));
