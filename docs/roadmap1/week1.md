@@ -8,7 +8,7 @@
 | ✅ 2 | `src/lib/env.ts` zod 환경변수 검증 도입, 흩어진 `process.env.X` 정리 | `src/lib/env.ts` (신규), `service/sanity.ts:5-11`, `api/auth/[...nextauth]/options.ts:10-11`, `app/layout.tsx:19` |
 | ✅ 3 | **Next 마이그레이션 ① codemod 적용**: 새 브랜치 생성 → `npx @next/codemod@latest upgrade latest` 실행 → 자동 변경분 커밋 → 빌드/타입 에러 목록화 | `package.json`, codemod 변경 결과 전체, 빌드 로그 |
 | ✅ 4·5 | **Next 마이그레이션 ② async params·타입 잔여** + **env 토큰 복구** + **NextAuth v4→v5(Auth.js) 앞당김**: Turbopack CSS 패치(tui-color-picker), React 19 타입 보정(useRef/img.src/JSX), revalidateTag 2번째 인자 추가, Sanity 토큰 mismatch 해소. Day 5 #4 결정("Track A 앞당길지")에서 v5 마이그레이션 즉시 진행으로 확정 → Day 4·5 통합 | `src/auth.ts`(신규), `src/app/api/auth/[...nextauth]/route.ts`, `src/utils/session.ts`, 호출부 전체 13개 파일, `.yarn/patches/` |
-| 6 | **Next 마이그레이션 ④ caching 정상화**: `fetch` 캐싱 디폴트가 Next 14~16 사이에 두 번 바뀌었으니 `service/*.ts` 전 fetch에 **명시적** `cache`/`next.revalidate`/`tags` 부여. Turbopack 빌드 통과 확인 | `src/service/*.ts` 전체, `next.config.js` |
+| ✅ 6 | **Next 마이그레이션 ④ caching 정상화**: `fetch` 캐싱 디폴트가 Next 14~16 사이에 두 번 바뀌었으니 `service/*.ts` 전 fetch에 **명시적** `cache`/`next.revalidate`/`tags` 부여. Turbopack 빌드 통과 확인 | `src/service/*.ts` 전체, `next.config.js` |
 | 7 | **블로그 1편 발행** — Next 13 → 16 마이그레이션기 | (블로그) |
 
 ## 검증
@@ -108,12 +108,12 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/service/*.ts` 전 fetch 호출 목록 파악 | [ ] |
-| 2 | 각 fetch에 명시적 `cache: 'no-store'` 또는 `next: { revalidate, tags }` 부여 | [ ] |
-| 3 | `next.config.js`(또는 `.ts`) Turbopack 관련 설정 검토 | [ ] |
-| 4 | `yarn build` 통과 확인 | [ ] |
-| 5 | `yarn dev --turbopack` (또는 `--turbo`) 실행 → 브라우저 정상 확인 | [ ] |
-| 6 | `yarn lint && yarn typecheck` 무경고 | [ ] |
+| 1 | `src/service/*.ts` 전 fetch 호출 목록 파악 | [x] |
+| 2 | 각 fetch에 명시적 `cache: 'no-store'` 또는 `next: { revalidate, tags }` 부여 | [x] |
+| 3 | `next.config.js`(또는 `.ts`) Turbopack 관련 설정 검토 | [x] |
+| 4 | `yarn build` 통과 확인 | [x] |
+| 5 | `yarn dev --turbopack` (또는 `--turbo`) 실행 → 브라우저 정상 확인 | [x] |
+| 6 | `yarn lint && yarn typecheck` 무경고 | [x] |
 
 #### Day 7 — 블로그 1편 발행
 

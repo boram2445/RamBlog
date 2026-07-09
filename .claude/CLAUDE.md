@@ -12,8 +12,8 @@
 | ------------- | ------------------------------------------------------------------------------------ |
 | 🔴 **보안**   | IDOR(소유권 검증 0건), GROQ Injection 전 쿼리, bcrypt salt 2~4, 이미지 업로드 무인증 |
 | 🟠 **SEO**    | sitemap·robots 사실상 부재, 홈이 CSR-only라 크롤러가 포스트 발견 불가, metadata 빈약 |
-| 🟠 **렌더링** | `'use client'` 45/161 (~28%) — 인터랙션 잎으로 더 잘게 쪼개 RSC 비중 확대 필요        |
-| 🟡 **DX**     | error.tsx 0, 테스트 0, CI 0, ~~env 검증~~ ✅(Day 2), `Avartar` 오타 11파일 전파     |
+| 🟠 **렌더링** | `'use client'` 45/161 (~28%) — 인터랙션 잎으로 더 잘게 쪼개 RSC 비중 확대 필요       |
+| 🟡 **DX**     | error.tsx 0, 테스트 0, CI 0, ~~env 검증~~ ✅(Day 2), `Avartar` 오타 11파일 전파      |
 
 ## 진행 방식
 
@@ -106,6 +106,7 @@ Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래
 
 - **커밋은 사용자가 명시적으로 요청할 때만** 실행. 작업 완료 후 자동 커밋 금지
 - 커밋 메시지에 진행 단위(`Day N`, `Week N` 등) 표기 **금지**. 변경 내용(무엇이/왜 바뀌었는지)만 적기. roadmap 매핑은 `docs/roadmap1/week{N}.md`가 관리
+- **커밋 author는 항상 사용자(Boram Kim)여야 함**. `--author` 플래그나 `Co-authored-by:` 트레일러로 Claude를 author/contributor에 추가하지 말 것.
 
 ### 30-day-plan 진행 표기
 
