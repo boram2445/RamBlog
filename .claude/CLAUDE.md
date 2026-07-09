@@ -30,9 +30,10 @@
 
 ### 개발 환경
 
-- Node 20+, 패키지 매니저 **yarn** (`yarn.lock` 기준)
-- 주요 명령어: `yarn dev` / `yarn build` (postbuild로 next-sitemap 자동 실행) / `yarn lint` / `npx tsc --noEmit` (typecheck — 스크립트 없어서 직접 실행)
-- `sanity-studio/` 는 별도 yarn 워크스페이스 — 루트 `yarn` 으로는 설치되지 않음
+- Node 20+, 패키지 매니저 **pnpm** (`pnpm-lock.yaml` 기준, `pnpm-workspace.yaml`로 root + `sanity-studio` 워크스페이스 통합)
+- 주요 명령어: `pnpm dev` / `pnpm build` (postbuild로 next-sitemap 자동 실행) / `pnpm lint` / `pnpm exec tsc --noEmit` (typecheck — 스크립트 없어서 직접 실행)
+- `sanity-studio/` 는 pnpm 워크스페이스 멤버 — 루트 `pnpm install` 한 번으로 함께 설치됨. React 18(studio) / React 19(root) 버전 충돌은 pnpm의 격리형 node_modules로 해결
+- 의존성 버전 오버라이드·패치는 `pnpm-workspace.yaml`의 `overrides`/`patchedDependencies`/`allowBuilds`에서 관리 (patch 파일은 `patches/`)
 - 환경변수: `.env.local` 사용 (`.env.example` 참고)
 
 ### 아키텍처
@@ -98,7 +99,7 @@ Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래
 1. `package.json` + 영향 받는 폴더의 기존 패턴 확인
 2. 호출 그래프 파악 (service → api → hooks → components 어느 층에서 시작)
 3. 구현
-4. `yarn build && yarn lint` 통과 확인
+4. `pnpm build && pnpm lint` 통과 확인
 5. 핵심 라우트 수동 스모크 테스트 (홈, 포스트 상세, 로그인, 글쓰기)
 6. 진행 중인 Day 작업이면 `docs/roadmap1/ROADMAP.md` 검증 항목 확인
 
@@ -121,4 +122,4 @@ Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래
 - task/step 종료 후 반드시 **2단 ask** 순서 준수. 침묵=동의 금지:
   1. 변경 파일 한 문장 요약 + **"코드 검토해 주시겠어요?"** → 사용자 검토 대기
   2. 검토 완료 후 **"다음 스텝 시작할까요? — `{다음 task/step 요약}`"** → `다음`/`진행`/`ok` 등 명시적 승인 대기
-- task 안에 명시된 빌드 확인(`yarn build`·`yarn lint`)은 별도로 끊지 않고 그 task에 포함
+- task 안에 명시된 빌드 확인(`pnpm build`·`pnpm lint`)은 별도로 끊지 않고 그 task에 포함

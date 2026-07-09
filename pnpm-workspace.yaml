@@ -1,0 +1,21 @@
+packages:
+  - 'sanity-studio'
+publicHoistPattern:
+  - 'tui-color-picker'
+allowBuilds:
+  bcrypt: true
+  core-js: false
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+overrides:
+  '@types/react': 19.2.14
+  '@types/react-dom': 19.2.3
+  tui-color-picker: 2.2.8
+  swr: 2.2.1
+  axios: 1.4.0
+  sanity: 3.15.1
+  '@sanity/vision': 3.15.1
+patchedDependencies:
+  react-markdown@8.0.7: patches/react-markdown@8.0.7.patch
+  tui-color-picker@2.2.8: patches/tui-color-picker@2.2.8.patch

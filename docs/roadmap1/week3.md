@@ -14,7 +14,7 @@
 
 ## 검증
 
-- 빌드/린트/타입: `yarn build && yarn lint && yarn typecheck` 무경고
+- 빌드/린트/타입: `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고
 - **SEO 단계(Day 16~18)**: 빌드 후 `public/sitemap.xml`, `public/robots.txt` 존재 + 동적 URL 포함. Google Search Console URL 검사로 indexable
 - **렌더링 단계(Day 20~21)**: 브라우저 View Source에서 초기 HTML에 포스트 카드 링크 포함. Lighthouse Performance 80+, SEO 95+, Accessibility 95+
 
@@ -39,7 +39,7 @@
 | 2 | `export const metadata` 객체에 `metadataBase` 추가 (`new URL(process.env.NEXTAUTH_URL)`) | [ ] |
 | 3 | OG(Open Graph), Twitter Card 기본 메타 추가 | [ ] |
 | 4 | `robots` 메타 (`index: true, follow: true`) 추가 | [ ] |
-| 5 | `yarn build` 통과 + 빌드 후 홈 head 태그 검토 | [ ] |
+| 5 | `pnpm build` 통과 + 빌드 후 홈 head 태그 검토 | [ ] |
 
 #### Day 17 — 포스트 상세 metadata + JSON-LD
 
@@ -49,7 +49,7 @@
 | 2 | `canonical`, `article` 메타 추가 | [ ] |
 | 3 | `src/components/post/JsonLd.tsx` 신규 생성 (`BlogPosting` JSON-LD 스키마) | [ ] |
 | 4 | `[user]/posts/[id]/page.tsx`에서 `<JsonLd>` 컴포넌트 렌더 | [ ] |
-| 5 | `yarn build` + 포스트 상세 head 태그 / `<script type="application/ld+json">` 검토 | [ ] |
+| 5 | `pnpm build` + 포스트 상세 head 태그 / `<script type="application/ld+json">` 검토 | [ ] |
 
 #### Day 18 — 동적 sitemap + robots.txt
 
@@ -57,7 +57,7 @@
 |---|---|---|
 | 1 | `next-sitemap.config.js`에 `additionalPaths` 함수 작성 — Sanity fetch로 포스트/유저/태그 URL 수집 | [ ] |
 | 2 | `generateRobotsTxt: true` 설정 추가 | [ ] |
-| 3 | `yarn build` 후 `public/sitemap.xml` 존재 확인 | [ ] |
+| 3 | `pnpm build` 후 `public/sitemap.xml` 존재 확인 | [ ] |
 | 4 | `public/sitemap.xml` 열어서 동적 포스트 URL 포함 여부 확인 | [ ] |
 | 5 | `public/robots.txt` 존재 및 `Sitemap:` 항목 확인 | [ ] |
 
@@ -77,7 +77,7 @@
 | 1 | `src/components/post/PostCard.tsx` `'use client'` 제거 | [ ] |
 | 2 | `PostCard.tsx`의 `useRouter().push` → `<Link href>` 교체 | [ ] |
 | 3 | `src/components/post/PostListCard.tsx` 동일 처리 | [ ] |
-| 4 | `yarn build` 통과 | [ ] |
+| 4 | `pnpm build` 통과 | [ ] |
 | 5 | 브라우저 View Source에서 포스트 카드 HTML(링크 등)이 초기 응답에 포함되는지 확인 | [ ] |
 
 #### Day 21 — 홈 페이지 서버 컴포넌트 전환
@@ -86,6 +86,6 @@
 |---|---|---|
 | 1 | `src/app/page.tsx`에서 서버 측 포스트 초기 데이터 페칭 추가 | [ ] |
 | 2 | `src/components/post/FullPosts.tsx`가 `fallbackData` prop을 받아 SWR hydration하도록 수정 | [ ] |
-| 3 | `yarn build` 통과 | [ ] |
+| 3 | `pnpm build` 통과 | [ ] |
 | 4 | Lighthouse Performance / SEO 점수 기록 (목표: Performance 80+, SEO 95+) | [ ] |
 | 5 | Day 20~21 summary 표 행에 ✅ 마킹 | [ ] |

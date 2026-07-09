@@ -60,7 +60,7 @@ RamBlog은 2023년 신입 시절 만든 개인 블로그 사이드 프로젝트(
 
 ## ✅ 검증 (각 Day 작업 후)
 
-- 빌드/린트/타입: `yarn build && yarn lint && yarn typecheck` 무경고
+- 빌드/린트/타입: `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고
 - **마이그레이션 단계(Day 3~11)**: 빌드 성공 + 핵심 라우트 수동 스모크 테스트 (홈, 포스트 상세, 로그인, 글쓰기, 댓글)
 - **보안 단계(Day 13~14)**: 다른 사용자 토큰으로 API 호출 → 403 응답. 비로그인으로 댓글 DELETE 호출 → 401. 잘못된 비밀번호 검증 우회 시도 → 차단
 - **SEO 단계(Day 16~18)**: 빌드 후 `public/sitemap.xml`, `public/robots.txt` 존재 + 동적 URL 포함. Google Search Console URL 검사로 indexable

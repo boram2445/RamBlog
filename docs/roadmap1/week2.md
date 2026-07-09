@@ -14,7 +14,7 @@
 
 ## 검증
 
-- 빌드/린트/타입: `yarn build && yarn lint && yarn typecheck` 무경고
+- 빌드/린트/타입: `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고
 - **마이그레이션 단계(Day 8~11)**: 빌드 성공 + 핵심 라우트 수동 스모크 테스트 (홈, 포스트 상세, 로그인, 글쓰기, 댓글)
 - **보안 단계(Day 13~14)**: 다른 사용자 토큰으로 API 호출 → 403 응답. 비로그인으로 댓글 DELETE 호출 → 401. 잘못된 비밀번호 검증 우회 시도 → 차단
 
@@ -26,11 +26,11 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | 현재 `@sanity/client`, `@sanity/image-url` 버전 확인 (`yarn list --pattern @sanity`) | [ ] |
-| 2 | `yarn upgrade @sanity/client@latest @sanity/image-url@latest` 실행 | [ ] |
-| 3 | `cd sanity-studio && yarn upgrade sanity@latest` 실행 | [ ] |
+| 1 | 현재 `@sanity/client`, `@sanity/image-url` 버전 확인 (`pnpm list '@sanity/*'`) | [ ] |
+| 2 | `pnpm update @sanity/client@latest @sanity/image-url@latest` 실행 | [ ] |
+| 3 | `cd sanity-studio && pnpm update sanity@latest` 실행 | [ ] |
 | 4 | Breaking changes 확인 (API 시그니처 변경 등) → 필요 시 `src/service/sanity.ts` 수정 | [ ] |
-| 5 | `yarn build` 통과 + 포스트 목록/상세 스모크 | [ ] |
+| 5 | `pnpm build` 통과 + 포스트 목록/상세 스모크 | [ ] |
 
 #### Day 9 — Sanity TypeGen 도입
 
@@ -38,9 +38,9 @@
 |---|---|---|
 | 1 | `sanity-studio/sanity.cli.ts`에 typegen 설정 추가 | [ ] |
 | 2 | `package.json` scripts에 `"typegen": "sanity typegen generate"` 추가 | [ ] |
-| 3 | `yarn typegen` 실행 → `src/sanity/types.ts` 자동 생성 확인 | [ ] |
+| 3 | `pnpm typegen` 실행 → `src/sanity/types.ts` 자동 생성 확인 | [ ] |
 | 4 | 생성된 타입 파일 검토 (스키마 누락·오류 없는지) | [ ] |
-| 5 | `yarn build && yarn typecheck` 통과 | [ ] |
+| 5 | `pnpm build && pnpm exec tsc --noEmit` 통과 | [ ] |
 
 #### Day 10 — posts.ts GROQ 쿼리 typegen + 파라미터 바인딩
 
@@ -50,7 +50,7 @@
 | 2 | 각 쿼리에서 `${변수}` → `$변수` 파라미터 바인딩으로 전환 | [ ] |
 | 3 | `client.fetch(query, { 변수 })` 두 번째 인자 추가 | [ ] |
 | 4 | typegen 결과 타입으로 fetch return type 지정 | [ ] |
-| 5 | `yarn build && yarn typecheck` 통과 + 포스트 목록·상세·태그 스모크 | [ ] |
+| 5 | `pnpm build && pnpm exec tsc --noEmit` 통과 + 포스트 목록·상세·태그 스모크 | [ ] |
 
 #### Day 11 — user.ts + comment.ts + model/*.ts 정리
 
@@ -59,7 +59,7 @@
 | 1 | `src/service/user.ts:51-115` 쿼리 파라미터 바인딩 전환 | [ ] |
 | 2 | `src/service/comment.ts:21-134` 쿼리 파라미터 바인딩 전환 | [ ] |
 | 3 | `src/model/*.ts` 수동 타입 중 typegen 타입으로 대체 가능한 것 제거 | [ ] |
-| 4 | `yarn build && yarn typecheck` 통과 + 댓글 조회/작성 스모크 | [ ] |
+| 4 | `pnpm build && pnpm exec tsc --noEmit` 통과 + 댓글 조회/작성 스모크 | [ ] |
 
 #### Day 12 — 블로그 2·3편 발행
 
@@ -80,7 +80,7 @@
 | 3 | `src/app/api/comment/[id]/password/route.ts` 게스트 비번 검증 로직 통합 | [ ] |
 | 4 | 다른 사용자 토큰으로 POST/DELETE 호출 → 403 응답 확인 | [ ] |
 | 5 | 비로그인 상태로 댓글 DELETE 호출 → 401 응답 확인 | [ ] |
-| 6 | `yarn build && yarn lint` 통과 | [ ] |
+| 6 | `pnpm build && pnpm lint` 통과 | [ ] |
 
 #### Day 14 — bcrypt 강화 + 이미지 업로드 보안
 
@@ -91,4 +91,4 @@
 | 3 | `src/app/api/comment/[id]/route.ts:37` 게스트 댓글 bcrypt salt 12 이상 상향 | [ ] |
 | 4 | `src/app/api/image/route.ts:4-13` 세션 인증 필수화 + MIME 타입 허용 목록 + 파일 사이즈 제한 | [ ] |
 | 5 | 비로그인 이미지 업로드 시도 → 401 응답 확인 | [ ] |
-| 6 | `yarn build && yarn lint` 통과 | [ ] |
+| 6 | `pnpm build && pnpm lint` 통과 | [ ] |

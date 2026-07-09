@@ -16,7 +16,7 @@
 
 ## 검증
 
-- 빌드/린트/타입: `yarn build && yarn lint && yarn typecheck` 무경고
+- 빌드/린트/타입: `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고
 - **렌더링 단계(Day 22)**: 브라우저 View Source에서 초기 HTML에 포스트 카드 링크 포함. Lighthouse Performance 80+, SEO 95+, Accessibility 95+
 - **DX 단계(Day 27~29)**: PR 만들어서 CI 통과 확인, pre-commit 훅 동작 확인
 
@@ -31,7 +31,7 @@
 | 1 | `src/components/post/PostIcons.tsx:27` 좋아요 fetch 제거 → `getPostDetail`이 반환하는 `likes` 재사용 | [ ] |
 | 2 | `src/service/posts.ts:39` `getAllPostsData`에 `next: { tags: ['posts'] }` 추가 | [ ] |
 | 3 | `src/service/posts.ts:60` `getTagPosts`에 `next: { tags: ['posts', 'tags'] }` 추가 | [ ] |
-| 4 | `yarn build` 통과 + 좋아요 동작 스모크 | [ ] |
+| 4 | `pnpm build` 통과 + 좋아요 동작 스모크 | [ ] |
 
 #### Day 23 — 블로그 6편 발행
 
@@ -50,7 +50,7 @@
 | 2 | `PostCard.tsx`, `PostListCard.tsx` 모든 `next/image`에 `sizes` 속성 추가 | [ ] |
 | 3 | `TuiEditors.tsx` `next/dynamic({ ssr: false })` 적용 | [ ] |
 | 4 | `WritePostForm.tsx` 에디터 dynamic import 반영 | [ ] |
-| 5 | `yarn build` + Lighthouse Performance 점수 측정 | [ ] |
+| 5 | `pnpm build` + Lighthouse Performance 점수 측정 | [ ] |
 
 #### Day 25 — 시맨틱 HTML + 접근성
 
@@ -60,7 +60,7 @@
 | 2 | `src/components/post/PostListCard.tsx:31,52` 동일 교체 | [ ] |
 | 3 | `src/components/post/PostCard.tsx:38,46` 동일 교체 | [ ] |
 | 4 | 폼 컴포넌트 4개 `<label htmlFor>` 또는 `aria-label` 연결 확인 및 추가 | [ ] |
-| 5 | `yarn build` + Lighthouse Accessibility 점수 측정 (목표: 95+) | [ ] |
+| 5 | `pnpm build` + Lighthouse Accessibility 점수 측정 (목표: 95+) | [ ] |
 
 #### Day 26 — 블로그 7편 발행
 
@@ -79,7 +79,7 @@
 | 2 | `src/app/not-found.tsx` 작성 | [ ] |
 | 3 | `src/app/global-error.tsx` 작성 | [ ] |
 | 4 | 도메인별 `error.tsx` 2~3개 추가 (`src/app/[user]/posts/error.tsx` 등) | [ ] |
-| 5 | `yarn build` 통과 + 잘못된 URL 접근 시 not-found 페이지 확인 | [ ] |
+| 5 | `pnpm build` 통과 + 잘못된 URL 접근 시 not-found 페이지 확인 | [ ] |
 
 #### Day 28 — API 공통 에러 핸들러
 
@@ -88,13 +88,13 @@
 | 1 | `src/lib/api-handler.ts` 신규 작성 (`withErrorHandler` 래퍼 함수) | [ ] |
 | 2 | `src/app/api/**/route.ts` 전체에서 `JSON.stringify(error)` 사용 부분 찾기 | [ ] |
 | 3 | 각 route.ts에 `withErrorHandler` 래퍼 적용, `NextResponse.json({ error }, { status })` 통일 | [ ] |
-| 4 | `yarn build && yarn lint` 통과 | [ ] |
+| 4 | `pnpm build && pnpm lint` 통과 | [ ] |
 
 #### Day 29 — CI / Husky / Prettier 인프라
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `yarn add -D prettier lint-staged husky` 설치 | [ ] |
+| 1 | `pnpm add -D prettier lint-staged husky` 설치 | [ ] |
 | 2 | `.prettierrc` 작성 | [ ] |
 | 3 | `npx husky init` + `.husky/pre-commit`에 `npx lint-staged` 설정 | [ ] |
 | 4 | `package.json`에 `lint-staged` 설정 추가 (`.ts`, `.tsx` → eslint + prettier) | [ ] |
