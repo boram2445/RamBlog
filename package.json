@@ -7,7 +7,9 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "schema:extract": "cd sanity-studio && ./node_modules/.bin/sanity schema extract --path ../schema.json",
+    "typegen": "pnpm schema:extract && ./sanity-studio/node_modules/.bin/sanity typegen generate"
   },
   "dependencies": {
     "@sanity/client": "^7.23.0",
@@ -25,6 +27,7 @@
     "bcrypt": "^5.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "groq": "^6.4.0",
     "next": "16.2.6",
     "next-auth": "^5.0.0-beta.31",
     "next-themes": "^0.2.1",

@@ -1,4 +1,6 @@
+import { defineQuery } from 'groq';
 import { PostData, SimplePost } from '@/model/post';
+import { AllPostsQueryResult } from '@/sanity/types';
 import { client } from './sanity';
 
 export const simplePostProjection = `
@@ -9,7 +11,7 @@ export const simplePostProjection = `
   "updatedAt":_updatedAt,
   "createdAt":coalesce(publishedAt, _createdAt),
   "tags":tags[]->tagName,
-  "username":author->username, 
+  "username":author->username,
   "name":author->name,
   "userImage":author->image,
   "likes":count(likes),
@@ -27,19 +29,73 @@ const fullPostProjection = `
   "id":_id
 `;
 
-function mapPosts(posts: SimplePost[]) {
-  return posts.map((post: SimplePost) => ({
+const allPostsQuery = defineQuery(`
+  *[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+`);
+
+const userPostsQuery = defineQuery(`
+  *[_type == "post" && author->username == $username]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+`);
+
+// NOTE: 파라미터명 $tag가 아니라 $tagName — @sanity/client의 QueryParams가 `tag`를
+// (CDN 요청 옵션과 혼동 방지용) 예약 키로 막아둠(tag?: never)
+const tagPostsQuery = defineQuery(`
+  *[_type == 'post' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+`);
+
+const bookmarkPostsQuery = defineQuery(`
+  *[_type == "post" && _id in *[_type == "user" && username == $username].bookmarks[]._ref]
+  | order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+`);
+
+const userTagPostsQuery = defineQuery(`
+  *[_type == 'post' && author->username == $username && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+`);
+
+const postDetailQuery = defineQuery(`
+  *[_type == "post" && _id == $postId][0]{
+    'currentPost': {${fullPostProjection}},
+    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},
+    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}
+  }
+`);
+
+const postDetailLikeQuery = defineQuery(`
+  *[_type == "post" && _id == $postId][0]{
+    "likes":likes[]->username,
+  }.likes
+`);
+
+const existingTagQuery = defineQuery(`
+  *[_type == "tag" && tagName == $tagName]
+`);
+
+const userPostTagsQuery = defineQuery(`
+  *[_type == 'post' && author->username == $username].tags[]->tagName
+`);
+
+const postAuthorQuery = defineQuery(`
+  *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }
+`);
+
+// simplePostProjection을 공유하는 5개 list 쿼리의 결과 요소 타입 — 구조 동일
+type SimplePostProjectionResult = AllPostsQueryResult[number];
+
+// TODO(Day 11): typegen 쿼리 결과 타입을 공개 반환 타입(SimplePost)으로 전면 채택하며
+// nullable 필드 정합을 맞추고 이 캐스트 제거
+function mapPosts(posts: SimplePostProjectionResult[]): SimplePost[] {
+  return posts.map((post) => ({
     ...post,
     tags: post.tags ?? [],
     pinned: post.pinned ?? false,
     likes: post.likes ?? 0,
-  }));
+  })) as unknown as SimplePost[];
 }
 
 export async function getAllPostsData(): Promise<SimplePost[]> {
   return client
     .fetch(
-      `*[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
+      allPostsQuery,
       {},
       {
         cache: 'force-cache',
@@ -52,8 +108,8 @@ export async function getAllPostsData(): Promise<SimplePost[]> {
 export async function getAllUserPosts(username: string) {
   return client
     .fetch(
-      `*[_type == "post" && author->username=="${username}"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
-      {},
+      userPostsQuery,
+      { username },
       {
         cache: 'force-cache',
         next: { tags: [`posts/${username}`] },
@@ -65,8 +121,8 @@ export async function getAllUserPosts(username: string) {
 export async function getTagPosts(tag: string) {
   return client
     .fetch(
-      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
-      {},
+      tagPostsQuery,
+      { tagName: tag },
       {
         cache: 'force-cache',
         next: { tags: ['posts'] },
@@ -76,22 +132,23 @@ export async function getTagPosts(tag: string) {
 }
 
 export async function getBookmarkPosts(username: string) {
-  return client.fetch(
-    `*[_type == "post" && _id in *[_type == "user" && username == "${username}"].bookmarks[]._ref]
-  | order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
-    {},
-    {
-      cache: 'force-cache',
-      next: { tags: ['bookmark'] },
-    }
-  );
+  return client
+    .fetch(
+      bookmarkPostsQuery,
+      { username },
+      {
+        cache: 'force-cache',
+        next: { tags: ['bookmark'] },
+      }
+    )
+    .then(mapPosts);
 }
 
 export async function getUserTagPosts(username: string, tag: string) {
   return client
     .fetch(
-      `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
-      {},
+      userTagPostsQuery,
+      { username, tagName: tag },
       {
         cache: 'force-cache',
         next: { tags: [`posts/${username}`] },
@@ -105,28 +162,23 @@ export async function getPostDetail(
   username: string
 ): Promise<PostData> {
   const postDetail = await client.fetch(
-    `*[_type == "post" && _id == "${postId}"][0]{
-      'currentPost': {${fullPostProjection}},
-      'nextPost': *[_type == 'post' && author->username =="${username}" && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},
-      'previousPost': *[_type == 'post' && author->username =="${username}"  && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}
-    }`,
-    {},
+    postDetailQuery,
+    { postId, username },
     {
       cache: 'force-cache',
       next: { tags: [`posts/${username}`] },
     }
   );
 
-  return postDetail;
+  // TODO(Day 11): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거
+  return postDetail as unknown as PostData;
 }
 
 export async function getPostDetailLike(postId: string) {
   const res = await client
     .fetch(
-      `*[_type == "post" && _id == "${postId}"][0]{
-      "likes":likes[]->username,
-    }.likes`,
-      {},
+      postDetailLikeQuery,
+      { postId },
       {
         cache: 'force-cache',
         next: { tags: ['like'] },
@@ -139,8 +191,8 @@ export async function getPostDetailLike(postId: string) {
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
 async function checkAndAddTag(tagName: string) {
   const existingTags = await client.fetch(
-    `*[_type == "tag" && tagName == "${tagName}"]`,
-    {},
+    existingTagQuery,
+    { tagName },
     { cache: 'no-store' }
   );
   if (existingTags.length === 0) {
@@ -243,13 +295,21 @@ export async function deletePost(postId: string) {
   return client.delete(postId);
 }
 
+export async function getPostAuthorId(postId: string) {
+  return client.fetch(
+    postAuthorQuery,
+    { postId },
+    { cache: 'no-store' }
+  );
+}
+
 export async function getTags(
   username: string
 ): Promise<{ name: string; count: number }[]> {
   return client
     .fetch(
-      `*[_type == 'post' && author->username == '${username}'].tags[]->tagName`,
-      {},
+      userPostTagsQuery,
+      { username },
       {
         cache: 'force-cache',
         next: { tags: [`tags/${username}`] },
@@ -257,7 +317,7 @@ export async function getTags(
     )
     .then((tagList) => {
       const tagCountMap: { [tag: string]: number } = {};
-      tagList?.forEach((tag: string) => {
+      tagList?.forEach((tag: string | null) => {
         if (tag === null) return;
         tagCountMap[tag] ? tagCountMap[tag]++ : (tagCountMap[tag] = 1);
       });
@@ -284,6 +344,9 @@ export async function likePost(postId: string, userId: string) {
 }
 
 export async function dislikePost(postId: string, userId: string) {
+  // NOTE: patch().unset() predicate는 client.fetch의 파라미터 바인딩 대상이 아니라
+  // 문자열 보간이 남음. userId는 세션에서 유래한 Sanity _id(사용자 자유 입력 아님)라
+  // 위험은 낮지만, 엄밀한 해결은 _id 형식 검증 — 트래킹: week2-issues.md
   return client
     .patch(postId)
     .unset([`likes[_ref=="${userId}"]`])

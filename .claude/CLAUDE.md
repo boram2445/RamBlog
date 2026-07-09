@@ -31,7 +31,8 @@
 ### 개발 환경
 
 - Node 20+, 패키지 매니저 **pnpm** (`pnpm-lock.yaml` 기준, `pnpm-workspace.yaml`로 root + `sanity-studio` 워크스페이스 통합)
-- 주요 명령어: `pnpm dev` / `pnpm build` (postbuild로 next-sitemap 자동 실행) / `pnpm lint` / `pnpm exec tsc --noEmit` (typecheck — 스크립트 없어서 직접 실행)
+- 주요 명령어: `pnpm dev` / `pnpm build` (postbuild로 next-sitemap 자동 실행) / `pnpm lint` / `pnpm exec tsc --noEmit` (typecheck — 스크립트 없어서 직접 실행) / `pnpm typegen` (Sanity 타입 재생성)
+- **Sanity TypeGen 파이프라인**: `pnpm typegen` = `schema:extract`(studio 컨텍스트에서 `sanity schema extract` → 등록 스키마를 `schema.json`으로 추출) → `typegen generate`(`sanity-typegen.json` 설정대로 `schema.json` + `src/service/**/*.ts`의 GROQ 쿼리를 읽어 `src/sanity/types.ts` 생성). **`src/sanity/types.ts`는 생성물이라 직접 수정 금지** — 스키마(`sanity-studio/schemas/*.js`) 또는 쿼리를 고치고 `pnpm typegen` 재실행
 - `sanity-studio/` 는 pnpm 워크스페이스 멤버 — 루트 `pnpm install` 한 번으로 함께 설치됨. React 18(studio) / React 19(root) 버전 충돌은 pnpm의 격리형 node_modules로 해결
 - 의존성 버전 오버라이드·패치는 `pnpm-workspace.yaml`의 `overrides`/`patchedDependencies`/`allowBuilds`에서 관리 (patch 파일은 `patches/`)
 - 환경변수: `.env.local` 사용 (`.env.example` 참고)
@@ -45,6 +46,7 @@ src/
     [user]/        # 동적 사용자 라우트
   components/      # 도메인별 폴더 (post, posts, comment, common, ui …)
   service/         # Sanity 호출 — 서버 전용
+  sanity/          # types.ts — typegen 생성물(직접 수정 금지), `pnpm typegen`으로 재생성
   hooks/           # SWR 훅
   context/         # Auth / SWR / DarkMode Provider
   utils/  model/  types/  asset/icons/
