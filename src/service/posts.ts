@@ -7,7 +7,7 @@ export const simplePostProjection = `
   mainImage,
   pinned,
   "updatedAt":_updatedAt,
-  "createdAt":_createdAt,
+  "createdAt":coalesce(publishedAt, _createdAt),
   "tags":tags[]->tagName,
   "username":author->username, 
   "name":author->name,
@@ -20,8 +20,8 @@ const fullPostProjection = `
   ...,
   "tags":tags[]->tagName,
   "updatedAt":_updatedAt,
-  "createdAt":_createdAt,
-  "username":author->username, 
+  "createdAt":coalesce(publishedAt, _createdAt),
+  "username":author->username,
   "userImage":author->image,
   "likes":likes[]->username,
   "id":_id
@@ -39,7 +39,7 @@ function mapPosts(posts: SimplePost[]) {
 export async function getAllPostsData(): Promise<SimplePost[]> {
   return client
     .fetch(
-      `*[_type == "post"]| order(_createdAt desc){${simplePostProjection}}`,
+      `*[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
       {},
       {
         cache: 'force-cache',
@@ -52,7 +52,7 @@ export async function getAllPostsData(): Promise<SimplePost[]> {
 export async function getAllUserPosts(username: string) {
   return client
     .fetch(
-      `*[_type == "post" && author->username=="${username}"]| order(_createdAt desc){${simplePostProjection}}`,
+      `*[_type == "post" && author->username=="${username}"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
       {},
       {
         cache: 'force-cache',
@@ -65,7 +65,7 @@ export async function getAllUserPosts(username: string) {
 export async function getTagPosts(tag: string) {
   return client
     .fetch(
-      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
+      `*[_type == 'post' && "${tag}" in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
       {},
       {
         cache: 'force-cache',
@@ -78,7 +78,7 @@ export async function getTagPosts(tag: string) {
 export async function getBookmarkPosts(username: string) {
   return client.fetch(
     `*[_type == "post" && _id in *[_type == "user" && username == "${username}"].bookmarks[]._ref]
-  | order(_createdAt desc){${simplePostProjection}}`,
+  | order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
     {},
     {
       cache: 'force-cache',
@@ -90,7 +90,7 @@ export async function getBookmarkPosts(username: string) {
 export async function getUserTagPosts(username: string, tag: string) {
   return client
     .fetch(
-      `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(_createdAt desc){${simplePostProjection}}`,
+      `*[_type == 'post' && author->username == "${username}"  && "${tag}" in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}`,
       {},
       {
         cache: 'force-cache',
@@ -107,8 +107,8 @@ export async function getPostDetail(
   const postDetail = await client.fetch(
     `*[_type == "post" && _id == "${postId}"][0]{
       'currentPost': {${fullPostProjection}},
-      'nextPost': *[_type == 'post' && author->username =="${username}" && _createdAt < ^._createdAt][0]{ "username":author->username, title, "id":_id},
-      'previousPost': *[_type == 'post' && author->username =="${username}"  && _createdAt > ^._createdAt] | order(_createdAt asc)[0]{ "username":author->username, title, "id":_id}
+      'nextPost': *[_type == 'post' && author->username =="${username}" && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},
+      'previousPost': *[_type == 'post' && author->username =="${username}"  && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}
     }`,
     {},
     {
@@ -169,6 +169,7 @@ export async function createPost(
     title: string;
     pinned: boolean;
     content: string;
+    publishedAt: string;
     description?: string;
     tags?: { _ref: string; _type: string }[];
     mainImage?: string;
@@ -179,6 +180,7 @@ export async function createPost(
     title,
     pinned: false,
     content,
+    publishedAt: new Date().toISOString(),
     ...(description && { description }),
     ...(mainImage && { mainImage }),
     likes: [],

@@ -17,6 +17,11 @@ export default {
       type: 'string',
     },
     {
+      title: 'Published at',
+      name: 'publishedAt',
+      type: 'datetime',
+    },
+    {
       title: 'Description',
       name: 'description',
       type: 'string',
