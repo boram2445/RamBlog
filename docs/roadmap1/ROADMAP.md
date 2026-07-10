@@ -18,7 +18,7 @@ RamBlog은 2023년 신입 시절 만든 개인 블로그 사이드 프로젝트(
 1. 작업은 별도 브랜치(`refactor/migration`)에서 진행하고 30일간 main에 머지하지 않아 Vercel auto-deploy가 트리거되지 않는다 → 기존 배포의 부채는 그대로 살아 있지만 작업 중 변경분은 추가로 노출되지 않고, 트래픽·공격 표면이 좁아 실용적 위험이 낮다.
 2. 보안 패치(GROQ 파라미터 바인딩)와 Sanity 클라이언트 업그레이드 + typegen 도입은 **같은 service 레이어를 재작성하는 작업**이라, 묶을 때 작업량이 절반이 된다.
 
-따라서 본 플랜은 **Next 16 + Sanity 마이그레이션을 먼저** 하고, 그 위에서 보안·SEO·렌더링·DX 패치를 진행한다. **NextAuth v4 → v5 (Auth.js) 전환과 Toast UI Editor 교체는 표면적이 커서 30일 이후 별도 트랙**(아래 Track A, B)으로 분리한다.
+따라서 본 플랜은 **Next 16 + Sanity 마이그레이션을 먼저** 하고, 그 위에서 보안·SEO·렌더링·DX 패치를 진행한다. 당초 **NextAuth v4 → v5 (Auth.js) 전환과 Toast UI Editor 교체는 30일 이후 별도 트랙**(Track A, B)으로 분리했으나, Track A는 Week 1(Day 4·5)에 앞당겨 완료됐고 Track B는 Week 5로 편입됐다 (아래 "30일 이후" 섹션 참조).
 
 작업 자체뿐 아니라 과정을 9편의 회고 시리즈로 남기는 것도 본 플랜의 일부다 — 같은 함정에 빠질 다른 신입 개발자에게 참고가 되도록, 그리고 3년 전의 나와 지금의 나를 비교하는 회고로.
 
@@ -48,15 +48,16 @@ RamBlog은 2023년 신입 시절 만든 개인 블로그 사이드 프로젝트(
 | Week 2 (Day 8–14) | Sanity 마이그레이션 + 보안 패치 | [roadmap1/week2.md](./roadmap1/week2.md) |
 | Week 3 (Day 15–21) | SEO 복구 + 렌더링 아키텍처 | [roadmap1/week3.md](./roadmap1/week3.md) |
 | Week 4 (Day 22–30) | 성능·접근성·DX 마무리 | [roadmap1/week4.md](./roadmap1/week4.md) |
+| Week 5 (Day 31–37) | 에디터 교체 + 타입·네이밍·UX 부채 청산 | [roadmap1/week5.md](./roadmap1/week5.md) |
 
 ## 🔭 30일 이후 (선택 트랙)
 
-표면적이 커서 본 플랜에서 분리. 진도와 흥미에 따라 진행:
+표면적이 커서 본 플랜에서 분리했던 트랙들의 현재 상태:
 
-- **Track A (NextAuth v4 → v5 / Auth.js)**: `getServerSession` → `auth()`, signIn API 시그니처 변경, 미들웨어 통합 — 1주 단위 작업
-- **Track B (Toast UI Editor 교체)**: Tiptap 또는 Lexical로 마이그레이션 — 에디터 통합 코드 처음부터 재작성
-- **Track C (테스트)**: Vitest 도입 + GROQ 파라미터 바인딩 회귀 테스트 + Playwright 핵심 플로우
-- **Track D (네이밍 정리)**: `Avartar` → `Avatar` 11파일 일괄 리네이밍, `components/post` ↔ `components/posts` 통합
+- ✅ **Track A (NextAuth v4 → v5 / Auth.js)**: Week 1(Day 4·5)에 앞당겨 완료 — `getServerSession` 0건, `src/auth.ts` v5 패턴 적용
+- **Track B (Toast UI Editor 교체)** → **Week 5 Day 31~32로 편입** — `@uiw/react-md-editor`로 확정 (마크다운 저장 구조와 1:1 대응, 뷰어는 이미 react-markdown으로 분리돼 있어 표면적 최소)
+- **Track C (테스트)** → **Week 6 예정** — Vitest 도입 + GROQ 파라미터 바인딩 회귀 테스트 + Playwright 핵심 플로우를 **성능 측정(Lighthouse 등)과 묶어** 별도 주차로 진행 (상세 week6.md는 추후 작성)
+- **Track D (네이밍 정리)** → **Week 5 Day 35로 편입** — `Avartar` → `Avatar` 11파일 일괄 리네이밍, `components/post` ↔ `components/posts` 통합
 
 ## ✅ 검증 (각 Day 작업 후)
 

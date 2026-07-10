@@ -18,13 +18,13 @@
 ## 진행 방식
 
 - **Next 16 + Sanity 마이그레이션을 먼저** 하고, 그 위에서 보안·SEO·렌더링 패치 진행
-- NextAuth v5(Auth.js) / Toast UI 교체는 표면적이 커서 30일 이후 별도 트랙
+- NextAuth v5(Auth.js) 전환은 Week 1에 앞당겨 완료. Toast UI 교체(`@uiw/react-md-editor`)는 Week 5 Day 31~32, 테스트는 성능 측정과 묶어 Week 6 예정
 - 매일 1시간 단위 작업, 작업 후 빌드/스모크 테스트 검증
 - 각 카테고리 완료 시 회고 블로그 글 발행 (총 9편 시리즈)
 - **신규 배포 차단**: 기존 production 배포는 그대로 두고, 작업은 별도 브랜치(`refactor/migration` 등)에서 진행해 main에 머지하지 않음 → Vercel auto-deploy가 트리거되지 않음. 30일 작업이 모두 끝난 뒤 한 번에 머지/배포
 - Day 9 이후 typegen 도입되면 `src/model/*.ts` 수동 타입은 점진 대체 — 새 파일에서 수동 타입 추가 금지
 
-상세 일정·변경 파일·검증 방법은 [`docs/roadmap1/ROADMAP.md`](./docs/roadmap1/ROADMAP.md) 참조.
+상세 일정·변경 파일·검증 방법은 [`docs/roadmap1/ROADMAP.md`](./docs/roadmap1/ROADMAP.md) 참조 (Week 5는 [`docs/roadmap1/week5.md`](./docs/roadmap1/week5.md)).
 
 ## 개발 가이드
 
