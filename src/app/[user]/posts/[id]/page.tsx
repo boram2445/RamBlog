@@ -1,8 +1,10 @@
-import { auth } from '@/auth';
-import CommentList from '@/components/comment/CommentList';
-import PostDetail from '@/components/post/PostDetail';
-import { getPostDetail } from '@/service/posts';
-import { cache } from 'react';
+import { auth } from "@/auth";
+import CommentList from "@/components/comment/CommentList";
+import JsonLd from "@/components/post/JsonLd";
+import PostDetail from "@/components/post/PostDetail";
+import { getPostDetail } from "@/service/posts";
+import type { Metadata } from "next";
+import { cache } from "react";
 
 type Props = {
   params: Promise<{
@@ -16,10 +18,7 @@ const getDetail = cache(getPostDetail);
 export default async function PostPage(props: Props) {
   const params = await props.params;
 
-  const {
-    user,
-    id
-  } = params;
+  const { user, id } = params;
 
   const session = await auth();
   const loginUserData = session?.user;
@@ -27,31 +26,53 @@ export default async function PostPage(props: Props) {
   const post = await getDetail(id, user);
 
   return (
-    <div className='mx-auto max-w-3xl laptop:max-w-6xl laptop:px-7 pb-20 '>
-      <PostDetail
-        postId={id}
-        currentPost={post.currentPost}
-        nextPost={post.nextPost}
-        previousPost={post.previousPost}
-        loginUserData={loginUserData}
-      />
-      <CommentList
-        postId={post.currentPost.id}
-        postUser={post.currentPost.username}
-        loginUserData={loginUserData}
-      />
-    </div>
+    <>
+      <div className="mx-auto max-w-3xl laptop:max-w-6xl laptop:px-7 pb-20 ">
+        <PostDetail
+          postId={id}
+          currentPost={post.currentPost}
+          nextPost={post.nextPost}
+          previousPost={post.previousPost}
+          loginUserData={loginUserData}
+        />
+        <CommentList
+          postId={post.currentPost.id}
+          postUser={post.currentPost.username}
+          loginUserData={loginUserData}
+        />
+      </div>
+      <JsonLd currentPost={post.currentPost} user={user} />
+    </>
   );
 }
 
-export async function generateMetadata(props: Props) {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    user,
-    id
-  } = params;
+  const { user, id } = params;
 
-  const { title, description } = (await getDetail(id, user))?.currentPost;
-  return { title, description };
+  const { title, description, mainImage, createdAt, updatedAt } = (
+    await getDetail(id, user)
+  )?.currentPost;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/${user}/posts/${id}`,
+    },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      publishedTime: new Date(createdAt).toISOString(),
+      modifiedTime: new Date(updatedAt).toISOString(),
+      images: mainImage ? [mainImage] : undefined,
+    },
+    twitter: {
+      title,
+      description,
+      images: mainImage ? [mainImage] : undefined,
+    },
+  };
 }
