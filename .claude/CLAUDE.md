@@ -100,10 +100,30 @@ Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래
 
 1. `package.json` + 영향 받는 폴더의 기존 패턴 확인
 2. 호출 그래프 파악 (service → api → hooks → components 어느 층에서 시작)
-3. 구현
+3. 구현 — 코드는 Learn by Doing 방식으로 사용자가 직접 작성하도록 단계별 유도 (아래 섹션)
 4. `pnpm build && pnpm lint` 통과 확인
 5. 핵심 라우트 수동 스모크 테스트 (홈, 포스트 상세, 로그인, 글쓰기)
 6. 진행 중인 Day 작업이면 `docs/roadmap1/ROADMAP.md` 검증 항목 확인
+
+### Learn by Doing
+
+**모든 코드 작업에 적용.** Claude는 구현 코드를 직접 작성하지 않는다. 사용자가 순서대로 모든 코드를 작성하도록 유도한다. 블로그·문서·roadmap·config 등 비(非)구현 작업은 대상 아님.
+
+**흐름:**
+
+1. **계획 공유** — task를 2~5개 구현 단계로 쪼개 순서와 이유를 먼저 설명한다.
+2. **단계별 요청** — 한 번에 한 단계씩 Learn by Doing 형식(Context / Your Task / Guidance)으로 요청한다. 사용자 응답 전 다음 단계로 넘어가지 않는다.
+3. **검토 후 다음** — 사용자가 제출한 코드를 검토하고 인사이트를 한 줄 공유한 뒤, 다음 단계를 요청한다.
+4. **완료** — 모든 단계가 끝나면 task 완료 보고로 마무리한다.
+
+**제약:** Claude가 `TODO(human)` 플레이스홀더를 포함한 어떤 구현 코드도 작성하지 않는다. 파일 생성·타입 정의·import 추가도 사용자에게 요청한다.
+
+**예외 — `/auto`:** 사용자가 `/auto`를 입력한 task에 한해 이 규칙을 건너뛰고 Claude가 코드를 직접 구현한다 (일회성, 다음 task부터 자동 복귀). 커맨드 정의는 `.claude/commands/auto.md`.
+
+**기존 규칙과의 관계:**
+
+- `작업 절차`의 `3. 구현`은 "사용자가 구현하도록 단계별 유도"로 대체된다.
+- `30-day-plan 실행 단위`의 2단 ask와 중첩된다: 한 task **안에서** Learn by Doing 4단계가 돌고, task가 끝난 뒤 2단 ask를 수행한다.
 
 ### Git 규칙
 
@@ -114,7 +134,9 @@ Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래
 ### 30-day-plan 진행 표기
 
 - `docs/roadmap1/week{N}.md`의 Day 작업을 완료하면 해당 행 앞에 ✅ 이모지 추가
-- 작업 중 발생한 이슈는 `docs/roadmap1/week{N}-issues.md`에 기록 (week{N}.md 본문에는 적지 않음)
+- 작업 중 발생한 이슈는 `docs/roadmap1/week{N}-issues.md`에 기록 (week{N}.md 본문에는 적지 않음). **단, 스모크 테스트 중 우연히 발견해 즉시 고친 사소한 원라인 버그는 기록 제외** — 설계 결정·재발 가능한 함정·의도적으로 미룬 백로그만 기록 대상
+- Learn by Doing 진행 중 사용자가 한 개념 질문과 답변은 `docs/roadmap1/learning-notes.md`에 Day별 섹션 + Q/A 형식으로 기록 (문서 작업이므로 Learn by Doing 예외 대상). Claude가 직접 쓰지 않고, Day task 종료 시점에 그 Day의 Q&A 쌍을 서브에이전트(general-purpose)에 넘겨 파일 추가를 위임 — 메인 컨텍스트는 코딩 흐름에 집중
+  - 같은 기준으로, 실수 노트에도 사소한 원라인 버그 수정은 제외하고 설계 결정·함정·백로그만 남긴다
 
 ### 30-day-plan 실행 단위
 

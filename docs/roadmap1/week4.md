@@ -4,7 +4,7 @@
 
 | D | 작업 | 변경 파일 |
 |---|---|---|
-| 22 | `PostIcons` 좋아요 중복 fetch 제거 (`getPostDetail`이 이미 포함한 `likes` 사용) + `getAllPostsData`/`getTagPosts`에 `next: { tags }` 추가 | `src/components/post/PostIcons.tsx:27`, `src/service/posts.ts:39,60` |
+| ✅ 22 | `PostIcons` 좋아요 중복 fetch 제거 (`getPostDetail`이 이미 포함한 `likes` 사용) + `getAllPostsData`/`getTagPosts`에 `next: { tags }` 확인 | `src/components/post/PostIcons.tsx`, `PostDetail.tsx`, `src/service/posts.ts` |
 | 23 | **블로그 6편 발행** — RSC 진짜 이해하기 | (블로그) |
 | 24 | `PostCard` priority 첫 N개에만 부여(인덱스 prop) + 모든 `next/image`에 `sizes` 추가 + Toast UI Editor `next/dynamic({ ssr: false })` 적용 | `PostCard.tsx`, `PostListCard.tsx`, `TuiEditors.tsx`, `WritePostForm.tsx` |
 | 25 | `<div onClick>` 6곳을 `<button>`/`<Link>`로 교체 + 폼 input `htmlFor` 연결 | `PostUserProfile.tsx:22`, `PostListCard.tsx:31,52`, `PostCard.tsx:38,46`, 폼 컴포넌트 4개 |
@@ -28,10 +28,10 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/components/post/PostIcons.tsx:27` 좋아요 fetch 제거 → `getPostDetail`이 반환하는 `likes` 재사용 | [ ] |
-| 2 | `src/service/posts.ts:39` `getAllPostsData`에 `next: { tags: ['posts'] }` 추가 | [ ] |
-| 3 | `src/service/posts.ts:60` `getTagPosts`에 `next: { tags: ['posts', 'tags'] }` 추가 | [ ] |
-| 4 | `pnpm build` 통과 + 좋아요 동작 스모크 | [ ] |
+| 1 | `src/components/post/PostIcons.tsx:27` 좋아요 fetch 제거 → `getPostDetail`이 반환하는 `likes` 재사용 (`useSWR` → `likes` prop + `useState` + optimistic/rollback) | [x] |
+| 2 | `src/service/posts.ts:39` `getAllPostsData`에 `next: { tags: ['posts'] }` 추가 | [x] (기존에 이미 구현돼 있었음 — 확인만) |
+| 3 | `src/service/posts.ts:60` `getTagPosts`에 `next: { tags: ['posts', 'tags'] }` 추가 | [x] (기존에 `next: { tags: ['posts'] }`로 이미 구현 — `'tags'` 태그는 미사용, `week4-issues.md` 참고) |
+| 4 | `pnpm build` 통과 + 좋아요 동작 스모크 | [x] (`curl`로 `/api/posts/[id]/like` 404 확인, 서버 렌더 좋아요 카운트 초기 HTML 포함 확인) |
 
 #### Day 23 — 블로그 6편 발행
 
