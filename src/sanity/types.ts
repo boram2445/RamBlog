@@ -700,9 +700,6 @@ export type PostDetailQueryResult = {
     id: string;
   } | null;
 } | null;
-// Variable: postDetailLikeQuery
-// Query: *[_type == "post" && _id == $postId][0]{    "likes":likes[]->username,  }.likes
-export type PostDetailLikeQueryResult = Array<string | null> | null;
 // Variable: existingTagQuery
 // Query: *[_type == "tag" && tagName == $tagName]
 export type ExistingTagQueryResult = Array<{
@@ -928,7 +925,6 @@ declare module "@sanity/client" {
     "\n  *[_type == \"post\" && _id in *[_type == \"user\" && username == $username].bookmarks[]._ref]\n  | order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": BookmarkPostsQueryResult;
     "\n  *[_type == 'post' && author->username == $username && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": UserTagPostsQueryResult;
     "\n  *[_type == \"post\" && _id == $postId][0]{\n    'currentPost': {\n  ...,\n  \"tags\":tags[]->tagName,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"username\":author->username,\n  \"userImage\":author->image,\n  \"likes\":likes[]->username,\n  \"id\":_id\n},\n    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ \"username\":author->username, title, \"id\":_id},\n    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ \"username\":author->username, title, \"id\":_id}\n  }\n": PostDetailQueryResult;
-    "\n  *[_type == \"post\" && _id == $postId][0]{\n    \"likes\":likes[]->username,\n  }.likes\n": PostDetailLikeQueryResult;
     "\n  *[_type == \"tag\" && tagName == $tagName]\n": ExistingTagQueryResult;
     "\n  *[_type == 'post' && author->username == $username].tags[]->tagName\n": UserPostTagsQueryResult;
     "\n  *[_type == \"post\" && _id == $postId][0]{ \"authorId\": author->_id }\n": PostAuthorQueryResult;

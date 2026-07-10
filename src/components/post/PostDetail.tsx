@@ -1,16 +1,15 @@
-import MarkDownPost from './MarkDownPost';
-import AdjacentPostCard from './AdjacentPostCard';
-import TagList, { TagListLoading } from '../common/TagList';
-import Date from '../ui/Date';
-import Toc from './Toc';
-import PostButtonList from './PostButtonList';
-import { AuthUser } from '@/model/user';
-import UserAvartar, { UserAvartarLoading } from '../common/UserAvartar';
-import { AdjacentPost, PostDetail as PostDetailType } from '@/model/post';
-import PostIcons from './PostIcons';
-import Skeleton from '../ui/Skeleton';
-import PostUserProfile from './PostUserProfile';
-import LikeNumIcon from '../common/LikeNumIcon';
+import MarkDownPost from "./MarkDownPost";
+import AdjacentPostCard from "./AdjacentPostCard";
+import TagList, { TagListLoading } from "../common/TagList";
+import Date from "../ui/Date";
+import Toc from "./Toc";
+import PostButtonList from "./PostButtonList";
+import { AuthUser } from "@/model/user";
+import UserAvartar, { UserAvartarLoading } from "../common/UserAvartar";
+import { AdjacentPost, PostDetail as PostDetailType } from "@/model/post";
+import PostIcons from "./PostIcons";
+import Skeleton from "../ui/Skeleton";
+import PostUserProfile from "./PostUserProfile";
 
 type Props = {
   postId: string;
@@ -33,24 +32,24 @@ export default async function PostDetail({
   const isMyPost = loginUserData?.username === username;
 
   return (
-    <section className='pb-16 relative'>
-      <div className='flex flex-col mt-11 mb-7 pb-3 border-b dark:border-slate-700'>
+    <section className="pb-16 relative">
+      <div className="flex flex-col mt-11 mb-7 pb-3 border-b dark:border-slate-700">
         {tags && (
-          <div className='mb-3 flex justify-between items-center'>
-            <TagList tags={currentPost.tags} type='big' />
+          <div className="mb-3 flex justify-between items-center">
+            <TagList tags={currentPost.tags} type="big" />
           </div>
         )}
-        <h1 className='mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[53px] font-semibold break-all text-gray-800 dark:text-slate-200'>
+        <h1 className="mb-6 text-3xl tablet:text-4xl laptop:text-[42px] laptop:leading-[53px] font-semibold break-all text-gray-800 dark:text-slate-200">
           {title}
         </h1>
-        <div className='flex justify-between'>
-          <div className='flex gap-4 flex-col tablet:flex-row'>
+        <div className="flex justify-between">
+          <div className="flex gap-4 flex-col tablet:flex-row">
             <UserAvartar
               imageUrl={userImage}
               username={username}
-              size='small'
+              size="small"
             />
-            <Date date={createdAt?.toString()} type='small' />
+            <Date date={createdAt?.toString()} type="small" />
             {/* <LikeNumIcon
               likes={likes?.length ?? 0}
               className='text-gray-700 dark:text-slate-400'
@@ -59,30 +58,30 @@ export default async function PostDetail({
           {isMyPost && <PostButtonList id={id} username={username} />}
         </div>
       </div>
-      <div className='flex mx-auto min-h-[450px] laptop:gap-12 pb-12'>
-        <div className='grow pb-5 ' id='content'>
+      <div className="flex mx-auto min-h-[450px] laptop:gap-12 pb-12">
+        <div className="grow pb-5 " id="content">
           <MarkDownPost content={content} />
         </div>
-        <div className='mt-8 ml-auto'>
-          <aside className='sticky top-[120px] hidden min-w-[230px] max-w-[250px] laptop:block border border-gray-200 rounded-xl overflow-hidden dark:bg-neutral-800 dark:border-neutral-700'>
+        <div className="mt-8 ml-auto">
+          <aside className="sticky top-[120px] hidden min-w-[230px] max-w-[250px] laptop:block border border-gray-200 rounded-xl overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
             <Toc />
-            <PostIcons postId={postId} />
+            <PostIcons postId={postId} likes={likes} />
           </aside>
         </div>
       </div>
       {tags && (
-        <div className='flex justify-between items-center pb-2 border-b border-gray-200 dark:border-slate-700'>
-          <TagList tags={currentPost.tags} type='big' />
+        <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-slate-700">
+          <TagList tags={currentPost.tags} type="big" />
         </div>
       )}
       <PostUserProfile username={username} />
-      <div className='laptop:hidden my-2 border border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden'>
-        <PostIcons postId={postId} />
+      <div className="laptop:hidden my-2 border border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden">
+        <PostIcons postId={postId} likes={likes} />
       </div>
       {(previousPost || nextPost) && (
-        <div className='mx-auto mt-5 tablet:px-4 flex gap-4 flex-col laptop:flex-row'>
-          {previousPost && <AdjacentPostCard data={previousPost} type='prev' />}
-          {nextPost && <AdjacentPostCard data={nextPost} type='next' />}
+        <div className="mx-auto mt-5 tablet:px-4 flex gap-4 flex-col laptop:flex-row">
+          {previousPost && <AdjacentPostCard data={previousPost} type="prev" />}
+          {nextPost && <AdjacentPostCard data={nextPost} type="next" />}
         </div>
       )}
     </section>
@@ -91,14 +90,14 @@ export default async function PostDetail({
 
 export function PostDetailLoading() {
   return (
-    <section className='pb-16 relative '>
-      <div className='flex flex-col mt-8 mb-7 pb-3 border-b '>
-        <TagListLoading type='big' />
-        <Skeleton className='mb-6 mt-4 w-2/3 h-[3rem]' />
-        <div className='flex justify-between'>
-          <div className='flex gap-4 items-center'>
-            <UserAvartarLoading size='small' />
-            <Skeleton className='w-[10rem] h-[1.5rem]' />
+    <section className="pb-16 relative ">
+      <div className="flex flex-col mt-8 mb-7 pb-3 border-b ">
+        <TagListLoading type="big" />
+        <Skeleton className="mb-6 mt-4 w-2/3 h-[3rem]" />
+        <div className="flex justify-between">
+          <div className="flex gap-4 items-center">
+            <UserAvartarLoading size="small" />
+            <Skeleton className="w-[10rem] h-[1.5rem]" />
           </div>
         </div>
       </div>

@@ -60,12 +60,6 @@ const postDetailQuery = defineQuery(`
   }
 `);
 
-const postDetailLikeQuery = defineQuery(`
-  *[_type == "post" && _id == $postId][0]{
-    "likes":likes[]->username,
-  }.likes
-`);
-
 const existingTagQuery = defineQuery(`
   *[_type == "tag" && tagName == $tagName]
 `);
@@ -172,20 +166,6 @@ export async function getPostDetail(
 
   // TODO(Day 11): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거
   return postDetail as unknown as PostData;
-}
-
-export async function getPostDetailLike(postId: string) {
-  const res = await client
-    .fetch(
-      postDetailLikeQuery,
-      { postId },
-      {
-        cache: 'force-cache',
-        next: { tags: ['like'] },
-      }
-    )
-    .then((res) => res ?? []);
-  return res;
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
