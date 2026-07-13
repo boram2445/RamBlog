@@ -36,6 +36,7 @@
 | 4 | 다크모드: `next-themes` theme → `data-color-mode` 속성 연동 | [ ] |
 | 5 | `WritePostForm.tsx`를 ref(`getInstance().getMarkdown()`) 대신 state 기반으로 단순화 | [ ] |
 | 6 | `pnpm build` 통과 + 글쓰기/수정 스모크 (새 글 작성, 기존 글 로드) | [ ] |
+| 7 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 32 — 에디터 교체 2 (TUI 의존성 청산)
 
@@ -46,6 +47,7 @@
 | 3 | `pnpm-workspace.yaml`에서 `tui-color-picker` override·patchedDependencies·publicHoistPattern 제거, `patches/tui-color-picker@2.2.8.patch` 삭제 | [ ] |
 | 4 | `pnpm install` 후 lockfile 정리 확인 | [ ] |
 | 5 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 통과 + 글쓰기/수정/상세 스모크 | [ ] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 33 — typegen 채택 1 (posts service)
 
@@ -56,6 +58,7 @@
 | 3 | `src/service/posts.ts:168` `as unknown as PostData` 제거 | [ ] |
 | 4 | 파급된 컴포넌트/훅 타입 정리 (`SimplePost`/`PostData` 사용처) | [ ] |
 | 5 | `pnpm typegen && pnpm exec tsc --noEmit` 통과 | [ ] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 34 — typegen 채택 2 (나머지 service + model 정리)
 
@@ -65,6 +68,7 @@
 | 2 | `src/service/comment.ts`의 `any` 2곳(`:65`, `:78`) typegen 타입으로 대체 | [ ] |
 | 3 | 사용처가 사라진 `src/model/*.ts` 타입 삭제 (전부 대체 안 되면 남는 것 목록화해 이슈 기록) | [ ] |
 | 4 | `pnpm typegen && pnpm build && pnpm exec tsc --noEmit` 통과 | [ ] |
+| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 35 — 네이밍 정리 (Track D)
 
@@ -75,6 +79,7 @@
 | 3 | import하는 나머지 9파일 일괄 수정 (`grep -rn "Avartar" src` 0건 확인) | [ ] |
 | 4 | `components/post` ↔ `components/posts` 폴더 역할 정리·통합 (도메인 기준 재배치) | [ ] |
 | 5 | `pnpm build && pnpm lint` 통과 | [ ] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 36 — toast 알림 도입
 
@@ -84,6 +89,7 @@
 | 2 | `alert()` 12곳 교체 — `WritePostForm`(2) · `PostIcons`(2) · `CommentForm`(3) · `SigninForm`(1) · `RegisterForm`(1) · `LogDetail`(1) · `ProfileForm`(2) | [ ] |
 | 3 | `RegisterForm.tsx`의 `//알림 컴포넌트 만들어야 함` 주석 제거 | [ ] |
 | 4 | `pnpm build` 통과 + 성공/실패 토스트 노출 스모크 | [ ] |
+| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 37 — HTTP 클라이언트 일원화 + 의존성 위생
 
@@ -94,3 +100,4 @@
 | 3 | 미사용 `@types/nodemailer` 제거 | [ ] |
 | 4 | 좋아요 `_id` 기반 전환(week4-issues.md 백로그) — Week 5에서 처리할지 Week 6 이후로 보낼지 재평가·기록 | [ ] |
 | 5 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 통과 + 좋아요/북마크/댓글/팔로우 스모크 | [ ] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |

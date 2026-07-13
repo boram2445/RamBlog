@@ -176,3 +176,48 @@ Next.js 공식 문서 기준 `sizes`가 실제로 필요한 조건은 "width/hei
 
 결론적으로 `PostListCard`의 sizes 추가는 생략하고, 대신 진짜 문제가 있던 곳(fill인데 sizes 누락된 `ProjectModal.tsx`)을 고치는 쪽으로 계획을 수정했다.
 
+## Day 27 — error 경계 추가
+
+**Q1. 링크를 버튼처럼 만들려면 어떻게 해?**
+
+`Button` 컴포넌트는 내부가 실제 `<button>` 엘리먼트라 `onClick`만 받고 `href`는 못 받는다. 대신 `<Link>`에 `Button.tsx`가 쓰는 것과 같은 톤의 Tailwind 클래스를 직접 입혀서 "버튼처럼 보이는 링크"를 만들면 된다. `Button.tsx`의 클래스 조합(공통: `border rounded-full transition-all font-semibold`, `black` 색상: `bg-gray-800 hover:bg-gray-700 text-white dark:bg-slate-100 dark:text-neutral-800 dark:hover:opacity-80`, `small` 사이즈: `py-1 px-3 text-sm`)을 그대로 `<Link>`의 `className`에 복사하면 시각적으로 동일하게 나온다. 컴포넌트를 재사용하는 게 아니라 클래스 조합만 복사하는 방식이다. `<Link href="/"><Button>...</Button></Link>`처럼 감싸는 방법도 가능하지만, `Link`가 기본 `inline`이라 `<button>` 자식과 겹치면 클릭 영역이 어색해질 수 있어 클래스만 가져다 쓰는 편이 더 깔끔하다.
+
+**Q2. (next-themes 관련 콘솔 경고를 붙여넣으며) 이건 무슨 에러인거지?**
+
+`not-found.tsx` 작업과 무관한, 기존에 있던 `next-themes`(다크모드) 관련 경고다. `next-themes`의 `ThemeProvider`는 SSR 시 `<html>`에 다크모드 클래스를 붙이기 위해 내부적으로 `<script>` 태그를 하나 렌더링한다(하이드레이션 전에 테마를 미리 적용해 깜빡임(FOUC)을 막는 트릭). 이 스크립트는 `dangerouslySetInnerHTML`로 서버 HTML에 직접 박혀서 브라우저가 HTML을 파싱하며 즉시 실행하는 방식이라 React가 만든 게 아니라 브라우저가 실행한다. 그런데 React 19는 하이드레이션 과정에서 이 `<script>` DOM 노드를 마주치면 "React 컴포넌트 안에서 script 태그를 만나면 클라이언트에서 실행 안 됨"이라는 경고를 새로 띄우기 시작했다. `next-themes`가 아직 이 React 19 경고에 맞춰 `<template>` 방식으로 바꾸지 않아서 생기는 알려진 라이브러리 호환성 경고이며, 실제 영향은 없다 — 다크모드는 정상 동작한다(스크립트가 이미 서버 HTML 파싱 시점에 실행 완료돼 하이드레이션과 무관). Day 27 스코프 밖이라 지금은 손대지 않고 넘어감.
+
+**Q3. error.tsx의 역할이 뭔지 설명해줄 수 있어?**
+
+`error.tsx`는 그 폴더(세그먼트)의 콘텐츠 전체를 자동으로 React Error Boundary로 감싸주는 Next.js 컨벤션이다. 5가지 핵심 규칙:
+
+1. **잡는 범위**: 같은 폴더의 `page.tsx`(및 그 자식들) + 하위 세그먼트에서 렌더링 중 던져진 예외를 잡는다. 더 가까운(구체적인) `error.tsx`가 있으면 그게 먼저 잡는다. 단, **같은 폴더의 `layout.tsx`에서 난 에러는 못 잡는다** — Next.js가 `error.tsx`를 `page.tsx`(및 자식)만 감싸고 그 위의 `layout.tsx` 자체는 감싸지 않는 구조로 배치하기 때문. 그래서 layout까지 포함해 전부 실패하는 최악의 경우를 위해 `global-error.tsx`가 별도로 필요하다.
+2. **언제 발동하나**: "렌더링 중 throw"만 잡는다. `onClick` 핸들러 안에서 난 에러나 이미 `.catch()`로 잡은 에러는 렌더링 예외가 아니므로 관여하지 않는다.
+3. **reset()**: 전체 페이지 새로고침 없이 React가 그 세그먼트의 렌더링을 다시 시도하게 만드는 함수. 일시적 네트워크 오류였다면 재시도로 정상 렌더링될 가능성이 있다.
+4. **왜 'use client' 필수인가**: React Error Boundary는 `componentDidCatch`/`getDerivedStateFromError` 같은 클래스 컴포넌트 생명주기로 구현되는데, 이건 클라이언트에서 React가 실제로 트리를 재조정하며 동작하는 메커니즘이다. 서버 컴포넌트는 이런 생명주기가 없어서 클라이언트 런타임이 필요하다.
+5. **error.digest**: 프로덕션 빌드에서는 보안상 에러 상세 메시지를 클라이언트에 노출하지 않고 Next.js가 잘라낸다. 대신 서버 로그와 대조 가능한 해시값(`digest`)만 남긴다.
+
+**Q4. (error.tsx 작성 후) NoContent 텍스트에 error(error.message)를 대신 넣는 게 좋을까?**
+
+추천하지 않는다. 두 가지 이유:
+1. **보안 — 내부 정보 유출**: `error.message`엔 종종 내부 구현 디테일(GROQ 쿼리 문자열, DB 연결 정보, 스택 트레이스 파일 경로 등)이 그대로 담긴다. 공격자에게 시스템 구조 힌트를 주는 셈이라 프로덕션에서는 일반 메시지만 보여주는 게 원칙(Next.js도 프로덕션 빌드에서 `error.message`를 자동으로 잘라내고 `digest` 해시만 남긴다).
+2. **UX — 사용자에게 의미 없는 정보**: `error.message`는 대개 `"Cannot read properties of undefined"` 같은 개발자용 디버깅 메시지라, 일반 사용자에겐 "오류가 발생했습니다 + 다시 시도" 버튼이 훨씬 명확하고 실행 가능하다.
+
+대안으로 `error.message` 대신 `error.digest`(프로덕션에서 서버 로그와 대조 가능한 해시)를 작게 덧붙이는 정도는 안전한 선택지이지만, 이번 스코프에선 필수가 아니라 고정 메시지를 유지했다.
+
+**Q5. (global-error.tsx 작성 시) 왜 이번엔 최상위가 `<div>`가 아니라 `<html lang="ko"><body>...</body></html>`이어야 해?**
+
+`global-error.tsx`가 활성화되는 시점엔 `layout.tsx`가 아예 렌더링되지 않은 상태이기 때문이다. 평소엔 `layout.tsx`가 `<html>`/`<body>`를 만들고, `error.tsx`는 그 안에 `page.tsx` 자리에 끼워지는 방식으로 동작한다 — `<html>`/`<body>`는 언제나 `layout.tsx`가 책임진다. 그런데 `global-error.tsx`가 필요해지는 상황은 **`layout.tsx` 자체가 깨진 경우**다 — `layout.tsx`가 렌더링을 실패했으니 그 안에 있던 `<html>`/`<body>`도 애초에 만들어지지 않는다. `error.tsx`처럼 "누군가 이미 만들어준 `<html>`/`<body>` 안에 끼워지는" 게 아니라 **아무도 `<html>`/`<body>`를 만들어주지 않는 상황**인 것. 그래서 `global-error.tsx`는 `layout.tsx`를 대체하는 역할까지 겸한다 — Next.js가 이 파일을 렌더링할 땐 `layout.tsx`를 건너뛰고 이 파일이 문서 전체(루트)가 된다. `<div>`만 반환하면 브라우저가 `<html>`/`<body>` 없는 비정상 문서를 받게 되고 React 하이드레이션도 루트에서 기대하는 형태와 어긋난다.
+
+**Q6. 왜 하위(도메인별) 경계까지 만들어야 하는거야?**
+
+두 가지 이유:
+1. **실패 범위(blast radius)를 좁혀서 나머지 UI를 살려둠**: 전역 `error.tsx`만 있으면, 예를 들어 포스트 상세 페칭 실패 시 그 에러가 계속 위로 전파돼 `layout.tsx`가 렌더링한 `Header`/`Footer`까지 포함된 전체 화면이 전역 `error.tsx`로 통째로 갈아치워진다. 도메인 경계(`[user]/posts/error.tsx`)를 두면 그 에러는 거기서 잡히고 `Header`/`Footer`, 네비게이션은 그대로 살아있어서 사용자가 다른 링크로 바로 이동할 수 있다.
+2. **더 정확한 메시지**: 전역 경계는 "무슨 일이 있었는지 모르니" 뭉뚱그린 메시지(`"오류가 발생했습니다"`, `"페이지를 찾을 수 없습니다"`)만 줄 수 있다. 도메인 경계는 발동 조건을 정확히 알기 때문에 `"존재하지 않는 사용자입니다"`, `"포스트를 불러오지 못했습니다"`처럼 원인이 분명한 메시지를 줄 수 있다.
+
+정리하면 전역 경계는 안전망, 도메인 경계는 실패를 더 작고 이해 가능한 단위로 가두는 역할이다.
+
+**실수 노트**
+
+1. `[user]/(home)/layout.tsx`의 `if (!user) notFound()`가 URL 파라미터(항상 truthy)를 검사하던 버그. 조회 결과가 없을 때를 판단하려면 실제 조회된 데이터의 식별 필드(`userData?.username`)를 봐야 하고, `getUserForProfile`처럼 실패 시에도 기본값이 채워진 truthy 객체를 반환하는 함수라면 `!userData` 체크만으로는 부족하다는 교훈.
+2. `not-found.tsx`를 처음 `notFound()`가 호출되는 바로 그 폴더(`(home)/`)에 뒀다가, "같은 세그먼트의 layout.tsx는 못 잡는다"는 error.tsx와 동일한 규칙 때문에 무효했던 경험. 도메인 경계를 배치할 때는 "실제 throw/notFound()가 `page.tsx`에서 나는지 `layout.tsx`에서 나는지"부터 확인하고, `layout.tsx`라면 그보다 한 단계 위에 경계를 둬야 한다는 교훈.
+

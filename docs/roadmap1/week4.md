@@ -9,7 +9,7 @@
 | 24 | `PostCard` priority 첫 N개에만 부여(인덱스 prop) + 모든 `next/image`에 `sizes` 추가 + Toast UI Editor `next/dynamic({ ssr: false })` 적용 | `PostCard.tsx`, `PostListCard.tsx`, `TuiEditors.tsx`, `WritePostForm.tsx` |
 | ✅ 25 | `<div onClick>`/`<p onClick>` → `<Link>` 교체 + 폼 input `htmlFor`/`aria-label` 연결 | `PostUserProfile.tsx`, `CommentForm.tsx`, `SearchList.tsx`, `ProfileForm.tsx`, `ArticleForm.tsx`(+`DateForm.tsx`, `TextArea.tsx`), `LogForm.tsx` |
 | 26 | **블로그 7편 발행** — priority + 접근성 회고 | (블로그) |
-| 27 | `app/error.tsx`, `app/not-found.tsx`, `app/global-error.tsx` 추가 + 도메인별 `error.tsx` 2~3개 | `src/app/error.tsx` 외 신규 |
+| ✅ 27 | `app/error.tsx`, `app/not-found.tsx`, `app/global-error.tsx` 추가 + 도메인별 `error.tsx`/`not-found.tsx` 2개 | `src/app/error.tsx`, `src/app/not-found.tsx`, `src/app/global-error.tsx`, `src/app/[user]/posts/error.tsx`, `src/app/[user]/not-found.tsx` |
 | 28 | API 공통 `withErrorHandler` 래퍼 도입 — `JSON.stringify(error)` 전부 제거, NextResponse.json 통일 | `src/lib/api-handler.ts` (신규), `src/app/api/**/route.ts` 전체 |
 | 29 | Prettier + Husky + lint-staged + GitHub Actions(lint + typecheck + build) 일괄 도입 | `.prettierrc`, `.husky/pre-commit`, `.github/workflows/ci.yml`, `package.json` |
 | 30 | **블로그 8편 발행** — 종합 회고 + 다음 v2 계획 | (블로그) |
@@ -75,13 +75,15 @@
 
 #### Day 27 — error 경계 추가
 
+> 도메인 경계는 2개로 확정: `[user]/posts/error.tsx`(포스트 페칭 실패), `[user]/not-found.tsx`(존재하지 않는 유저). 후자는 처음 `[user]/(home)/not-found.tsx`에 작성했으나, `notFound()`가 같은 폴더의 `(home)/layout.tsx`에서 호출되어 같은 세그먼트의 경계가 못 잡는 문제를 발견 — `[user]/` 바로 아래(route group `(home)` 밖)로 이동해 해결. 검증 중 `(home)/layout.tsx:25`의 `if (!user) notFound()`가 URL 파라미터(항상 truthy)를 검사하는 기존 버그도 발견해 `if (!userData?.username) notFound()`로 함께 수정(상세: `week4-issues.md`).
+
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/app/error.tsx` 작성 (reset 버튼 포함) | [ ] |
-| 2 | `src/app/not-found.tsx` 작성 | [ ] |
-| 3 | `src/app/global-error.tsx` 작성 | [ ] |
-| 4 | 도메인별 `error.tsx` 2~3개 추가 (`src/app/[user]/posts/error.tsx` 등) | [ ] |
-| 5 | `pnpm build` 통과 + 잘못된 URL 접근 시 not-found 페이지 확인 | [ ] |
+| 1 | `src/app/error.tsx` 작성 (reset 버튼 포함) | [x] |
+| 2 | `src/app/not-found.tsx` 작성 | [x] |
+| 3 | `src/app/global-error.tsx` 작성 | [x] |
+| 4 | 도메인별 error/not-found 경계 2개 추가 (`[user]/posts/error.tsx`, `[user]/not-found.tsx`) | [x] |
+| 5 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고 + 잘못된 URL/존재하지 않는 유저 접근 시 not-found 페이지 확인 | [x] |
 
 #### Day 28 — API 공통 에러 핸들러
 
@@ -91,6 +93,7 @@
 | 2 | `src/app/api/**/route.ts` 전체에서 `JSON.stringify(error)` 사용 부분 찾기 | [ ] |
 | 3 | 각 route.ts에 `withErrorHandler` 래퍼 적용, `NextResponse.json({ error }, { status })` 통일 | [ ] |
 | 4 | `pnpm build && pnpm lint` 통과 | [ ] |
+| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 29 — CI / Husky / Prettier 인프라
 
@@ -103,6 +106,7 @@
 | 5 | `.github/workflows/ci.yml` 작성 (lint + typecheck + build) | [ ] |
 | 6 | 테스트용 PR 생성 → GitHub Actions CI 통과 확인 | [ ] |
 | 7 | 커밋 시 pre-commit 훅 동작 확인 | [ ] |
+| 8 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
 #### Day 30 — 블로그 8편 발행 + 마무리
 
