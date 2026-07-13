@@ -2,12 +2,13 @@ import { withSessionUser } from '@/utils/session';
 import { createPost, getAllPostsData } from '@/service/posts';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
+import { withErrorHandler, HttpError } from '@/lib/api-handler';
 
-export async function GET(_: Request) {
+export const GET = withErrorHandler(async (_: Request) => {
   return await getAllPostsData().then((data) => NextResponse.json(data));
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async (req: NextRequest) => {
   return withSessionUser(async (user) => {
     const form = await req.formData();
     const title = form.get('title')?.toString();
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
     const mainImage = form.get('mainImageUrl')?.toString();
 
     if (!title || !content) {
-      return new Response('Bad request', { status: 400 });
+      throw new HttpError(400, '제목과 내용을 입력해주세요.');
     }
 
     const tagArr = tags?.replace(/ /g, '').split(',');
@@ -38,4 +39,4 @@ export async function POST(req: NextRequest) {
 
     return result;
   });
-}
+});

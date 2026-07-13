@@ -2,22 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 import { revalidateTag } from 'next/cache';
 import { createLog, getAllUserLogs } from '@/service/log';
+import { withErrorHandler, HttpError } from '@/lib/api-handler';
 
 type Context = {
   params: Promise<{ user: string }>;
 };
 
-export async function GET(_: Request, context: Context) {
+export const GET = withErrorHandler(async (_: Request, context: Context) => {
   const { user } = (await context.params);
 
   if (!user) {
-    return new NextResponse('Bad Reqest', { status: 400 });
+    throw new HttpError(400, '잘못된 요청입니다.');
   }
 
   return await getAllUserLogs(user).then((data) => NextResponse.json(data));
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async (req: NextRequest) => {
   return withSessionUser(async (user) => {
     const form = await req.formData();
     const title = form.get('title')?.toString();
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
     const file = (form.get('file') as Blob) ?? '';
 
     if (!title || !content) {
-      return new Response('Bad request', { status: 400 });
+      throw new HttpError(400, '제목과 내용을 입력해주세요.');
     }
 
     const result = await createLog(
@@ -43,4 +44,4 @@ export async function POST(req: NextRequest) {
 
     return result;
   });
-}
+});

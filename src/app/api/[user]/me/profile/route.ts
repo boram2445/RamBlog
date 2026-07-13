@@ -3,24 +3,22 @@ import { editProfile, getUserByUsername } from '@/service/user';
 import { withSessionUser } from '@/utils/session';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
+import { withErrorHandler, HttpError } from '@/lib/api-handler';
 
-export async function GET(_: Request) {
+export const GET = withErrorHandler(async (_: Request) => {
   const session = await auth();
   const user = session?.user;
 
   if (!user) {
-    return new Response(JSON.stringify(null), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(null, { status: 200 });
   }
 
   return await getUserByUsername(user.username).then((data) =>
     NextResponse.json(data)
   );
-}
+});
 
-export async function POST(req: NextRequest) {
+export const POST = withErrorHandler(async (req: NextRequest) => {
   return withSessionUser(async (user) => {
     const form = await req.formData();
 
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest) {
     const name = form.get('name')?.toString();
 
     if (!title || !name) {
-      return new Response('Bad request', { status: 400 });
+      throw new HttpError(400, '타이틀과 닉네임을 입력해주세요.');
     }
 
     const github = form.get('github')?.toString();
@@ -62,4 +60,4 @@ export async function POST(req: NextRequest) {
 
     return result;
   });
-}
+});

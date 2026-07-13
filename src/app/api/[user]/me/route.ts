@@ -1,19 +1,17 @@
 import { auth } from '@/auth';
 import { NextResponse } from "next/server";
 import { getUserData } from '@/service/user';
+import { withErrorHandler } from '@/lib/api-handler';
 
-export async function GET(_: Request) {
+export const GET = withErrorHandler(async (_: Request) => {
   const session = await auth();
   const user = session?.user;
 
   if (!user) {
-    return new Response(JSON.stringify(null), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(null, { status: 200 });
   }
 
   return await getUserData(user.id, user.username).then((data) =>
     NextResponse.json(data)
   );
-}
+});

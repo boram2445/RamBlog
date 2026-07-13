@@ -10,7 +10,7 @@
 | ✅ 25 | `<div onClick>`/`<p onClick>` → `<Link>` 교체 + 폼 input `htmlFor`/`aria-label` 연결 | `PostUserProfile.tsx`, `CommentForm.tsx`, `SearchList.tsx`, `ProfileForm.tsx`, `ArticleForm.tsx`(+`DateForm.tsx`, `TextArea.tsx`), `LogForm.tsx` |
 | 26 | **블로그 7편 발행** — priority + 접근성 회고 | (블로그) |
 | ✅ 27 | `app/error.tsx`, `app/not-found.tsx`, `app/global-error.tsx` 추가 + 도메인별 `error.tsx`/`not-found.tsx` 2개 | `src/app/error.tsx`, `src/app/not-found.tsx`, `src/app/global-error.tsx`, `src/app/[user]/posts/error.tsx`, `src/app/[user]/not-found.tsx` |
-| 28 | API 공통 `withErrorHandler` 래퍼 도입 — `JSON.stringify(error)` 전부 제거, NextResponse.json 통일 | `src/lib/api-handler.ts` (신규), `src/app/api/**/route.ts` 전체 |
+| ✅ 28 | API 공통 `withErrorHandler` 래퍼 도입 — `JSON.stringify(error)` 전부 제거, NextResponse.json 통일 | `src/lib/api-handler.ts` (신규), `src/app/api/**/route.ts` 전체, `src/utils/session.ts` |
 | 29 | Prettier + Husky + lint-staged + GitHub Actions(lint + typecheck + build) 일괄 도입 | `.prettierrc`, `.husky/pre-commit`, `.github/workflows/ci.yml`, `package.json` |
 | 30 | **블로그 8편 발행** — 종합 회고 + 다음 v2 계획 | (블로그) |
 
@@ -89,11 +89,11 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/lib/api-handler.ts` 신규 작성 (`withErrorHandler` 래퍼 함수) | [ ] |
-| 2 | `src/app/api/**/route.ts` 전체에서 `JSON.stringify(error)` 사용 부분 찾기 | [ ] |
-| 3 | 각 route.ts에 `withErrorHandler` 래퍼 적용, `NextResponse.json({ error }, { status })` 통일 | [ ] |
-| 4 | `pnpm build && pnpm lint` 통과 | [ ] |
-| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+| 1 | `src/lib/api-handler.ts` 신규 작성 (`HttpError` 클래스 + `withErrorHandler` 래퍼 함수) | [x] |
+| 2 | `src/app/api/**/route.ts` 전체에서 `JSON.stringify(error)` 사용 부분 찾기 | [x] |
+| 3 | 각 route.ts에 `withErrorHandler` 래퍼 적용, `NextResponse.json({ error }, { status })` 통일 (22개 라우트 전체 + `'Bad Reqest'` 오타 8곳 해소) | [x] |
+| 4 | `pnpm build && pnpm lint` 통과 + 스모크 테스트 중 발견한 `withSessionUser`(`src/utils/session.ts`)의 plain-text 401 응답도 `HttpError`로 통일 | [x] |
+| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [x] |
 
 #### Day 29 — CI / Husky / Prettier 인프라
 

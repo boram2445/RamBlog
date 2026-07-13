@@ -2,6 +2,7 @@ import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 import { deletePost, editPost, getPostAuthorId } from '@/service/posts';
+import { withErrorHandler, HttpError } from '@/lib/api-handler';
 
 type Context = {
   params: Promise<{ id: string }>;
@@ -11,20 +12,18 @@ async function assertPostOwner(postId: string, userId: string) {
   const authorId = (await getPostAuthorId(postId))?.authorId;
 
   if (!authorId) {
-    return new Response('Not Found', { status: 404 });
+    throw new HttpError(404, '게시글을 찾을 수 없습니다.');
   }
   if (authorId !== userId) {
-    return new Response('Forbidden', { status: 403 });
+    throw new HttpError(403, '권한이 없습니다.');
   }
-  return null;
 }
 
-export async function POST(req: NextRequest, context: Context) {
+export const POST = withErrorHandler(async (req: NextRequest, context: Context) => {
   return withSessionUser(async (user) => {
     const id = (await context.params).id;
 
-    const ownerError = await assertPostOwner(id, user.id);
-    if (ownerError) return ownerError;
+    await assertPostOwner(id, user.id);
 
     const form = await req.formData();
 
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest, context: Context) {
     const content = form.get('content')?.toString();
 
     if (!title || !content) {
-      return new Response('Bad request', { status: 400 });
+      throw new HttpError(400, '제목과 내용을 입력해주세요.');
     }
     const tagArr = tags?.replace(/ /g, '').split(',');
     const result = await editPost(
@@ -53,15 +52,14 @@ export async function POST(req: NextRequest, context: Context) {
 
     return result;
   });
-}
+});
 
-export async function DELETE(_: NextRequest, context: Context) {
+export const DELETE = withErrorHandler(async (_: NextRequest, context: Context) => {
   return withSessionUser(async (user) => {
     const id = (await context.params).id;
-    if (!id) return new Response('Bad Request', { status: 400 });
+    if (!id) throw new HttpError(400, '잘못된 요청입니다.');
 
-    const ownerError = await assertPostOwner(id, user.id);
-    if (ownerError) return ownerError;
+    await assertPostOwner(id, user.id);
 
     const result = await deletePost(id).then((data) => NextResponse.json(data));
 
@@ -71,4 +69,4 @@ export async function DELETE(_: NextRequest, context: Context) {
 
     return result;
   });
-}
+});

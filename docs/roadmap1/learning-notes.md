@@ -221,3 +221,108 @@ Next.js 공식 문서 기준 `sizes`가 실제로 필요한 조건은 "width/hei
 1. `[user]/(home)/layout.tsx`의 `if (!user) notFound()`가 URL 파라미터(항상 truthy)를 검사하던 버그. 조회 결과가 없을 때를 판단하려면 실제 조회된 데이터의 식별 필드(`userData?.username`)를 봐야 하고, `getUserForProfile`처럼 실패 시에도 기본값이 채워진 truthy 객체를 반환하는 함수라면 `!userData` 체크만으로는 부족하다는 교훈.
 2. `not-found.tsx`를 처음 `notFound()`가 호출되는 바로 그 폴더(`(home)/`)에 뒀다가, "같은 세그먼트의 layout.tsx는 못 잡는다"는 error.tsx와 동일한 규칙 때문에 무효했던 경험. 도메인 경계를 배치할 때는 "실제 throw/notFound()가 `page.tsx`에서 나는지 `layout.tsx`에서 나는지"부터 확인하고, `layout.tsx`라면 그보다 한 단계 위에 경계를 둬야 한다는 교훈.
 
+## Day 28 — API 공통 에러 핸들러
+
+`src/lib/api-handler.ts`에 `HttpError` 클래스와 `withErrorHandler` 고차함수(HOF)를 만들어, 22개 API route.ts에 제각각으로 흩어져 있던 에러 처리(`JSON.stringify(error)`, plain text 응답, 아예 무처리 등)를 하나로 통일하는 작업.
+
+**Q1. 왜 HttpError를 class로 만든거야?**
+
+`class ... extends Error`로 만든 이유는 세 가지다.
+
+1. **throw/catch와 자연스럽게 맞물림**: JS는 아무 값이나 throw할 수 있지만(`throw "문자열"`도 가능), 관례상 Error(또는 서브클래스)를 던지는 게 표준이다. 그래야 `.stack`(발생 위치 추적), `.message`, `console.error` 출력 포맷 등 JS 엔진과 툴링이 기대하는 동작을 그대로 받는다. `throw { status, message }`처럼 평범한 객체를 던지면 동작은 하지만 `.stack`이 없고 `instanceof Error`가 false가 되어 다른 코드(로깅 등)가 "이게 진짜 에러인가?"를 판단할 때 어긋날 수 있다.
+2. **instanceof로 안전하게 타입 구분**: `withErrorHandler`의 catch 블록이 하는 일이 정확히 "이 에러가 어떤 종류냐에 따라 다른 응답을 만든다"이다. `error instanceof HttpError`로 체크하면 TypeScript가 그 if 블록 안에서 `error`의 타입을 자동으로 `HttpError`로 좁혀줘서(narrowing) `error.status`/`error.message`에 타입 에러 없이 접근 가능하다. 평범한 객체였다면 `instanceof`를 못 쓰고 `'status' in error` 같은 덕타이핑으로 체크해야 하는데, 이건 "우연히 같은 모양을 가진 다른 객체"와 구분이 안 되는 약한 체크다.
+3. **status라는 우리만의 필드를 안전하게 추가**: 내장 Error엔 HTTP 상태 코드 개념이 없다. extends Error로 만들면 `.message`/`.stack` 같은 기존 기능은 그대로 물려받으면서 우리 도메인에 필요한 `status` 필드만 얹어 확장할 수 있다 — 상속의 전형적인 용도다.
+
+여러 서브클래스(UnauthorizedError, ForbiddenError 등)로 안 나누고 하나로 통일한 이유도 있다: 프로젝트에 기존 에러 타입 구분 관례가 전혀 없었고, 이후 16개 라우트에 이 패턴을 반복 적용해야 하니 `new HttpError(403, '...')`처럼 상태 코드를 인자로 주는 단일 클래스가 매번 새 서브클래스를 만드는 것보다 간단하고 반복 작업 부담이 적다.
+
+**Q2. withErrorHandler도 설명해줘, 코드 전반적으로 이해가 잘 안돼**
+
+Next.js App Router의 Route Handler(API)에서 공통으로 에러를 처리하기 위한 Higher-Order Function(HOF)이다. API마다 try-catch를 쓰지 말고 `withErrorHandler()`가 대신 처리해주는 패턴이다.
+
+`RouteHandler` 타입은 `(req: NextRequest, context: any) => Promise<Response>` — Next.js route handler(`export async function GET(req, context) {...}`)의 모양을 타입으로 정의한 것이다. 실제 각 route.ts의 GET/POST/PUT/DELETE 함수가 전부 이 모양을 따른다.
+
+`withErrorHandler` 자체는 `handler`(원래 라우트 로직)를 받아서 새로운 handler를 리턴하는 고차 함수다. 구조는 원래 Handler → `withErrorHandler()` → try-catch가 추가된 새 Handler. 반환된 함수는 클로저로 원래 `handler`를 기억하고 있다가, 실제 요청이 오면 그 handler를 try 블록 안에서 실행한다.
+
+에러 종류별로 분기한다:
+
+- **HttpError**: `throw new HttpError(404, "존재하지 않습니다.")`가 발생하면 catch에서 `NextResponse.json({ error: error.message }, { status: error.status })`로 응답 — 결과는 `{ "error": "존재하지 않습니다." }` + status 404.
+- **ZodError**: zod 스키마 검증 실패(`z.object({ email: z.string().email() })`에 잘못된 값이 들어오는 경우 등) 시 자동으로 발생하는 ZodError를 `error.flatten().fieldErrors`로 단순화해서 `{ "email": ["Invalid email"] }` 같은 필드별 에러 목록을 만들고, `{ error: {...} }` + status 400으로 응답한다.
+- **그 외 모든 에러**: DB 연결 실패, 코드 버그 등 예상 못 한 에러는 `console.error(error)`로 서버 로그에만 남기고(DB 비밀번호, stack trace, 파일 경로, SQL, 환경변수 같은 내부 정보가 클라이언트에 노출되는 걸 막기 위해), 클라이언트에는 `{ error: "서버 오류가 발생했습니다" }` + status 500만 내려준다.
+
+실제 사용 예시:
+
+```ts
+export const GET = withErrorHandler(async () => {
+  const user = await getUser();
+  if (!user) {
+    throw new HttpError(404, "유저를 찾을 수 없습니다.");
+  }
+  return NextResponse.json(user);
+});
+```
+
+여기엔 try-catch가 없지만, 내부적으로는 handler 전체가 try-catch로 감싸진 것과 동일하게 동작한다 — API마다 같은 try-catch를 반복 작성할 필요가 없어진다.
+
+이 패턴의 장점: 중복 제거(모든 API에서 try-catch 반복 불필요), 일관된 응답 형식(항상 `{ error: ... }`), 상태 코드 관리(HttpError만 던지면 적절한 HTTP 상태 코드 자동 설정), 검증 에러 분리(ZodError는 400, 그 외는 500), 보안(예상 못한 내부 오류 상세를 클라이언트에 노출 안 함, 서버 로그에만 남김).
+
+비유하자면 `withErrorHandler`는 가게 입구에 서 있는 경비원 같은 존재다 — 가게 안에서 실제로 물건 파는 일(라우트 로직)은 경비원이 하지 않지만, 안에서 사고가 나면(예외 발생) 경비원이 손님에게 정리된 안내를 대신 전달해준다.
+
+**Q3. 그런데 원래 그런식으로 개발하나?**
+
+A: 네, 실제로 흔한 패턴이다. 실제 사례:
+
+1. **Express의 `asyncHandler` 패턴**: Express는 원래 async 라우트 핸들러 안 에러를 자동으로 못 잡아서, 커뮤니티가 `asyncHandler(fn)` 래퍼로 모든 라우트를 감싸고 중앙에서 에러를 처리하는 게 예전부터 표준 관행이었다(Express 5부터는 내장됨).
+2. **NestJS의 `HttpException` + Exception Filter**: 지금 만든 것과 거의 동일한 구조. `throw new HttpException('메시지', 403)`처럼 상태 코드를 가진 에러를 던지면 프레임워크의 전역 Exception Filter가 잡아서 일관된 JSON 응답으로 변환한다.
+3. **Next.js 생태계**: App Router의 Route Handler엔 Express 같은 전역 에러 미들웨어가 없어서, "핸들러를 감싸는 HOF + 커스텀 에러 클래스" 패턴이 커뮤니티 해법으로 흔히 쓰인다.
+
+이 패턴으로 수렴하는 이유: "실패는 타입 있는 예외로 던지고, 처리는 경계(boundary) 한 곳에서 한다"는 원칙 때문 — 각 라우트가 자기만의 에러 포맷을 만들면 중복/불일치가 생기는데, wrapper 하나로 모으면 라우트 코드는 "무엇이 실패인지"만 선언(throw)하고 "실패를 응답으로 바꾸는 방법"은 wrapper가 전담한다. 참고로 프로젝트의 기존 `withSessionUser`도 이미 같은 방향(cross-cutting concern 분리)의 패턴이라, `withErrorHandler`가 새 스타일을 들여오는 게 아니라 있던 방향을 에러 처리로 확장한 것에 가깝다.
+
+**Q4. 이렇게 바꾸는 이유가 뭐였지? 어떤 문제가 있기 때문이었어?**
+
+A: 조사에서 확인한 4가지 문제:
+
+1. **`JSON.stringify(error)`가 `NextResponse.json`이 아니라 `new Response(...)`를 씀**: `Content-Type: application/json` 헤더가 안 붙어서 클라이언트 `res.json()` 파싱 시 헤더 불일치 문제가 생길 수 있음. CLAUDE.md 규칙(`JSON.stringify(error) 금지`)에도 위배.
+2. **try/catch가 프로젝트 전체에 하나도 없음**: `.then()`은 있는데 `.catch()`가 없는 라우트가 대부분이라, 서비스 함수가 reject하면 아무 데도 안 잡혀서 API인데 Next.js 기본 500 HTML 에러 페이지가 나갈 수 있는 상태였음.
+3. **plain text 에러 응답이 라우트마다 제각각**: `new Response('Bad Request', { status: 400 })`처럼 JSON이 아니라 순수 텍스트 응답이 대부분이었고, `'Bad Reqest'`(오타)가 8개 라우트에 반복.
+4. **zod 검증 실패 처리 방식이 파일마다 다름**: `auth/register`만 `{ error: parsed.error.flatten().fieldErrors }`로 제대로 구조화, `comment/[id]`는 같은 zod 검증 실패를 그냥 `'Bad Request'` 텍스트로 뭉개서 어떤 필드가 왜 틀렸는지 정보를 버림.
+
+정리: API 전체가 "무엇을 에러 응답으로 내려줄지"에 대한 공통 규칙이 없었다는 게 근본 문제였고, `withErrorHandler`+`HttpError`는 이걸 한 곳에서 강제해서 응답 형식(`{ error }` + 정확한 status + JSON 헤더)을 통일하는 목적.
+
+**Q5. JSON.stringify(error)가 NextResponse.json 이 두개의 차이가 뭔데?**
+
+A: 두 가지 차이가 있는데, 두 번째가 더 치명적이다.
+
+**1. HTTP 헤더 차이**: `new Response(문자열, { status })`는 날것의 Web API Response 생성자라서 헤더를 직접 안 넣으면 `Content-Type: application/json`이 자동으로 안 붙는다. `NextResponse.json(data, { status })`는 Next.js 전용 헬퍼라서 `data`를 알아서 `JSON.stringify`해주고 `Content-Type: application/json` 헤더도 자동으로 붙여준다.
+
+**2. (더 중요) `JSON.stringify(error)`는 Error 객체를 직렬화하면 사실상 `{}`가 된다**: `JSON.stringify`는 "열거 가능한(enumerable) 속성"만 변환하는데, `Error` 인스턴스의 `message`/`stack` 프로퍼티는 enumerable하지 않게 정의되어 있어서 `JSON.stringify`가 순회할 때 아예 안 보인다.
+
+```ts
+const error = new Error("실패했습니다");
+JSON.stringify(error); // => "{}"
+```
+
+일반 plain object(`{ name: "Kim", age: 20 }`)는 `name`/`age`가 enumerable이라 정상적으로 `{"name":"Kim","age":20}`로 변환되지만, `Error`는 다르다. 그래서 기존 코드의 `.catch((error) => new Response(JSON.stringify(error), { status: 500 }))`는 Sanity 호출이 진짜 `Error` 객체로 reject됐다면 클라이언트에 `"{}"`라는 사실상 빈 문자열을 보내고 있었을 가능성이 높다 — 에러 메시지 정보가 통째로 날아간 것.
+
+**해결**: `error.message`만 꺼내서 **새로운 plain object**를 만들면 된다.
+
+```ts
+NextResponse.json({ error: error.message }, { status: 500 });
+```
+
+이 객체의 `error` 프로퍼티는 enumerable이므로 정상적으로 `{"error":"DB 연결 실패"}`로 변환된다. 핵심은 "원본 Error 객체를 그대로 보내지 말고, 필요한 값(message)만 꺼내서 새 plain object를 만들어라"는 것.
+
+**`NextResponse.json()`이 내부적으로 하는 일**을 풀어 쓰면 다음과 같다:
+
+```ts
+// NextResponse.json({ error: "DB 연결 실패" }, { status: 500 })는
+// 아래와 동일한 일을 대신 해준다:
+new Response(
+  JSON.stringify({ error: "DB 연결 실패" }),
+  { status: 500, headers: { "Content-Type": "application/json" } }
+);
+```
+
+그래서 `NextResponse.json()`을 쓰면 (1) `JSON.stringify()`를 직접 호출할 필요가 없고, (2) `Content-Type` 헤더가 자동 설정되며, (3) 응답 형식이 프로젝트 전체에서 일관되게 유지된다.
+
+**결론**: `withErrorHandler`의 핵심 역할은 단순히 try/catch를 줄이는 게 아니라 (1) 어떤 예외가 발생하든 항상 JSON 형태로 응답하고, (2) Error 객체를 그대로 직렬화하는 실수를 막고, (3) 상태 코드와 응답 형식을 프로젝트 전체에서 통일하는 것이다.
+

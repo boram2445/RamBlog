@@ -1,25 +1,26 @@
-import { revalidateTag } from 'next/cache';
-import { dislikePost, likePost } from '@/service/posts';
+import { revalidateTag } from "next/cache";
+import { dislikePost, likePost } from "@/service/posts";
 import { NextRequest, NextResponse } from "next/server";
-import { withSessionUser } from '@/utils/session';
+import { withSessionUser } from "@/utils/session";
+import { withErrorHandler, HttpError } from "@/lib/api-handler";
 
-export async function PUT(req: NextRequest) {
+export const PUT = withErrorHandler(async (req: NextRequest) => {
   return withSessionUser(async (user) => {
     const { id, like } = await req.json();
 
     if (!id || like === undefined) {
-      return new Response('Bad Request', { status: 400 });
+      throw new HttpError(400, "잘못된 요청입니다.");
     }
 
     const request = like ? likePost : dislikePost;
 
-    const result = await request(id, user.id)
-      .then((res) => NextResponse.json(res))
-      .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
+    const result = await request(id, user.id).then((res) =>
+      NextResponse.json(res),
+    );
 
-    revalidateTag(`posts/${user.username}`, 'max');
-    revalidateTag('posts', 'max');
+    revalidateTag(`posts/${user.username}`, "max");
+    revalidateTag("posts", "max");
 
     return result;
   });
-}
+});

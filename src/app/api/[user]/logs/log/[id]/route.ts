@@ -2,25 +2,26 @@ import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
 import { withSessionUser } from '@/utils/session';
 import { deleteLog, getUserLog } from '@/service/log';
+import { withErrorHandler, HttpError } from '@/lib/api-handler';
 
 type Context = {
   params: Promise<{ user: string; id: string }>;
 };
 
-export async function GET(_: Request, context: Context) {
+export const GET = withErrorHandler(async (_: Request, context: Context) => {
   const { user, id } = (await context.params);
 
   if (!user || !id) {
-    return new NextResponse('Bad Reqest', { status: 400 });
+    throw new HttpError(400, '잘못된 요청입니다.');
   }
 
   return getUserLog(user, id).then((data) => NextResponse.json(data));
-}
+});
 
-export async function DELETE(_: NextRequest, context: Context) {
+export const DELETE = withErrorHandler(async (_: NextRequest, context: Context) => {
   return withSessionUser(async (user) => {
     const id = (await context.params).id;
-    if (!id) return new Response('Bad Request', { status: 400 });
+    if (!id) throw new HttpError(400, '잘못된 요청입니다.');
 
     const result = await deleteLog(id).then((data) => NextResponse.json(data));
 
@@ -28,4 +29,4 @@ export async function DELETE(_: NextRequest, context: Context) {
 
     return result;
   });
-}
+});
