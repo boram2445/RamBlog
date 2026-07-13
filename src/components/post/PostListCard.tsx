@@ -7,6 +7,7 @@ import Skeleton from "../ui/Skeleton";
 import LikeNumIcon from "../common/LikeNumIcon";
 import Link from "next/link";
 
+// 리스트용
 export default function PostListCard({ post }: { post: SimplePost }) {
   const {
     title,

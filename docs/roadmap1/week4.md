@@ -7,7 +7,7 @@
 | ✅ 22 | `PostIcons` 좋아요 중복 fetch 제거 (`getPostDetail`이 이미 포함한 `likes` 사용) + `getAllPostsData`/`getTagPosts`에 `next: { tags }` 확인 | `src/components/post/PostIcons.tsx`, `PostDetail.tsx`, `src/service/posts.ts` |
 | 23 | **블로그 6편 발행** — RSC 진짜 이해하기 | (블로그) |
 | 24 | `PostCard` priority 첫 N개에만 부여(인덱스 prop) + 모든 `next/image`에 `sizes` 추가 + Toast UI Editor `next/dynamic({ ssr: false })` 적용 | `PostCard.tsx`, `PostListCard.tsx`, `TuiEditors.tsx`, `WritePostForm.tsx` |
-| 25 | `<div onClick>` 6곳을 `<button>`/`<Link>`로 교체 + 폼 input `htmlFor` 연결 | `PostUserProfile.tsx:22`, `PostListCard.tsx:31,52`, `PostCard.tsx:38,46`, 폼 컴포넌트 4개 |
+| ✅ 25 | `<div onClick>`/`<p onClick>` → `<Link>` 교체 + 폼 input `htmlFor`/`aria-label` 연결 | `PostUserProfile.tsx`, `CommentForm.tsx`, `SearchList.tsx`, `ProfileForm.tsx`, `ArticleForm.tsx`(+`DateForm.tsx`, `TextArea.tsx`), `LogForm.tsx` |
 | 26 | **블로그 7편 발행** — priority + 접근성 회고 | (블로그) |
 | 27 | `app/error.tsx`, `app/not-found.tsx`, `app/global-error.tsx` 추가 + 도메인별 `error.tsx` 2~3개 | `src/app/error.tsx` 외 신규 |
 | 28 | API 공통 `withErrorHandler` 래퍼 도입 — `JSON.stringify(error)` 전부 제거, NextResponse.json 통일 | `src/lib/api-handler.ts` (신규), `src/app/api/**/route.ts` 전체 |
@@ -46,21 +46,23 @@
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `PostCard.tsx`에 `index` prop 추가 → `index < 3`일 때만 `priority` 부여 | [ ] |
-| 2 | `PostCard.tsx`, `PostListCard.tsx` 모든 `next/image`에 `sizes` 속성 추가 | [ ] |
-| 3 | `TuiEditors.tsx` `next/dynamic({ ssr: false })` 적용 | [ ] |
-| 4 | `WritePostForm.tsx` 에디터 dynamic import 반영 | [ ] |
-| 5 | `pnpm build` + Lighthouse Performance 점수 측정 | [ ] |
+| 1 | `PostCard.tsx`에 `index` prop 추가 → `index < 3`일 때만 `priority` 부여 | [x] |
+| 2 | `PostCard.tsx`, `PostListCard.tsx` 모든 `next/image`에 `sizes` 속성 추가 | [x] (`PostCard`만 실질적 필요 — `PostListCard`는 반응형 확장 클래스 없이 `width/height`가 실제 렌더 크기와 일치해 기본 동작이 이미 정확함, 변경 없음. 대신 `fill`인데 `sizes` 누락돼 있던 `ProjectModal.tsx`를 함께 수정) | [x] |
+| 3 | `TuiEditors.tsx` `next/dynamic({ ssr: false })` 적용 | [x] (이미 `WritePostForm.tsx`에서 구현돼 있었음 — 확인만) |
+| 4 | `WritePostForm.tsx` 에디터 dynamic import 반영 | [x] (위와 동일, 기존에 이미 반영됨) |
+| 5 | `pnpm build` + Lighthouse Performance 점수 측정 | [x] (`pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고. 홈페이지 SSR HTML로 `sizes`/`priority`(preload) 반영 스모크 확인. Lighthouse 정식 측정은 미실시 — 필요 시 별도 진행) |
 
 #### Day 25 — 시맨틱 HTML + 접근성
 
+> 로드맵 원문의 `PostCard`/`PostListCard` `<div onClick>`은 Day 20~22 RSC 전환 때 이미 `<Link>`로 교체되어 있어 실제 대상에서 제외(확인만). 실제 남은 건 `PostUserProfile` 1파일뿐. 폼도 "4개" 추정과 달리 실제 라벨 갭은 5개(`CommentForm`/`SearchList`/`ProfileForm`/`ArticleForm`/`LogForm`)였고, `ArticleForm`은 자식 컴포넌트(`DateForm`/`TextArea`)까지 prop 추가가 필요해 범위가 확장됨.
+
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/components/post/PostUserProfile.tsx:22` `<div onClick>` → `<button>` 교체 | [ ] |
-| 2 | `src/components/post/PostListCard.tsx:31,52` 동일 교체 | [ ] |
-| 3 | `src/components/post/PostCard.tsx:38,46` 동일 교체 | [ ] |
-| 4 | 폼 컴포넌트 4개 `<label htmlFor>` 또는 `aria-label` 연결 확인 및 추가 | [ ] |
-| 5 | `pnpm build` + Lighthouse Accessibility 점수 측정 (목표: 95+) | [ ] |
+| 1 | `PostUserProfile.tsx`의 `<div onClick>`+`<p onClick>`(아바타+username)를 단일 `<Link>`로 병합 (같은 목적지 중복 링크 방지) | [x] |
+| 2 | `CommentForm.tsx`(3곳)·`SearchList.tsx`(1곳) — 라벨 없는 input/textarea에 `aria-label` 추가 | [x] |
+| 3 | `ProfileForm.tsx`·`ArticleForm.tsx` label에 `htmlFor`/`id` 연결. `ArticleForm`의 `DateForm`(2개 인스턴스, 하드코딩 중복 `id` 버그도 함께 수정)·`TextArea`는 `id`/`aria-label` prop 신규 추가 | [x] |
+| 4 | `LogForm.tsx`(날짜·제목·내용) `aria-label` 추가 | [x] |
+| 5 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 무경고 + 스모크(서버 렌더 HTML로 aria-label 확인) | [x] (`PostUserProfile`은 클라이언트 사이드 SWR 페칭 구조라 서버 HTML엔 미노출 — 브라우저 Tab+Enter 수동 확인 필요. `ProfileForm`/`ArticleForm`/`LogForm`은 인증 라우트라 curl 확인 불가 — 코드 리뷰로 대체) |
 
 #### Day 26 — 블로그 7편 발행
 

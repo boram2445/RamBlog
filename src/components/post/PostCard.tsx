@@ -7,7 +7,14 @@ import Skeleton from "../ui/Skeleton";
 import LikeNumIcon from "../common/LikeNumIcon";
 import Link from "next/link";
 
-export default function PostCard({ post }: { post: SimplePost }) {
+// 그리드용
+export default function PostCard({
+  post,
+  index,
+}: {
+  post: SimplePost;
+  index: number;
+}) {
   const {
     title,
     description,
@@ -30,7 +37,8 @@ export default function PostCard({ post }: { post: SimplePost }) {
             width={300}
             height={200}
             className="mx-auto w-full h-1/2 object-cover aspect-square cursor-pointer"
-            priority
+            priority={index < 3}
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           />
         </Link>
       )}

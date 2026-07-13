@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import useUser from '@/hooks/useUser';
-import Avartar from '../ui/Avartar';
-import LinkButtons from '../user/LinkButtons';
-import { useRouter } from 'next/navigation';
+import useUser from "@/hooks/useUser";
+import Avartar from "../ui/Avartar";
+import LinkButtons from "../user/LinkButtons";
+import Link from "next/link";
 
 type Props = {
   username: string;
@@ -11,30 +11,25 @@ type Props = {
 
 export default function PostUserProfile({ username }: Props) {
   const { userProfile } = useUser(username);
-  const router = useRouter();
-
-  const handleClick = () => router.push(`/${username}`);
 
   return (
-    <div className='mt-3'>
+    <div className="mt-3">
       {userProfile && (
-        <div className='p-10 flex gap-6 items-center justify-center'>
-          <div onClick={handleClick} className='cursor-pointer'>
+        <div className="p-10 flex gap-6 items-center justify-center">
+          <Link
+            href={`/${username}`}
+            className="flex items-center gap-3 cursor-pointer"
+          >
             <Avartar
               imageUrl={userProfile?.image}
               username={username}
-              type='xl'
+              type="xl"
             />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <p
-              className='font-semibold hover:underline cursor-pointer'
-              onClick={handleClick}
-            >
+            <p className="font-semibold hover:underline cursor-pointer">
               {username}
             </p>
-            {userProfile?.links && <LinkButtons links={userProfile?.links} />}
-          </div>
+          </Link>
+          {userProfile?.links && <LinkButtons links={userProfile?.links} />}
         </div>
       )}
     </div>

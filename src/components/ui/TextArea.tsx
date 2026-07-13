@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
-import { ChangeEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef } from "react";
 
 type Props = {
   value: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   name: string;
   placeholder?: string;
+  id?: string;
 };
 
 export default function TextArea({
@@ -14,22 +15,23 @@ export default function TextArea({
   onChange,
   name,
   placeholder,
+  id,
 }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const changeTextAreaHeight = () => {
     if (textareaRef?.current) {
-      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + 'px';
+        textareaRef.current.scrollHeight + "px";
     }
   };
 
   useEffect(() => {
-    window.addEventListener('resize', changeTextAreaHeight);
+    window.addEventListener("resize", changeTextAreaHeight);
     changeTextAreaHeight();
     return () => {
-      window.removeEventListener('resize', changeTextAreaHeight);
+      window.removeEventListener("resize", changeTextAreaHeight);
     };
   }, []);
 
@@ -41,11 +43,12 @@ export default function TextArea({
   return (
     <textarea
       ref={textareaRef}
-      className='w-full px-4 py-2 textarea'
+      className="w-full px-4 py-2 textarea"
       value={value}
       name={name}
       onChange={handleChange}
       placeholder={placeholder}
+      id={id}
     />
   );
 }

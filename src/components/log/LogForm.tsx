@@ -1,11 +1,11 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import Button from '../ui/Button';
-import axios from 'axios';
-import ImageUpload from '../ui/ImageUpload';
-import EmotionList from './EmotionList';
-import { getDate } from '@/utils/date';
-import { mutate } from 'swr';
-import PageLoader from '../ui/PageLoader';
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import Button from "../ui/Button";
+import axios from "axios";
+import ImageUpload from "../ui/ImageUpload";
+import EmotionList from "./EmotionList";
+import { getDate } from "@/utils/date";
+import { mutate } from "swr";
+import PageLoader from "../ui/PageLoader";
 
 type Props = {
   username: string;
@@ -13,16 +13,16 @@ type Props = {
   closeForm: () => void;
 };
 
-const inputStyle = 'py-2 px-3 w-full input';
+const inputStyle = "py-2 px-3 w-full input";
 
 export default function LogForm({ username, resetSelect, closeForm }: Props) {
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<string>(
-    getDate(new Date().toISOString(), 'day')
+    getDate(new Date().toISOString(), "day"),
   );
   const [selectedEmotion, setSelectedEmotion] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
@@ -39,13 +39,13 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
 
     setLoading(true);
     const formData = new FormData();
-    file && formData.append('file', file);
-    formData.append('title', titleRef.current?.value ?? '');
-    formData.append('content', contentRef.current?.value ?? '');
-    formData.append('emotion', selectedEmotion?.toString() ?? '');
+    file && formData.append("file", file);
+    formData.append("title", titleRef.current?.value ?? "");
+    formData.append("content", contentRef.current?.value ?? "");
+    formData.append("emotion", selectedEmotion?.toString() ?? "");
     formData.append(
-      'date',
-      date + 'T' + new Date().toISOString().split('T')[1]
+      "date",
+      date + "T" + new Date().toISOString().split("T")[1],
     );
 
     axios
@@ -64,47 +64,50 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
 
   return (
     <>
-      {loading && <PageLoader label='일기 작성중...' />}
+      {loading && <PageLoader label="일기 작성중..." />}
       <form
-        className='relative w-full h-full p-5 rounded-lg bg-white dark:bg-neutral-800'
+        className="relative w-full h-full p-5 rounded-lg bg-white dark:bg-neutral-800"
         onSubmit={handleSubmit}
       >
-        <div className='flex justify-between items-center'>
+        <div className="flex justify-between items-center">
           <div>
-            <h2 className='ml-2 mt-3 mb-5 color-title'>오늘의 기록</h2>
+            <h2 className="ml-2 mt-3 mb-5 color-title">오늘의 기록</h2>
             <input
-              type='date'
+              aria-label="기록 날짜"
+              type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className='ml-2 mb-3 px-1 input'
+              className="ml-2 mb-3 px-1 input"
             />
           </div>
-          <Button color='black' onClick={handleSubmit}>
+          <Button color="black" onClick={handleSubmit}>
             등록
           </Button>
         </div>
-        <div className='h-5/6 flex flex-col tablet:flex-row gap-3'>
-          <div className='h-full tablet:w-1/2'>
+        <div className="h-5/6 flex flex-col tablet:flex-row gap-3">
+          <div className="h-full tablet:w-1/2">
             <ImageUpload
               file={file}
               onChange={handleChange}
-              styleClass='h-full w-full'
-              text='오늘의 사진'
+              styleClass="h-full w-full"
+              text="오늘의 사진"
             />
           </div>
-          <div className='h-full tablet:w-1/2 flex flex-col gap-2'>
+          <div className="h-full tablet:w-1/2 flex flex-col gap-2">
             <input
-              type='text'
-              placeholder='제목'
+              type="text"
+              placeholder="제목"
               ref={titleRef}
               className={inputStyle}
+              aria-label="제목"
             />
             <textarea
-              name='content'
-              id='content'
+              name="content"
+              id="content"
               ref={contentRef}
               className={`grow w-full textarea p-3`}
-              placeholder='내용을 적어 주세요.'
+              placeholder="내용을 적어 주세요."
+              aria-label="내용"
             />
             <EmotionList
               selected={selectedEmotion}
