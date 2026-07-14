@@ -8,6 +8,9 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "schema:extract": "cd sanity-studio && ./node_modules/.bin/sanity schema extract --path ../schema.json",
     "typegen": "pnpm schema:extract && ./sanity-studio/node_modules/.bin/sanity typegen generate"
   },
@@ -51,7 +54,9 @@
     "@types/nodemailer": "^6.4.9",
     "@types/prismjs": "^1.26.0",
     "@types/react-syntax-highlighter": "^15.5.7",
-    "next-sitemap": "^4.2.3"
+    "eslint-config-prettier": "^10.1.8",
+    "next-sitemap": "^4.2.3",
+    "prettier": "^3.9.5"
   },
   "packageManager": "pnpm@11.10.0"
 }

@@ -1,0 +1,6 @@
+.next/
+node_modules/
+sanity-studio/
+src/sanity/types.ts
+pnpm-lock.yaml
+*.patch

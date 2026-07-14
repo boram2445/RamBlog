@@ -11,7 +11,7 @@
 | 26 | **블로그 7편 발행** — priority + 접근성 회고 | (블로그) |
 | ✅ 27 | `app/error.tsx`, `app/not-found.tsx`, `app/global-error.tsx` 추가 + 도메인별 `error.tsx`/`not-found.tsx` 2개 | `src/app/error.tsx`, `src/app/not-found.tsx`, `src/app/global-error.tsx`, `src/app/[user]/posts/error.tsx`, `src/app/[user]/not-found.tsx` |
 | ✅ 28 | API 공통 `withErrorHandler` 래퍼 도입 — `JSON.stringify(error)` 전부 제거, NextResponse.json 통일 | `src/lib/api-handler.ts` (신규), `src/app/api/**/route.ts` 전체, `src/utils/session.ts` |
-| 29 | Prettier + Husky + lint-staged + GitHub Actions(lint + typecheck + build) 일괄 도입 | `.prettierrc`, `.husky/pre-commit`, `.github/workflows/ci.yml`, `package.json` |
+| ✅ 29 | Prettier(+format-on-save) + GitHub Actions(lint + typecheck + build) 도입 — Husky/lint-staged는 혼자 하는 프로젝트라 제외, 커밋 훅 대신 에디터 저장 시 포맷 통일로 대체 | `.prettierrc`, `.prettierignore`, `.vscode/settings.json`, `.vscode/extensions.json`, `.github/workflows/ci.yml`, `package.json` |
 | 30 | **블로그 8편 발행** — 종합 회고 + 다음 v2 계획 | (블로그) |
 
 ## 검증
@@ -95,18 +95,20 @@
 | 4 | `pnpm build && pnpm lint` 통과 + 스모크 테스트 중 발견한 `withSessionUser`(`src/utils/session.ts`)의 plain-text 401 응답도 `HttpError`로 통일 | [x] |
 | 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [x] |
 
-#### Day 29 — CI / Husky / Prettier 인프라
+#### Day 29 — Prettier(format-on-save) + CI 인프라 (경량안)
+
+> **범위 변경**: 원안(Husky/lint-staged pre-commit 훅 포함)에서 축소. 포맷 통일은 에디터 format-on-save로, 검사(lint/typecheck/build)는 CI로 분리 — 혼자 하는 프로젝트에서 커밋 훅은 과함.
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `pnpm add -D prettier lint-staged husky` 설치 | [ ] |
-| 2 | `.prettierrc` 작성 | [ ] |
-| 3 | `npx husky init` + `.husky/pre-commit`에 `npx lint-staged` 설정 | [ ] |
-| 4 | `package.json`에 `lint-staged` 설정 추가 (`.ts`, `.tsx` → eslint + prettier) | [ ] |
-| 5 | `.github/workflows/ci.yml` 작성 (lint + typecheck + build) | [ ] |
-| 6 | 테스트용 PR 생성 → GitHub Actions CI 통과 확인 | [ ] |
-| 7 | 커밋 시 pre-commit 훅 동작 확인 | [ ] |
-| 8 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+| 1 | `pnpm add -D prettier eslint-config-prettier` 설치, `.prettierrc`/`.prettierignore` 작성, `eslint.config.mjs`에 연동 | [x] |
+| 2 | `.vscode/settings.json`(formatOnSave) + `.vscode/extensions.json` 작성 | [x] |
+| 3 | `package.json`에 `typecheck`/`format`/`format:check` 스크립트 추가 | [x] |
+| 4 | `.github/workflows/ci.yml` 작성 (lint + typecheck + build, secrets로 env 7종 주입) | [x] |
+| 5 | `pnpm lint && pnpm typecheck && pnpm build` 로컬 무경고 확인 | [x] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+
+**보류(다음에 진행)**: GitHub Secrets 7종 등록 + 실제 push/PR로 Actions 통과 확인 — 원격 액션이라 사용자 확인 후 별도 진행.
 
 #### Day 30 — 블로그 8편 발행 + 마무리
 
