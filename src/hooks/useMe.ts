@@ -25,9 +25,24 @@ export default function useMe() {
 
   const toggleFollow = useCallback(
     (targetId: string, follow: boolean) => {
-      return mutate(updateFollow(targetId, follow), { populateCache: false });
+      if (!loggedInUser) return;
+      const following = follow
+        ? [
+            ...loggedInUser.following,
+            { id: targetId, username: '', name: '', image: '', title: '' },
+          ]
+        : loggedInUser.following.filter((item) => item.id !== targetId);
+
+      const newUserData = { ...loggedInUser, following };
+
+      return mutate(updateFollow(targetId, follow), {
+        optimisticData: newUserData,
+        populateCache: false,
+        rollbackOnError: true,
+        revalidate: false,
+      });
     },
-    [mutate]
+    [mutate, loggedInUser]
   );
 
   const setBookmark = useCallback(

@@ -58,7 +58,7 @@ export const POST = withErrorHandler(
       NextResponse.json(res)
     );
 
-    revalidateTag(`comments/${postId}`, 'max');
+    revalidateTag(`comments/${postId}`, { expire: 0 });
     return result;
   }
 );
@@ -124,7 +124,7 @@ export const DELETE = withErrorHandler(
       (res) => NextResponse.json(res)
     );
 
-    revalidateTag(`comments/${postId}`, 'max');
+    revalidateTag(`comments/${postId}`, { expire: 0 });
     return result;
   }
 );

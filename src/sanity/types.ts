@@ -15,15 +15,15 @@
 // Source: schema.json
 export type Portfolio = {
   _id: string;
-  _type: "portfolio";
+  _type: 'portfolio';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   author?: {
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   };
   skills?: Array<string>;
   introduce?: string;
@@ -33,7 +33,7 @@ export type Portfolio = {
     endDate?: string;
     holding?: boolean;
     content?: string;
-    _type: "business";
+    _type: 'business';
     _key: string;
   }>;
   projects?: Array<{
@@ -44,7 +44,7 @@ export type Portfolio = {
     endDate?: string;
     holding?: boolean;
     content?: string;
-    _type: "project";
+    _type: 'project';
     _key: string;
   }>;
   educations?: Array<{
@@ -53,51 +53,51 @@ export type Portfolio = {
     endDate?: string;
     holding?: boolean;
     content?: string;
-    _type: "education";
+    _type: 'education';
     _key: string;
   }>;
 };
 
 export type Log = {
   _id: string;
-  _type: "log";
+  _type: 'log';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   author?: {
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   };
   title?: string;
   content?: string;
   photo?: {
     asset?: {
       _ref: string;
-      _type: "reference";
+      _type: 'reference';
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
     };
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: "image";
+    _type: 'image';
   };
   emotion?: string;
   date?: string;
   likes?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
 };
 
 export type Tag = {
   _id: string;
-  _type: "tag";
+  _type: 'tag';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -106,15 +106,15 @@ export type Tag = {
 
 export type Post = {
   _id: string;
-  _type: "post";
+  _type: 'post';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   author?: {
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   };
   title?: string;
   publishedAt?: string;
@@ -123,87 +123,96 @@ export type Post = {
   mainImage?: string;
   likes?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   tags?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "tag";
+    [internalGroqTypeReferenceTo]?: 'tag';
   }>;
   content?: string;
-  comments?: Array<{
-    deleted?: boolean;
-    author?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "user";
-    };
-    comment?: string;
-    createdAt?: string;
-    comments?: Array<{
-      deleted?: boolean;
-      author?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "user";
-      };
-      comment?: string;
-      createdAt?: string;
-      _type: "loggedInUserComment";
-      _key: string;
-    } | {
-      deleted?: boolean;
-      name?: string;
-      password?: string;
-      comment?: string;
-      createdAt?: string;
-      _type: "guestComment";
-      _key: string;
-    }>;
-    _type: "loggedInUserComment";
-    _key: string;
-  } | {
-    deleted?: boolean;
-    name?: string;
-    password?: string;
-    comment?: string;
-    createdAt?: string;
-    comments?: Array<{
-      deleted?: boolean;
-      author?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "user";
-      };
-      comment?: string;
-      createdAt?: string;
-      _type: "loggedInUserComment";
-      _key: string;
-    } | {
-      deleted?: boolean;
-      name?: string;
-      password?: string;
-      comment?: string;
-      createdAt?: string;
-      _type: "guestComment";
-      _key: string;
-    }>;
-    _type: "guestComment";
-    _key: string;
-  }>;
+  comments?: Array<
+    | {
+        deleted?: boolean;
+        author?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'user';
+        };
+        comment?: string;
+        createdAt?: string;
+        comments?: Array<
+          | {
+              deleted?: boolean;
+              author?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'user';
+              };
+              comment?: string;
+              createdAt?: string;
+              _type: 'loggedInUserComment';
+              _key: string;
+            }
+          | {
+              deleted?: boolean;
+              name?: string;
+              password?: string;
+              comment?: string;
+              createdAt?: string;
+              _type: 'guestComment';
+              _key: string;
+            }
+        >;
+        _type: 'loggedInUserComment';
+        _key: string;
+      }
+    | {
+        deleted?: boolean;
+        name?: string;
+        password?: string;
+        comment?: string;
+        createdAt?: string;
+        comments?: Array<
+          | {
+              deleted?: boolean;
+              author?: {
+                _ref: string;
+                _type: 'reference';
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: 'user';
+              };
+              comment?: string;
+              createdAt?: string;
+              _type: 'loggedInUserComment';
+              _key: string;
+            }
+          | {
+              deleted?: boolean;
+              name?: string;
+              password?: string;
+              comment?: string;
+              createdAt?: string;
+              _type: 'guestComment';
+              _key: string;
+            }
+        >;
+        _type: 'guestComment';
+        _key: string;
+      }
+  >;
 };
 
 export type User = {
   _id: string;
-  _type: "user";
+  _type: 'user';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -225,29 +234,29 @@ export type User = {
   };
   following?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   followers?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   bookmarks?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "post";
+    [internalGroqTypeReferenceTo]?: 'post';
   }>;
 };
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
+  _type: 'sanity.imagePaletteSwatch';
   background?: string;
   foreground?: string;
   population?: number;
@@ -255,7 +264,7 @@ export type SanityImagePaletteSwatch = {
 };
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
+  _type: 'sanity.imagePalette';
   darkMuted?: SanityImagePaletteSwatch;
   lightVibrant?: SanityImagePaletteSwatch;
   darkVibrant?: SanityImagePaletteSwatch;
@@ -266,14 +275,14 @@ export type SanityImagePalette = {
 };
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
+  _type: 'sanity.imageDimensions';
   height?: number;
   width?: number;
   aspectRatio?: number;
 };
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
+  _type: 'sanity.imageHotspot';
   x?: number;
   y?: number;
   height?: number;
@@ -281,7 +290,7 @@ export type SanityImageHotspot = {
 };
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
+  _type: 'sanity.imageCrop';
   top?: number;
   bottom?: number;
   left?: number;
@@ -290,7 +299,7 @@ export type SanityImageCrop = {
 
 export type SanityFileAsset = {
   _id: string;
-  _type: "sanity.fileAsset";
+  _type: 'sanity.fileAsset';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -312,7 +321,7 @@ export type SanityFileAsset = {
 
 export type SanityImageAsset = {
   _id: string;
-  _type: "sanity.imageAsset";
+  _type: 'sanity.imageAsset';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -334,7 +343,7 @@ export type SanityImageAsset = {
 };
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
+  _type: 'sanity.imageMetadata';
   location?: Geopoint;
   dimensions?: SanityImageDimensions;
   palette?: SanityImagePalette;
@@ -345,78 +354,106 @@ export type SanityImageMetadata = {
 };
 
 export type Geopoint = {
-  _type: "geopoint";
+  _type: 'geopoint';
   lat?: number;
   lng?: number;
   alt?: number;
 };
 
 export type Slug = {
-  _type: "slug";
+  _type: 'slug';
   current?: string;
   source?: string;
 };
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
+  _type: 'sanity.assetSourceData';
   name?: string;
   id?: string;
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Portfolio | Log | Tag | Post | User | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes =
+  | Portfolio
+  | Log
+  | Tag
+  | Post
+  | User
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | Slug
+  | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/service/comment.ts
 // Variable: postCommentsQuery
-// Query: *[_type == "post" && _id == $postId][0]{    "comments": comments[]{       createdAt,  deleted,  "id":_key,  "comment": comment,  "type":_type,  _type == 'loggedInUserComment' => {    "username":author->username,    "image":author->image  },  _type == 'guestComment' => {    "username":name  },     "recomments": comments[]{        createdAt,  deleted,  "id":_key,  "comment": comment,  "type":_type,  _type == 'loggedInUserComment' => {    "username":author->username,    "image":author->image  },  _type == 'guestComment' => {    "username":name  },     } | order(createdAt desc),    } | order(createdAt desc),  }.comments
-export type PostCommentsQueryResult = Array<{
-  createdAt: string | null;
-  deleted: boolean | null;
-  id: string;
-  comment: string | null;
-  type: "loggedInUserComment";
-  username: string | null;
-  image: string | null;
-  recomments: Array<{
-    createdAt: string | null;
-    deleted: boolean | null;
-    id: string;
-    comment: string | null;
-    type: "loggedInUserComment";
-    username: string | null;
-    image: string | null;
-  } | {
-    createdAt: string | null;
-    deleted: boolean | null;
-    id: string;
-    comment: string | null;
-    type: "guestComment";
-    username: string | null;
-  }> | null;
-} | {
-  createdAt: string | null;
-  deleted: boolean | null;
-  id: string;
-  comment: string | null;
-  type: "guestComment";
-  username: string | null;
-  recomments: Array<{
-    createdAt: string | null;
-    deleted: boolean | null;
-    id: string;
-    comment: string | null;
-    type: "loggedInUserComment";
-    username: string | null;
-    image: string | null;
-  } | {
-    createdAt: string | null;
-    deleted: boolean | null;
-    id: string;
-    comment: string | null;
-    type: "guestComment";
-    username: string | null;
-  }> | null;
-}> | null;
+// Query: *[_type == "post" && _id == $postId][0]{    "comments": comments[]{       createdAt,  deleted,  "id":_key,  "comment": comment,  "type":_type,  _type == 'loggedInUserComment' => {    "username":author->username,    "image":author->image,    "authorId":author._ref  },  _type == 'guestComment' => {    "username":name  },     "recomments": comments[]{        createdAt,  deleted,  "id":_key,  "comment": comment,  "type":_type,  _type == 'loggedInUserComment' => {    "username":author->username,    "image":author->image,    "authorId":author._ref  },  _type == 'guestComment' => {    "username":name  },     } | order(createdAt desc),    } | order(createdAt desc),  }.comments
+export type PostCommentsQueryResult = Array<
+  | {
+      createdAt: string | null;
+      deleted: boolean | null;
+      id: string;
+      comment: string | null;
+      type: 'loggedInUserComment';
+      username: string | null;
+      image: string | null;
+      authorId: string | null;
+      recomments: Array<
+        | {
+            createdAt: string | null;
+            deleted: boolean | null;
+            id: string;
+            comment: string | null;
+            type: 'loggedInUserComment';
+            username: string | null;
+            image: string | null;
+            authorId: string | null;
+          }
+        | {
+            createdAt: string | null;
+            deleted: boolean | null;
+            id: string;
+            comment: string | null;
+            type: 'guestComment';
+            username: string | null;
+          }
+      > | null;
+    }
+  | {
+      createdAt: string | null;
+      deleted: boolean | null;
+      id: string;
+      comment: string | null;
+      type: 'guestComment';
+      username: string | null;
+      recomments: Array<
+        | {
+            createdAt: string | null;
+            deleted: boolean | null;
+            id: string;
+            comment: string | null;
+            type: 'loggedInUserComment';
+            username: string | null;
+            image: string | null;
+            authorId: string | null;
+          }
+        | {
+            createdAt: string | null;
+            deleted: boolean | null;
+            id: string;
+            comment: string | null;
+            type: 'guestComment';
+            username: string | null;
+          }
+      > | null;
+    }
+> | null;
 // Variable: nestedCommentPasswordQuery
 // Query: *[_type == "post" && _id == $postId][0]{    'password': comments[_key == $parentCommentId][0].comments[_key == $commentId][0].password  }
 export type NestedCommentPasswordQueryResult = {
@@ -429,92 +466,105 @@ export type TopLevelCommentPasswordQueryResult = {
 } | null;
 // Variable: nestedCommentByKeyQuery
 // Query: *[_id == $postId][0].comments[_key == $parentCommentId].comments[_key == $commentId]
-export type NestedCommentByKeyQueryResult = Array<{
-  deleted?: boolean;
-  name?: string;
-  password?: string;
-  comment?: string;
-  createdAt?: string;
-  _type: "guestComment";
-  _key: string;
-} | {
-  deleted?: boolean;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
-  };
-  comment?: string;
-  createdAt?: string;
-  _type: "loggedInUserComment";
-  _key: string;
-} | null> | null;
+export type NestedCommentByKeyQueryResult = Array<
+  | {
+      deleted?: boolean;
+      name?: string;
+      password?: string;
+      comment?: string;
+      createdAt?: string;
+      _type: 'guestComment';
+      _key: string;
+    }
+  | {
+      deleted?: boolean;
+      author?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'user';
+      };
+      comment?: string;
+      createdAt?: string;
+      _type: 'loggedInUserComment';
+      _key: string;
+    }
+  | null
+> | null;
 // Variable: topLevelCommentByKeyQuery
 // Query: *[_id == $postId][0].comments[_key == $commentId]
-export type TopLevelCommentByKeyQueryResult = Array<{
-  deleted?: boolean;
-  name?: string;
-  password?: string;
-  comment?: string;
-  createdAt?: string;
-  comments?: Array<{
-    deleted?: boolean;
-    name?: string;
-    password?: string;
-    comment?: string;
-    createdAt?: string;
-    _type: "guestComment";
-    _key: string;
-  } | {
-    deleted?: boolean;
-    author?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "user";
-    };
-    comment?: string;
-    createdAt?: string;
-    _type: "loggedInUserComment";
-    _key: string;
-  }>;
-  _type: "guestComment";
-  _key: string;
-} | {
-  deleted?: boolean;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "user";
-  };
-  comment?: string;
-  createdAt?: string;
-  comments?: Array<{
-    deleted?: boolean;
-    name?: string;
-    password?: string;
-    comment?: string;
-    createdAt?: string;
-    _type: "guestComment";
-    _key: string;
-  } | {
-    deleted?: boolean;
-    author?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "user";
-    };
-    comment?: string;
-    createdAt?: string;
-    _type: "loggedInUserComment";
-    _key: string;
-  }>;
-  _type: "loggedInUserComment";
-  _key: string;
-}> | null;
+export type TopLevelCommentByKeyQueryResult = Array<
+  | {
+      deleted?: boolean;
+      name?: string;
+      password?: string;
+      comment?: string;
+      createdAt?: string;
+      comments?: Array<
+        | {
+            deleted?: boolean;
+            name?: string;
+            password?: string;
+            comment?: string;
+            createdAt?: string;
+            _type: 'guestComment';
+            _key: string;
+          }
+        | {
+            deleted?: boolean;
+            author?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'user';
+            };
+            comment?: string;
+            createdAt?: string;
+            _type: 'loggedInUserComment';
+            _key: string;
+          }
+      >;
+      _type: 'guestComment';
+      _key: string;
+    }
+  | {
+      deleted?: boolean;
+      author?: {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'user';
+      };
+      comment?: string;
+      createdAt?: string;
+      comments?: Array<
+        | {
+            deleted?: boolean;
+            name?: string;
+            password?: string;
+            comment?: string;
+            createdAt?: string;
+            _type: 'guestComment';
+            _key: string;
+          }
+        | {
+            deleted?: boolean;
+            author?: {
+              _ref: string;
+              _type: 'reference';
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: 'user';
+            };
+            comment?: string;
+            createdAt?: string;
+            _type: 'loggedInUserComment';
+            _key: string;
+          }
+      >;
+      _type: 'loggedInUserComment';
+      _key: string;
+    }
+> | null;
 
 // Source: ./src/service/posts.ts
 // Variable: allPostsQuery
@@ -598,95 +648,105 @@ export type UserTagPostsQueryResult = Array<{
   id: string;
 }>;
 // Variable: postDetailQuery
-// Query: *[_type == "post" && _id == $postId][0]{    'currentPost': {  ...,  "tags":tags[]->tagName,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "username":author->username,  "userImage":author->image,  "likes":likes[]->username,  "id":_id},    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}  }
+// Query: *[_type == "post" && _id == $postId][0]{    'currentPost': {  ...,  "tags":tags[]->tagName,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "username":author->username,  "userImage":author->image,  "authorId":author._ref,  "likes":likes[]._ref,  "id":_id},    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}  }
 export type PostDetailQueryResult = {
   currentPost: {
     _id: string;
-    _type: "post";
+    _type: 'post';
     _createdAt: string;
     _updatedAt: string;
     _rev: string;
     author?: {
       _ref: string;
-      _type: "reference";
+      _type: 'reference';
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "user";
+      [internalGroqTypeReferenceTo]?: 'user';
     };
     title?: string;
     publishedAt?: string;
     description?: string;
     pinned?: boolean;
     mainImage?: string;
-    likes: Array<string | null> | null;
+    likes: Array<string> | null;
     tags: Array<string | null> | null;
     content?: string;
-    comments?: Array<{
-      deleted?: boolean;
-      name?: string;
-      password?: string;
-      comment?: string;
-      createdAt?: string;
-      comments?: Array<{
-        deleted?: boolean;
-        name?: string;
-        password?: string;
-        comment?: string;
-        createdAt?: string;
-        _type: "guestComment";
-        _key: string;
-      } | {
-        deleted?: boolean;
-        author?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "user";
-        };
-        comment?: string;
-        createdAt?: string;
-        _type: "loggedInUserComment";
-        _key: string;
-      }>;
-      _type: "guestComment";
-      _key: string;
-    } | {
-      deleted?: boolean;
-      author?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "user";
-      };
-      comment?: string;
-      createdAt?: string;
-      comments?: Array<{
-        deleted?: boolean;
-        name?: string;
-        password?: string;
-        comment?: string;
-        createdAt?: string;
-        _type: "guestComment";
-        _key: string;
-      } | {
-        deleted?: boolean;
-        author?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "user";
-        };
-        comment?: string;
-        createdAt?: string;
-        _type: "loggedInUserComment";
-        _key: string;
-      }>;
-      _type: "loggedInUserComment";
-      _key: string;
-    }>;
+    comments?: Array<
+      | {
+          deleted?: boolean;
+          name?: string;
+          password?: string;
+          comment?: string;
+          createdAt?: string;
+          comments?: Array<
+            | {
+                deleted?: boolean;
+                name?: string;
+                password?: string;
+                comment?: string;
+                createdAt?: string;
+                _type: 'guestComment';
+                _key: string;
+              }
+            | {
+                deleted?: boolean;
+                author?: {
+                  _ref: string;
+                  _type: 'reference';
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: 'user';
+                };
+                comment?: string;
+                createdAt?: string;
+                _type: 'loggedInUserComment';
+                _key: string;
+              }
+          >;
+          _type: 'guestComment';
+          _key: string;
+        }
+      | {
+          deleted?: boolean;
+          author?: {
+            _ref: string;
+            _type: 'reference';
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: 'user';
+          };
+          comment?: string;
+          createdAt?: string;
+          comments?: Array<
+            | {
+                deleted?: boolean;
+                name?: string;
+                password?: string;
+                comment?: string;
+                createdAt?: string;
+                _type: 'guestComment';
+                _key: string;
+              }
+            | {
+                deleted?: boolean;
+                author?: {
+                  _ref: string;
+                  _type: 'reference';
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: 'user';
+                };
+                comment?: string;
+                createdAt?: string;
+                _type: 'loggedInUserComment';
+                _key: string;
+              }
+          >;
+          _type: 'loggedInUserComment';
+          _key: string;
+        }
+    >;
     updatedAt: string;
     createdAt: string;
     username: string | null;
     userImage: string | null;
+    authorId: string | null;
     id: string;
   };
   nextPost: {
@@ -704,7 +764,7 @@ export type PostDetailQueryResult = {
 // Query: *[_type == "tag" && tagName == $tagName]
 export type ExistingTagQueryResult = Array<{
   _id: string;
-  _type: "tag";
+  _type: 'tag';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -724,7 +784,7 @@ export type PostAuthorQueryResult = {
 // Query: *[_type=='user' && username == $username][0]
 export type CheckUsernameValidQueryResult = {
   _id: string;
-  _type: "user";
+  _type: 'user';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -746,31 +806,31 @@ export type CheckUsernameValidQueryResult = {
   };
   following?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   followers?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   bookmarks?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "post";
+    [internalGroqTypeReferenceTo]?: 'post';
   }>;
 } | null;
 // Variable: checkEmailValidQuery
 // Query: *[_type=='user' && email == $email][0]
 export type CheckEmailValidQueryResult = {
   _id: string;
-  _type: "user";
+  _type: 'user';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -792,24 +852,24 @@ export type CheckEmailValidQueryResult = {
   };
   following?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   followers?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "user";
+    [internalGroqTypeReferenceTo]?: 'user';
   }>;
   bookmarks?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "post";
+    [internalGroqTypeReferenceTo]?: 'post';
   }>;
 } | null;
 // Variable: loginWithEmailQuery
@@ -836,7 +896,7 @@ export type UserDataQueryResult = {
 // Query: *[_type == "user" && username == $username][0]{    ...,    "id":_id,    following[]->{"id":_id,username,name,image,title},    followers[]->{"id":_id,username,name,image,title},    "bookmarks":bookmarks[]->_id  }
 export type UserByUsernameQueryResult = {
   _id: string;
-  _type: "user";
+  _type: 'user';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -877,7 +937,7 @@ export type UserByUsernameQueryResult = {
 // Query: *[_type=='user' && username == $username][0]{    ...,    "id":_id,    "following":count(following),    "followers":count(followers),    "posts":count(*[_type=="post" && author->username == $username])  }
 export type UserForProfileQueryResult = {
   _id: string;
-  _type: "user";
+  _type: 'user';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -901,38 +961,38 @@ export type UserForProfileQueryResult = {
   followers: number | null;
   bookmarks?: Array<{
     _ref: string;
-    _type: "reference";
+    _type: 'reference';
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: "post";
+    [internalGroqTypeReferenceTo]?: 'post';
   }>;
   id: string;
   posts: number;
 } | null;
 
 // Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
+import '@sanity/client';
+declare module '@sanity/client' {
   interface SanityQueries {
-    "\n  *[_type == \"post\" && _id == $postId][0]{\n    \"comments\": comments[]{\n     \n  createdAt,\n  deleted,\n  \"id\":_key,\n  \"comment\": comment,\n  \"type\":_type,\n  _type == 'loggedInUserComment' => {\n    \"username\":author->username,\n    \"image\":author->image\n  },\n  _type == 'guestComment' => {\n    \"username\":name\n  },\n\n     \"recomments\": comments[]{\n      \n  createdAt,\n  deleted,\n  \"id\":_key,\n  \"comment\": comment,\n  \"type\":_type,\n  _type == 'loggedInUserComment' => {\n    \"username\":author->username,\n    \"image\":author->image\n  },\n  _type == 'guestComment' => {\n    \"username\":name\n  },\n\n     } | order(createdAt desc),\n    } | order(createdAt desc),\n  }.comments\n": PostCommentsQueryResult;
-    "\n  *[_type == \"post\" && _id == $postId][0]{\n    'password': comments[_key == $parentCommentId][0].comments[_key == $commentId][0].password\n  }\n": NestedCommentPasswordQueryResult;
-    "\n  *[_type == \"post\" && _id == $postId][0]{\n    'password': comments[_key == $commentId][0].password\n  }\n": TopLevelCommentPasswordQueryResult;
-    "\n  *[_id == $postId][0].comments[_key == $parentCommentId].comments[_key == $commentId]\n": NestedCommentByKeyQueryResult;
-    "\n  *[_id == $postId][0].comments[_key == $commentId]\n": TopLevelCommentByKeyQueryResult;
-    "\n  *[_type == \"post\"]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": AllPostsQueryResult;
-    "\n  *[_type == \"post\" && author->username == $username]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": UserPostsQueryResult;
-    "\n  *[_type == 'post' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": TagPostsQueryResult;
-    "\n  *[_type == \"post\" && _id in *[_type == \"user\" && username == $username].bookmarks[]._ref]\n  | order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": BookmarkPostsQueryResult;
-    "\n  *[_type == 'post' && author->username == $username && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"tags\":tags[]->tagName,\n  \"username\":author->username,\n  \"name\":author->name,\n  \"userImage\":author->image,\n  \"likes\":count(likes),\n  \"id\":_id\n}\n": UserTagPostsQueryResult;
-    "\n  *[_type == \"post\" && _id == $postId][0]{\n    'currentPost': {\n  ...,\n  \"tags\":tags[]->tagName,\n  \"updatedAt\":_updatedAt,\n  \"createdAt\":coalesce(publishedAt, _createdAt),\n  \"username\":author->username,\n  \"userImage\":author->image,\n  \"likes\":likes[]->username,\n  \"id\":_id\n},\n    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ \"username\":author->username, title, \"id\":_id},\n    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ \"username\":author->username, title, \"id\":_id}\n  }\n": PostDetailQueryResult;
-    "\n  *[_type == \"tag\" && tagName == $tagName]\n": ExistingTagQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{\n    "comments": comments[]{\n     \n  createdAt,\n  deleted,\n  "id":_key,\n  "comment": comment,\n  "type":_type,\n  _type == \'loggedInUserComment\' => {\n    "username":author->username,\n    "image":author->image,\n    "authorId":author._ref\n  },\n  _type == \'guestComment\' => {\n    "username":name\n  },\n\n     "recomments": comments[]{\n      \n  createdAt,\n  deleted,\n  "id":_key,\n  "comment": comment,\n  "type":_type,\n  _type == \'loggedInUserComment\' => {\n    "username":author->username,\n    "image":author->image,\n    "authorId":author._ref\n  },\n  _type == \'guestComment\' => {\n    "username":name\n  },\n\n     } | order(createdAt desc),\n    } | order(createdAt desc),\n  }.comments\n': PostCommentsQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{\n    \'password\': comments[_key == $parentCommentId][0].comments[_key == $commentId][0].password\n  }\n': NestedCommentPasswordQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{\n    \'password\': comments[_key == $commentId][0].password\n  }\n': TopLevelCommentPasswordQueryResult;
+    '\n  *[_id == $postId][0].comments[_key == $parentCommentId].comments[_key == $commentId]\n': NestedCommentByKeyQueryResult;
+    '\n  *[_id == $postId][0].comments[_key == $commentId]\n': TopLevelCommentByKeyQueryResult;
+    '\n  *[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': AllPostsQueryResult;
+    '\n  *[_type == "post" && author->username == $username]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': UserPostsQueryResult;
+    '\n  *[_type == \'post\' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': TagPostsQueryResult;
+    '\n  *[_type == "post" && _id in *[_type == "user" && username == $username].bookmarks[]._ref]\n  | order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': BookmarkPostsQueryResult;
+    '\n  *[_type == \'post\' && author->username == $username && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': UserTagPostsQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{\n    \'currentPost\': {\n  ...,\n  "tags":tags[]->tagName,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "username":author->username,\n  "userImage":author->image,\n  "authorId":author._ref,\n  "likes":likes[]._ref,\n  "id":_id\n},\n    \'nextPost\': *[_type == \'post\' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},\n    \'previousPost\': *[_type == \'post\' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}\n  }\n': PostDetailQueryResult;
+    '\n  *[_type == "tag" && tagName == $tagName]\n': ExistingTagQueryResult;
     "\n  *[_type == 'post' && author->username == $username].tags[]->tagName\n": UserPostTagsQueryResult;
-    "\n  *[_type == \"post\" && _id == $postId][0]{ \"authorId\": author->_id }\n": PostAuthorQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }\n': PostAuthorQueryResult;
     "\n  *[_type=='user' && username == $username][0]\n": CheckUsernameValidQueryResult;
     "\n  *[_type=='user' && email == $email][0]\n": CheckEmailValidQueryResult;
-    "\n  *[_type=='user' && email == $email][0]{\n    \"id\":_id,\n    email,\n    name,\n    username,\n    password,\n    image,\n  }\n": LoginWithEmailQueryResult;
-    "\n  *[_type=='user' && _id == $userId][0]\n  {\"id\":_id,name,username,email,image,blogName}\n": UserDataQueryResult;
-    "\n  *[_type == \"user\" && username == $username][0]{\n    ...,\n    \"id\":_id,\n    following[]->{\"id\":_id,username,name,image,title},\n    followers[]->{\"id\":_id,username,name,image,title},\n    \"bookmarks\":bookmarks[]->_id\n  }\n": UserByUsernameQueryResult;
-    "\n  *[_type=='user' && username == $username][0]{\n    ...,\n    \"id\":_id,\n    \"following\":count(following),\n    \"followers\":count(followers),\n    \"posts\":count(*[_type==\"post\" && author->username == $username])\n  }\n": UserForProfileQueryResult;
+    '\n  *[_type==\'user\' && email == $email][0]{\n    "id":_id,\n    email,\n    name,\n    username,\n    password,\n    image,\n  }\n': LoginWithEmailQueryResult;
+    '\n  *[_type==\'user\' && _id == $userId][0]\n  {"id":_id,name,username,email,image,blogName}\n': UserDataQueryResult;
+    '\n  *[_type == "user" && username == $username][0]{\n    ...,\n    "id":_id,\n    following[]->{"id":_id,username,name,image,title},\n    followers[]->{"id":_id,username,name,image,title},\n    "bookmarks":bookmarks[]->_id\n  }\n': UserByUsernameQueryResult;
+    '\n  *[_type==\'user\' && username == $username][0]{\n    ...,\n    "id":_id,\n    "following":count(following),\n    "followers":count(followers),\n    "posts":count(*[_type=="post" && author->username == $username])\n  }\n': UserForProfileQueryResult;
   }
 }

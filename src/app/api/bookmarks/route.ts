@@ -27,7 +27,7 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
       NextResponse.json(res),
     );
 
-    revalidateTag("bookmark", "max");
+    revalidateTag("bookmark", { expire: 0 });
 
     return result;
   });

@@ -26,10 +26,19 @@ export default async function PostDetail({
   previousPost,
   loginUserData,
 }: Props) {
-  const { title, tags, createdAt, content, id, username, userImage, likes } =
-    currentPost;
+  const {
+    title,
+    tags,
+    createdAt,
+    content,
+    id,
+    username,
+    userImage,
+    likes,
+    authorId,
+  } = currentPost;
 
-  const isMyPost = loginUserData?.username === username;
+  const isMyPost = loginUserData?.id === authorId;
 
   return (
     <section className="pb-16 relative">

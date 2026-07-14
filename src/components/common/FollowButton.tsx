@@ -4,15 +4,13 @@ import Button from '../ui/Button';
 import useMe from '@/hooks/useMe';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { PulseLoader } from 'react-spinners';
 import { AiOutlineCheck, AiOutlinePlus } from 'react-icons/ai';
 
 type Props = {
   userId: string;
-  username: string;
 };
 
-export default function FollowButton({ userId, username }: Props) {
+export default function FollowButton({ userId }: Props) {
   const { loggedInUser, toggleFollow } = useMe(); //로그인한 사람
 
   const router = useRouter();
@@ -22,11 +20,11 @@ export default function FollowButton({ userId, username }: Props) {
 
   const showButton = loggedInUser && loggedInUser.id !== userId;
   const following =
-    loggedInUser &&
-    loggedInUser.following.find((item) => item.username === username);
+    loggedInUser && loggedInUser.following.find((item) => item.id === userId);
   const text = following ? '팔로잉' : '팔로우';
 
   const handleFollow = async () => {
+    if (isUpdating) return;
     setIsFetching(true);
     await toggleFollow(userId, !following);
     setIsFetching(false);
@@ -38,21 +36,16 @@ export default function FollowButton({ userId, username }: Props) {
   return (
     <>
       {showButton && (
-        <div className='relative h-[30px]'>
-          {isUpdating && (
-            <div className='absolute inset-0 flex justify-center items-center z-20'>
-              <PulseLoader size='6' className='text-gray-500 dark:text-white' />
-            </div>
-          )}
+        <div>
           <Button
             disabled={isUpdating}
             onClick={handleFollow}
             color={following ? 'black' : 'white'}
           >
             {following ? (
-              <AiOutlineCheck className='text-white dark:text-neutral-800' />
+              <AiOutlineCheck className="text-white dark:text-neutral-800" />
             ) : (
-              <AiOutlinePlus className='text-neutral-800' />
+              <AiOutlinePlus className="text-neutral-800" />
             )}
             {text}
           </Button>

@@ -40,7 +40,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       file
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`log/${user.username}`, 'max');
+    revalidateTag(`log/${user.username}`, { expire: 0 });
 
     return result;
   });

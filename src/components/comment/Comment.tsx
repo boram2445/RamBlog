@@ -14,7 +14,7 @@ import Date from '../ui/Date';
 
 type Props = {
   postId: string;
-  postUser: string;
+  postUserId: string;
   comment: Comment;
   commentType?: 'comment' | 'recomment';
   loginUserData?: AuthUser;
@@ -23,7 +23,7 @@ type Props = {
 
 export default function Comment({
   postId,
-  postUser,
+  postUserId,
   comment,
   commentType = 'comment',
   loginUserData,
@@ -43,6 +43,7 @@ export default function Comment({
     recomments,
     id,
     deleted,
+    authorId,
   } = comment;
 
   const handleDeleteUserComment = () => {
@@ -52,8 +53,8 @@ export default function Comment({
   };
 
   const isUserDelete =
-    loginUserData?.username === postUser ||
-    loginUserData?.username === username;
+    loginUserData?.id === postUserId ||
+    (!!loginUserData?.id && loginUserData.id === authorId);
 
   return (
     <div
@@ -121,7 +122,7 @@ export default function Comment({
         <ReCommentList
           comments={comment.recomments}
           postId={postId}
-          postUser={postUser}
+          postUserId={postUserId}
           commentId={id}
           loginUserData={loginUserData}
         />

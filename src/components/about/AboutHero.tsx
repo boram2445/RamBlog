@@ -5,16 +5,16 @@ import Button from '../ui/Button';
 
 type Props = {
   loginUser?: AuthUser;
-  username: string;
+  profileUserId?: string;
 };
 
-export default function AboutHero({ loginUser, username }: Props) {
+export default function AboutHero({ loginUser, profileUserId }: Props) {
   return (
     <div className='flex gap-5'>
       <div className='mb-6'>
         <Title title='About me' />
       </div>
-      {loginUser?.username === username && (
+      {!!loginUser?.id && loginUser.id === profileUserId && (
         <Link href={`/${loginUser.username}/about/edit`} className='mt-1'>
           <Button>수정</Button>
         </Link>

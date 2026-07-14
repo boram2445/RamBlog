@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import useMe from "@/hooks/useMe";
-import ToggleButton from "../ui/ToggleButton";
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import useMe from '@/hooks/useMe';
+import ToggleButton from '../ui/ToggleButton';
 import {
   BsLink45Deg,
   BsHeart,
   BsHeartFill,
   BsFillBookmarkFill,
   BsBookmark,
-} from "react-icons/bs";
-import { useState } from "react";
+} from 'react-icons/bs';
+import { useState } from 'react';
 
 type Props = {
   postId: string;
@@ -19,25 +19,25 @@ type Props = {
 };
 
 const buttonStyle =
-  "p-1 rounded-lg hover:bg-gray-200 flex items-center dark:hover:bg-neutral-800";
-const iconStyle = "w-5 h-5 dark:text-slate-400";
+  'p-1 rounded-lg hover:bg-gray-200 flex items-center dark:hover:bg-neutral-800';
+const iconStyle = 'w-5 h-5 dark:text-slate-400';
 
 export default function PostIcons({ postId, likes: initialLikes }: Props) {
-  const [likes, setLikes] = useState(initialLikes);
+  const [likes, setLikes] = useState(initialLikes ?? []);
 
   const { loggedInUser, setBookmark } = useMe();
 
   const router = useRouter();
 
-  const liked = likes ? likes?.includes(loggedInUser?.username ?? "") : false;
+  const liked = likes ? likes?.includes(loggedInUser?.id ?? '') : false;
   const bookmarked = loggedInUser?.bookmarks.includes(postId) ?? false;
 
   const handleCopyLink = () => {
     if (navigator.clipboard) {
       navigator.clipboard
         .writeText(window && window.location.href)
-        .then(() => alert("링크가 복사되었습니다🔗"))
-        .catch(() => alert("다시 시도해주세요😅"));
+        .then(() => alert('링크가 복사되었습니다🔗'))
+        .catch(() => alert('다시 시도해주세요😅'));
     }
   };
 
@@ -46,14 +46,14 @@ export default function PostIcons({ postId, likes: initialLikes }: Props) {
 
   const handleLike = async (like: boolean) => {
     if (!loggedInUser) {
-      router.push("/auth/signin");
+      router.push('/auth/signin');
       return;
     }
     if (!likes) return;
 
     const newLikesArr = like
-      ? [...likes, loggedInUser.username]
-      : likes.filter((user) => user !== loggedInUser.username);
+      ? [...likes, loggedInUser.id]
+      : likes.filter((id) => id !== loggedInUser.id);
 
     const prevLikes = likes;
     // 로컬 업데이트
@@ -67,7 +67,7 @@ export default function PostIcons({ postId, likes: initialLikes }: Props) {
 
   const handleBookmark = (bookmark: boolean) => {
     if (!loggedInUser) {
-      router.push("/auth/signin");
+      router.push('/auth/signin');
       return;
     }
 

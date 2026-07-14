@@ -24,7 +24,7 @@ export default function Hero({ user }: Props) {
               {user.introduce}
             </p>
           </div>
-          <FollowButton userId={user.id} username={user.username} />
+          <FollowButton userId={user.id} />
         </div>
         <div className='flex justify-between items-center'>
           <LinkButtons links={user.links} />

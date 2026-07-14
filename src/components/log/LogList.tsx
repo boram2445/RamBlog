@@ -13,12 +13,13 @@ import NoContent from '../ui/NoContent';
 
 type Props = {
   username: string;
+  userId?: string;
 };
 
 const listStyle =
   'mx-auto py-8 px-1 tablet:px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
 
-export default function LogList({ username }: Props) {
+export default function LogList({ username, userId }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -40,7 +41,7 @@ export default function LogList({ username }: Props) {
           onSelectChange={handleChangeSelect}
           type='emoji'
         />
-        {user?.username === username && (
+        {!!user?.id && user.id === userId && (
           <Button onClick={() => setIsOpenForm(true)}>일기쓰기</Button>
         )}
       </div>

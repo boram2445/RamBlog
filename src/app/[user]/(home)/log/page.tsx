@@ -1,4 +1,5 @@
 import LogList from '@/components/log/LogList';
+import { getUserForProfile } from '@/service/user';
 
 type Props = {
   params: Promise<{ user: string }>;
@@ -11,9 +12,11 @@ export default async function LogPage(props: Props) {
     user
   } = params;
 
+  const profileUser = await getUserForProfile(user);
+
   return (
     <>
-      <LogList username={user} />
+      <LogList username={user} userId={profileUser?.id} />
     </>
   );
 }

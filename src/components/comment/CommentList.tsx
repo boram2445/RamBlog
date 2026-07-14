@@ -8,13 +8,13 @@ import useComment from '@/hooks/useComment';
 
 type Props = {
   postId: string;
-  postUser: string;
+  postUserId: string;
   loginUserData?: AuthUser;
 };
 
 export default function CommentList({
   postId,
-  postUser,
+  postUserId,
   loginUserData,
 }: Props) {
   const { comments, isLoading } = useComment(postId);
@@ -34,7 +34,7 @@ export default function CommentList({
                 <Comment
                   comment={comment}
                   postId={postId}
-                  postUser={postUser}
+                  postUserId={postUserId}
                   loginUserData={loginUserData}
                 />
               </li>

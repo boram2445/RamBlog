@@ -37,7 +37,7 @@ export default async function PostPage(props: Props) {
         />
         <CommentList
           postId={post.currentPost.id}
-          postUser={post.currentPost.username}
+          postUserId={post.currentPost.authorId}
           loginUserData={loginUserData}
         />
       </div>

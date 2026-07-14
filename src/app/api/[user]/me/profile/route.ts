@@ -56,7 +56,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       image
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`profile/${user.username}`, 'max');
+    revalidateTag(`profile/${user.username}`, { expire: 0 });
 
     return result;
   });

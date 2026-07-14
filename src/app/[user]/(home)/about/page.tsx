@@ -1,4 +1,5 @@
 import { getUserPortfolio } from '@/service/portfolio';
+import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
 import AboutList from '@/components/about/AboutList';
 import { auth } from '@/auth';
@@ -22,9 +23,11 @@ export default async function AboutPage(props: Props) {
   const session = await auth();
   const loginUser = session?.user;
 
+  const profileUser = await getUserForProfile(user);
+
   return (
     <>
-      <AboutHero loginUser={loginUser} username={user} />
+      <AboutHero loginUser={loginUser} profileUserId={profileUser?.id} />
       <AboutList portfolio={portfolio} />
     </>
   );

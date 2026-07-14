@@ -28,7 +28,7 @@ export default function UserCard({ followUser }: Props) {
         </h3>
         <p className='text-sm text-gray-500 dark:text-slate-400'>{title}</p>
       </div>
-      <FollowButton userId={followUser.id} username={followUser.username} />
+      <FollowButton userId={followUser.id} />
     </div>
   );
 }

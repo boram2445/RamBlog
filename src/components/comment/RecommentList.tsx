@@ -10,7 +10,7 @@ import { AuthUser } from '@/model/user';
 type Props = {
   comments?: CommentType[];
   postId: string;
-  postUser: string;
+  postUserId: string;
   commentId: string;
   loginUserData?: AuthUser;
 };
@@ -18,7 +18,7 @@ type Props = {
 export default function ReCommentList({
   comments,
   postId,
-  postUser,
+  postUserId,
   commentId,
   loginUserData,
 }: Props) {
@@ -32,7 +32,7 @@ export default function ReCommentList({
             <li key={comment.id}>
               <Comment
                 postId={postId}
-                postUser={postUser}
+                postUserId={postUserId}
                 comment={comment}
                 commentType='recomment'
                 loginUserData={loginUserData}

@@ -10,7 +10,8 @@ const commentProjection = `
   "type":_type,
   _type == 'loggedInUserComment' => {
     "username":author->username,
-    "image":author->image
+    "image":author->image,
+    "authorId":author._ref
   },
   _type == 'guestComment' => {
     "username":name

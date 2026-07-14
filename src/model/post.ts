@@ -22,4 +22,8 @@ export type PostData = {
   nextPost: AdjacentPost;
 };
 
-export type PostDetail = Post & { content: string; likes: string[] };
+export type PostDetail = Post & {
+  content: string;
+  likes: string[];
+  authorId: string;
+};

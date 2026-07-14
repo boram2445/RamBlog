@@ -17,7 +17,7 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
     const result = await request(user.id, targetId) //
       .then((res) => NextResponse.json(res));
 
-    revalidateTag("following", "max");
+    revalidateTag("following", { expire: 0 });
 
     return result;
   });

@@ -18,7 +18,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 
     const result = await request().then((data) => NextResponse.json(data));
 
-    revalidateTag(`about/${user.username}`, 'max');
+    revalidateTag(`about/${user.username}`, { expire: 0 });
 
     return result;
   });

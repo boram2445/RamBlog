@@ -25,7 +25,8 @@ const fullPostProjection = `
   "createdAt":coalesce(publishedAt, _createdAt),
   "username":author->username,
   "userImage":author->image,
-  "likes":likes[]->username,
+  "authorId":author._ref,
+  "likes":likes[]._ref,
   "id":_id
 `;
 

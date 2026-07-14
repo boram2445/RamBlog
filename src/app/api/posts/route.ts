@@ -33,9 +33,9 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       mainImage
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`, 'max');
-    revalidateTag(`posts/${user.username}`, 'max');
-    revalidateTag('posts', 'max');
+    revalidateTag(`tags/${user.username}`, { expire: 0 });
+    revalidateTag(`posts/${user.username}`, { expire: 0 });
+    revalidateTag('posts', { expire: 0 });
 
     return result;
   });

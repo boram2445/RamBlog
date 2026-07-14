@@ -18,8 +18,8 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
       NextResponse.json(res),
     );
 
-    revalidateTag(`posts/${user.username}`, "max");
-    revalidateTag("posts", "max");
+    revalidateTag(`posts/${user.username}`, { expire: 0 });
+    revalidateTag("posts", { expire: 0 });
 
     return result;
   });
