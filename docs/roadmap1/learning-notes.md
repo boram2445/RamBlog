@@ -347,3 +347,108 @@ new Response(
 
 정리하면 포맷 통일(에디터)과 코드 검사(CI)는 서로 다른 축이고, 그중 겹치는 부분(커밋 훅)은 프로젝트 규모에 맞춰 얼마든지 뺄 수 있다는 게 이번에 정리된 인사이트.
 
+## Day 31 — 에디터 교체 1 (Toast UI → @uiw/react-md-editor)
+
+**Q. resolvedTheme을 써야 하는 이유?**
+
+`next-themes`의 `useTheme()`이 반환하는 `theme`은 사용자가 고른 원래 선택값이라 `"system"`일 수도 있다. 반면 `resolvedTheme`은 `"system"`일 때 실제 OS/브라우저 설정을 반영해 계산된 최종 `"light"`/`"dark"` 값이다. `data-color-mode`처럼 실제 색상 모드를 렌더링에 써야 하는 곳에서는 `theme`을 쓰면 `"system"`이 그대로 들어가 버그가 나므로 반드시 `resolvedTheme`을 써야 한다.
+
+**Q. FileList가 왜 유사 배열이야? Array.from은 어떤 역할?**
+
+`input[type=file].files`나 드래그/붙여넣기 이벤트의 `dataTransfer.files`/`clipboardData.files`는 브라우저 DOM API가 반환하는 `FileList` 타입인데, 이는 length와 인덱스 접근(`files[0]`)은 되지만 진짜 `Array`가 아니라서 `.forEach`, `.map` 같은 배열 메서드가 없다(유사 배열, array-like). `Array.from(fileList)`는 유사 배열이나 이터러블을 순회하며 진짜 `Array` 인스턴스로 복사·변환해줘서, 그 이후로 배열 메서드나 `for...of`를 자유롭게 쓸 수 있게 해준다.
+
+**Q. 왜 여러 파일을 연달아 업로드하면 일부가 사라지는(stale closure) 버그가 났는가?**
+
+비동기 루프 안에서 컴포넌트의 `value` prop을 직접 읽어 이어붙이고 `onChange(value + ...)`를 호출하면, prop은 함수 호출 도중에 리렌더링되어 갱신되지 않으므로 매 반복마다 같은 최초 `value`를 읽어버린다(stale closure). 그 결과 여러 이미지를 연속 삽입하면 마지막에 삽입한 것만 남고 앞서 삽입한 내용이 덮어써진다.
+
+해결책은 `let updatedValue = value`처럼 로컬 누적 변수를 두고, 매 반복마다 `updatedValue = updatedValue + ...`로 갱신한 뒤 그 값을 `onChange`에 넘기는 것.
+
+**Q. HTML5 drag&drop에서 onDrop에 preventDefault를 했는데도 왜 브라우저가 새 탭에서 파일을 열어버리는가?**
+
+`onDrop`의 `preventDefault()`만으로는 부족하다. 브라우저는 `dragover` 이벤트에서도 `preventDefault()`가 호출되지 않으면 해당 엘리먼트를 "유효하지 않은 드롭 대상"으로 취급해서 기본 동작(파일을 새 탭에서 열기)으로 fallback한다. 그래서 `onDragOver`에도 `preventDefault()`를 추가해야 drop이 정상 동작한다.
+
+**Q. 에디터 미리보기와 실제 발행된 글의 렌더링이 다른 이유는? (다음 줄 처리 등)**
+
+`@uiw/react-md-editor`의 기본 미리보기는 내부적으로 `@uiw/react-markdown-preview`(react-markdown v10, remark-gfm v4, rehype-raw 포함)를 쓰는 반면, 실제 발행 글은 `MarkDownPost.tsx`가 별도로 react-markdown v8 + remark-gfm v3 + 커스텀 `<br>` 치환 로직으로 렌더링한다. 두 파이프라인의 라이브러리 버전과 플러그인 구성이 다르니 마크다운 소프트 브레이크(줄바꿈) 처리, GFM 확장, 코드/이미지 렌더링 방식이 서로 달라 미리보기가 실제 결과를 대변하지 못하는 문제(WYSIWYG 불일치)가 있었다.
+
+해결책은 `MDEditor`의 `components.preview`를 실제 발행 렌더러인 `MarkDownPost`로 교체해서 편집기 미리보기와 발행 결과가 완전히 동일한 파이프라인을 타도록 통일한 것.
+
+**Q. 마크다운에서 Enter 한 번이 왜 줄바꿈이 안 되는가? remark-breaks는 뭘 하는가?**
+
+CommonMark 표준 마크다운은 Enter 한 번(줄 안에서의 개행)을 "soft break"로 취급해 렌더링 시 공백(스페이스) 하나로 처리한다 — 실제 줄바꿈(`<br>`)이 되려면 원래는 문단 사이 빈 줄이 필요하거나, 줄 끝에 스페이스 2칸을 넣어야 한다.
+
+`remark-breaks`는 이 soft break를 강제로 hard break(`<br>`)로 바꿔주는 remark 플러그인으로, 도입하면 Enter 한 번만으로도 실제 줄바꿈이 된다. 다만 이건 렌더링 방식 자체를 바꾸는 것이라 이미 발행된 기존 글들의 렌더링에도 전부 영향을 준다(사이트 전역 적용).
+
+**Q. (ESLint) `react-hooks/refs` 에러 — ref를 함수 인자로 넘겼는데 왜 "render 중에 ref.current를 읽을 수 있다"는 경고가 뜨는가?**
+
+`{ ...commands.image, execute: () => fileInputRef.current?.click() }`처럼 `ref.current`를 읽는 클로저를 담은 객체를, 헬퍼 함수(`translateTooltip(...)`) 호출의 인자로 넘기면, ESLint는 그 헬퍼 함수가 렌더링 도중 실행되면서 인자로 전달된 객체(그리고 그 안의 클로저)를 렌더링 중에 평가/실행할 수도 있다고 정적으로 판단해 경고를 낸다(실제로 실행되는지 여부와 무관하게, 함수 호출에 ref를 감싼 객체를 인자로 넘기는 패턴 자체를 위험하다고 본다).
+
+해결책은 이런 객체를 함수 호출 경유 없이 순수 객체 리터럴/스프레드로 직접 구성하는 것 — 즉 `translateTooltip`으로 감싸지 않고 `imageUploadCommand`를 인라인 객체 리터럴로 직접 만들었다.
+
+**Q. TypeScript에서 `'children' in cmd`로는 왜 유니온 타입이 좁혀지지 않는가?**
+
+`@uiw/react-md-editor`의 `ICommand<T>`는 `ICommandChildCommands<T> | ICommandChildHandle<T>` 유니온인데, 두 변형 모두 `children` 프로퍼티를 갖고 있다(단, 타입이 다름 — 하나는 배열, 하나는 렌더 함수). `in` 연산자를 이용한 narrowing은 "그 프로퍼티가 존재하는 변형만 걸러내는" 방식인데, 유니온의 양쪽 모두 이미 `children`을 갖고 있으므로 `'children' in cmd`는 아무것도 좁혀주지 못한다(둘 다 조건을 만족).
+
+대신 `Array.isArray(cmd.children)`을 쓰면 런타임에 실제 값이 배열인지 확인하는 것이므로, TypeScript가 이를 근거로 배열 변형(`ICommandChildCommands`)으로 정확히 좁혀준다.
+
+## Day 33 — 계정 중복 생성 수정 (구글 재로그인 안정화)
+
+**Q1. addEmailUser는 왜 랜덤 id를 쓰는거야?**
+
+Sanity의 `client.create()`는 `_id`를 지정하지 않으면 랜덤 id를 자동 생성한다(이메일 회원가입 경로, `src/service/user.ts`의 `addEmailUser`). 반면 구글 OAuth 가입 경로(`addUser`)는 `client.createIfNotExists({ _id: id, ... })`로 특정 `_id`를 명시적으로 지정해, 이미 그 id의 문서가 있으면 아무 것도 안 하는(no-op) 멱등 동작을 한다.
+
+이 두 경로가 서로 다른 `_id` 발급 방식을 쓴다는 게 이후 "구글 재로그인마다 계정이 중복 생성되는" 버그의 배경이 된다 — `createIfNotExists`가 멱등하다는 보장은 넘겨주는 `_id` 값 자체가 매번 같아야 성립하는데, NextAuth의 `user.id`가 로그인마다 랜덤이라 그 전제가 깨졌다.
+
+**Q2. signIn 콜백을 canonical id 헬퍼로 재설계해야 하는 이유는?**
+
+NextAuth v5(`@auth/core`)에서 데이터베이스 adapter 없이 JWT 세션 전략을 쓰면, OAuth 로그인마다 `user.id`가 `crypto.randomUUID()`로 매번 새로 발급된다 — `@auth/core` 소스 코드(`lib/actions/callback/oauth/callback.js`)에 "user는 provider와 독립적이어야 한다"는 의도적 설계 주석이 달려 있다.
+
+그래서 `user.id`를 그대로 Sanity 문서의 `_id`로 쓰면, 같은 사람이 재로그인할 때마다 새 문서가 생성된다. 해결책은 `signIn` 콜백에서 매번 랜덤인 `user.id` 대신, 로그인할 때마다 같은 값이 나오도록 계산되는 canonical id를 만들어주는 헬퍼를 두고 그 값을 Sanity `_id`로 쓰는 것.
+
+**Q3. user가 원래 구글에서 제공해주는 유저 아이디 아니었나?**
+
+아니다. `user.id`는 구글이 주는 고정 식별자가 아니라 `@auth/core`가 세션 전략상 임의로 만들어낸 값이다. 구글의 실제 안정적 식별자(OAuth의 `sub` 클레임)는 `account.providerAccountId`에 별도로 보존돼 있다 — 그래서 재로그인해도 변하지 않는 canonical id를 만들려면 `user.id`가 아니라 `account.providerAccountId` 기반으로 만들어야 한다(`google.${account.providerAccountId}` 형태 채택).
+
+즉 `user`(프로필 정보)와 `account`(어떤 provider로, 어떤 식별자로 로그인했는지)는 NextAuth 콜백에서 서로 다른 목적을 가진 별개의 인자이고, "재로그인해도 변하지 않는 값"이 필요할 때는 `user` 쪽이 아니라 `account` 쪽을 봐야 한다는 게 이번에 정리된 포인트.
+
+**Q4. 그럼 기존 user.id를 계속 쓰면 왜 안 되는건데?**
+
+`user.id`는 매 로그인마다 랜덤이라 재로그인 시 이전 로그인 때의 값과 달라진다. 세션(`session.user.id`)에 이 값을 계속 쓰면, 재로그인 후에는 예전에 작성한 글의 `author._ref`(과거 로그인 시점의 랜덤 id)와 새로 발급된 `session.user.id`가 서로 달라져 `assertPostOwner` 같은 소유권 검증이 실패한다 — 즉 재로그인하면 자기가 쓴 글을 더 이상 수정/삭제할 수 없게 되는 부수 피해가 생긴다.
+
+`account.providerAccountId`(구글 sub)는 같은 구글 계정이면 항상 동일하므로, 이를 기반으로 한 canonical id만이 재로그인 전후로 안정적이다. 결국 이번 수정의 핵심은 "계정을 식별하는 값"과 "세션마다 새로 발급되는 값"을 구분해서, 소유권 검증처럼 영속성이 필요한 곳에는 전자만 써야 한다는 것.
+
+## Day 34a — identity/소유권 판정 username → `_id`
+
+**Q1. targetId가 뭔데? follow랑**
+
+`toggleFollow(targetId, follow)`는 `useMe.ts`에 이미 있던 함수 시그니처. `targetId`는 지금 팔로우 버튼이 붙어있는 프로필 주인의 Sanity `_id`(`FollowButton`의 `userId` prop을 그대로 전달). `follow`는 이 액션 후 도달해야 할 목표 상태를 나타내는 boolean으로, `FollowButton`이 `toggleFollow(userId, !following)`처럼 현재 팔로우 상태의 반대값을 넘겨서 클릭마다 상태가 토글되게 만든다.
+
+**Q2. followers 배열로 낙관적 업데이트를 만들었는데 slice를 어떻게 해야 할지 모르겠다**
+
+세 가지를 짚어야 했다.
+
+1. `followers`가 아니라 `following`을 조작해야 한다 — `followers`는 "나를 팔로우하는 사람들", `following`은 "내가 팔로우하는 사람들"인데, `FollowButton`이 "내가 이 사람을 팔로우했는지" 판정에 읽는 건 `loggedInUser.following`이다.
+2. 배열에서 특정 id를 가진 항목을 제거하려면 인덱스 범위로 잘라내는 `slice`가 아니라, 조건에 맞는 항목만 남기는 `filter`를 써야 한다:
+   ```ts
+   following.filter((item) => item.id !== targetId);
+   ```
+3. SWR의 `optimisticData`는 배열 자체가 아니라 `loggedInUser` 전체를 스프레드하고 `following` 필드만 교체한 객체여야 한다:
+   ```ts
+   { ...loggedInUser, following: 새배열 }
+   ```
+   `setBookmark`가 이미 이 패턴을 쓰고 있었다.
+
+**Q3. `{ id: targetId, username: '', name: '', image: '', title: '' }`처럼 빈 값으로 채우는 이유는?**
+
+SWR의 `optimisticData`는 서버 응답이 오기 전까지 잠깐 화면에 보여줄 임시(낙관적) 데이터다. `following` 배열 항목의 타입(`SimpleUser`)은 `id`/`username`/`name`/`image`/`title` 다섯 필드를 모두 요구하는데, 이 시점(클라이언트에서 방금 팔로우 버튼을 눌렀을 때)에 실제로 아는 값은 대상의 `id`뿐이다.
+
+나머지 필드는 실제로 그 값을 읽어서 화면에 표시하는 곳이 코드베이스 어디에도 없다는 걸 확인했고(팔로우 여부 판정은 `item.id` 비교뿐), 이후 서버 재검증이 오면 실제 값으로 자동 교체되므로 빈 문자열 placeholder로 채워도 안전하다. 즉 타입을 만족시키기 위한 최소한의 더미 값이고, 실질적으로 화면에 노출될 일이 없다.
+
+**Q4. revalidateTag(tag, 'max')가 Next.js에서 올바른 사용법인지 (공식 문서로 검증)**
+
+Next.js 16 공식 문서를 확인한 결과, `'max'`는 버그가 아니라 "블로그 글처럼 약간의 지연이 허용되는 콘텐츠"를 위한 공식 권장 기본값(stale-while-revalidate 방식)이다.
+
+다만 "다음 방문 때도 우선 stale 콘텐츠를 보여준 뒤 백그라운드에서 갱신"하는 방식이라, 사용자가 방금 한 뮤테이션(팔로우, 좋아요, 댓글, 프로필 수정 등)을 즉시 자기 화면에서 확인해야 하는(read-your-own-writes) 라우트에는 적합하지 않다. 이런 경우 공식 문서가 명시한 즉시 무효화 방법은 `revalidateTag(tag, { expire: 0 })`이며, Server Action이 아닌 Route Handler에서는(`updateTag`를 못 쓰므로) 이게 유일한 즉시 무효화 수단이다.
+
+RamBlog의 mutation 라우트 17곳이 전부 `'max'`를 쓰고 있어서, 사용자가 방금 한 행동에 즉시 반영이 필요한 이 라우트들에는 `{ expire: 0 }`으로 일괄 전환했다.
+
