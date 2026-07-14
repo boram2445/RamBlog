@@ -1,10 +1,10 @@
 'use client';
 
-import { ChangeEvent, useRef, useState, useTransition } from 'react';
+import { ChangeEvent, useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 
-const TuiEditors = dynamic(() => import('./TuiEditors'), { ssr: false });
-import { Editor } from '@toast-ui/react-editor';
+const MdEditor = dynamic(() => import('./MdEditor'), { ssr: false });
+
 import { useRouter } from 'next/navigation';
 import { PostDetail } from '@/model/post';
 import Button from '../ui/Button';
@@ -22,7 +22,7 @@ const inputBoxStyle = 'flex gap-2 items-center';
 const inputStyle = 'grow my-1 py-2 px-3';
 
 export default function WritePostForm({ username, id, postDetail }: Props) {
-  const editorRef = useRef<Editor | null>(null);
+  const [content, setContent] = useState(postDetail?.content || '');
   //tag- 배열로 관리하다가 form전송시 string으로 변환
   const initialState = {
     title: postDetail?.title || '',
@@ -61,7 +61,6 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   };
 
   const handleSubmit = async () => {
-    const content = editorRef.current?.getInstance().getMarkdown();
     if (handleAlert(content)) {
       setIsFetching(true);
       await writePost(content, form, id);
@@ -74,48 +73,44 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   };
 
   return (
-    <section className='flex flex-col'>
-      {isMutating && <PageLoader label='업로드중...' />}
-      <div className='my-3 mx-auto max-w-screen-lg w-full tablet:px-4 '>
+    <section className="flex flex-col">
+      {isMutating && <PageLoader label="업로드중..." />}
+      <div className="my-3 mx-auto max-w-screen-lg w-full tablet:px-4 ">
         <div className={inputBoxStyle}>
-          <label htmlFor='title'>제목</label>
+          <label htmlFor="title">제목</label>
           <input
-            type='text'
-            id='title'
-            name='title'
-            placeholder='제목을 입력하세요'
+            type="text"
+            id="title"
+            name="title"
+            placeholder="제목을 입력하세요"
             autoFocus
             value={form.title}
             onChange={handleChange}
             className={`${inputStyle} input`}
-            autoComplete='off'
+            autoComplete="off"
           />
         </div>
         <div className={inputBoxStyle}>
-          <label htmlFor='description'>설명</label>
+          <label htmlFor="description">설명</label>
           <input
-            type='text'
-            id='description'
-            name='description'
-            placeholder='한줄 설명을 입력해주세요'
+            type="text"
+            id="description"
+            name="description"
+            placeholder="한줄 설명을 입력해주세요"
             value={form.description}
             onChange={handleChange}
             className={`${inputStyle} input`}
-            autoComplete='off'
+            autoComplete="off"
           />
         </div>
         <TagsInput tags={form.tags} handleTags={handleTags} />
       </div>
-      <TuiEditors content={postDetail?.content || ' '} editorRef={editorRef} />
-      <div className='m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3'>
-        <Button onClick={() => router.back()} size='big'>
+      <MdEditor value={content} onChange={(value) => setContent(value ?? '')} />
+      <div className="m-3 mx-4 laptop:mx-8 desktop:mx-12 flex justify-end gap-3">
+        <Button onClick={() => router.back()} size="big">
           뒤로가기
         </Button>
-        <Button
-          color='black'
-          onClick={handleSubmit}
-          size='big'
-        >
+        <Button color="black" onClick={handleSubmit} size="big">
           출간하기
         </Button>
       </div>

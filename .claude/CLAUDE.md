@@ -96,6 +96,8 @@ src/
 
 Tailwind 유틸리티 전용. 다크모드 `dark:` prefix. 본문 `prose` 클래스. `global.css` 폰트·reset 외 금지.
 
+**예외**: 서드파티 컴포넌트(예: `@uiw/react-md-editor`)의 내부 DOM 클래스를 오버라이드할 때는 전용 CSS 파일(예: `src/components/post/mdEditor.css`, 컴포넌트와 같은 폴더에 배치) 허용. 라이브러리 CSS import 뒤에 우리 CSS를 import해 명시도 경쟁에서 이기도록 순서 유지. 우리가 작성한 마크업/컴포넌트 스타일은 이 예외와 무관하게 여전히 Tailwind 유틸리티 우선.
+
 ### 작업 절차
 
 1. `package.json` + 영향 받는 폴더의 기존 패턴 확인

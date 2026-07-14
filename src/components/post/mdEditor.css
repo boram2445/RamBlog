@@ -1,0 +1,22 @@
+[data-color-mode] .w-md-editor-toolbar {
+  padding: 4px;
+}
+[data-color-mode] .w-md-editor-toolbar li > button {
+  height: 32px;
+}
+[data-color-mode] .w-md-editor-toolbar svg {
+  width: 16px;
+  height: 16px;
+}
+
+[data-color-mode='light'] .w-md-editor-toolbar li > button {
+  color: #595f6b;
+}
+
+[data-color-mode] .w-md-editor-text,
+[data-color-mode] .w-md-editor-text-input,
+[data-color-mode] .w-md-editor-text-pre,
+[data-color-mode] .w-md-editor-text-pre > code {
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
