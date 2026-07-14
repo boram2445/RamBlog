@@ -39,22 +39,32 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async signIn({ user: { id, name, image, email } }) {
+    async signIn({ user: { id, name, image, email }, account }) {
       if (!email || !id) return false;
-      addUser({
-        id,
-        name: name || '',
-        email,
-        image,
-        username: email.split('@')[0] || '',
-      });
+      if (account?.provider === 'google') {
+        try {
+          await addUser({
+            id: `google.${account?.providerAccountId}`,
+            name: name || '',
+            email,
+            image,
+            username: email.split('@')[0] || '',
+          });
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
+      }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.name = user?.name ?? '';
         token.username = (user as { username?: string }).username ?? '';
-        token.id = user.id;
+        token.id =
+          account?.provider === 'google'
+            ? `google.${account.providerAccountId}`
+            : user.id;
       }
       return token;
     },
@@ -65,8 +75,7 @@ export const authConfig: NextAuthConfig = {
         session.user = {
           ...user,
           name: token.name || user.name,
-          username:
-            (token.username as string) || user.email?.split('@')[0],
+          username: (token.username as string) || user.email?.split('@')[0],
           id: token.id as string,
         };
       }
