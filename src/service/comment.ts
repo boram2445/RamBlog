@@ -50,6 +50,24 @@ const topLevelCommentByKeyQuery = defineQuery(`
   *[_id == $postId][0].comments[_key == $commentId]
 `);
 
+// GROQ 쿼리 결과가 아니라 patch().append()에 넘기는 write payload — typegen 대상 아님
+type CommentWritePayload =
+  | {
+      deleted: boolean;
+      _type: 'loggedInUserComment';
+      comment: string;
+      author: { _ref?: string; _type: 'reference' };
+      createdAt: string;
+    }
+  | {
+      deleted: boolean;
+      _type: 'guestComment';
+      comment: string;
+      name?: string;
+      password?: string;
+      createdAt: string;
+    };
+
 export async function getPostComments(postId: string) {
   return await client.fetch(
     postCommentsQuery,
@@ -64,7 +82,7 @@ export async function getPostComments(postId: string) {
 async function addNestedComment(
   postId: string,
   commentId: string,
-  commentTypeProjection: any
+  commentTypeProjection: CommentWritePayload
 ) {
   // NOTE: findComment의 commentPath와 동일한 종류 — patch 경로 selector라 $param
   // 바인딩 대상이 아님. commentId는 클라이언트 입력 — 트래킹: week2-issues.md
@@ -77,7 +95,10 @@ async function addNestedComment(
     .commit({ autoGenerateArrayKeys: true });
 }
 
-async function addTopLevelComment(postId: string, commentTypeProjection: any) {
+async function addTopLevelComment(
+  postId: string,
+  commentTypeProjection: CommentWritePayload
+) {
   return client
     .patch(postId)
     .setIfMissing({ comments: [] })
@@ -103,7 +124,7 @@ export async function addComment(
   userId?: string
 ) {
   const now = new Date();
-  let commentTypeProjection;
+  let commentTypeProjection: CommentWritePayload;
 
   if (type === 'loggedInUserComment') {
     commentTypeProjection = {
@@ -113,7 +134,7 @@ export async function addComment(
       author: { _ref: userId, _type: 'reference' },
       createdAt: now.toISOString(),
     };
-  } else if (type === 'guestComment') {
+  } else {
     commentTypeProjection = {
       deleted: false,
       _type: 'guestComment',

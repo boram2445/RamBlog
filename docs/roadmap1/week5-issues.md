@@ -20,3 +20,7 @@
 `MdEditor.tsx`의 `commandsFilter`에서 `@uiw/react-md-editor` 툴바 커맨드의 `buttonProps.title`/`aria-label`을 한국어로 번역하는 로직을 추가했다(라이브러리 커맨드가 기본 제공하는 네이티브 `title` 속성 hover 툴팁을 활용하는 방식). devtools로 확인한 결과 `<button>`의 `title` 속성엔 한국어 텍스트가 정확히 들어가 있고, 코드 자체(`commandsFilter` → `useReducer` 초기 상태 반영 경로)도 라이브러리 소스 추적 결과 문제가 없어 보인다. 그런데 Chrome에서 버튼 위에 마우스를 올려도(2초 이상 정지 포함) 네이티브 툴팁이 전혀 뜨지 않는다. Safari의 button title 미지원 이슈는 배제됨(Chrome/Edge에서 재현). 원인 미확정 — React 재렌더링으로 인한 DOM 노드 재생성이 hover 타이머를 리셋하는지, 혹은 다른 브라우저/환경 요인인지 추후 조사 필요.
 
 **왜 이번엔 안 고치나**: 코드(title 속성 자체)는 정상 삽입되고 있고, 순수 브라우저 렌더링/타이밍 문제로 추정되나 확실한 재현 조건을 못 잡았다. Day 31 스코프를 벗어나는 탐구라 보류하고 기록만 남긴다. 필요시 CSS-only 커스텀 툴팁(예: `title` 대신 `data-tooltip` + `::after` 가상요소)으로 대체하는 방안도 고려 가능.
+
+## Day 37 — `comment.ts`의 `any` 2곳은 typegen 쿼리 타입이 아니라 write payload였음 (설계 확인)
+
+roadmap week5.md의 Day 37 항목은 "`src/service/comment.ts`의 `any` 2곳을 typegen 타입으로 대체"라고 적혀 있었는데, 실제로 `addNestedComment`/`addTopLevelComment`의 `commentTypeProjection: any`는 GROQ 쿼리 결과(`client.fetch`)가 아니라 `client.patch().append()`에 넘기는 **write(뮤테이션) payload**다. Sanity TypeGen은 `src/service/**/*.ts`의 GROQ 쿼리만 스캔해 결과 타입을 생성하므로, 쓰기 payload에는 애초에 대응하는 생성 타입이 없다. 대신 `loggedInUserComment`/`guestComment` 두 write shape의 명시 union 타입(`CommentWritePayload`)을 직접 선언해 `any`를 제거했다(`addComment`의 `let commentTypeProjection: CommentWritePayload`도 `else if` → `else`로 정리해 definitely-assigned 확보). typegen 도입만으로는 커버 안 되는 영역이 있다는 걸 보여주는 사례라 남겨둔다.
