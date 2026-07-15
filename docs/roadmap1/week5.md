@@ -1,8 +1,10 @@
-# Week 5: 에디터 교체 + 타입·네이밍·UX 부채 청산 (Day 31–40)
+# Week 5: 에디터 교체 + 타입·네이밍 부채 청산 (Day 31–38)
 
 > **전제**: Week 4(Day 23~30)의 잔여 작업(블로그 6·7·8편, 이미지 성능, 접근성, error 경계, API 핸들러, CI)이 끝난 뒤 착수한다.
 >
-> 구 "30일 이후 선택 트랙" 중 **Track B(에디터 교체)·Track D(네이밍 정리)** 를 이 주차로 편입. **Track C(테스트)는 성능 측정과 묶어 Week 6으로 분리** (상세 week6.md는 추후 작성).
+> 구 "30일 이후 선택 트랙" 중 **Track B(에디터 교체)·Track D(네이밍 정리)** 를 이 주차로 편입. **Track C(테스트)는 성능 측정과 묶어 Week 6으로 분리**.
+>
+> **범위 조정**: 원래 이 주차에 있던 Day 35(삭제 stale 수정)·39(toast 알림)·40(axios→fetch 위생)은 착수 전 **Week 6(Day 41·42·43)으로 이월** — 상세는 [`week6.md`](./week6.md) 참고.
 
 | D | 작업 | 변경 파일 |
 |---|---|---|
@@ -10,13 +12,10 @@
 | ✅ 32 | **에디터 교체 2** — `@toast-ui/*` 4패키지 + `prismjs`/`@types/prismjs` 제거, `pnpm-workspace.yaml`의 `tui-color-picker` override/patch/publicHoistPattern 제거, `patches/tui-color-picker@2.2.8.patch`·`tuiEditor.css`·`TuiEditors.tsx` 삭제, 글쓰기/수정 스모크 | `package.json`, `pnpm-workspace.yaml`, `patches/`, `src/components/post/` |
 | ✅ 33 | **계정 중복 생성 수정(구글 재로그인 안정화)** — 근본원인: `@auth/core`가 OAuth 로그인마다 `user.id`를 `crypto.randomUUID()`로 재생성해 `_id`가 매번 바뀜(재로그인 시 예전 글 소유권도 깨짐). `account.providerAccountId`(구글 `sub`) 기반 canonical `_id`(`google.<sub>`)로 signIn·jwt 콜백 정합. email 기준 크로스 방식 병합은 하지 않음(방침 확정). 기존 중복 데이터 마이그레이션은 별도 스텝으로 분리 | `src/auth.ts`, `src/service/user.ts` |
 | ✅ 34a | **identity/소유권 판정 `_id` 전환** — 좋아요·내 글·팔로우 여부·About 편집·로그 소유·댓글 삭제 판정을 username 문자열 비교에서 `_id`(`_ref`) 비교로 전환(username 중복 시 남의 콘텐츠에 소유 UI가 뜨는 false-positive 제거). URL 스킴/캐시/유일성은 34b로 분리 | `src/service/{posts,comment}.ts`, `src/components/{post,common,about,log,comment}/*` |
-| 34b | **slug 기반 URL/식별 전환(T1~T6)** — username은 유일성 강제 없이 표시 전용 유지, user 문서에 유일·불변 `slug` 필드 신설. `[user]`/`api/[user]` 라우트, service GROQ 필터·캐시태그, SWR키, 내부 링크, SEO 식별 기준을 전부 username에서 `slug`로 전환(기존 `slug=username` 백필로 URL 보존, raw `_id` 미채택) | `sanity-studio/schemas/user.js`, `src/auth.ts`, `src/service/{user,posts,log,search,portfolio,comment}.ts`, `src/app/[user]/**`, `src/app/api/[user]/**`, 링크/훅 다수, `next-sitemap.config.js`/`JsonLd.tsx` |
-| 35 | **삭제 후 목록/상세 stale 수정(별도 태스크)** — 포스트 삭제 성공 시 목록·상세 캐시(SWR `mutate` + `revalidateTag`) 무효화로 stale 화면 제거 | `src/components/post/PostButtonList.tsx`, `src/hooks/useUserPost.ts`, service `revalidateTag` 호출부 |
+| ✅ 34b | **slug 기반 URL/식별 전환(T1~T6)** — username은 유일성 강제 없이 표시 전용 유지, user 문서에 유일·불변 `slug` 필드 신설. `[user]`/`api/[user]` 라우트, service GROQ 필터·캐시태그, SWR키, 내부 링크, SEO 식별 기준을 전부 username에서 `slug`로 전환(기존 `slug=username` 백필로 URL 보존, raw `_id` 미채택) | `sanity-studio/schemas/user.js`, `src/auth.ts`, `src/service/{user,posts,log,search,portfolio,comment}.ts`, `src/app/[user]/**`, `src/app/api/[user]/**`, 링크/훅 다수, `next-sitemap.config.js`/`JsonLd.tsx` |
 | ✅ 36 | **typegen 채택 1** — `src/service/posts.ts` 반환 타입을 typegen 타입(`src/sanity/types.ts`)으로 전환, `as unknown as` 캐스트 2곳 제거(서비스 경계 null 정규화). `getPostDetail`이 실제 `null` 반환 가능함을 발견해 `notFound()` 처리 추가 | `src/service/posts.ts`, `src/model/post.ts`, `src/app/[user]/posts/[id]/page.tsx` |
-| 37 | **typegen 채택 2** — `src/service/user.ts` 캐스트 3곳 + 나머지 service 전환, `src/model/*.ts` 사용처 점진 대체 (컴포넌트 파급 범위 확인하며 진행) | `src/service/user.ts` 외 service 전체, `src/model/*.ts` |
-| 38 | **네이밍 정리(Track D)** — `Avartar` → `Avatar` 11파일 `git mv` + import 일괄 수정, `components/post` ↔ `components/posts` 폴더 통합 | `src/components/ui/Avartar.tsx` 외 10파일, `src/components/post*/` |
-| 39 | **UX** — toast 알림 컴포넌트 신설 + `alert()` 12곳 교체 (`RegisterForm.tsx`의 "알림 컴포넌트 만들어야 함" 주석 해소) | toast 컴포넌트 (신규), `WritePostForm.tsx`·`PostIcons.tsx`·`CommentForm.tsx`·`SigninForm.tsx`·`RegisterForm.tsx`·`LogDetail.tsx`·`ProfileForm.tsx` |
-| 40 | **위생 마무리** — axios 11파일 → fetch 일원화 후 `axios` 의존성 제거, 미사용 `@types/nodemailer` 제거, 좋아요 `_id` 기반 전환(week4 백로그) 착수 여부 재평가 | `src/hooks/*.ts`, 컴포넌트 8파일, `package.json` |
+| ✅ 37 | **typegen 채택 2** — `src/service/user.ts` 캐스트 3곳 제거(서비스 경계 정규화, `HomeUser.posts` 등 latent 필드 제거), `src/service/comment.ts` write payload에 명시 union 타입 부여, 미사용 `SearchUser` 삭제 | `src/service/{user,comment}.ts`, `src/model/user.ts` |
+| ✅ 38 | **네이밍 정리(Track D)** — `Avartar` → `Avatar` 10파일(정의 2 + 소비 8) `git mv` + import 일괄 수정, `components/posts`(`PostList` 1개 살아있는 파일 + dead code `CarouselPosts`) → `components/post`로 최소 통합(폴더 하위 재분류는 범위 밖) | `src/components/ui/Avatar.tsx`(신) 외 9파일, `src/components/post/PostList.tsx`(이동) |
 
 ## 검증
 
@@ -25,10 +24,9 @@
 - **계정 안정화(Day 33)**: 동일 구글 계정 재로그인 시 user 문서 1건 유지(재로그인 후 확인), `/api/[user]/me` 정상 응답
 - **소유권 판정(Day 34a)**: 재로그인 후 내 글/좋아요/팔로우/About/로그/댓글에만 소유 UI 노출, `grep -rn "username ===\|=== .*username\|includes(.*username" src` 0건
 - **라우팅 재설계(Day 34b)**: 신규 가입 시 slug 유일 생성(충돌 시 suffix)·username은 자유(비유일) 유지 확인, 로그인 후 "내 블로그"·프로필/글목록/상세/북마크/로그/검색이 slug로 항상 본인 문서 해석, `grep -rn "author->username ==\|username == \$username" src` 0건(표시용 `author->username` projection 출력은 잔존 가능)
-- **삭제 반영(Day 35)**: 글 삭제 즉시 목록/상세에서 사라지는지 확인(재조회·재접속 없이), SWR `mutate` + `revalidateTag` 이중 무효화 동작 확인
 - **typegen 단계(Day 36~37)**: `pnpm typegen` 재생성 후 타입 에러 0. `as unknown as` 검색 결과 0건
-- **네이밍 단계(Day 38)**: `grep -rn "Avartar" src` 0건, import 깨짐 없이 빌드 통과
-- **UX 단계(Day 39~40)**: `grep -rn "alert(" src` 0건(핵심 플로우), `grep -rln "axios" src` 0건
+- **네이밍 단계(Day 38)**: `grep -rn "Avartar" src` 0건, `grep -rn "components/posts" src` 0건, import 깨짐 없이 빌드 통과
+- Day 35·39·40 검증 항목은 [`week6.md`](./week6.md)로 이동
 
 ---
 
@@ -89,7 +87,7 @@
 
 > **스모크 중 발견·수정한 추가 버그(범위 내 처리)**: (1) `PostIcons.tsx` — 좋아요 0개 글에서 `likes[]._ref`가 `null`이라 `if (!likes) return;` 가드에 걸려 클릭 무반응 → `initialLikes ?? []`로 정규화. (2) `useMe.ts`의 `toggleFollow`에 `setBookmark`처럼 `optimisticData` 추가 → 새로고침 없이 팔로우 버튼 즉시 반영. (3) `revalidateTag(tag, 'max')`가 즉시 무효화가 아니라 stale-while-revalidate라 낙관적 업데이트가 되돌아가고 중복 팔로우가 생기던 근본원인 확인(Next.js 16 공식 문서로 검증) → 프로젝트 전체 17개 호출부를 `revalidateTag(tag, { expire: 0 })`로 전환(`week5-issues.md`의 Day 31 백로그 항목 해소). (4) `FollowButton.tsx` UX 정리 — 반영이 즉시 되니 불필요해진 `PulseLoader` 스피너 제거, 그로 인한 flex stretch 레이아웃 깨짐 수정, `disabled` 시 텍스트 흐림 스타일 제거(`Button.tsx`에서 `disabled`를 실제로 쓰는 소비처가 이 컴포넌트뿐이라 안전).
 
-#### Day 34b — slug 기반 URL/식별 전환 (별도 태스크, T1~T6)
+#### ✅ Day 34b — slug 기반 URL/식별 전환 (별도 태스크, T1~T6)
 
 > 근본원인: username은 유일성이 없고(구글 로그인 자동 생성, 도메인이 다르면 이메일 앞부분이 정당하게 겹칠 수 있음) 조회/라우팅이 임의의 첫 문서를 집어 "내 블로그"가 남의 블로그로 열릴 수 있다. 34a에서 소유권 판정은 이미 `_id`로 안전해졌지만, URL로 사용자를 특정하는 조회 경로는 여전히 username 문자열에 의존한다.
 > 방침(사용자 확정): username 유일성은 강제하지 않는다(표시 전용, 중복 허용). 대신 user 문서에 유일·불변 `slug` 필드를 신설해 식별/조회/캐시/SWR키/내부링크/SEO를 전부 slug로 전환한다. raw `_id`(`google.<sub>`) 직행은 URL이 못생겨지고 기존 URL이 전부 깨져 미채택. 기존 데이터는 `slug=username` 백필로 기존 URL(`/boram`) 보존.
@@ -107,20 +105,11 @@
 | T3-3 | `log.ts`·`search.ts`·`portfolio.ts`: 문자열 보간 필터를 slug 파라미터 바인딩으로 교체 + 캐시태그 slug화, `comment.ts` projection에 `author->slug` 병기 | [x] |
 | T4-1 | `api/[user]/**` 라우트가 slug param을 slug-service로 전달, `revalidateTag`를 세션 `user.slug` 기반으로(api/posts·likes 포함) | [x] |
 | T5-1 | SWR 키 slug화: `useUser`·`useUserPost`·`useLogs`·`useLogDetail`·`useMe`·`Header.tsx`·`SearchList`·`ProfileForm` | [x] |
-| T5-2 | 내부 링크/네비 slug화: `Header`·`TabList`·`FollowNumButtons`·`UserCard`·`UserAvartar`·`Comment`·`PostCard`/`PostListCard`/`AdjacentPostCard`/`PostUserProfile`·`PostButtonList`·`WritePostForm`·`AboutForm`/`AboutHero`·`LogDetail`·`ProfileForm`·`about/edit/page.tsx` | [x] (표시용 `username`과 링크용 `slug`를 분리 — `UserAvartar`/`PostUserProfile` 등에 `slug` prop 신설) |
+| T5-2 | 내부 링크/네비 slug화: `Header`·`TabList`·`FollowNumButtons`·`UserCard`·`UserAvatar`·`Comment`·`PostCard`/`PostListCard`/`AdjacentPostCard`/`PostUserProfile`·`PostButtonList`·`WritePostForm`·`AboutForm`/`AboutHero`·`LogDetail`·`ProfileForm`·`about/edit/page.tsx` | [x] (표시용 `username`과 링크용 `slug`를 분리 — `UserAvatar`/`PostUserProfile` 등에 `slug` prop 신설. 파일명은 Day 38에서 `UserAvartar`→`UserAvatar`로 리네이밍됨) |
 | T6-1 | SEO slug화: `[user]/posts/[id]/page.tsx` canonical, `JsonLd.tsx`, `next-sitemap.config.js` | [x] |
 | T6-2 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit`(+`pnpm typegen`) 무경고 + 프로필/글목록/상세/글쓰기/팔로우/검색 스모크 | [x] (빌드/린트/타입체크 무경고. 공개 라우트 curl 스모크: 홈·프로필·글상세·팔로워·팔로잉·검색·로그·about 전부 200) |
-| T6-3 | 스모크: 로그인 후 "내 블로그" 진입이 항상 본인 문서로 해석되는지, 신규 가입 시 slug 충돌 처리가 되는지 확인 | [ ] (공개 라우트는 slug로 정상 해석 확인 완료 — 로그인 필요한 "내 블로그"·글쓰기·팔로우 등은 개발 서버 띄워둔 상태에서 사용자 직접 확인 필요) |
-| T6-4 | Day 34b 개념 Q&A 서브에이전트(general-purpose) 위임해 `learning-notes.md` 기록 | [ ] |
-
-#### Day 35 — 삭제 후 목록/상세 stale 수정 (별도 태스크)
-
-| # | 할 일 | ✓ |
-|---|---|---|
-| 1 | `src/components/post/PostButtonList.tsx:25-37` 삭제 성공 후 SWR `mutate`로 목록 키 무효화 추가 (`useUserPost`의 `/api/.../posts` 키) | [ ] |
-| 2 | `router.refresh()`/`router.push` 순서 및 `revalidateTag`(서버) ↔ SWR(클라) 이중 캐시 정합성 점검 | [ ] |
-| 3 | 스모크: 글 삭제 즉시 목록·상세에서 사라지는지 확인 (재조회/재접속 없이) | [ ] |
-| 4 | Day 작업 중 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+| T6-3 | 스모크: 로그인 후 "내 블로그" 진입이 항상 본인 문서로 해석되는지, 신규 가입 시 slug 충돌 처리가 되는지 확인 | [x] (사용자 직접 확인 완료) |
+| T6-4 | Day 34b 개념 Q&A 서브에이전트(general-purpose) 위임해 `learning-notes.md` 기록 | [x] |
 
 #### ✅ Day 36 — typegen 채택 1 (posts service)
 
@@ -135,44 +124,29 @@
 | 5 | `pnpm typegen && pnpm exec tsc --noEmit` 통과 | [x] (`pnpm build && pnpm lint`도 무경고 확인. `grep -rn "as unknown as" src/service/posts.ts src/model/post.ts` 0건) |
 | 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] (`/auto`로 진행해 Learn by Doing 대화가 없어 기록할 Q&A 없음 — 생략) |
 
-#### Day 37 — typegen 채택 2 (나머지 service + model 정리)
+#### ✅ Day 37 — typegen 채택 2 (나머지 service + model 정리)
+
+> Day 34b(slug 전환)와 대상 파일이 겹쳐 병행 진행됨 — `user.ts`/`model/user.ts`의 캐스트 제거가 slug 전환과 자연스럽게 합쳐짐(예: `getUserByUsername`→`getUserBySlug`).
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | `src/service/user.ts:121,153,183` `as unknown as` 3곳 제거 | [ ] |
-| 2 | `src/service/comment.ts`의 `any` 2곳(`:65`, `:78`) typegen 타입으로 대체 | [ ] |
-| 3 | 사용처가 사라진 `src/model/*.ts` 타입 삭제 (전부 대체 안 되면 남는 것 목록화해 이슈 기록) | [ ] |
-| 4 | `pnpm typegen && pnpm build && pnpm exec tsc --noEmit` 통과 | [ ] |
-| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+| 1 | `src/service/user.ts:121,153,183` `as unknown as` 3곳 제거 | [x] (`loginWithEmail`은 캐스트만 삭제하고 생성 타입 그대로 반환, `auth.ts`에서 `res.password ?? ''`로 null 방어. `getUserBySlug`/`getUserForProfile`은 `HomeUser \| null`/`ProfileUser \| null`로 정정 후 서비스 경계에서 필드별 coalesce) |
+| 2 | `src/service/comment.ts`의 `any` 2곳(`:65`, `:78`) typegen 타입으로 대체 | [x] (이건 쿼리 결과가 아니라 mutation write payload라 typegen 쿼리 타입 적용 불가 — `loggedInUserComment`/`guestComment` write shape의 명시 union `CommentWritePayload` 신설. roadmap 문구와 실제 처리 방식 차이는 `week5-issues.md` 기록) |
+| 3 | 사용처가 사라진 `src/model/*.ts` 타입 삭제 (전부 대체 안 되면 남는 것 목록화해 이슈 기록) | [x] (`SearchUser` 삭제 — 외부 importer 0, `ProfileUser`에 `following`/`followers` 인라인. `HomeUser.posts`는 `userBySlugQuery`가 투영도 안 하고 소비처도 없는 latent 필드였음을 발견해 제거. `AuthUser`/`ProfileUser`/`HomeUser`/`UserData`/`SimpleUser`/`Links`/`OAuthUser`/`Comment`는 소비처 다수 + nullable 갭으로 유지) |
+| 4 | `pnpm typegen && pnpm build && pnpm exec tsc --noEmit` 통과 | [x] (무경고. `pnpm lint`도 확인. `grep -rn "as unknown as" src` / `grep -rn ": any\b" src/service` 0건) |
+| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] (`/auto`로 진행해 Learn by Doing 대화가 없어 기록할 Q&A 없음 — 생략) |
 
-#### Day 38 — 네이밍 정리 (Track D)
+#### ✅ Day 38 — 네이밍 정리 (Track D)
 
-| # | 할 일 | ✓ |
-|---|---|---|
-| 1 | `git mv src/components/ui/Avartar.tsx src/components/ui/Avatar.tsx` + 컴포넌트/타입명 리네이밍 | [ ] |
-| 2 | `UserAvartar.tsx` → `UserAvatar.tsx` 동일 처리 | [ ] |
-| 3 | import하는 나머지 9파일 일괄 수정 (`grep -rn "Avartar" src` 0건 확인) | [ ] |
-| 4 | `components/post` ↔ `components/posts` 폴더 역할 정리·통합 (도메인 기준 재배치) | [ ] |
-| 5 | `pnpm build && pnpm lint` 통과 | [ ] |
-| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
-
-#### Day 39 — toast 알림 도입
+> `/auto`로 진행. `components/post`↔`components/posts` 통합 범위는 **최소 통합**으로 확정(진행 중인 Day 34b T2~T6 slug 전환과의 경로 충돌 회피) — 하위 재분류(detail/list/editor)와 오배치 컴포넌트(`PasswordForm`→comment, `TagsInput` 공유화) 이동은 범위 밖으로 분리.
 
 | # | 할 일 | ✓ |
 |---|---|---|
-| 1 | toast 컴포넌트/컨텍스트 신설 (라이브러리 vs 자체 구현 결정 포함) | [ ] |
-| 2 | `alert()` 12곳 교체 — `WritePostForm`(2) · `PostIcons`(2) · `CommentForm`(3) · `SigninForm`(1) · `RegisterForm`(1) · `LogDetail`(1) · `ProfileForm`(2) | [ ] |
-| 3 | `RegisterForm.tsx`의 `//알림 컴포넌트 만들어야 함` 주석 제거 | [ ] |
-| 4 | `pnpm build` 통과 + 성공/실패 토스트 노출 스모크 | [ ] |
-| 5 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+| 1 | `git mv src/components/ui/Avartar.tsx src/components/ui/Avatar.tsx` + 컴포넌트/타입명 리네이밍 | [x] |
+| 2 | `UserAvartar.tsx` → `UserAvatar.tsx` 동일 처리 | [x] |
+| 3 | import하는 나머지 8파일(조사 결과 9파일이 아닌 8파일) 일괄 수정 (`grep -rn "Avartar" src` 0건 확인) | [x] |
+| 4 | `components/post` ↔ `components/posts` 폴더 역할 정리·통합 (도메인 기준 재배치) | [x] (조사 결과 `posts/`는 실질 파일 1개(`PostList`)뿐이었고 `CarouselPosts`는 사용처 0건인 dead code — `CarouselPosts` 삭제 + `PostList`를 `post/`로 이동, 빈 `posts/` 폴더 제거) |
+| 5 | `pnpm build && pnpm lint` 통과 | [x] (무경고. `grep -rn "Avartar\|components/posts" src` 0건) |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] (`/auto`로 진행해 Learn by Doing 대화가 없어 기록할 Q&A 없음 — 생략) |
 
-#### Day 40 — HTTP 클라이언트 일원화 + 의존성 위생
-
-| # | 할 일 | ✓ |
-|---|---|---|
-| 1 | axios 사용 11파일(훅 3 + 컴포넌트 8)을 fetch 기반으로 전환 | [ ] |
-| 2 | `axios` 의존성 제거 | [ ] |
-| 3 | 미사용 `@types/nodemailer` 제거 | [ ] |
-| 4 | 좋아요 `_id` 기반 전환(week4-issues.md 백로그) — Week 5에서 처리할지 Week 6 이후로 보낼지 재평가·기록 | [ ] |
-| 5 | `pnpm build && pnpm lint && pnpm exec tsc --noEmit` 통과 + 좋아요/북마크/댓글/팔로우 스모크 | [ ] |
-| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+> Day 35(삭제 stale 수정)·39(toast 알림)·40(axios→fetch 위생)는 착수 전 **Week 6(Day 41·42·43)** 으로 이월 — 상세는 [`week6.md`](./week6.md) 참고.
