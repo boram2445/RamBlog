@@ -10,7 +10,7 @@ import { UserData } from '@/model/user';
 import useUser from '@/hooks/useUser';
 import Button from '../ui/Button';
 import DarkMode from '../ui/DarkMode';
-import UserAvartar from './UserAvartar';
+import UserAvatar from './UserAvatar';
 import DropDownNav from './DropDownNav';
 import PlanetLogo from '../../asset/icons/planet_logo.svg';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
@@ -91,7 +91,7 @@ export default function Header() {
                 Write Post
               </Link>
               <div ref={btnRef} className='relative'>
-                <UserAvartar
+                <UserAvatar
                   imageUrl={loginUser.image}
                   username={loginUser.username}
                   size='medium'

@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Avartar, { AvartarLoading } from '../ui/Avartar';
+import Avatar, { AvatarLoading } from '../ui/Avatar';
 import { useRouter } from 'next/navigation';
 import Skeleton from '../ui/Skeleton';
 
@@ -15,7 +15,7 @@ type Props = {
   icon?: ReactNode;
 };
 
-export default function UserAvartar({
+export default function UserAvatar({
   imageUrl,
   username,
   slug,
@@ -37,7 +37,7 @@ export default function UserAvartar({
         type === 'link' ? () => router.push(`/${slug ?? username}`) : onClick
       }
     >
-      <Avartar imageUrl={imageUrl} username={username} type={size} />
+      <Avatar imageUrl={imageUrl} username={username} type={size} />
       <div
         className={`${size === 'small' && 'text-sm'} ${
           type === 'link' ? 'hover:underline' : ''
@@ -50,10 +50,10 @@ export default function UserAvartar({
   );
 }
 
-export function UserAvartarLoading({ size }: { size: 'small' | 'medium' }) {
+export function UserAvatarLoading({ size }: { size: 'small' | 'medium' }) {
   return (
     <div className='flex gap-2 items-center'>
-      <AvartarLoading type={size} />
+      <AvatarLoading type={size} />
       <Skeleton className={'w-[5rem] h-[1.25rem]'} />
     </div>
   );

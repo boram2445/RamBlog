@@ -5,7 +5,7 @@ import Date from "../ui/Date";
 import Toc from "./Toc";
 import PostButtonList from "./PostButtonList";
 import { AuthUser } from "@/model/user";
-import UserAvartar, { UserAvartarLoading } from "../common/UserAvartar";
+import UserAvatar, { UserAvatarLoading } from "../common/UserAvatar";
 import { AdjacentPost, PostDetail as PostDetailType } from "@/model/post";
 import PostIcons from "./PostIcons";
 import Skeleton from "../ui/Skeleton";
@@ -54,7 +54,7 @@ export default async function PostDetail({
         </h1>
         <div className="flex justify-between">
           <div className="flex gap-4 flex-col tablet:flex-row">
-            <UserAvartar
+            <UserAvatar
               imageUrl={userImage}
               username={username}
               slug={slug}
@@ -107,7 +107,7 @@ export function PostDetailLoading() {
         <Skeleton className="mb-6 mt-4 w-2/3 h-[3rem]" />
         <div className="flex justify-between">
           <div className="flex gap-4 items-center">
-            <UserAvartarLoading size="small" />
+            <UserAvatarLoading size="small" />
             <Skeleton className="w-[10rem] h-[1.5rem]" />
           </div>
         </div>

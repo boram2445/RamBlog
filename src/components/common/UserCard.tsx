@@ -1,6 +1,6 @@
 import { SimpleUser } from '@/model/user';
 import FollowButton from './FollowButton';
-import Avartar from '../ui/Avartar';
+import Avatar from '../ui/Avatar';
 import { useRouter } from 'next/navigation';
 
 type Props = {
@@ -17,7 +17,7 @@ export default function UserCard({ followUser }: Props) {
         className='cursor-pointer'
         onClick={() => router.push(`/${slug}`)}
       >
-        <Avartar imageUrl={image ?? ''} username={username} type='medium' />
+        <Avatar imageUrl={image ?? ''} username={username} type='medium' />
       </div>
       <div className='ml-1 grow flex flex-col gap-1'>
         <h3

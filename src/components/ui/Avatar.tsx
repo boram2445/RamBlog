@@ -1,15 +1,15 @@
 import Image from 'next/image';
 import Skeleton from './Skeleton';
 
-export type AvartarSize = 'small' | 'medium' | 'big' | 'xl' | 'max';
+export type AvatarSize = 'small' | 'medium' | 'big' | 'xl' | 'max';
 
 type Props = {
   imageUrl?: string;
   username: string;
-  type?: AvartarSize;
+  type?: AvatarSize;
 };
 
-export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
+export default function Avatar({ imageUrl, username, type = 'small' }: Props) {
   return (
     <div
       className={`relative rounded-full overflow-hidden ${getSizeStyle(type)}`}
@@ -30,7 +30,7 @@ export default function Avartar({ imageUrl, username, type = 'small' }: Props) {
   );
 }
 
-export function AvartarLoading({ type }: { type: AvartarSize }) {
+export function AvatarLoading({ type }: { type: AvatarSize }) {
   return (
     <Skeleton
       className={`rounded-full overflow-hidden ${getSizeStyle(type)}`}
@@ -38,7 +38,7 @@ export function AvartarLoading({ type }: { type: AvartarSize }) {
   );
 }
 
-function getSizeStyle(size: AvartarSize) {
+function getSizeStyle(size: AvatarSize) {
   switch (size) {
     case 'small':
       return 'w-8 h-8';

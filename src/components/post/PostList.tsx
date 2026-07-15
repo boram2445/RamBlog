@@ -2,7 +2,7 @@
 
 import useUserPost from '@/hooks/useUserPost';
 import { ProfileUser } from '@/model/user';
-import PostListCard, { PostListCardLoading } from '../post/PostListCard';
+import PostListCard, { PostListCardLoading } from './PostListCard';
 import UserTagList from '../user/UserTagList';
 import { useState } from 'react';
 

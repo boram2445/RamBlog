@@ -1,6 +1,6 @@
 'use client';
 
-import Avartar from '../ui/Avartar';
+import Avatar from '../ui/Avatar';
 import { useRouter } from 'next/navigation';
 import { BsPlusSquare } from 'react-icons/bs';
 import { AiOutlineMinusSquare } from 'react-icons/ai';
@@ -66,7 +66,7 @@ export default function Comment({
       {!deleted && (
         <div className='flex justify-between'>
           <div className='mb-2 flex items-center gap-4'>
-            <Avartar imageUrl={image} username={username} type='big' />
+            <Avatar imageUrl={image} username={username} type='big' />
             <div className='flex flex-col gap-1'>
               <span
                 className={`text-semibold ${

@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import PageLoader from '../ui/PageLoader';
 import { useSWRConfig } from 'swr';
-import UserAvartar from '../common/UserAvartar';
+import UserAvatar from '../common/UserAvatar';
 import { AiOutlineHeart } from 'react-icons/ai';
 import ArrowButton from '../ui/ArrowButton';
 import useLogDetail from '@/hooks/useLogDetail';
@@ -82,7 +82,7 @@ export default function LogDetail({
           </div>
           <div className='w-full h-full tablet:w-1/2 flex flex-col'>
             <div className='flex justify-between p-3 border-b border-gray-200 dark:border-neutral-700'>
-              <UserAvartar
+              <UserAvatar
                 username={username}
                 slug={slug}
                 imageUrl={log.currentLog.userImage}

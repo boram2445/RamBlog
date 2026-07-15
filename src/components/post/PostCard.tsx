@@ -1,7 +1,7 @@
 import Image from "next/image";
 import TagList from "../common/TagList";
 import Date from "../ui/Date";
-import UserAvartar, { UserAvartarLoading } from "../common/UserAvartar";
+import UserAvatar, { UserAvatarLoading } from "../common/UserAvatar";
 import { SimplePost } from "@/model/post";
 import Skeleton from "../ui/Skeleton";
 import LikeNumIcon from "../common/LikeNumIcon";
@@ -68,7 +68,7 @@ export default function PostCard({
           </div>
         </div>
         <div className="p-2 flex justify-between border-t border-gray-100 dark:border-neutral-700">
-          <UserAvartar username={username} slug={slug} imageUrl={userImage} />
+          <UserAvatar username={username} slug={slug} imageUrl={userImage} />
           <LikeNumIcon likes={likes} className="mr-2 dark:text-slate-500" />
         </div>
       </div>
@@ -86,7 +86,7 @@ export function PostCardLoading() {
           <Skeleton className="w-5/6 h-[1.25rem]" />
         </div>
         <div className="p-2 flex justify-between items-center border-t border-gray-100 dark:border-neutral-700">
-          <UserAvartarLoading size="small" />
+          <UserAvatarLoading size="small" />
           <Skeleton className="w-[4rem] h-[1.25rem]" />
         </div>
       </div>

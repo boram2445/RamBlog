@@ -1,4 +1,4 @@
-import PostList from '@/components/posts/PostList';
+import PostList from '@/components/post/PostList';
 import { getUserForProfile } from '@/service/user';
 import { notFound } from 'next/navigation';
 

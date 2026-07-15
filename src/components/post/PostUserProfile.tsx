@@ -1,7 +1,7 @@
 "use client";
 
 import useUser from "@/hooks/useUser";
-import Avartar from "../ui/Avartar";
+import Avatar from "../ui/Avatar";
 import LinkButtons from "../user/LinkButtons";
 import Link from "next/link";
 
@@ -21,7 +21,7 @@ export default function PostUserProfile({ username, slug }: Props) {
             href={`/${slug}`}
             className="flex items-center gap-3 cursor-pointer"
           >
-            <Avartar
+            <Avatar
               imageUrl={userProfile?.image}
               username={username}
               type="xl"

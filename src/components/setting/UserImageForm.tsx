@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import Avartar from '../ui/Avartar';
+import Avatar from '../ui/Avatar';
 import { AiOutlineCamera } from 'react-icons/ai';
 
 type Props = {
@@ -13,7 +13,7 @@ export default function UserImageForm({ image, username, onChange }: Props) {
     <div>
       <div className='relative'>
         <div className='p-3 border border-gray-200 rounded-full dark:border-neutral-700'>
-          <Avartar
+          <Avatar
             imageUrl={
               !image
                 ? ''
