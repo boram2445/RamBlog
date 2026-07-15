@@ -46,8 +46,8 @@ export const POST = withErrorHandler(async (req: NextRequest, context: Context) 
       mainImage
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`, { expire: 0 });
-    revalidateTag(`posts/${user.username}`, { expire: 0 });
+    revalidateTag(`tags/${user.slug}`, { expire: 0 });
+    revalidateTag(`posts/${user.slug}`, { expire: 0 });
     revalidateTag('posts', { expire: 0 });
 
     return result;
@@ -63,8 +63,8 @@ export const DELETE = withErrorHandler(async (_: NextRequest, context: Context) 
 
     const result = await deletePost(id).then((data) => NextResponse.json(data));
 
-    revalidateTag(`tags/${user.username}`, { expire: 0 });
-    revalidateTag(`posts/${user.username}`, { expire: 0 });
+    revalidateTag(`tags/${user.slug}`, { expire: 0 });
+    revalidateTag(`posts/${user.slug}`, { expire: 0 });
     revalidateTag('posts', { expire: 0 });
 
     return result;

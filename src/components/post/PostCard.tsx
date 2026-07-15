@@ -23,6 +23,7 @@ export default function PostCard({
     mainImage,
     createdAt,
     username,
+    slug,
     userImage,
     likes,
   } = post;
@@ -30,7 +31,7 @@ export default function PostCard({
   return (
     <article className="relative mx-auto w-full h-[352px] tablet:h-76 overflow-hidden shadow-md rounded-lg animate-fade-in hover:-translate-y-3  transition-transform ease-in-out duration-300 dark:bg-neutral-800">
       {mainImage && (
-        <Link href={`/${username}/posts/${id}`}>
+        <Link href={`/${slug}/posts/${id}`}>
           <Image
             src={mainImage}
             alt={`${title}이미지`}
@@ -46,7 +47,7 @@ export default function PostCard({
         <div className="grow px-3 py-2 flex flex-col">
           <TagList tags={tags} />
           <Link
-            href={`/${username}/posts/${id}`}
+            href={`/${slug}/posts/${id}`}
             className="grow flex flex-col cursor-pointer"
           >
             <div>
@@ -67,7 +68,7 @@ export default function PostCard({
           </div>
         </div>
         <div className="p-2 flex justify-between border-t border-gray-100 dark:border-neutral-700">
-          <UserAvartar username={username} imageUrl={userImage} />
+          <UserAvartar username={username} slug={slug} imageUrl={userImage} />
           <LikeNumIcon likes={likes} className="mr-2 dark:text-slate-500" />
         </div>
       </div>

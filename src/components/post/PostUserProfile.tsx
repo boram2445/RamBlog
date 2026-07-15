@@ -7,17 +7,18 @@ import Link from "next/link";
 
 type Props = {
   username: string;
+  slug: string;
 };
 
-export default function PostUserProfile({ username }: Props) {
-  const { userProfile } = useUser(username);
+export default function PostUserProfile({ username, slug }: Props) {
+  const { userProfile } = useUser(slug);
 
   return (
     <div className="mt-3">
       {userProfile && (
         <div className="p-10 flex gap-6 items-center justify-center">
           <Link
-            href={`/${username}`}
+            href={`/${slug}`}
             className="flex items-center gap-3 cursor-pointer"
           >
             <Avartar

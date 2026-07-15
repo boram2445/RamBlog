@@ -37,6 +37,7 @@ export default function Comment({
   const {
     image,
     username,
+    slug,
     comment: text,
     createdAt,
     type,
@@ -72,7 +73,7 @@ export default function Comment({
                   type === 'loggedInUserComment' &&
                   'hover:underline cursor-pointer'
                 }`}
-                onClick={() => router.push(`/${username}`)}
+                onClick={() => slug && router.push(`/${slug}`)}
               >
                 {username}
               </span>

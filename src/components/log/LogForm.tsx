@@ -8,14 +8,14 @@ import { mutate } from "swr";
 import PageLoader from "../ui/PageLoader";
 
 type Props = {
-  username: string;
+  slug: string;
   resetSelect: () => void;
   closeForm: () => void;
 };
 
 const inputStyle = "py-2 px-3 w-full input";
 
-export default function LogForm({ username, resetSelect, closeForm }: Props) {
+export default function LogForm({ slug, resetSelect, closeForm }: Props) {
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<string>(
     getDate(new Date().toISOString(), "day"),
@@ -49,11 +49,11 @@ export default function LogForm({ username, resetSelect, closeForm }: Props) {
     );
 
     axios
-      .post(`/api/${username}/logs`, formData)
+      .post(`/api/${slug}/logs`, formData)
       .then(() => {
         resetSelect();
-        mutate(`/api/${username}/logs`);
-        mutate(`/api/${username}/logs/log`);
+        mutate(`/api/${slug}/logs`);
+        mutate(`/api/${slug}/logs/log`);
       })
       .catch((err) => setError(err.toString()))
       .finally(() => {

@@ -17,6 +17,7 @@ import Skeleton from '../ui/Skeleton';
 type Props = {
   logId: string;
   username: string;
+  slug: string;
   thumbnail?: string;
   title: string;
   selectedEmotion: 'all' & Emotion;
@@ -27,12 +28,13 @@ type Props = {
 export default function LogDetail({
   logId,
   username,
+  slug,
   selectedEmotion,
   resetSelect,
   onClose,
 }: Props) {
   const [detailId, setDetailId] = useState(logId);
-  const { log } = useLogDetail(username, detailId, selectedEmotion);
+  const { log } = useLogDetail(slug, detailId, selectedEmotion);
 
   const router = useRouter();
   const { mutate } = useSWRConfig();
@@ -46,15 +48,15 @@ export default function LogDetail({
     if (confirm('정말로 삭제하시겠습니까?😥')) {
       setIsFetching(true);
       await axios
-        .delete(`/api/${username}/logs/log/${logId}`)
+        .delete(`/api/${slug}/logs/log/${logId}`)
         .catch((err) => setError(err.toString()));
       setIsFetching(false);
       startTransition(() => {
         onClose();
         resetSelect();
-        mutate(`/api/${username}/logs`);
+        mutate(`/api/${slug}/logs`);
         router.refresh();
-        router.push(`/${username}/log`);
+        router.push(`/${slug}/log`);
       });
     }
   };
@@ -82,6 +84,7 @@ export default function LogDetail({
             <div className='flex justify-between p-3 border-b border-gray-200 dark:border-neutral-700'>
               <UserAvartar
                 username={username}
+                slug={slug}
                 imageUrl={log.currentLog.userImage}
               />
               <div className='flex gap-2'>

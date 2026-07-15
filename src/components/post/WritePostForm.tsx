@@ -13,7 +13,7 @@ import useUserPost from '@/hooks/useUserPost';
 import PageLoader from '../ui/PageLoader';
 
 type Props = {
-  username: string;
+  slug: string;
   id?: string;
   postDetail?: PostDetail;
 };
@@ -21,7 +21,7 @@ type Props = {
 const inputBoxStyle = 'flex gap-2 items-center';
 const inputStyle = 'grow my-1 py-2 px-3';
 
-export default function WritePostForm({ username, id, postDetail }: Props) {
+export default function WritePostForm({ slug, id, postDetail }: Props) {
   const [content, setContent] = useState(postDetail?.content || '');
   //tag- 배열로 관리하다가 form전송시 string으로 변환
   const initialState = {
@@ -35,7 +35,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState(initialState);
-  const { writePost } = useUserPost(username, 'all');
+  const { writePost } = useUserPost(slug, 'all');
 
   const isMutating = isFetching || isPending;
 
@@ -66,7 +66,7 @@ export default function WritePostForm({ username, id, postDetail }: Props) {
       await writePost(content, form, id);
       setIsFetching(false);
       startTransition(() => {
-        const url = id ? `/${username}/posts/${id}` : `/${username}`;
+        const url = id ? `/${slug}/posts/${id}` : `/${slug}`;
         router.push(url);
       });
     }

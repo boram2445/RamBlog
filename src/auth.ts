@@ -2,7 +2,12 @@ import NextAuth, { type NextAuthConfig } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
-import { addUser, loginWithEmail } from '@/service/user';
+import {
+  addUser,
+  generateUniqueSlug,
+  getUserSlug,
+  loginWithEmail,
+} from '@/service/user';
 import { env } from '@/lib/env';
 
 export const authConfig: NextAuthConfig = {
@@ -28,13 +33,20 @@ export const authConfig: NextAuthConfig = {
 
         const checkPassword = await compare(
           credentials.password as string,
-          res.password
+          res.password ?? ''
         );
         if (!checkPassword || res.email !== credentials.email) {
           throw new Error('이메일 혹은 패스워드가 일치하지 않습니다.');
         }
 
-        return res;
+        return {
+          id: res.id,
+          email: res.email ?? '',
+          name: res.name ?? '',
+          username: res.username ?? '',
+          slug: res.slug ?? '',
+          image: res.image ?? undefined,
+        };
       },
     }),
   ],
@@ -43,12 +55,15 @@ export const authConfig: NextAuthConfig = {
       if (!email || !id) return false;
       if (account?.provider === 'google') {
         try {
+          const username = email.split('@')[0] || '';
+          const slug = await generateUniqueSlug(username);
           await addUser({
             id: `google.${account?.providerAccountId}`,
             name: name || '',
             email,
             image,
-            username: email.split('@')[0] || '',
+            username,
+            slug,
           });
         } catch (error) {
           console.error(error);
@@ -65,6 +80,12 @@ export const authConfig: NextAuthConfig = {
           account?.provider === 'google'
             ? `google.${account.providerAccountId}`
             : user.id;
+        // credentials 로그인은 loginWithEmail이 slug를 이미 실어주지만,
+        // google 로그인은 next-auth 기본 User(구글 profile)라 slug가 없어 별도 조회 필요.
+        token.slug =
+          (user as { slug?: string }).slug ??
+          (await getUserSlug(token.id as string)) ??
+          '';
       }
       return token;
     },
@@ -76,6 +97,7 @@ export const authConfig: NextAuthConfig = {
           ...user,
           name: token.name || user.name,
           username: (token.username as string) || user.email?.split('@')[0],
+          slug: (token.slug as string) || '',
           id: token.id as string,
         };
       }

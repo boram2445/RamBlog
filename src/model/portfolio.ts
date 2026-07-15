@@ -1,6 +1,7 @@
 export type Portfolio = PostPortfolio & {
   id: string;
   username: string;
+  slug: string;
 };
 
 export type PostPortfolio = {

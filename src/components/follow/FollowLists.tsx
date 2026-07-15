@@ -5,12 +5,12 @@ import UserCard from '../common/UserCard';
 import MiniLoader from '../ui/MiniLoader';
 
 type Props = {
-  username: string;
+  slug: string;
   type: 'follower' | 'following';
 };
 
-export default function FollowLists({ username, type }: Props) {
-  const { userProfile, isLoading, error } = useUser(username);
+export default function FollowLists({ slug, type }: Props) {
+  const { userProfile, isLoading, error } = useUser(slug);
 
   const list =
     type === 'follower' ? userProfile?.followers : userProfile?.following;

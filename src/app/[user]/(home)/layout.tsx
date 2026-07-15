@@ -18,7 +18,7 @@ export default async function UserTemplate(props: Props) {
 
   const userData = await getUserForProfile(user);
 
-  if (!userData?.username) notFound();
+  if (!userData) notFound();
 
   return (
     <div className="mx-auto max-w-3xl laptop:max-w-5xl">

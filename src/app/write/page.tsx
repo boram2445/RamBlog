@@ -20,7 +20,7 @@ export default async function NewPage() {
 
   return (
     <>
-      <WritePostForm username={user.username} />
+      <WritePostForm slug={user.slug} />
     </>
   );
 }

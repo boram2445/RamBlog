@@ -9,11 +9,13 @@ declare module 'next-auth' {
 
   interface User extends DefaultUser {
     username: string;
+    slug?: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT extends DefaultJWT {
     username?: string;
+    slug?: string;
   }
 }

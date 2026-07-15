@@ -21,7 +21,7 @@ export default function FollowNumButtons({ user }: Props) {
         <li
           key={index}
           className='py-1 px-3 flex gap-2 rounded-full hover:bg-gray-50 cursor-pointer text-gray-700 dark:text-slate-300 dark:hover:bg-neutral-800'
-          onClick={() => router.push(`/${user.username}/${name}`)}
+          onClick={() => router.push(`/${user.slug}/${name}`)}
         >
           {label}
           <span className='font-semibold mr-1'>{number}</span>

@@ -26,17 +26,17 @@ module.exports = {
     }
 
     try {
-      const [posts, usernames, tagNames] = await Promise.all([
+      const [posts, slugs, tagNames] = await Promise.all([
         sanityClient.fetch(
-          `*[_type == "post" && defined(author->username)]{ "id":_id, "username":author->username, "updatedAt":_updatedAt }`
+          `*[_type == "post" && defined(author->slug)]{ "id":_id, "slug":author->slug, "updatedAt":_updatedAt }`
         ),
-        sanityClient.fetch(`*[_type == "user" && defined(username)].username`),
+        sanityClient.fetch(`*[_type == "user" && defined(slug)].slug`),
         sanityClient.fetch(`array::unique(*[_type == "post"].tags[]->tagName)`),
       ]);
 
       const postFields = await Promise.all(
         posts.map((post) =>
-          config.transform(config, `/${post.username}/posts/${post.id}`).then((field) => ({
+          config.transform(config, `/${post.slug}/posts/${post.id}`).then((field) => ({
             ...field,
             lastmod: new Date(post.updatedAt).toISOString(),
           }))
@@ -44,7 +44,7 @@ module.exports = {
       );
 
       const userFields = await Promise.all(
-        usernames.map((username) => config.transform(config, `/${username}`))
+        slugs.map((slug) => config.transform(config, `/${slug}`))
       );
 
       const tagFields = await Promise.all(

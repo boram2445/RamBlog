@@ -5,11 +5,9 @@ import { useCallback } from 'react';
 import { getMainImageUrl } from '@/utils/mainImage';
 import { SimplePost } from '@/model/post';
 
-export default function useUserPost(username: string, tag: string) {
+export default function useUserPost(slug: string, tag: string) {
   const url =
-    tag === 'all'
-      ? `/api/${username}/posts`
-      : `/api/${username}/posts/tags/${tag}`;
+    tag === 'all' ? `/api/${slug}/posts` : `/api/${slug}/posts/tags/${tag}`;
 
   const { data: posts, isLoading, error } = useSWR<SimplePost[]>(url);
   const { mutate } = useSWRConfig();
@@ -26,11 +24,9 @@ export default function useUserPost(username: string, tag: string) {
       content.trim() && formData.append('content', content);
 
       const url = postId ? `/api/posts/${postId}` : '/api/posts';
-      await axios
-        .post(url, formData)
-        .then(() => mutate(`/api/${username}/posts`));
+      await axios.post(url, formData).then(() => mutate(`/api/${slug}/posts`));
     },
-    [mutate, username]
+    [mutate, slug]
   );
 
   return { posts, isLoading, error, writePost };

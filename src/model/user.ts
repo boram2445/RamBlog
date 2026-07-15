@@ -4,12 +4,14 @@ export type OAuthUser = {
   name: string;
   image?: string | null;
   username: string;
+  slug: string;
 };
 
 export type AuthUser = {
   id: string;
   name: string;
   username: string;
+  slug: string;
   email: string;
   image?: string;
 };
@@ -21,17 +23,15 @@ export type UserData = AuthUser & {
 export type SimpleUser = {
   id: string;
   username: string;
+  slug: string;
   name: string;
   image: string;
   title: string;
 };
 
-export type SearchUser = AuthUser & {
+export type ProfileUser = AuthUser & {
   following: number;
   followers: number;
-};
-
-export type ProfileUser = SearchUser & {
   blogName: string;
   title: string;
   introduce: string;
@@ -43,7 +43,6 @@ export type HomeUser = AuthUser & {
   blogName: string;
   title: string;
   introduce: string;
-  posts: number;
   links: Links;
   following: SimpleUser[];
   followers: SimpleUser[];

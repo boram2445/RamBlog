@@ -27,22 +27,22 @@ export default function Header() {
   const user = session?.user;
 
   const { data: loginUser } = useSWR<UserData>(
-    user ? `/api/${user.username}/me` : null
+    user ? `/api/${user.slug}/me` : null
   );
 
   const [isOpenNav, setIsOpenNav] = useState(false);
   const btnRef = useRef<HTMLDivElement>(null) as React.MutableRefObject<HTMLDivElement>;
 
   const navList = [
-    { label: '내 블로그', onClick: () => router.push(`/${user?.username}`) },
+    { label: '내 블로그', onClick: () => router.push(`/${user?.slug}`) },
     {
       label: '북마크 포스트',
-      onClick: () => router.push(`/${user?.username}/bookmarks`),
+      onClick: () => router.push(`/${user?.slug}/bookmarks`),
     },
     { label: '글 쓰기', onClick: () => router.push(`/write`) },
     {
       label: '프로필 설정',
-      onClick: () => router.push(`/${user?.username}/me/setting`),
+      onClick: () => router.push(`/${user?.slug}/me/setting`),
     },
     { label: '로그아웃', onClick: signOut },
   ];

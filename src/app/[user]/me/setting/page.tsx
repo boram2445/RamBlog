@@ -9,7 +9,8 @@ export default async function SettingPage() {
   const user = session?.user;
 
   if (!user) redirect('/auth/signin');
-  const userData = user && (await getUserForProfile(user.username));
+  const userData = await getUserForProfile(user.slug);
+  if (!userData) redirect('/auth/signin');
 
   return (
     <section className='mt-12 mx-auto max-w-3xl laptop:max-w-5xl'>

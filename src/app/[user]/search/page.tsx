@@ -15,7 +15,7 @@ export default async function SearchPage(props: Props) {
 
   return (
     <div className='mx-auto max-w-3xl laptop:max-w-7xl my-10'>
-      <SearchList username={user} />
+      <SearchList slug={user} />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function JsonLd({ currentPost, user }: JsonJProps) {
     author: {
       "@type": "Person",
       name: currentPost.username,
-      url: `${env.NEXTAUTH_URL}/${currentPost.username}`,
+      url: `${env.NEXTAUTH_URL}/${currentPost.slug}`,
     },
     mainEntityOfPage: `${env.NEXTAUTH_URL}/${user}/posts/${currentPost.id}`,
     keywords: (currentPost.tags ?? []).join(", "),

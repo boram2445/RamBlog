@@ -3,10 +3,11 @@ export type Post = {
   description: string;
   mainImage: string;
   pinned: boolean;
-  updatedAt: Date;
-  createdAt: Date;
+  updatedAt: string;
+  createdAt: string;
   tags: string[];
   username: string;
+  slug: string;
   name: string;
   userImage: string;
   id: string;
@@ -14,15 +15,21 @@ export type Post = {
 
 export type SimplePost = Post & { likes: number };
 
-export type AdjacentPost = { username: string; title: string; id: string };
+export type AdjacentPost = {
+  username: string;
+  slug: string;
+  title: string;
+  id: string;
+};
 
 export type PostData = {
   currentPost: PostDetail;
-  previousPost: AdjacentPost;
-  nextPost: AdjacentPost;
+  previousPost?: AdjacentPost;
+  nextPost?: AdjacentPost;
 };
 
-export type PostDetail = Post & {
+// postDetailQuery(fullPostProjection)는 author->name을 투영하지 않음 — Post의 `name`은 제외
+export type PostDetail = Omit<Post, 'name'> & {
   content: string;
   likes: string[];
   authorId: string;

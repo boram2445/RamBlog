@@ -81,11 +81,11 @@ export default function ProfileForm({ userData }: Props) {
     );
 
     axios
-      .post(`/api/${userData.username}/me/profile`, formData)
+      .post(`/api/${userData.slug}/me/profile`, formData)
       .then(() => {
         router.refresh();
-        mutate(`/api/${userData.username}/me`);
-        router.push(`/${userData.username}`);
+        mutate(`/api/${userData.slug}/me`);
+        router.push(`/${userData.slug}`);
       })
       .catch((err) => setError(err.toString()))
       .finally(() => setIsLoading(false));

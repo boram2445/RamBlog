@@ -12,12 +12,12 @@ type Props = {
 
 export default function PostList({ user }: Props) {
   const [selectedTag, setSelectedTag] = useState('all');
-  const { posts, isLoading, error } = useUserPost(user.username, selectedTag);
+  const { posts, isLoading, error } = useUserPost(user.slug, selectedTag);
 
   return (
     <>
       <UserTagList
-        username={user.username}
+        slug={user.slug}
         onClick={setSelectedTag}
         selected={selectedTag}
       />

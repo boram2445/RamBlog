@@ -21,7 +21,7 @@ export default function useMe() {
     error,
     isLoading,
     mutate,
-  } = useSWR<HomeUser>(user ? `/api/${user.username}/me/profile` : null);
+  } = useSWR<HomeUser>(user ? `/api/${user.slug}/me/profile` : null);
 
   const toggleFollow = useCallback(
     (targetId: string, follow: boolean) => {
@@ -29,7 +29,14 @@ export default function useMe() {
       const following = follow
         ? [
             ...loggedInUser.following,
-            { id: targetId, username: '', name: '', image: '', title: '' },
+            {
+              id: targetId,
+              username: '',
+              slug: '',
+              name: '',
+              image: '',
+              title: '',
+            },
           ]
         : loggedInUser.following.filter((item) => item.id !== targetId);
 

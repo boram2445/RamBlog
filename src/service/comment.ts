@@ -10,6 +10,7 @@ const commentProjection = `
   "type":_type,
   _type == 'loggedInUserComment' => {
     "username":author->username,
+    "slug":author->slug,
     "image":author->image,
     "authorId":author._ref
   },

@@ -12,20 +12,20 @@ import LogForm from './LogForm';
 import NoContent from '../ui/NoContent';
 
 type Props = {
-  username: string;
+  slug: string;
   userId?: string;
 };
 
 const listStyle =
   'mx-auto py-8 px-1 tablet:px-4 grid grid-cols-2 tablet:grid-cols-3 gap-2';
 
-export default function LogList({ username, userId }: Props) {
+export default function LogList({ slug, userId }: Props) {
   const { data: session } = useSession();
   const user = session?.user;
 
   const [selected, setSelected] = useState<SelectItem>(selectList[0]);
   const { logs, isLoading, error } = useLogs(
-    username,
+    slug,
     selected.label as Emotion & 'all'
   );
 
@@ -69,7 +69,7 @@ export default function LogList({ username, userId }: Props) {
           className='overflow-y-hidden bg-white w-4/5 h-4/5 tablet:h-[440px] laptop:h-[480px] desktop:max-w-[1000px] desktop:h-[580px] dark:bg-neutral-800'
         >
           <LogForm
-            username={username}
+            slug={slug}
             closeForm={() => setIsOpenForm(false)}
             resetSelect={() => handleChangeSelect(selectList[0])}
           />

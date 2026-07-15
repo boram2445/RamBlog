@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
-  const { title, image, id, username, emotion, date } = log;
+  const { title, image, id, username, slug, emotion, date } = log;
   const [openModal, setOpenModal] = useState(false);
 
   return (
@@ -51,6 +51,7 @@ export default function LogCard({ log, selectedEmotion, resetSelect }: Props) {
           <LogDetail
             logId={id}
             username={username}
+            slug={slug}
             thumbnail={image}
             title={title}
             selectedEmotion={selectedEmotion}

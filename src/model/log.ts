@@ -5,6 +5,7 @@ export type SimpleLog = {
   title: string;
   date: Date;
   username: string;
+  slug: string;
   emotion: Emotion;
   // likes: number;
 };
@@ -13,6 +14,7 @@ export type Log = {
   title: string;
   content: string;
   username: string;
+  slug: string;
   userImage: string;
   image: string;
   id: string;

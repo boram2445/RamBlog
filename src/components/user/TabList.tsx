@@ -25,9 +25,9 @@ export default function TabList({ user }: Props) {
       {tabs.map(({ href, name }) => (
         <li key={href}>
           <Link
-            href={`/${user.username}${href}`}
+            href={`/${user.slug}${href}`}
             className={`${tabStyle} ${
-              getOnPath(pathname, href, user.username)
+              getOnPath(pathname, href, user.slug)
                 ? 'font-semibold text-gray-900 bg-gray-100 rounded-full dark:text-gray-700'
                 : ''
             }`}
@@ -40,8 +40,8 @@ export default function TabList({ user }: Props) {
   );
 }
 
-function getOnPath(url: string, href: string, username: string) {
-  const path = url.split(`/${username}`)[1];
+function getOnPath(url: string, href: string, slug: string) {
+  const path = url.split(`/${slug}`)[1];
   if (href === '' && path === '') return true;
   else if (href === '/about' && path.includes(href)) return true;
   else if (href === '/log' && path.includes(href)) return true;

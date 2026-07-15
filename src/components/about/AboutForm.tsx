@@ -13,13 +13,13 @@ import TextArea from '../ui/TextArea';
 import PageLoader from '../ui/PageLoader';
 
 type Props = {
-  username: string;
+  slug: string;
   portfolio: Portfolio;
 };
 
 const titleClass = 'px-2 color-title';
 
-export default function AboutForm({ username, portfolio }: Props) {
+export default function AboutForm({ slug, portfolio }: Props) {
   const initialState = {
     introduce: portfolio?.introduce ?? '',
     skills: portfolio?.skills ?? [],
@@ -72,7 +72,7 @@ export default function AboutForm({ username, portfolio }: Props) {
     try {
       await Promise.all(uploadTasks);
 
-      await axios.post(`/api/${username}/about`, {
+      await axios.post(`/api/${slug}/about`, {
         id: portfolio?.id,
         form,
       });
@@ -80,7 +80,7 @@ export default function AboutForm({ username, portfolio }: Props) {
       setIsFetching(false);
       startTransition(() => {
         router.refresh();
-        router.push(`/${username}/about`);
+        router.push(`/${slug}/about`);
       });
     } catch (error) {
       console.error('데이터 전송 오류:', error);

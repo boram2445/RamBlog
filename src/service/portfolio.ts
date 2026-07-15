@@ -1,21 +1,22 @@
 import { Portfolio, PostPortfolio } from '@/model/portfolio';
 import { client } from './sanity';
 
-export async function getUserPortfolio(username: string): Promise<Portfolio> {
+export async function getUserPortfolio(slug: string): Promise<Portfolio> {
   return client.fetch(
-    `*[_type == "portfolio" && author->username=="${username}"][0]{
+    `*[_type == "portfolio" && author->slug == $slug][0]{
       "id":_id,
-      "username":author->username, 
+      "username":author->username,
+      "slug":author->slug,
       skills,
       introduce,
       businessExperiences[]{...,"id":_key},
       projects[]{...,"id":_key},
       educations[]{...,"id":_key},
     }`,
-    {},
+    { slug },
     {
       cache: 'force-cache',
-      next: { tags: [`about/${username}`] },
+      next: { tags: [`about/${slug}`] },
     }
   );
 }

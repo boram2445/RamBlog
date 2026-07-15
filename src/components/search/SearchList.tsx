@@ -10,15 +10,15 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import useDebounce from "@/hooks/useDebounce";
 
 type Props = {
-  username?: string;
+  slug?: string;
 };
 
-export default function SearchList({ username }: Props) {
+export default function SearchList({ slug }: Props) {
   const [keyword, setKeyword] = useState("");
   const debouncedKeyword = useDebounce(keyword);
-  const url = !username
+  const url = !slug
     ? `/api/search/${debouncedKeyword}`
-    : `/api/${username}/search/${debouncedKeyword}`;
+    : `/api/${slug}/search/${debouncedKeyword}`;
   const {
     data: posts,
     isLoading,
@@ -34,9 +34,9 @@ export default function SearchList({ username }: Props) {
   return (
     <section className="mx-auto tablet:px-5">
       <form onSubmit={handleSubmit} className="my-8 flex flex-col items-center">
-        {username && (
+        {slug && (
           <p className="mb-2 text-gray-600 text-sm dark:text-slate-300">
-            {username}님의 포스트를 검색해보세요✨
+            {slug}님의 포스트를 검색해보세요✨
           </p>
         )}
         <div className="relative shadow-md w-5/6 tablet:w-3/4 laptop:w-1/2 rounded-xl">

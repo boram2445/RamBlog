@@ -10,10 +10,10 @@ import PageLoader from '../ui/PageLoader';
 
 export default function PostButtonList({
   id,
-  username,
+  slug,
 }: {
   id: string;
-  username: string;
+  slug: string;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -31,7 +31,7 @@ export default function PostButtonList({
       setIsFetching(false);
       startTransition(() => {
         router.refresh();
-        router.push(`/${username}`);
+        router.push(`/${slug}`);
       });
     }
   };

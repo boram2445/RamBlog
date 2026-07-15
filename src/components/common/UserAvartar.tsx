@@ -8,6 +8,7 @@ import Skeleton from '../ui/Skeleton';
 type Props = {
   imageUrl?: string;
   username: string;
+  slug?: string;
   size?: 'small' | 'medium';
   type?: 'button' | 'link';
   onClick?: () => void;
@@ -17,6 +18,7 @@ type Props = {
 export default function UserAvartar({
   imageUrl,
   username,
+  slug,
   size = 'small',
   type = 'link',
   onClick,
@@ -31,7 +33,9 @@ export default function UserAvartar({
           ? 'hover:bg-gray-50 rounded-full px-2 py-1 dark:hover:bg-neutral-800'
           : ''
       }`}
-      onClick={type === 'link' ? () => router.push(`/${username}`) : onClick}
+      onClick={
+        type === 'link' ? () => router.push(`/${slug ?? username}`) : onClick
+      }
     >
       <Avartar imageUrl={imageUrl} username={username} type={size} />
       <div

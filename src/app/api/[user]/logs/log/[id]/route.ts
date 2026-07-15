@@ -25,7 +25,7 @@ export const DELETE = withErrorHandler(async (_: NextRequest, context: Context) 
 
     const result = await deleteLog(id).then((data) => NextResponse.json(data));
 
-    revalidateTag(`log/${user.username}`, { expire: 0 });
+    revalidateTag(`log/${user.slug}`, { expire: 0 });
 
     return result;
   });

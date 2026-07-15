@@ -15,7 +15,7 @@ export default async function FollowerPage(props: Props) {
 
   return (
     <div className='max-w-screen-md mx-auto px-6'>
-      <FollowLists username={user} type='follower' />
+      <FollowLists slug={user} type='follower' />
     </div>
   );
 }

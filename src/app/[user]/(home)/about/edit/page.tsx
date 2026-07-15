@@ -23,7 +23,7 @@ export default async function AboutEditPage(props: Props) {
 
   if (!loginUser) redirect('/auth/signin');
 
-  const portfolio = await getUserPortfolio(loginUser.username);
+  const portfolio = await getUserPortfolio(loginUser.slug);
   const targetUser = await getUserForProfile(user);
 
   return (
@@ -31,12 +31,12 @@ export default async function AboutEditPage(props: Props) {
       <div className='flex gap-5 items-center mb-6'>
         <Title title='About Edit' />
         {loginUser.id === targetUser?.id && (
-          <Link href={`/${loginUser.username}/about`} className='mt-1'>
+          <Link href={`/${loginUser.slug}/about`} className='mt-1'>
             <Button>뒤로 가기</Button>
           </Link>
         )}
       </div>
-      <AboutForm portfolio={portfolio} username={loginUser.username} />
+      <AboutForm portfolio={portfolio} slug={loginUser.slug} />
     </>
   );
 }

@@ -17,7 +17,7 @@ export default async function UserPage(props: Props) {
 
   const userData = await getUserForProfile(user);
 
-  if (!user) notFound();
+  if (!userData) notFound();
   return (
     <>
       <PostList user={userData} />

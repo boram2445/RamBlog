@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { editProfile, getUserByUsername } from '@/service/user';
+import { editProfile, getUserBySlug } from '@/service/user';
 import { withSessionUser } from '@/utils/session';
 import { revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export const GET = withErrorHandler(async (_: Request) => {
     return NextResponse.json(null, { status: 200 });
   }
 
-  return await getUserByUsername(user.username).then((data) =>
+  return await getUserBySlug(user.slug).then((data) =>
     NextResponse.json(data)
   );
 });
@@ -56,7 +56,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       image
     ).then((data) => NextResponse.json(data));
 
-    revalidateTag(`profile/${user.username}`, { expire: 0 });
+    revalidateTag(`profile/${user.slug}`, { expire: 0 });
 
     return result;
   });

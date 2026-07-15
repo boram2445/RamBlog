@@ -18,7 +18,7 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
       NextResponse.json(res),
     );
 
-    revalidateTag(`posts/${user.username}`, { expire: 0 });
+    revalidateTag(`posts/${user.slug}`, { expire: 0 });
     revalidateTag("posts", { expire: 0 });
 
     return result;

@@ -12,6 +12,7 @@ export const simplePostProjection = `
   "createdAt":coalesce(publishedAt, _createdAt),
   "tags":tags[]->tagName,
   "username":author->username,
+  "slug":author->slug,
   "name":author->name,
   "userImage":author->image,
   "likes":count(likes),
@@ -24,6 +25,7 @@ const fullPostProjection = `
   "updatedAt":_updatedAt,
   "createdAt":coalesce(publishedAt, _createdAt),
   "username":author->username,
+  "slug":author->slug,
   "userImage":author->image,
   "authorId":author._ref,
   "likes":likes[]._ref,
@@ -35,7 +37,7 @@ const allPostsQuery = defineQuery(`
 `);
 
 const userPostsQuery = defineQuery(`
-  *[_type == "post" && author->username == $username]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+  *[_type == "post" && author->slug == $slug]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
 `);
 
 // NOTE: 파라미터명 $tag가 아니라 $tagName — @sanity/client의 QueryParams가 `tag`를
@@ -45,19 +47,19 @@ const tagPostsQuery = defineQuery(`
 `);
 
 const bookmarkPostsQuery = defineQuery(`
-  *[_type == "post" && _id in *[_type == "user" && username == $username].bookmarks[]._ref]
+  *[_type == "post" && _id in *[_type == "user" && slug == $slug].bookmarks[]._ref]
   | order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
 `);
 
 const userTagPostsQuery = defineQuery(`
-  *[_type == 'post' && author->username == $username && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+  *[_type == 'post' && author->slug == $slug && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
 `);
 
 const postDetailQuery = defineQuery(`
   *[_type == "post" && _id == $postId][0]{
     'currentPost': {${fullPostProjection}},
-    'nextPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, title, "id":_id},
-    'previousPost': *[_type == 'post' && author->username == $username && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, title, "id":_id}
+    'nextPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},
+    'previousPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}
   }
 `);
 
@@ -66,7 +68,7 @@ const existingTagQuery = defineQuery(`
 `);
 
 const userPostTagsQuery = defineQuery(`
-  *[_type == 'post' && author->username == $username].tags[]->tagName
+  *[_type == 'post' && author->slug == $slug].tags[]->tagName
 `);
 
 const postAuthorQuery = defineQuery(`
@@ -76,15 +78,23 @@ const postAuthorQuery = defineQuery(`
 // simplePostProjection을 공유하는 5개 list 쿼리의 결과 요소 타입 — 구조 동일
 type SimplePostProjectionResult = AllPostsQueryResult[number];
 
-// TODO(Day 11): typegen 쿼리 결과 타입을 공개 반환 타입(SimplePost)으로 전면 채택하며
-// nullable 필드 정합을 맞추고 이 캐스트 제거
+// typegen 결과는 스키마상 대부분 nullable — 서비스 경계에서 SimplePost(non-null)로 정규화
 function mapPosts(posts: SimplePostProjectionResult[]): SimplePost[] {
   return posts.map((post) => ({
-    ...post,
-    tags: post.tags ?? [],
+    title: post.title ?? '',
+    description: post.description ?? '',
+    mainImage: post.mainImage ?? '',
     pinned: post.pinned ?? false,
+    updatedAt: post.updatedAt,
+    createdAt: post.createdAt,
+    tags: post.tags?.filter((tag): tag is string => tag !== null) ?? [],
+    username: post.username ?? '',
+    slug: post.slug ?? '',
+    name: post.name ?? '',
+    userImage: post.userImage ?? '',
     likes: post.likes ?? 0,
-  })) as unknown as SimplePost[];
+    id: post.id,
+  }));
 }
 
 export async function getAllPostsData(): Promise<SimplePost[]> {
@@ -100,14 +110,14 @@ export async function getAllPostsData(): Promise<SimplePost[]> {
     .then(mapPosts);
 }
 
-export async function getAllUserPosts(username: string) {
+export async function getAllUserPosts(slug: string) {
   return client
     .fetch(
       userPostsQuery,
-      { username },
+      { slug },
       {
         cache: 'force-cache',
-        next: { tags: [`posts/${username}`] },
+        next: { tags: [`posts/${slug}`] },
       }
     )
     .then(mapPosts);
@@ -126,11 +136,11 @@ export async function getTagPosts(tag: string) {
     .then(mapPosts);
 }
 
-export async function getBookmarkPosts(username: string) {
+export async function getBookmarkPosts(slug: string) {
   return client
     .fetch(
       bookmarkPostsQuery,
-      { username },
+      { slug },
       {
         cache: 'force-cache',
         next: { tags: ['bookmark'] },
@@ -139,14 +149,14 @@ export async function getBookmarkPosts(username: string) {
     .then(mapPosts);
 }
 
-export async function getUserTagPosts(username: string, tag: string) {
+export async function getUserTagPosts(slug: string, tag: string) {
   return client
     .fetch(
       userTagPostsQuery,
-      { username, tagName: tag },
+      { slug, tagName: tag },
       {
         cache: 'force-cache',
-        next: { tags: [`posts/${username}`] },
+        next: { tags: [`posts/${slug}`] },
       }
     )
     .then(mapPosts);
@@ -154,19 +164,56 @@ export async function getUserTagPosts(username: string, tag: string) {
 
 export async function getPostDetail(
   postId: string,
-  username: string
-): Promise<PostData> {
+  slug: string
+): Promise<PostData | null> {
   const postDetail = await client.fetch(
     postDetailQuery,
-    { postId, username },
+    { postId, slug },
     {
       cache: 'force-cache',
-      next: { tags: [`posts/${username}`] },
+      next: { tags: [`posts/${slug}`] },
     }
   );
 
-  // TODO(Day 11): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거
-  return postDetail as unknown as PostData;
+  if (!postDetail) return null;
+
+  const { currentPost, nextPost, previousPost } = postDetail;
+
+  return {
+    currentPost: {
+      title: currentPost.title ?? '',
+      description: currentPost.description ?? '',
+      mainImage: currentPost.mainImage ?? '',
+      pinned: currentPost.pinned ?? false,
+      updatedAt: currentPost.updatedAt,
+      createdAt: currentPost.createdAt,
+      tags:
+        currentPost.tags?.filter((tag): tag is string => tag !== null) ?? [],
+      username: currentPost.username ?? '',
+      slug: currentPost.slug ?? '',
+      userImage: currentPost.userImage ?? '',
+      id: currentPost.id,
+      content: currentPost.content ?? '',
+      likes: currentPost.likes ?? [],
+      authorId: currentPost.authorId ?? '',
+    },
+    nextPost: nextPost
+      ? {
+          username: nextPost.username ?? '',
+          slug: nextPost.slug ?? '',
+          title: nextPost.title ?? '',
+          id: nextPost.id,
+        }
+      : undefined,
+    previousPost: previousPost
+      ? {
+          username: previousPost.username ?? '',
+          slug: previousPost.slug ?? '',
+          title: previousPost.title ?? '',
+          id: previousPost.id,
+        }
+      : undefined,
+  };
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
@@ -285,15 +332,15 @@ export async function getPostAuthorId(postId: string) {
 }
 
 export async function getTags(
-  username: string
+  slug: string
 ): Promise<{ name: string; count: number }[]> {
   return client
     .fetch(
       userPostTagsQuery,
-      { username },
+      { slug },
       {
         cache: 'force-cache',
-        next: { tags: [`tags/${username}`] },
+        next: { tags: [`tags/${slug}`] },
       }
     )
     .then((tagList) => {

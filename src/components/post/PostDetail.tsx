@@ -33,6 +33,7 @@ export default async function PostDetail({
     content,
     id,
     username,
+    slug,
     userImage,
     likes,
     authorId,
@@ -56,6 +57,7 @@ export default async function PostDetail({
             <UserAvartar
               imageUrl={userImage}
               username={username}
+              slug={slug}
               size="small"
             />
             <Date date={createdAt?.toString()} type="small" />
@@ -64,7 +66,7 @@ export default async function PostDetail({
               className='text-gray-700 dark:text-slate-400'
             /> */}
           </div>
-          {isMyPost && <PostButtonList id={id} username={username} />}
+          {isMyPost && <PostButtonList id={id} slug={slug} />}
         </div>
       </div>
       <div className="flex mx-auto min-h-[450px] laptop:gap-12 pb-12">
@@ -83,7 +85,7 @@ export default async function PostDetail({
           <TagList tags={currentPost.tags} type="big" />
         </div>
       )}
-      <PostUserProfile username={username} />
+      <PostUserProfile username={username} slug={slug} />
       <div className="laptop:hidden my-2 border border-gray-200 dark:border-neutral-700 rounded-xl overflow-hidden">
         <PostIcons postId={postId} likes={likes} />
       </div>

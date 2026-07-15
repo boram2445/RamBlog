@@ -3,14 +3,14 @@ import { useSWRConfig } from 'swr';
 import { DetailLog, Emotion } from '@/model/log';
 
 export default function useLogDetail(
-  username: string,
+  slug: string,
   logId: string,
   type: 'all' & Emotion
 ) {
   const url =
     type === 'all'
-      ? `/api/${username}/logs/log/${logId}`
-      : `/api/${username}/logs/log/${logId}/${type}`;
+      ? `/api/${slug}/logs/log/${logId}`
+      : `/api/${slug}/logs/log/${logId}/${type}`;
 
   const { data: log, isLoading, error } = useSWR<DetailLog>(url);
   const { mutate } = useSWRConfig();

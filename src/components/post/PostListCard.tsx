@@ -16,7 +16,7 @@ export default function PostListCard({ post }: { post: SimplePost }) {
     id,
     mainImage,
     createdAt,
-    username,
+    slug,
     likes,
   } = post;
 
@@ -25,7 +25,7 @@ export default function PostListCard({ post }: { post: SimplePost }) {
       <div className="grow flex flex-col min-h-[160px]">
         <TagList tags={tags} />
         <Link
-          href={`/${username}/posts/${id}`}
+          href={`/${slug}/posts/${id}`}
           className="mt-1.5 flex flex-col h-full"
         >
           <div className="py-1 text-gray-900 text-lg tablet:text-2xl flex gap-2 items-center group-hover:text-indigo-500 dark:group-hover:text-slate-100 dark:text-slate-300">
@@ -42,7 +42,7 @@ export default function PostListCard({ post }: { post: SimplePost }) {
         </Link>
       </div>
       {mainImage && (
-        <Link href={`/${username}/posts/${id}`}>
+        <Link href={`/${slug}/posts/${id}`}>
           <Image
             src={mainImage}
             alt={`${title}이미지`}

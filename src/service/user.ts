@@ -7,6 +7,10 @@ const checkUsernameValidQuery = defineQuery(`
   *[_type=='user' && username == $username][0]
 `);
 
+const checkSlugValidQuery = defineQuery(`
+  *[_type=='user' && slug == $slug][0]
+`);
+
 const checkEmailValidQuery = defineQuery(`
   *[_type=='user' && email == $email][0]
 `);
@@ -17,9 +21,14 @@ const loginWithEmailQuery = defineQuery(`
     email,
     name,
     username,
+    slug,
     password,
     image,
   }
+`);
+
+const userSlugByIdQuery = defineQuery(`
+  *[_type=='user' && _id == $id][0].slug
 `);
 
 const userDataQuery = defineQuery(`
@@ -27,31 +36,39 @@ const userDataQuery = defineQuery(`
   {"id":_id,name,username,email,image,blogName}
 `);
 
-const userByUsernameQuery = defineQuery(`
-  *[_type == "user" && username == $username][0]{
+const userBySlugQuery = defineQuery(`
+  *[_type == "user" && slug == $slug][0]{
     ...,
     "id":_id,
-    following[]->{"id":_id,username,name,image,title},
-    followers[]->{"id":_id,username,name,image,title},
+    following[]->{"id":_id,username,slug,name,image,title},
+    followers[]->{"id":_id,username,slug,name,image,title},
     "bookmarks":bookmarks[]->_id
   }
 `);
 
 const userForProfileQuery = defineQuery(`
-  *[_type=='user' && username == $username][0]{
+  *[_type=='user' && slug == $slug][0]{
     ...,
     "id":_id,
     "following":count(following),
     "followers":count(followers),
-    "posts":count(*[_type=="post" && author->username == $username])
+    "posts":count(*[_type=="post" && author->slug == $slug])
   }
 `);
 
-export async function addUser({ id, username, email, image, name }: OAuthUser) {
+export async function addUser({
+  id,
+  username,
+  slug,
+  email,
+  image,
+  name,
+}: OAuthUser) {
   return client.createIfNotExists({
     _id: id,
     _type: 'user',
     username,
+    slug,
     email,
     name,
     image,
@@ -69,11 +86,13 @@ export async function addEmailUser({
   username,
   email,
   password,
+  slug,
 }: {
   name: string;
   username: string;
   email: string;
   password: string;
+  slug: string;
 }) {
   return client.create({
     _type: 'user',
@@ -88,6 +107,7 @@ export async function addEmailUser({
     following: [],
     followers: [],
     bookmarks: [],
+    slug,
   });
 }
 
@@ -100,6 +120,20 @@ export async function checkUsernameValid(username: string) {
   return !!isExistUsername;
 }
 
+export async function checkSlugValid(slug: string) {
+  const isExistSlug = await client.fetch(
+    checkSlugValidQuery,
+    { slug },
+    { cache: 'no-store' }
+  );
+  return !!isExistSlug;
+}
+
+export async function generateUniqueSlug(base: string): Promise<string> {
+  const taken = await checkSlugValid(base);
+  return taken ? `${base}-${Math.random().toString(36).slice(2, 6)}` : base;
+}
+
 export async function checkEmailValid(email: string) {
   const isExistEmail = await client.fetch(
     checkEmailValidQuery,
@@ -110,78 +144,114 @@ export async function checkEmailValid(email: string) {
 }
 
 export async function loginWithEmail(email: string) {
-  const user = await client.fetch(
-    loginWithEmailQuery,
-    { email },
-    { cache: 'no-store' }
-  );
-
-  // TODO(Day 11 #3): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거.
-  // 반환 shape은 src/auth.ts의 credentials authorize 콜백 소비 형태를 그대로 반영(기존엔 암묵적 any).
-  return user as unknown as {
-    id: string;
-    email: string;
-    name: string;
-    username: string;
-    password: string;
-    image?: string;
-  } | null;
+  return client.fetch(loginWithEmailQuery, { email }, { cache: 'no-store' });
 }
 
-export async function getUserData(userId: string, username: string) {
+export async function getUserSlug(id: string): Promise<string | null> {
+  const slug = await client.fetch(
+    userSlugByIdQuery,
+    { id },
+    { cache: 'no-store' }
+  );
+  return slug ?? null;
+}
+
+export async function getUserData(userId: string, slug: string) {
   return client.fetch(
     userDataQuery,
     { userId },
     {
       cache: 'force-cache',
-      next: { tags: [`profile/${username}`] },
+      next: { tags: [`profile/${slug}`] },
     }
   );
 }
 
-export async function getUserByUsername(username: string): Promise<HomeUser> {
+const defaultLinks: Links = {
+  github: '',
+  email: '',
+  twitter: '',
+  facebook: '',
+  youtube: '',
+  homePage: '',
+};
+
+function toSimpleUser(member: {
+  id: string;
+  username: string | null;
+  slug: string | null;
+  name: string | null;
+  image: string | null;
+  title: string | null;
+}) {
+  return {
+    id: member.id,
+    username: member.username ?? '',
+    slug: member.slug ?? '',
+    name: member.name ?? '',
+    image: member.image ?? '',
+    title: member.title ?? '',
+  };
+}
+
+export async function getUserBySlug(slug: string): Promise<HomeUser | null> {
   const user = await client.fetch(
-    userByUsernameQuery,
-    { username },
+    userBySlugQuery,
+    { slug },
     {
       cache: 'force-cache',
       next: { tags: ['following', 'bookmark'] },
     }
   );
 
-  // TODO(Day 11 #3): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거
-  return user as unknown as HomeUser;
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    name: user.name ?? '',
+    username: user.username ?? '',
+    slug: user.slug ?? '',
+    email: user.email ?? '',
+    image: user.image,
+    blogName: user.blogName ?? '',
+    title: user.title ?? '',
+    introduce: user.introduce ?? '',
+    links: user.links ?? defaultLinks,
+    following: (user.following ?? []).map(toSimpleUser),
+    followers: (user.followers ?? []).map(toSimpleUser),
+    bookmarks: user.bookmarks ?? [],
+  };
 }
 
 export async function getUserForProfile(
-  username: string
-): Promise<ProfileUser> {
-  return client
-    .fetch(
-      userForProfileQuery,
-      { username },
-      {
-        cache: 'force-cache',
-        next: { tags: [`profile/${username}`, 'following'] },
-      }
-    )
-    .then(
-      (user) =>
-        ({
-          ...user,
-          following: user?.following ?? 0,
-          followers: user?.followers ?? 0,
-          links: user?.links ?? {
-            github: '',
-            email: '',
-            twitter: '',
-            facebook: '',
-            youtube: '',
-            homePage: '',
-          },
-          // TODO(Day 11 #3): typegen 쿼리 결과 타입을 공개 반환 타입으로 전면 채택하며 이 캐스트 제거
-        }) as unknown as ProfileUser
-    );
+  slug: string
+): Promise<ProfileUser | null> {
+  const user = await client.fetch(
+    userForProfileQuery,
+    { slug },
+    {
+      cache: 'force-cache',
+      next: { tags: [`profile/${slug}`, 'following'] },
+    }
+  );
+
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    name: user.name ?? '',
+    username: user.username ?? '',
+    slug: user.slug ?? '',
+    email: user.email ?? '',
+    image: user.image,
+    following: user.following ?? 0,
+    followers: user.followers ?? 0,
+    blogName: user.blogName ?? '',
+    title: user.title ?? '',
+    introduce: user.introduce ?? '',
+    links: user.links ?? defaultLinks,
+    posts: user.posts,
+  };
 }
 
 export async function editProfile(

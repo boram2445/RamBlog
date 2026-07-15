@@ -16,7 +16,7 @@ export default async function LogPage(props: Props) {
 
   return (
     <>
-      <LogList username={user} userId={profileUser?.id} />
+      <LogList slug={user} userId={profileUser?.id} />
     </>
   );
 }

@@ -5,6 +5,7 @@ import PostDetail from "@/components/post/PostDetail";
 import { getPostDetail } from "@/service/posts";
 import type { Metadata } from "next";
 import { cache } from "react";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{
@@ -24,6 +25,8 @@ export default async function PostPage(props: Props) {
   const loginUserData = session?.user;
 
   const post = await getDetail(id, user);
+
+  if (!post) notFound();
 
   return (
     <>
@@ -51,9 +54,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const { user, id } = params;
 
-  const { title, description, mainImage, createdAt, updatedAt } = (
-    await getDetail(id, user)
-  )?.currentPost;
+  const post = await getDetail(id, user);
+
+  if (!post) notFound();
+
+  const { title, description, mainImage, createdAt, updatedAt } =
+    post.currentPost;
 
   return {
     title,

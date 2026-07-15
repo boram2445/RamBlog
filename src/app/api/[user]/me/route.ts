@@ -11,7 +11,7 @@ export const GET = withErrorHandler(async (_: Request) => {
     return NextResponse.json(null, { status: 200 });
   }
 
-  return await getUserData(user.id, user.username).then((data) =>
+  return await getUserData(user.id, user.slug).then((data) =>
     NextResponse.json(data)
   );
 });

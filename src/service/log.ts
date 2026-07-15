@@ -10,12 +10,14 @@ const simpleLogProjection = `
   emotion,
   content,
   "username":author->username,
+  "slug":author->slug,
 `;
 
 const logProjection = `
   title,
   content,
-  "username":author->username, 
+  "username":author->username,
+  "slug":author->slug,
   "userImage":author->image,
   "image":photo,
   "id":_id,
@@ -24,15 +26,15 @@ const logProjection = `
   "likes":likes[]->username,
 `;
 
-export async function getAllUserLogs(username: string) {
+export async function getAllUserLogs(slug: string) {
   return client
     .fetch(
-      `*[_type == "log" && author->username=="${username}"]| order(date desc){${simpleLogProjection}}
+      `*[_type == "log" && author->slug == $slug]| order(date desc){${simpleLogProjection}}
       `,
-      {},
+      { slug },
       {
         cache: 'force-cache',
-        next: { tags: [`log/${username}`] },
+        next: { tags: [`log/${slug}`] },
       }
     )
     .then((logs) =>
@@ -43,15 +45,15 @@ export async function getAllUserLogs(username: string) {
     );
 }
 
-export async function getUserEmotionLogs(username: string, emotion: Emotion) {
+export async function getUserEmotionLogs(slug: string, emotion: Emotion) {
   return client
     .fetch(
-      `*[_type == "log" && author->username=="${username}" && emotion == "${emotion}"]| order(date desc){${simpleLogProjection}}
+      `*[_type == "log" && author->slug == $slug && emotion == $emotion]| order(date desc){${simpleLogProjection}}
       `,
-      {},
+      { slug, emotion },
       {
         cache: 'force-cache',
-        next: { tags: [`log/${username}`] },
+        next: { tags: [`log/${slug}`] },
       }
     )
     .then((logs) =>
@@ -63,22 +65,22 @@ export async function getUserEmotionLogs(username: string, emotion: Emotion) {
 }
 
 export async function getUserEmotionLog(
-  username: string,
+  slug: string,
   logId: string,
   emotion: Emotion
 ) {
   return client
     .fetch(
-      `*[_type == "log" && author->username=="${username}" && emotion == "${emotion}" && _id == "${logId}"][0]{
+      `*[_type == "log" && author->slug == $slug && emotion == $emotion && _id == $logId][0]{
       'currentLog':{${logProjection}},
-      'nextLog': *[_type == 'log' && author->username =="${username}"  && emotion == "${emotion}" && date > ^.date][0]{ "id":_id},
-      'previousLog': *[_type == 'log' && author->username =="${username}"  && emotion == "${emotion}" && date < ^.date]| order(date desc)[0]{ "id":_id}
+      'nextLog': *[_type == 'log' && author->slug == $slug && emotion == $emotion && date > ^.date][0]{ "id":_id},
+      'previousLog': *[_type == 'log' && author->slug == $slug && emotion == $emotion && date < ^.date]| order(date desc)[0]{ "id":_id}
       }
     `,
-      {},
+      { slug, emotion, logId },
       {
         cache: 'force-cache',
-        next: { tags: [`log/${username}`] },
+        next: { tags: [`log/${slug}`] },
       }
     )
     .then((log) => ({
@@ -90,18 +92,18 @@ export async function getUserEmotionLog(
     }));
 }
 
-export async function getUserLog(username: string, logId: string) {
+export async function getUserLog(slug: string, logId: string) {
   return client
     .fetch(
-      `*[_type == "log" && author->username=="${username}" && _id == "${logId}"][0]{
+      `*[_type == "log" && author->slug == $slug && _id == $logId][0]{
       'currentLog':{${logProjection}},
-      'nextLog': *[_type == 'log' && author->username =="${username}" && date > ^.date][0]{ "id":_id},
-      'previousLog': *[_type == 'log' && author->username =="${username}"  && date < ^.date] | order(date desc)[0]{ "id":_id}
+      'nextLog': *[_type == 'log' && author->slug == $slug && date > ^.date][0]{ "id":_id},
+      'previousLog': *[_type == 'log' && author->slug == $slug && date < ^.date] | order(date desc)[0]{ "id":_id}
       }`,
-      {},
+      { slug, logId },
       {
         cache: 'force-cache',
-        next: { tags: [`log/${username}`] },
+        next: { tags: [`log/${slug}`] },
       }
     )
     .then((log) => ({

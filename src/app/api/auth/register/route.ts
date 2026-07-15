@@ -3,6 +3,7 @@ import {
   addEmailUser,
   checkEmailValid,
   checkUsernameValid,
+  generateUniqueSlug,
 } from "@/service/user";
 import bcrypt from "bcrypt";
 import { registerSchema } from "@/lib/validation";
@@ -32,11 +33,14 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     return NextResponse.json({ error }, { status: 422 });
   }
 
+  const slug = await generateUniqueSlug(username);
+
   const newData = {
     name,
     username,
     email,
     password: bcrypt.hashSync(password, 12),
+    slug,
   };
 
   return await addEmailUser(newData).then((data) => NextResponse.json(data));

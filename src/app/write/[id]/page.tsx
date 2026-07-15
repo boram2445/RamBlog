@@ -31,11 +31,11 @@ export default async function EditPage(props: Props) {
     redirect('/auth/signin');
   }
 
-  const postDetail = (await getPostDetail(id, user.username))?.currentPost;
+  const postDetail = (await getPostDetail(id, user.slug))?.currentPost;
 
   return (
     <>
-      <WritePostForm id={id} postDetail={postDetail} username={user.username} />
+      <WritePostForm id={id} postDetail={postDetail} slug={user.slug} />
     </>
   );
 }

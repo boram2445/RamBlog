@@ -4,13 +4,13 @@ import useSWR from 'swr';
 import TagList, { TagListLoading } from '../common/TagList';
 
 type Props = {
-  username: string;
+  slug: string;
   onClick: (tag: string) => void;
   selected: string;
 };
 
-export default function UserTagList({ username, onClick, selected }: Props) {
-  const { data: tags, isLoading } = useSWR(`/api/${username}/posts/tags`);
+export default function UserTagList({ slug, onClick, selected }: Props) {
+  const { data: tags, isLoading } = useSWR(`/api/${slug}/posts/tags`);
 
   return (
     <div className='px-3 tablet:px-6 pb-2'>
