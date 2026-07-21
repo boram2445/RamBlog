@@ -49,7 +49,7 @@ RamBlog은 2023년 신입 시절 만든 개인 블로그 사이드 프로젝트(
 | Week 3 (Day 15–21) | SEO 복구 + 렌더링 아키텍처 | [roadmap1/week3.md](./roadmap1/week3.md) |
 | Week 4 (Day 22–30) | 성능·접근성·DX 마무리 | [roadmap1/week4.md](./roadmap1/week4.md) |
 | Week 5 (Day 31–38) | 에디터 교체 + 타입·네이밍 부채 청산 | [roadmap1/week5.md](./roadmap1/week5.md) |
-| Week 6 (Day 41–) | 위생 마무리(삭제 stale·toast·axios) + 테스트·성능 트랙 | [roadmap1/week6.md](./roadmap1/week6.md) |
+| Week 6 (Day 41–) | 시리즈 기능 + 위생 마무리(삭제 stale·toast·axios) + 테스트·성능 트랙 | [roadmap1/week6.md](./roadmap1/week6.md) |
 
 ## 🔭 30일 이후 (선택 트랙)
 
@@ -57,10 +57,10 @@ RamBlog은 2023년 신입 시절 만든 개인 블로그 사이드 프로젝트(
 
 - ✅ **Track A (NextAuth v4 → v5 / Auth.js)**: Week 1(Day 4·5)에 앞당겨 완료 — `getServerSession` 0건, `src/auth.ts` v5 패턴 적용
 - **Track B (Toast UI Editor 교체)** → **Week 5 Day 31~32로 편입** — `@uiw/react-md-editor`로 확정 (마크다운 저장 구조와 1:1 대응, 뷰어는 이미 react-markdown으로 분리돼 있어 표면적 최소)
-- **Track C (테스트) 예정 위치**: Week 6(Day 44~)에서 Vitest 도입 + GROQ 파라미터 바인딩 회귀 테스트 + Playwright 핵심 플로우를 **성능 측정(Lighthouse 등)과 묶어** 진행 (상세는 착수 시 `week6.md`에 채움)
+- **Track C (테스트) 예정 위치**: Week 6(Day 45~)에서 Vitest 도입 + GROQ 파라미터 바인딩 회귀 테스트 + Playwright 핵심 플로우를 **성능 측정(Lighthouse 등)과 묶어** 진행 (상세는 착수 시 `week6.md`에 채움)
 - ✅ **Track D (네이밍 정리)**: Week 5 Day 38에서 완료 — `Avartar` → `Avatar` 10파일 리네이밍, `components/posts` → `components/post` 최소 통합(dead code `CarouselPosts` 삭제 포함)
 
-Week 5에 있던 Day 35(삭제 stale 수정)·39(toast 알림)·40(axios→fetch 위생)은 착수 전 Week 6(Day 41·42·43)으로 이월됐다.
+Week 5에 있던 Day 35(삭제 stale 수정)·39(toast 알림)·40(axios→fetch 위생)은 착수 전 Week 6(Day 42·43·44)으로 이월됐다 (Day 41은 신규 기능인 시리즈가 차지).
 
 ## ✅ 검증 (각 Day 작업 후)
 
