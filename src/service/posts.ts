@@ -22,6 +22,7 @@ export const simplePostProjection = `
 const fullPostProjection = `
   ...,
   "tags":tags[]->tagName,
+  "series": series->seriesName,
   "updatedAt":_updatedAt,
   "createdAt":coalesce(publishedAt, _createdAt),
   "username":author->username,
@@ -67,6 +68,10 @@ const existingTagQuery = defineQuery(`
   *[_type == "tag" && tagName == $tagName]
 `);
 
+const existingSeriesQuery = defineQuery(`
+   *[_type == "series" && seriesName == $name && author._ref == $userId]
+`);
+
 const userPostTagsQuery = defineQuery(`
   *[_type == 'post' && author->slug == $slug].tags[]->tagName
 `);
@@ -79,7 +84,7 @@ const postAuthorQuery = defineQuery(`
 type SimplePostProjectionResult = AllPostsQueryResult[number];
 
 // typegen 결과는 스키마상 대부분 nullable — 서비스 경계에서 SimplePost(non-null)로 정규화
-function mapPosts(posts: SimplePostProjectionResult[]): SimplePost[] {
+export function mapPosts(posts: SimplePostProjectionResult[]): SimplePost[] {
   return posts.map((post) => ({
     title: post.title ?? '',
     description: post.description ?? '',
@@ -196,6 +201,7 @@ export async function getPostDetail(
       content: currentPost.content ?? '',
       likes: currentPost.likes ?? [],
       authorId: currentPost.authorId ?? '',
+      series: currentPost.series ?? '',
     },
     nextPost: nextPost
       ? {
@@ -214,6 +220,26 @@ export async function getPostDetail(
         }
       : undefined,
   };
+}
+
+// 시리즈를 추가하고 확인하는 함수
+async function checkAndAddSeries(seriesName: string, userId: string) {
+  const existingSeires = await client.fetch(
+    existingSeriesQuery,
+    { name: seriesName, userId },
+    { cache: 'no-store' }
+  );
+  if (existingSeires.length === 0) {
+    const createdSeries = await client.create({
+      _type: 'series',
+      seriesName,
+      author: { _ref: userId },
+    });
+
+    return createdSeries._id;
+  } else {
+    return existingSeires[0]._id;
+  }
 }
 
 // 태그를 확인하고 추가 또는 기존 태그 ID 반환하는 함수
@@ -241,7 +267,8 @@ export async function createPost(
   content: string,
   description?: string,
   tagArr?: string[],
-  mainImage?: string
+  mainImage?: string,
+  seriesName?: string
 ) {
   const newData: {
     _type: string;
@@ -324,11 +351,7 @@ export async function deletePost(postId: string) {
 }
 
 export async function getPostAuthorId(postId: string) {
-  return client.fetch(
-    postAuthorQuery,
-    { postId },
-    { cache: 'no-store' }
-  );
+  return client.fetch(postAuthorQuery, { postId }, { cache: 'no-store' });
 }
 
 export async function getTags(

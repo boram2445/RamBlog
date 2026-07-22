@@ -1,11 +1,27 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
-    "allow": ["WebSearch", "Bash", "WebFetch"],
+    "allow": [
+      "WebSearch",
+      "Bash",
+      "WebFetch",
+      "Bash(curl -sI https://ram-blog.vercel.app/sitemap.xml)",
+      "Bash(curl -sI https://ram-blog.vercel.app/sitemap-0.xml)",
+      "Bash(curl -sI -A \"Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)\" https://ram-blog.vercel.app/sitemap.xml)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)\" https://ram-blog.vercel.app/robots.txt)",
+      "Bash(curl -s https://ram-blog.vercel.app/sitemap.xml)",
+      "Bash(curl -sI http://ram-blog.vercel.app/sitemap.xml)"
+    ],
     "defaultMode": "plan",
     "language": "korean"
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["context7"],
+  "enabledMcpjsonServers": [
+    "context7"
+  ],
   "hooks": {
     "Notification": [
       {
@@ -19,9 +35,5 @@
       }
     ]
   },
-  "plansDirectory": ".claude/plans/",
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  }
+  "plansDirectory": ".claude/plans/"
 }

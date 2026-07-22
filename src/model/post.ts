@@ -33,4 +33,5 @@ export type PostDetail = Omit<Post, 'name'> & {
   content: string;
   likes: string[];
   authorId: string;
+  series: string;
 };

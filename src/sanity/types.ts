@@ -208,6 +208,29 @@ export type Post = {
         _key: string;
       }
   >;
+  series?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'series';
+  };
+  seriesOrder?: number;
+};
+
+export type Series = {
+  _id: string;
+  _type: 'series';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seriesName?: string;
+  author?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'user';
+  };
+  description?: string;
 };
 
 export type User = {
@@ -379,6 +402,7 @@ export type AllSanitySchemaTypes =
   | Log
   | Tag
   | Post
+  | Series
   | User
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -657,7 +681,7 @@ export type UserTagPostsQueryResult = Array<{
   id: string;
 }>;
 // Variable: postDetailQuery
-// Query: *[_type == "post" && _id == $postId][0]{    'currentPost': {  ...,  "tags":tags[]->tagName,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "username":author->username,  "slug":author->slug,  "userImage":author->image,  "authorId":author._ref,  "likes":likes[]._ref,  "id":_id},    'nextPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},    'previousPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}  }
+// Query: *[_type == "post" && _id == $postId][0]{    'currentPost': {  ...,  "tags":tags[]->tagName,  "series": series->seriesName,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "username":author->username,  "slug":author->slug,  "userImage":author->image,  "authorId":author._ref,  "likes":likes[]._ref,  "id":_id},    'nextPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},    'previousPost': *[_type == 'post' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}  }
 export type PostDetailQueryResult = {
   currentPost: {
     _id: string;
@@ -751,6 +775,8 @@ export type PostDetailQueryResult = {
           _key: string;
         }
     >;
+    series: string | null;
+    seriesOrder?: number;
     updatedAt: string;
     createdAt: string;
     username: string | null;
@@ -782,6 +808,23 @@ export type ExistingTagQueryResult = Array<{
   _rev: string;
   tagName?: string;
 }>;
+// Variable: existingSeriesQuery
+// Query: *[_type == "series" && seriesName == $name && author._ref == $userId]
+export type ExistingSeriesQueryResult = Array<{
+  _id: string;
+  _type: 'series';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seriesName?: string;
+  author?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'user';
+  };
+  description?: string;
+}>;
 // Variable: userPostTagsQuery
 // Query: *[_type == 'post' && author->slug == $slug].tags[]->tagName
 export type UserPostTagsQueryResult = Array<string | null>;
@@ -789,6 +832,40 @@ export type UserPostTagsQueryResult = Array<string | null>;
 // Query: *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }
 export type PostAuthorQueryResult = {
   authorId: string | null;
+} | null;
+
+// Source: ./src/service/series.ts
+// Variable: getUserSeriesQuery
+// Query: *[_type == "series" && author->slug == $slug]{    "id": _id,    seriesName,    description,    "postCount": count(*[_type == "post" && series._ref == ^._id]),    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage  }
+export type GetUserSeriesQueryResult = Array<{
+  id: string;
+  seriesName: string | null;
+  description: string | null;
+  postCount: number;
+  thumbnail: string | null;
+}>;
+// Variable: getSeriesDetailQuery
+// Query: *[_type == "series" && _id == $id][0]{    "id": _id,    seriesName,    description,    "authorSlug": author->slug,    "posts": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}  }
+export type GetSeriesDetailQueryResult = {
+  id: string;
+  seriesName: string | null;
+  description: string | null;
+  authorSlug: string | null;
+  posts: Array<{
+    title: string | null;
+    description: string | null;
+    mainImage: string | null;
+    pinned: boolean | null;
+    updatedAt: string;
+    createdAt: string;
+    tags: Array<string | null> | null;
+    username: string | null;
+    slug: string | null;
+    name: string | null;
+    userImage: string | null;
+    likes: number | null;
+    id: string;
+  }>;
 } | null;
 
 // Source: ./src/service/user.ts
@@ -1053,10 +1130,13 @@ declare module '@sanity/client' {
     '\n  *[_type == \'post\' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': TagPostsQueryResult;
     '\n  *[_type == "post" && _id in *[_type == "user" && slug == $slug].bookmarks[]._ref]\n  | order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': BookmarkPostsQueryResult;
     '\n  *[_type == \'post\' && author->slug == $slug && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': UserTagPostsQueryResult;
-    '\n  *[_type == "post" && _id == $postId][0]{\n    \'currentPost\': {\n  ...,\n  "tags":tags[]->tagName,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "username":author->username,\n  "slug":author->slug,\n  "userImage":author->image,\n  "authorId":author._ref,\n  "likes":likes[]._ref,\n  "id":_id\n},\n    \'nextPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},\n    \'previousPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}\n  }\n': PostDetailQueryResult;
+    '\n  *[_type == "post" && _id == $postId][0]{\n    \'currentPost\': {\n  ...,\n  "tags":tags[]->tagName,\n  "series": series->seriesName,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "username":author->username,\n  "slug":author->slug,\n  "userImage":author->image,\n  "authorId":author._ref,\n  "likes":likes[]._ref,\n  "id":_id\n},\n    \'nextPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},\n    \'previousPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}\n  }\n': PostDetailQueryResult;
     '\n  *[_type == "tag" && tagName == $tagName]\n': ExistingTagQueryResult;
+    '\n   *[_type == "series" && seriesName == $name && author._ref == $userId]\n': ExistingSeriesQueryResult;
     "\n  *[_type == 'post' && author->slug == $slug].tags[]->tagName\n": UserPostTagsQueryResult;
     '\n  *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }\n': PostAuthorQueryResult;
+    '\n  *[_type == "series" && author->slug == $slug]{\n    "id": _id,\n    seriesName,\n    description,\n    "postCount": count(*[_type == "post" && series._ref == ^._id]),\n    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage\n  }\n': GetUserSeriesQueryResult;
+    '\n  *[_type == "series" && _id == $id][0]{\n    "id": _id,\n    seriesName,\n    description,\n    "authorSlug": author->slug,\n    "posts": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n  }\n': GetSeriesDetailQueryResult;
     "\n  *[_type=='user' && username == $username][0]\n": CheckUsernameValidQueryResult;
     "\n  *[_type=='user' && slug == $slug][0]\n": CheckSlugValidQueryResult;
     "\n  *[_type=='user' && email == $email][0]\n": CheckEmailValidQueryResult;
