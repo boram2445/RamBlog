@@ -13,7 +13,8 @@
       "Bash(curl -sI -A \"Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)\" https://ram-blog.vercel.app/sitemap.xml)",
       "Bash(curl -s -A \"Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)\" https://ram-blog.vercel.app/robots.txt)",
       "Bash(curl -s https://ram-blog.vercel.app/sitemap.xml)",
-      "Bash(curl -sI http://ram-blog.vercel.app/sitemap.xml)"
+      "Bash(curl -sI http://ram-blog.vercel.app/sitemap.xml)",
+      "Bash(git -C /Users/boram/dev/projects/RamBlog log --oneline -8)"
     ],
     "defaultMode": "plan",
     "language": "korean"

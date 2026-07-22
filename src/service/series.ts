@@ -9,7 +9,8 @@ const getUserSeriesQuery = defineQuery(`
     seriesName,
     description,
     "postCount": count(*[_type == "post" && series._ref == ^._id]),
-    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage
+    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage,
+    "lastUpdated": *[_type == "post" && series._ref == ^._id]{ "date": coalesce(publishedAt, _createdAt) } | order(date desc)[0].date
   }
 `);
 
@@ -28,6 +29,7 @@ export type SeriesDetail = {
   seriesName: string;
   description: string;
   authorSlug: string;
+  thumbnail?: string;
   posts: Post[];
 };
 
@@ -37,6 +39,7 @@ export type SeriesListItem = {
   description: string;
   postCount: number;
   thumbnail: string;
+  lastUpdated: string;
 };
 
 export async function getUserSeries(slug: string): Promise<SeriesListItem[]> {
@@ -55,6 +58,7 @@ export async function getUserSeries(slug: string): Promise<SeriesListItem[]> {
     description: series.description ?? '',
     postCount: series.postCount ?? 0,
     thumbnail: series.thumbnail ?? '',
+    lastUpdated: series.lastUpdated ?? '',
   }));
 }
 

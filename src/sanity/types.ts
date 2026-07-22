@@ -836,13 +836,14 @@ export type PostAuthorQueryResult = {
 
 // Source: ./src/service/series.ts
 // Variable: getUserSeriesQuery
-// Query: *[_type == "series" && author->slug == $slug]{    "id": _id,    seriesName,    description,    "postCount": count(*[_type == "post" && series._ref == ^._id]),    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage  }
+// Query: *[_type == "series" && author->slug == $slug]{    "id": _id,    seriesName,    description,    "postCount": count(*[_type == "post" && series._ref == ^._id]),    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage,    "lastUpdated": *[_type == "post" && series._ref == ^._id]{ "date": coalesce(publishedAt, _createdAt) } | order(date desc)[0].date  }
 export type GetUserSeriesQueryResult = Array<{
   id: string;
   seriesName: string | null;
   description: string | null;
   postCount: number;
   thumbnail: string | null;
+  lastUpdated: string | null;
 }>;
 // Variable: getSeriesDetailQuery
 // Query: *[_type == "series" && _id == $id][0]{    "id": _id,    seriesName,    description,    "authorSlug": author->slug,    "posts": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}  }
@@ -1135,7 +1136,7 @@ declare module '@sanity/client' {
     '\n   *[_type == "series" && seriesName == $name && author._ref == $userId]\n': ExistingSeriesQueryResult;
     "\n  *[_type == 'post' && author->slug == $slug].tags[]->tagName\n": UserPostTagsQueryResult;
     '\n  *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }\n': PostAuthorQueryResult;
-    '\n  *[_type == "series" && author->slug == $slug]{\n    "id": _id,\n    seriesName,\n    description,\n    "postCount": count(*[_type == "post" && series._ref == ^._id]),\n    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage\n  }\n': GetUserSeriesQueryResult;
+    '\n  *[_type == "series" && author->slug == $slug]{\n    "id": _id,\n    seriesName,\n    description,\n    "postCount": count(*[_type == "post" && series._ref == ^._id]),\n    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage,\n    "lastUpdated": *[_type == "post" && series._ref == ^._id]{ "date": coalesce(publishedAt, _createdAt) } | order(date desc)[0].date\n  }\n': GetUserSeriesQueryResult;
     '\n  *[_type == "series" && _id == $id][0]{\n    "id": _id,\n    seriesName,\n    description,\n    "authorSlug": author->slug,\n    "posts": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n  }\n': GetSeriesDetailQueryResult;
     "\n  *[_type=='user' && username == $username][0]\n": CheckUsernameValidQueryResult;
     "\n  *[_type=='user' && slug == $slug][0]\n": CheckSlugValidQueryResult;

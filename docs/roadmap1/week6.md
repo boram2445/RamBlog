@@ -4,7 +4,8 @@
 
 | D | 작업 |
 |---|---|
-| 41 | **시리즈 기능(벨로그 스타일)** — post→series reference 모델, 유저 페이지 Posts 탭 상단 섹션(최대 4개+펼치기) + 시리즈 상세 페이지 + 글쓰기 폼에서 시리즈 선택/즉석 생성 |
+| 41 | **시리즈 기능(벨로그 스타일)** — post→series reference 모델, 유저 페이지 Posts 탭 상단 섹션(최대 4개+전체 보기) + 시리즈 상세 페이지 + 글쓰기 폼에서 시리즈 선택/즉석 생성 |
+| 41b | **시리즈 만들기 모달 + 전용 대표 이미지** — 글쓰기 폼 안에서 벨로그처럼 시리즈를 만드는 모달을 두고, 이때 이름·설명과 함께 시리즈 전용 대표 이미지를 직접 업로드. 대표 이미지를 "첫 글 파생"에서 "직접 지정"으로 전환 (Day 41 서브태스크 5·6 완료 후 착수) |
 | 42 | **삭제 후 목록/상세 stale 수정(별도 태스크)** — 포스트 삭제 성공 시 목록·상세 캐시(SWR `mutate` + `revalidateTag`) 무효화로 stale 화면 제거 |
 | 43 | **UX** — toast 알림 컴포넌트 신설 + `alert()` 12곳 교체 (`RegisterForm.tsx`의 "알림 컴포넌트 만들어야 함" 주석 해소) |
 | 44 | **위생 마무리** — axios 11파일 → fetch 일원화 후 `axios` 의존성 제거, 미사용 `@types/nodemailer` 제거, 좋아요 `_id` 기반 전환(week4 백로그) 착수 여부 재평가 |
@@ -37,7 +38,22 @@
 | 7 | **검증** — 빌드·린트 통과 후 위 `## 검증`의 시리즈 시나리오 ①~⑦을 스모크. 미뤄둔 항목(Sanity webhook 미도입, 시리즈 upsert 동시 요청 경합)은 `week6-issues.md`에 백로그로 기록 | [ ] |
 | 8 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
 
-**변경 파일**: `sanity-studio/schemas/series.js`(신규) · `sanity-studio/schemas/post.js` · `sanity-studio/schemas/index.ts` · `src/service/series.ts`(신규) · `src/service/posts.ts` · `src/model/post.ts` · `src/app/[user]/series/[id]/page.tsx`(신규) · `src/app/[user]/(home)/page.tsx` · `src/components/series/`(신규: SeriesSection·SeriesCard·SeriesExpandToggle·SeriesSelect) · `src/components/post/WritePostForm.tsx` · `src/hooks/useUserPost.ts` · `src/app/write/page.tsx` · `src/app/write/[id]/page.tsx` · `src/app/api/posts/route.ts` · `src/app/api/posts/[id]/route.ts`
+**변경 파일**: `sanity-studio/schemas/series.js`(신규) · `sanity-studio/schemas/post.js` · `sanity-studio/schemas/index.ts` · `src/service/series.ts`(신규) · `src/service/posts.ts` · `src/model/post.ts` · `src/app/[user]/series/[id]/page.tsx`(신규) · `src/app/[user]/(home)/page.tsx` · `src/components/series/`(신규: SeriesSection·SeriesCard·SeriesSelect·SeriesTitle) · `src/components/post/WritePostForm.tsx` · `src/hooks/useUserPost.ts` · `src/app/write/page.tsx` · `src/app/write/[id]/page.tsx` · `src/app/api/posts/route.ts` · `src/app/api/posts/[id]/route.ts`
+
+#### Day 41b — 시리즈 만들기 모달 + 전용 대표 이미지
+
+> 배경: 시리즈 기능(Day 41)은 별도 관리 페이지 없이 글쓰기 폼에서 이름만으로 즉석 생성하는 설계라, 시리즈 전용 이미지를 올릴 UI가 없어 대표 썸네일을 첫 글 `mainImage`에서 파생해 왔다. 벨로그처럼 발행 흐름 안에서 시리즈를 "제대로 만드는" 모달을 두면 전용 대표 이미지를 직접 지정할 수 있다. Day 41 서브태스크 5(폼 시리즈 선택)·6(API 연결) 위에 얹히므로 그 뒤에 착수한다.
+
+| # | 할 일 | ✓ |
+|---|---|---|
+| 1 | series 스키마에 대표 이미지 필드를 추가하고 typegen을 재생성한다 | [ ] |
+| 2 | 글쓰기 폼의 시리즈 선택에서 "새 시리즈 만들기"를 고르면 이름·설명·대표 이미지를 입력하는 모달을 띄운다. 별도 관리 페이지 없이 발행 흐름 안에서 생성하며, 이미지는 기존 이미지 업로드 경로를 재사용한다 | [ ] |
+| 3 | 시리즈 목록·상세 쿼리가 전용 대표 이미지를 우선 반환하고, 없으면 기존처럼 첫 글 이미지로 폴백하도록 넓힌다. upsert 시 이미지도 함께 저장한다 | [ ] |
+| 4 | 소비 측(홈 시리즈 카드·상세 헤더)이 전용 이미지를 우선 사용하도록 반영한다 | [ ] |
+| 5 | 빌드·린트·타입체크 통과 후 새 시리즈를 이미지와 함께 만들어 카드·상세 헤더에 반영되는지 스모크 | [ ] |
+| 6 | Day 작업 중 나온 개념 질문·답변 중 중요한 내용을 서브에이전트(general-purpose)에 위임해 `learning-notes.md`에 기록 | [ ] |
+
+**변경 파일**: `sanity-studio/schemas/series.js` · `src/service/series.ts` · `src/components/series/`(신규 시리즈 만들기 모달) · `src/components/series/SeriesSelect.tsx` · `src/components/series/SeriesCard.tsx` · `src/components/series/SeriesTitle.tsx` · `src/app/api/posts/route.ts` · `src/app/api/posts/[id]/route.ts`
 
 #### Day 42 — 삭제 후 목록/상세 stale 수정 (별도 태스크)
 
