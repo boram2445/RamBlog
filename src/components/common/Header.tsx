@@ -59,7 +59,7 @@ export default function Header() {
           {params.user ? (
             <Link href={`/${params.user}`}>
               <h1 className='hidden tablet:block text-xl font-semibold hover:text-indigo-600'>
-                {userProfile?.blogName}
+                {userProfile?.title}
               </h1>
             </Link>
           ) : (

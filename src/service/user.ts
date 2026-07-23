@@ -33,7 +33,7 @@ const userSlugByIdQuery = defineQuery(`
 
 const userDataQuery = defineQuery(`
   *[_type=='user' && _id == $userId][0]
-  {"id":_id,name,username,email,image,blogName}
+  {"id":_id,name,username,email,image}
 `);
 
 const userBySlugQuery = defineQuery(`
@@ -72,7 +72,6 @@ export async function addUser({
     email,
     name,
     image,
-    blogName: name,
     title: `${name}`,
     introduce: `안녕하세요 ${name}의 멋진 블로그입니다 :)`,
     following: [],
@@ -101,7 +100,6 @@ export async function addEmailUser({
     password,
     name,
     image: '',
-    blogName: name,
     title: `${name}`,
     introduce: `안녕하세요 ${name}의 멋진 블로그입니다 :)`,
     following: [],
@@ -200,7 +198,7 @@ export async function getUserBySlug(slug: string): Promise<HomeUser | null> {
     { slug },
     {
       cache: 'force-cache',
-      next: { tags: ['following', 'bookmark'] },
+      next: { tags: ['following', 'bookmark', `profile/${slug}`] },
     }
   );
 
@@ -213,7 +211,6 @@ export async function getUserBySlug(slug: string): Promise<HomeUser | null> {
     slug: user.slug ?? '',
     email: user.email ?? '',
     image: user.image,
-    blogName: user.blogName ?? '',
     title: user.title ?? '',
     introduce: user.introduce ?? '',
     links: user.links ?? defaultLinks,
@@ -246,7 +243,6 @@ export async function getUserForProfile(
     image: user.image,
     following: user.following ?? 0,
     followers: user.followers ?? 0,
-    blogName: user.blogName ?? '',
     title: user.title ?? '',
     introduce: user.introduce ?? '',
     links: user.links ?? defaultLinks,

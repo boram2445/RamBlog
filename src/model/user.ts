@@ -16,9 +16,7 @@ export type AuthUser = {
   image?: string;
 };
 
-export type UserData = AuthUser & {
-  blogName: string;
-};
+export type UserData = AuthUser;
 
 export type SimpleUser = {
   id: string;
@@ -32,7 +30,6 @@ export type SimpleUser = {
 export type ProfileUser = AuthUser & {
   following: number;
   followers: number;
-  blogName: string;
   title: string;
   introduce: string;
   links: Links;
@@ -40,7 +37,6 @@ export type ProfileUser = AuthUser & {
 };
 
 export type HomeUser = AuthUser & {
-  blogName: string;
   title: string;
   introduce: string;
   links: Links;
