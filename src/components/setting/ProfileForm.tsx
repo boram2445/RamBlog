@@ -85,6 +85,7 @@ export default function ProfileForm({ userData }: Props) {
       .then(() => {
         router.refresh();
         mutate(`/api/${userData.slug}/me`);
+        mutate(`/api/${userData.slug}`);
         router.push(`/${userData.slug}`);
       })
       .catch((err) => setError(err.toString()))

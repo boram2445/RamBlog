@@ -34,11 +34,6 @@ export default {
       type: 'string',
     },
     {
-      title: 'Blog Name',
-      name: 'blogName',
-      type: 'string',
-    },
-    {
       title: 'Profile Title',
       name: 'title',
       type: 'string',

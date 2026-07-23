@@ -245,7 +245,6 @@ export type User = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -884,7 +883,6 @@ export type CheckUsernameValidQueryResult = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -931,7 +929,6 @@ export type CheckSlugValidQueryResult = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -978,7 +975,6 @@ export type CheckEmailValidQueryResult = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -1026,14 +1022,13 @@ export type LoginWithEmailQueryResult = {
 // Query: *[_type=='user' && _id == $id][0].slug
 export type UserSlugByIdQueryResult = string | null;
 // Variable: userDataQuery
-// Query: *[_type=='user' && _id == $userId][0]  {"id":_id,name,username,email,image,blogName}
+// Query: *[_type=='user' && _id == $userId][0]  {"id":_id,name,username,email,image}
 export type UserDataQueryResult = {
   id: string;
   name: string | null;
   username: string | null;
   email: string | null;
   image: string | null;
-  blogName: string | null;
 } | null;
 // Variable: userBySlugQuery
 // Query: *[_type == "user" && slug == $slug][0]{    ...,    "id":_id,    following[]->{"id":_id,username,slug,name,image,title},    followers[]->{"id":_id,username,slug,name,image,title},    "bookmarks":bookmarks[]->_id  }
@@ -1049,7 +1044,6 @@ export type UserBySlugQueryResult = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -1093,7 +1087,6 @@ export type UserForProfileQueryResult = {
   email?: string;
   password?: string;
   image?: string;
-  blogName?: string;
   title?: string;
   introduce?: string;
   links?: {
@@ -1143,7 +1136,7 @@ declare module '@sanity/client' {
     "\n  *[_type=='user' && email == $email][0]\n": CheckEmailValidQueryResult;
     '\n  *[_type==\'user\' && email == $email][0]{\n    "id":_id,\n    email,\n    name,\n    username,\n    slug,\n    password,\n    image,\n  }\n': LoginWithEmailQueryResult;
     "\n  *[_type=='user' && _id == $id][0].slug\n": UserSlugByIdQueryResult;
-    '\n  *[_type==\'user\' && _id == $userId][0]\n  {"id":_id,name,username,email,image,blogName}\n': UserDataQueryResult;
+    '\n  *[_type==\'user\' && _id == $userId][0]\n  {"id":_id,name,username,email,image}\n': UserDataQueryResult;
     '\n  *[_type == "user" && slug == $slug][0]{\n    ...,\n    "id":_id,\n    following[]->{"id":_id,username,slug,name,image,title},\n    followers[]->{"id":_id,username,slug,name,image,title},\n    "bookmarks":bookmarks[]->_id\n  }\n': UserBySlugQueryResult;
     '\n  *[_type==\'user\' && slug == $slug][0]{\n    ...,\n    "id":_id,\n    "following":count(following),\n    "followers":count(followers),\n    "posts":count(*[_type=="post" && author->slug == $slug])\n  }\n': UserForProfileQueryResult;
   }
