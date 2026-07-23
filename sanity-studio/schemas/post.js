@@ -144,6 +144,17 @@ export default {
         },
       ],
     },
+    {
+      title: 'Series',
+      name: 'series',
+      type: 'reference',
+      to: [{type: 'series'}],
+    },
+    {
+      title: 'Series Order',
+      name: 'seriesOrder',
+      type: 'number',
+    },
   ],
   preview: {
     select: {
@@ -158,4 +169,5 @@ export default {
       }
     },
   },
+ 
 }
