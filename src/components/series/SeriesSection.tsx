@@ -26,7 +26,7 @@ export default function SeriesSection({ seriesList, slug }: Props) {
         )}
       </div>
 
-      <div className="p-4 w-full gap-2 grid lg:grid-cols-3 grid-cols-2">
+      <div className="p-4 w-full gap-4 grid lg:grid-cols-3 grid-cols-2">
         {seriesList.slice(0, VISIBLE_COUNT).map((series) => (
           <SeriesCard key={series.id} series={series} slug={slug} />
         ))}

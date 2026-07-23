@@ -9,9 +9,9 @@ const getUserSeriesQuery = defineQuery(`
     seriesName,
     description,
     "postCount": count(*[_type == "post" && series._ref == ^._id]),
-    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(seriesOrder, 9999) asc, coalesce(publishedAt, _createdAt) asc)[0].mainImage,
+    "thumbnail": *[_type == "post" && series._ref == ^._id] | order(coalesce(publishedAt, _createdAt) desc)[0].mainImage,
     "lastUpdated": *[_type == "post" && series._ref == ^._id]{ "date": coalesce(publishedAt, _createdAt) } | order(date desc)[0].date
-  }
+  } | order(lastUpdated desc)
 `);
 
 const getSeriesDetailQuery = defineQuery(`

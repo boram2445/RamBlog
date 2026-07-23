@@ -30,8 +30,8 @@ export default function SeriesCard({ series, slug }: Props) {
         </span>
       </div>
       <div className="w-full py-2 px-3 flex text-start flex-col items-start justify-start dark:text-slate-300">
-        <p>{series.seriesName}</p>
-        <p className="text-gray-600 py-1 text-sm dark:text-slate-400">
+        <p className="truncate w-full">{series.seriesName}</p>
+        <p className="truncate w-full text-gray-600 py-1 text-sm dark:text-slate-400">
           {series.description}
         </p>
         {series.lastUpdated && (
