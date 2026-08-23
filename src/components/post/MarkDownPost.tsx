@@ -89,7 +89,12 @@ export default function MarkDownPost({ content }: { content: string }) {
               className='marker:text-indigo-500 dark:marker:text-yellow-500'
             />
           ),
-          h1: ({ node, ...props }) => <h1 {...props} className={headerStyle} />,
+          h1: ({ node, ...props }) => (
+            <h1
+              {...props}
+              className={`${headerStyle} font-bold mt-14 first:mt-0`}
+            />
+          ),
           h2: ({ node, ...props }) => <h2 {...props} className={headerStyle} />,
           h3: ({ node, ...props }) => <h3 {...props} className={headerStyle} />,
           strong: ({ node, ...props }) => (
