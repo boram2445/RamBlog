@@ -70,7 +70,7 @@ export default async function PostDetail({
         </div>
       </div>
       <div className="flex mx-auto min-h-[450px] laptop:gap-12 pb-12">
-        <div className="grow pb-5 " id="content">
+        <div className="grow min-w-0 pb-5" id="content">
           <MarkDownPost content={content} />
         </div>
         <div className="mt-8 ml-auto">
