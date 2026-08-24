@@ -26,7 +26,12 @@ export default async function UserPage(props: Props) {
       {seriesList.length > 0 && (
         <SeriesSection seriesList={seriesList} slug={user} />
       )}
-      <h2 className="text-xl font-bold my-4">Posts</h2>
+      <h2 className="text-xl font-bold my-4 flex items-baseline gap-2">
+        Posts
+        <span className="text-sm font-normal text-gray-500 dark:text-slate-400">
+          {userData.posts}개
+        </span>
+      </h2>
       <PostList user={userData} />
     </>
   );

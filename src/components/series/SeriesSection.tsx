@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { AiOutlineRight } from 'react-icons/ai';
 import SeriesCard from './SeriesCard';
 
-const VISIBLE_COUNT = 4;
+const VISIBLE_COUNT = 6;
 
 type Props = {
   seriesList: SeriesListItem[];
@@ -14,8 +14,13 @@ export default function SeriesSection({ seriesList, slug }: Props) {
   return (
     <div className="mb-6">
       <div className="mb-2 flex justify-between">
-        <h2 className="text-xl font-bold">Series</h2>
-        {seriesList?.length > 3 && (
+        <h2 className="text-xl font-bold flex items-baseline gap-2">
+          Series
+          <span className="text-sm font-normal text-gray-500 dark:text-slate-400">
+            {seriesList.length}개
+          </span>
+        </h2>
+        {seriesList.length > VISIBLE_COUNT && (
           <Link
             href={`/${slug}/series`}
             className="text-gray-500 flex items-center gap-1 hover:text-gray-800 dark:text-slate-400 dark:hover:text-slate-200"
