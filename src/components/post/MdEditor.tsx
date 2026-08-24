@@ -2,7 +2,12 @@
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import './mdEditor.css';
-import MDEditor, { commands, type ICommand } from '@uiw/react-md-editor';
+import MDEditor, {
+  commands,
+  insertTextAtPosition,
+  type ICommand,
+  type RefMDEditor,
+} from '@uiw/react-md-editor';
 import { useTheme } from 'next-themes';
 import { useRef, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
@@ -53,6 +58,7 @@ export default function MdEditor({ value, onChange }: Props) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const editorRef = useRef<RefMDEditor>(null);
 
   const imageUploadCommand: ICommand = {
     ...commands.image,
@@ -64,38 +70,46 @@ export default function MdEditor({ value, onChange }: Props) {
     },
   };
 
-  const uploadImage = async (file: File): Promise<string> => {
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch('/api/image', { method: 'POST', body: formData });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.document?.url ?? null;
+  };
+
+  const insertImages = async (files: FileList) => {
+    const images = Array.from(files).filter((f) => f.type.startsWith('image/'));
+    const textarea = editorRef.current?.textarea;
+    if (images.length === 0 || !textarea) return;
+
     try {
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch('/api/image', { method: 'POST', body: formData });
-      const data = await res.json();
-      return `![](${data.document.url})`;
+      for (const file of images) {
+        const url = await uploadImage(file);
+        if (!url) continue;
+        // 캐럿이 줄 중간이면 줄을 먼저 끊는다
+        const before = textarea.value.slice(0, textarea.selectionStart);
+        const prefix = before && !before.endsWith('\n') ? '\n' : '';
+        insertTextAtPosition(textarea, `${prefix}![](${url})\n`);
+      }
     } finally {
       setIsUploading(false);
     }
   };
 
-  const insertImages = async (files: FileList) => {
-    let updatedValue = value;
-    for (const file of Array.from(files)) {
-      if (file.type.startsWith('image/')) {
-        const imageUrl = await uploadImage(file);
-        updatedValue = updatedValue + '\n' + imageUrl;
-        onChange(updatedValue);
-      }
-    }
-  };
-
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
-    if (!e.clipboardData) return;
-    insertImages(e.clipboardData.files);
+    const files = e.clipboardData?.files;
+    if (!files || !Array.from(files).some((f) => f.type.startsWith('image/')))
+      return;
+    // 이미지일 때만 막아 텍스트 붙여넣기가 중복되지 않게 한다
+    e.preventDefault();
+    insertImages(files);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (!e.dataTransfer) return;
     insertImages(e.dataTransfer.files);
   };
 
@@ -110,9 +124,11 @@ export default function MdEditor({ value, onChange }: Props) {
         </div>
       )}
       <MDEditor
+        ref={editorRef}
         value={value}
         onChange={onChange}
         height={600}
+        enableScroll={false}
         onPaste={handlePaste}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
