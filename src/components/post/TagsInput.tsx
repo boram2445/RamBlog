@@ -12,12 +12,21 @@ export default function TagsInput({ tags, handleTags, type = 'row' }: Props) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setTag(e.target.value);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      const newTags = [...tags, tag];
-      handleTags(newTags);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+    // 한글 IME 조합 중의 Enter는 조합 확정용이라 태그 생성으로 취급하지 않는다
+    if (e.nativeEvent.isComposing) return;
+    e.preventDefault();
+
+    const newTag = tag.trim();
+    if (!newTag) {
       setTag('');
+      return;
     }
+    if (tags.includes(newTag)) return;
+
+    handleTags([...tags, newTag]);
+    setTag('');
   };
 
   const handleTagClick = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -19,3 +19,7 @@ export const registerSchema = z.object({
 });
 
 export const guestCommentPasswordSchema = passwordSchema;
+
+// URL `?page=` 는 사용자가 직접 만질 수 있는 값 — 잘못된 입력에 404를 내는 대신
+// 1페이지로 폴백시킨다. `.catch(1)` 이라 abc/0/-1/빈값 모두 throw 없이 1이 된다.
+export const pageParamSchema = z.coerce.number().int().min(1).catch(1);

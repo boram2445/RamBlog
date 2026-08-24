@@ -611,23 +611,27 @@ export type AllPostsQueryResult = Array<{
   likes: number | null;
   id: string;
 }>;
-// Variable: userPostsQuery
-// Query: *[_type == "post" && author->slug == $slug]| order(coalesce(publishedAt, _createdAt) desc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}
-export type UserPostsQueryResult = Array<{
-  title: string | null;
-  description: string | null;
-  mainImage: string | null;
-  pinned: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  tags: Array<string | null> | null;
-  username: string | null;
-  slug: string | null;
-  name: string | null;
-  userImage: string | null;
-  likes: number | null;
-  id: string;
-}>;
+// Variable: userPostsPageQuery
+// Query: {    "items": *[_type == "post" && author->slug == $slug && ($tagName == null || $tagName in tags[]->tagName)]| order(coalesce(publishedAt, _createdAt) desc)[$start...$end]{  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id},    "total": count(*[_type == "post" && author->slug == $slug && ($tagName == null || $tagName in tags[]->tagName)]),    "totalAll": count(*[_type == "post" && author->slug == $slug])  }
+export type UserPostsPageQueryResult = {
+  items: Array<{
+    title: string | null;
+    description: string | null;
+    mainImage: string | null;
+    pinned: boolean | null;
+    updatedAt: string;
+    createdAt: string;
+    tags: Array<string | null> | null;
+    username: string | null;
+    slug: string | null;
+    name: string | null;
+    userImage: string | null;
+    likes: number | null;
+    id: string;
+  }>;
+  total: number;
+  totalAll: number;
+};
 // Variable: tagPostsQuery
 // Query: *[_type == 'post' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}
 export type TagPostsQueryResult = Array<{
@@ -648,23 +652,6 @@ export type TagPostsQueryResult = Array<{
 // Variable: bookmarkPostsQuery
 // Query: *[_type == "post" && _id in *[_type == "user" && slug == $slug].bookmarks[]._ref]  | order(coalesce(publishedAt, _createdAt) desc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}
 export type BookmarkPostsQueryResult = Array<{
-  title: string | null;
-  description: string | null;
-  mainImage: string | null;
-  pinned: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  tags: Array<string | null> | null;
-  username: string | null;
-  slug: string | null;
-  name: string | null;
-  userImage: string | null;
-  likes: number | null;
-  id: string;
-}>;
-// Variable: userTagPostsQuery
-// Query: *[_type == 'post' && author->slug == $slug && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){  title,  description,  mainImage,  pinned,  "updatedAt":_updatedAt,  "createdAt":coalesce(publishedAt, _createdAt),  "tags":tags[]->tagName,  "username":author->username,  "slug":author->slug,  "name":author->name,  "userImage":author->image,  "likes":count(likes),  "id":_id}
-export type UserTagPostsQueryResult = Array<{
   title: string | null;
   description: string | null;
   mainImage: string | null;
@@ -1120,10 +1107,9 @@ declare module '@sanity/client' {
     '\n  *[_id == $postId][0].comments[_key == $parentCommentId].comments[_key == $commentId]\n': NestedCommentByKeyQueryResult;
     '\n  *[_id == $postId][0].comments[_key == $commentId]\n': TopLevelCommentByKeyQueryResult;
     '\n  *[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': AllPostsQueryResult;
-    '\n  *[_type == "post" && author->slug == $slug]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': UserPostsQueryResult;
+    '\n  {\n    "items": *[_type == "post" && author->slug == $slug && ($tagName == null || $tagName in tags[]->tagName)]| order(coalesce(publishedAt, _createdAt) desc)[$start...$end]{\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n},\n    "total": count(*[_type == "post" && author->slug == $slug && ($tagName == null || $tagName in tags[]->tagName)]),\n    "totalAll": count(*[_type == "post" && author->slug == $slug])\n  }\n': UserPostsPageQueryResult;
     '\n  *[_type == \'post\' && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': TagPostsQueryResult;
     '\n  *[_type == "post" && _id in *[_type == "user" && slug == $slug].bookmarks[]._ref]\n  | order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': BookmarkPostsQueryResult;
-    '\n  *[_type == \'post\' && author->slug == $slug && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){\n  title,\n  description,\n  mainImage,\n  pinned,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "tags":tags[]->tagName,\n  "username":author->username,\n  "slug":author->slug,\n  "name":author->name,\n  "userImage":author->image,\n  "likes":count(likes),\n  "id":_id\n}\n': UserTagPostsQueryResult;
     '\n  *[_type == "post" && _id == $postId][0]{\n    \'currentPost\': {\n  ...,\n  "tags":tags[]->tagName,\n  "series": series->seriesName,\n  "updatedAt":_updatedAt,\n  "createdAt":coalesce(publishedAt, _createdAt),\n  "username":author->username,\n  "slug":author->slug,\n  "userImage":author->image,\n  "authorId":author._ref,\n  "likes":likes[]._ref,\n  "id":_id\n},\n    \'nextPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) < coalesce(^.publishedAt, ^._createdAt)][0]{ "username":author->username, "slug":author->slug, title, "id":_id},\n    \'previousPost\': *[_type == \'post\' && author->slug == $slug && coalesce(publishedAt, _createdAt) > coalesce(^.publishedAt, ^._createdAt)] | order(coalesce(publishedAt, _createdAt) asc)[0]{ "username":author->username, "slug":author->slug, title, "id":_id}\n  }\n': PostDetailQueryResult;
     '\n  *[_type == "tag" && tagName == $tagName]\n': ExistingTagQueryResult;
     '\n   *[_type == "series" && seriesName == $name && author._ref == $userId]\n': ExistingSeriesQueryResult;

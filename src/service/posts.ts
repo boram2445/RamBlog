@@ -3,6 +3,8 @@ import { PostData, SimplePost } from '@/model/post';
 import { AllPostsQueryResult } from '@/sanity/types';
 import { client } from './sanity';
 
+export const POSTS_PER_PAGE = 10;
+
 export const simplePostProjection = `
   title,
   description,
@@ -37,8 +39,19 @@ const allPostsQuery = defineQuery(`
   *[_type == "post"]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
 `);
 
-const userPostsQuery = defineQuery(`
-  *[_type == "post" && author->slug == $slug]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
+const userPostsBaseFilter = `_type == "post" && author->slug == $slug`;
+// $tagName이 null이면 태그 필터를 건너뛴다 — 전체/태그 목록을 쿼리 하나로 처리
+const userPostsPageFilter = `${userPostsBaseFilter} && ($tagName == null || $tagName in tags[]->tagName)`;
+
+// NOTE: 슬라이스 `[$start...$end]`에 공백을 넣지 말 것. @sanity/codegen이 슬라이스 안의
+// 파라미터를 정규식으로 추출해 typegen에 주입하는데, 공백이 있으면 추출에 실패해
+// `slicing must use constant numbers`로 typegen이 죽는다.
+const userPostsPageQuery = defineQuery(`
+  {
+    "items": *[${userPostsPageFilter}]| order(coalesce(publishedAt, _createdAt) desc)[$start...$end]{${simplePostProjection}},
+    "total": count(*[${userPostsPageFilter}]),
+    "totalAll": count(*[${userPostsBaseFilter}])
+  }
 `);
 
 // NOTE: 파라미터명 $tag가 아니라 $tagName — @sanity/client의 QueryParams가 `tag`를
@@ -50,10 +63,6 @@ const tagPostsQuery = defineQuery(`
 const bookmarkPostsQuery = defineQuery(`
   *[_type == "post" && _id in *[_type == "user" && slug == $slug].bookmarks[]._ref]
   | order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
-`);
-
-const userTagPostsQuery = defineQuery(`
-  *[_type == 'post' && author->slug == $slug && $tagName in tags[]->tagName]| order(coalesce(publishedAt, _createdAt) desc){${simplePostProjection}}
 `);
 
 const postDetailQuery = defineQuery(`
@@ -80,7 +89,7 @@ const postAuthorQuery = defineQuery(`
   *[_type == "post" && _id == $postId][0]{ "authorId": author->_id }
 `);
 
-// simplePostProjection을 공유하는 5개 list 쿼리의 결과 요소 타입 — 구조 동일
+// simplePostProjection을 공유하는 list 쿼리들의 결과 요소 타입 — 구조 동일
 type SimplePostProjectionResult = AllPostsQueryResult[number];
 
 // typegen 결과는 스키마상 대부분 nullable — 서비스 경계에서 SimplePost(non-null)로 정규화
@@ -115,17 +124,38 @@ export async function getAllPostsData(): Promise<SimplePost[]> {
     .then(mapPosts);
 }
 
-export async function getAllUserPosts(slug: string) {
-  return client
-    .fetch(
-      userPostsQuery,
-      { slug },
-      {
-        cache: 'force-cache',
-        next: { tags: [`posts/${slug}`] },
-      }
-    )
-    .then(mapPosts);
+export type UserPostsPage = {
+  posts: SimplePost[];
+  /** 태그 필터가 반영된 개수 — 페이지 수 계산용 */
+  total: number;
+  /** 필터와 무관한 유저의 전체 포스트 수 — 헤딩 표시용 */
+  totalAll: number;
+  totalPages: number;
+};
+
+export async function getUserPostsPage(
+  slug: string,
+  { page, tag }: { page: number; tag?: string }
+): Promise<UserPostsPage> {
+  const start = (page - 1) * POSTS_PER_PAGE;
+
+  const { items, total, totalAll } = await client.fetch(
+    userPostsPageQuery,
+    // NOTE: undefined를 넘기면 @sanity/client가 파라미터를 요청에서 통째로 빼버려
+    // `param $tagName referenced, but not provided` 에러가 난다. 반드시 null.
+    { slug, tagName: tag ?? null, start, end: start + POSTS_PER_PAGE },
+    {
+      cache: 'force-cache',
+      next: { tags: [`posts/${slug}`] },
+    }
+  );
+
+  return {
+    posts: mapPosts(items),
+    total,
+    totalAll,
+    totalPages: Math.ceil(total / POSTS_PER_PAGE),
+  };
 }
 
 export async function getTagPosts(tag: string) {
@@ -149,19 +179,6 @@ export async function getBookmarkPosts(slug: string) {
       {
         cache: 'force-cache',
         next: { tags: ['bookmark'] },
-      }
-    )
-    .then(mapPosts);
-}
-
-export async function getUserTagPosts(slug: string, tag: string) {
-  return client
-    .fetch(
-      userTagPostsQuery,
-      { slug, tagName: tag },
-      {
-        cache: 'force-cache',
-        next: { tags: [`posts/${slug}`] },
       }
     )
     .then(mapPosts);

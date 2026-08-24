@@ -9,8 +9,9 @@ import { useRouter } from 'next/navigation';
 import { PostDetail } from '@/model/post';
 import Button from '../ui/Button';
 import TagsInput from './TagsInput';
-import useUserPost from '@/hooks/useUserPost';
 import PageLoader from '../ui/PageLoader';
+import axios from 'axios';
+import { getMainImageUrl } from '@/utils/mainImage';
 
 type Props = {
   slug: string;
@@ -35,7 +36,6 @@ export default function WritePostForm({ slug, id, postDetail }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState(initialState);
-  const { writePost } = useUserPost(slug, 'all');
 
   const isMutating = isFetching || isPending;
 
@@ -60,14 +60,29 @@ export default function WritePostForm({ slug, id, postDetail }: Props) {
     return true;
   };
 
+  const writePost = async () => {
+    const imageUrl = getMainImageUrl(content);
+
+    const formData = new FormData();
+    imageUrl && formData.append('mainImageUrl', imageUrl);
+    form.title.trim() && formData.append('title', form.title);
+    form.description && formData.append('description', form.description);
+    form.tags.length !== 0 && formData.append('tags', form.tags.join());
+    content.trim() && formData.append('content', content);
+
+    await axios.post(id ? `/api/posts/${id}` : '/api/posts', formData);
+  };
+
   const handleSubmit = async () => {
     if (handleAlert(content)) {
       setIsFetching(true);
-      await writePost(content, form, id);
+      await writePost();
       setIsFetching(false);
       startTransition(() => {
-        const url = id ? `/${slug}/posts/${id}` : `/${slug}`;
-        router.push(url);
+        // 목록은 서버 렌더링 — API가 revalidateTag로 Data Cache를 비우고,
+        // refresh()가 클라이언트 라우터 캐시까지 비워야 새 글이 즉시 보인다
+        router.refresh();
+        router.push(id ? `/${slug}/posts/${id}` : `/${slug}`);
       });
     }
   };

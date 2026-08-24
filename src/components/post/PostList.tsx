@@ -1,37 +1,24 @@
-'use client';
-
-import useUserPost from '@/hooks/useUserPost';
-import { ProfileUser } from '@/model/user';
+import { SimplePost } from '@/model/post';
 import PostListCard, { PostListCardLoading } from './PostListCard';
-import UserTagList from '../user/UserTagList';
-import { useState } from 'react';
+import NoContent from '../ui/NoContent';
 
 type Props = {
-  user: ProfileUser;
+  posts: SimplePost[];
 };
 
-export default function PostList({ user }: Props) {
-  const [selectedTag, setSelectedTag] = useState('all');
-  const { posts, isLoading, error } = useUserPost(user.slug, selectedTag);
+export default function PostList({ posts }: Props) {
+  if (posts.length === 0) {
+    return <NoContent text='아직 등록된 포스트가 없어요😥' />;
+  }
 
   return (
-    <>
-      <UserTagList
-        slug={user.slug}
-        onClick={setSelectedTag}
-        selected={selectedTag}
-      />
-      {isLoading && <PostListLoading />}
-      {!isLoading && !error && (
-        <ul className='flex flex-col'>
-          {posts?.map((post) => (
-            <li key={post.id}>
-              <PostListCard post={post} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
+    <ul className='flex flex-col'>
+      {posts.map((post) => (
+        <li key={post.id}>
+          <PostListCard post={post} />
+        </li>
+      ))}
+    </ul>
   );
 }
 
