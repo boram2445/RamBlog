@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 import axios from "axios";
 import ImageUpload from "../ui/ImageUpload";
 import EmotionList from "./EmotionList";
-import { getDate } from "@/utils/date";
+import { getDate, getIsoFromKstDate } from "@/utils/date";
 import { mutate } from "swr";
 import PageLoader from "../ui/PageLoader";
 
@@ -43,10 +43,7 @@ export default function LogForm({ slug, resetSelect, closeForm }: Props) {
     formData.append("title", titleRef.current?.value ?? "");
     formData.append("content", contentRef.current?.value ?? "");
     formData.append("emotion", selectedEmotion?.toString() ?? "");
-    formData.append(
-      "date",
-      date + "T" + new Date().toISOString().split("T")[1],
-    );
+    formData.append("date", getIsoFromKstDate(date));
 
     axios
       .post(`/api/${slug}/logs`, formData)

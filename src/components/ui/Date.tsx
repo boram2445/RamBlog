@@ -1,4 +1,4 @@
-import { getDate } from '@/utils/date';
+import { getDate, getIsoDate } from '@/utils/date';
 
 type Size = 'xsmall' | 'small' | 'big';
 
@@ -15,6 +15,7 @@ export default function Date({
 }: Props) {
   return (
     <time
+      dateTime={getIsoDate(date)}
       className={`flex gap-2 items-center ${getSize(
         type
       )} text-gray-500 dark:text-slate-400`}
